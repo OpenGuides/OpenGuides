@@ -422,7 +422,7 @@ sub edit_node {
     my %node_data = $wiki->retrieve_node($node);
     my ($content, $checksum) = @node_data{ qw( content checksum ) };
     my %metadata   = %{$node_data{metadata}};
-    my $username   = &get_cookie;
+    my $username   = get_cookie( "username" );
     my %tt_vars = ( content    => $q->escapeHTML($content),
                     checksum   => $q->escapeHTML($checksum),
                     categories => $metadata{category},
@@ -442,15 +442,16 @@ sub edit_node {
 }
 
 sub get_cookie {
+    my $cookie_name = shift or return "";
+    my %defaults = ( username              => "Anonymous",
+		     include_geocache_link => 0 );
     my %cookies = fetch CGI::Cookie;
-    my $cookie;
-    if ($cookies{'username'}) {
-	$cookie = $cookies{'username'}->value;
+    if ($cookies{$cookie_name}) {
+	return $cookies{$cookie_name}->value;
     }
     else {
-	$cookie = "Anonymous";
+	return $defaults{$cookie_name};
     }
-    return $cookie;
 }
 
 sub emit_recent_changes_rss {
@@ -506,6 +507,7 @@ sub emit_chef_dan_rss {
 }
 
 sub make_geocache_link {
+    return "" unless get_cookie( "include_geocache_link" );
     my $node = shift || $home_name;
     my %current_data = $wiki->retrieve_node( $node );
     my %criteria     = ( name => $node );

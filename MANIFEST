@@ -3,6 +3,7 @@ lib/OpenGuides/RDF.pm
 MANIFEST
 META.yml
 README
+preferences.cgi
 supersearch.cgi
 templates/backlink_results.tt
 templates/display_metadata.tt
@@ -22,5 +23,4 @@ templates/userstats.tt
 t/00_setup.t
 t/01_add_test_data.t
 t/rdf.t
-username.cgi
 wiki.cgi

@@ -7,7 +7,7 @@
     [% IF geocache_link %]
     <li>[% geocache_link %]</li>
     [% END %]
-    <li><a href="username.cgi">Set username</a></li>
+    <li><a href="preferences.cgi">Set username/preferences</a></li>
     [% IF not_editable %]
     </ul><br />
     [% ELSE %]
