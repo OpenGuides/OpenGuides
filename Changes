@@ -1,14 +1,26 @@
+        Overhauled RDF output. Changes:
+          - everything is no longer classified as a restaurant(!)
+          - empty tags are no longer generated
+          - switch to W3C contact namespace for addressing data
+          - move homepage tag out of wiki metadata
+          - logical structure improvements (subjects of pages are now
+            identified as spatial things instead of being anonymous 
+            FOAF topics).
+
         Fixed bug that prevented automatic database initialization on
 	  SQLite databases.
+
 	Doc fix for private installations.
-	Removed the following characters from the list of forbidden ones in 
-        node names in newpage.cgi (a restriction which dates from all the way
-        back when we were using UseModWiki): " ! $ ^ ~ @ [ ] { }
+
+  	Removed the following characters from the list of forbidden ones in 
+          node names in newpage.cgi (a restriction which dates from all the way
+          back when we were using UseModWiki): " ! $ ^ ~ @ [ ] { }
 
 0.30    2 January 2003
         Added method to allow admins to delete nodes.  You will need to
           explicitly enable this option in your wiki.conf, since it brings
           with it the risk of accidental data loss.
+
         Major overhaul of templates - added numerous style hooks.  See
           examples/ for two stylesheet designs that take advantage of these.
           Added new banner template for page headers. Also ensured presence
@@ -19,52 +31,69 @@
           You are advised to create a duplicate wiki.cgi that reads its data
           from your database but its stylesheet and templates from the new
           ones in order to test them *before* deploying them.
+
         Added "FAQ", "How To Get Started" and "Wiki Etiquette" to the
           navigation, under "Help" - these won't exist unless you create them 
           on your site, so at first the links serve as examples of 
           documentation you can provide.
+
         Modified preferences.cgi so that all the help links in the navbar
           can be hidden, not just the text formatting link.
+
         Fixed some HTML validation bugs.
+
 	Added multiple install and pretty URL notes to INSTALL.
+
 	Removed pubcrawl stuff from distro for now - it doesn't really work.
+
 	Changed to use CGI::Wiki::Plugin::Diff instead of OpenGuides::Diff.
 
 0.29    8 November 2003
         Expanded section in TROUBLESHOOTING about permissions problems.
+
         Diff.pm now absorbs trailing punctuation and spaces into words
           it is diffing (to give less blocky results).
+
         SuperSearch.pm change NOT to use '-' instead of '!'.
 
 0.28    1 November 2003
         Allow running sites on SQLite databases.
+
         Fixed bug with navbar prompt in Build.PL (CPAN RT #3894).
         Junked OpenGuides::Config completely to avoid database password
           leakage, and easier install (CPAN RT #3916).
 
 0.27    1 November 2003
         Fixed bug with category/locale indexing - no longer case-sensitive.
+
         Fixed bug that had the supersearch results page offering an edit link.
+
 	Revamp of search syntax to make the SuperSearch UI much more like
 	Google and Alta Vista. See the POD of SuperSearch.pm for details.
 
 0.26    9 October 2003
         Modified TROUBLESHOOTING to reflect the correct invocation for
           Module::Build to install into a private directory.
+
         Show IP address for anonymous edits.
+
         Changed CGI.pm version dependency for Dom (CPAN bug #3895).
+
         Added check to OpenGuides::SuperSearch to stop it trying to
           retrieve a nonexistent node when the search indexes have screwed up.
 
 0.25    23 September 2003
         Applied recent changes fix to front page feed as well.
+
         Search box now searches categories and locales as well as title and
           body - so for example a search on "holborn & pubs" will DTRT.
+
         NOT and phrase search tests were passing even though they shouldn't
           have been - skip them for now.
 
 0.24    8 September 2003
         Fix to recent changes so minor changes don't mask major ones.
+
         Fixed supersearch.cgi to use a template instead of CGI.pm to avoid
           weird errors, also turned it into a module and added tests.
         Strip whitespace from OS co-ords before storing in database.
@@ -135,7 +164,7 @@
 0.17    15 June 2003
         Fixed OpenGuides::Utils to take note of dbhost.
  
-       Added example stylesheet provided by the OxfordGuide team.
+        Added example stylesheet provided by the OxfordGuide team.
 
 0.16    26 May 2003
         Ivor fixed OpenGuides::Diff to diff by word instead of by character.
