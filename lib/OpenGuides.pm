@@ -859,8 +859,10 @@ sub get_cookie {
 
 =head1 BUGS AND CAVEATS
 
-At the moment, the location data uses a United-Kingdom-specific module,
-so the location features might not work so well outside the UK.
+UTF8 data is currently not handled correctly throughout.
+
+Other bugs are documented at
+L<http://rt.cpan.org/NoAuth/Bugs.html?Dist=OpenGuides>
 
 =head1 SEE ALSO
 
@@ -879,8 +881,8 @@ so the location features might not work so well outside the UK.
 If you have a question, a bug report, or a patch, or you're interested
 in joining the development team, please contact openguides-dev@openguides.org
 (moderated mailing list, will reach all current developers but you'll have
-to wait for your post to be approved) or kake@earth.li (a real person who
-may take a little while to reply to your mail if she's busy).
+to wait for your post to be approved) or file a bug report at
+L<http://rt.cpan.org/NoAuth/Bugs.html?Dist=OpenGuides>
 
 =head1 AUTHOR
 

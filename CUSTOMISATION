@@ -31,6 +31,7 @@ The custom templates currently supported are:
 
 Requests for further custom inserts are welcomed.
 
-You can also include your own versions of other templates in the
-custom-templates/ directory, and these will override the installed files,
-but this is not recommended for the reasons detailed above.
+If you include your own versions of other (non custom_) templates in
+custom-templates they will override the installed files, and this may
+cause you problems. We would much rather that you let us know what we could
+do to make your customisations possible within custom_ templates.
