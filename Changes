@@ -4,6 +4,9 @@
         Moved "content" div in a couple of templates to fix incorrect nesting. 
         @INDEX_LINK macros now have optional title text like so:
           @INDEX_LINK [[Category Pubs|Pubs]]
+        Added preferences option for including or excluding text formatting
+          rules link in navbar.  Enable this by setting text_formatting_node
+          in your config file.
 
 0.18    16 June 2003
         Added a Makefile.PL as well as a Build.PL, for CPAN.pm users.

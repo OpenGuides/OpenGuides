@@ -2,7 +2,7 @@ package OpenGuides::Template;
 
 use strict;
 use vars qw( $VERSION );
-$VERSION = '0.07';
+$VERSION = '0.08';
 
 use Carp qw( croak );
 use CGI; # want to get rid of this and put the burden on the templates
@@ -49,11 +49,45 @@ to OpenGuides developers.
                                       template     => "node.tt",
                                       content_type => "text/html",
                                       cookies      => $cookie,
-                                      vars         => { foo => "bar" }
+                                      vars         => {foo => "bar"}
   );
 
 Returns everything you need to send to STDOUT, including the
 Content-Type: header. Croaks unless C<template> is supplied.
+
+The variables supplied in C<vars> are passed through to the template
+specified.  Additional Template Toolkit variables are automatically
+set and passed through as well, as described below.  B<Note:>
+variables set in C<vars> will over-ride any variables of the same name
+in the config object or the user cookies.
+
+=over
+
+=item * C<site_name>
+
+=item * C<cgi_url>
+
+=item * C<full_cgi_url>
+
+=item * C<contact_email>
+
+=item * C<stylesheet>
+
+=item * C<home_link>
+
+=item * C<formatting_rules_link> (unless C<omit_formatting_link> is set in user cookie)
+
+=item * C<home_name>
+
+=back
+
+If C<node> is supplied:
+
+=item * C<node_name>
+
+=item * C<node_param> (the node name escaped for use in URLs)
+
+=back
 
 Content-Type: defaults to C<text/html> and is omitted if the
 C<content_type> arg is explicitly set to the blank string.
@@ -66,7 +100,6 @@ sub output {
     my $config = $args{config} or croak "No config supplied";
     my $template_path = $config->{_}->{template_path};
     my $tt = Template->new( { INCLUDE_PATH => $template_path } );
-    my $tt_vars = $args{vars} || {};
 
     my $script_name = $config->{_}->{script_name};
     my $script_url  = $config->{_}->{script_url};
@@ -75,20 +108,34 @@ sub output {
     # we need to allow for people editing the config file by hand later.
     $script_url .= "/" unless $script_url =~ /\/$/;
 
-    $tt_vars = { %$tt_vars,
-		 site_name     => $config->{_}->{site_name},
-		 cgi_url       => $script_name,
-		 full_cgi_url  => $script_url . $script_name,
-		 contact_email => $config->{_}->{contact_email},
-		 stylesheet    => $config->{_}->{stylesheet_url},
-		 home_link     => $script_url . $script_name,
-		 home_name     => $config->{_}->{home_name}
+    # Check cookie to see if we need to set the formatting_rules_link.
+    my %cookie_data = OpenGuides::CGI->get_prefs_from_cookie(config=>$config);
+    my $formatting_rules_link = "";
+    my $formatting_rules_node = $config->{_}->{formatting_rules_node} || "";
+    if ( $formatting_rules_node and ! $cookie_data{omit_formatting_link} ) {
+        $formatting_rules_link = $script_url . $script_name . "?"
+                               . uri_escape($args{wiki}->formatter->node_name_to_node_param($formatting_rules_node));
+    }
+
+    my $tt_vars = { site_name             => $config->{_}->{site_name},
+	   	    cgi_url               => $script_name,
+		    full_cgi_url          => $script_url . $script_name,
+		    contact_email         => $config->{_}->{contact_email},
+		    stylesheet            => $config->{_}->{stylesheet_url},
+		    home_link             => $script_url . $script_name,
+		    home_name             => $config->{_}->{home_name},
+                    formatting_rules_link => $formatting_rules_link,
+                    formatting_rules_node => $formatting_rules_node,
     };
 
     if ($args{node}) {
         $tt_vars->{node_name} = CGI->escapeHTML($args{node});
         $tt_vars->{node_param} = CGI->escape($args{wiki}->formatter->node_name_to_node_param($args{node}));
     }
+
+    # Now set further TT variables if explicitly supplied - do this last
+    # as these override auto-set ones.
+    $tt_vars = { %$tt_vars, %{ $args{vars} || {} } };
 
     my $header = "";
     unless ( defined $args{content_type} and $args{content_type} eq "" ) {
@@ -134,7 +181,7 @@ Picks out things like categories, locales, phone number etc from
 EITHER the metadata hash returned by L<CGI::Wiki> OR the query
 parameters in a L<CGI> object, and packages them nicely for passing to
 templates or storing in L<CGI::Wiki> datastore.  If you supply both
-C<metadata> and C<cgi_obj> then C<metadata will take precedence, but
+C<metadata> and C<cgi_obj> then C<metadata> will take precedence, but
 don't do that.
 
 =cut

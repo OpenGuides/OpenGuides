@@ -48,6 +48,17 @@
     Display latitude and longitude as degrees and minutes instead of decimal.
     </p>
 
+    [% IF formatting_rules_node %]
+      <p>
+      [% IF omit_formatting_link %]
+        <input type="checkbox" name="omit_formatting_link" value="1" checked />
+      [% ELSE %]
+        <input type="checkbox" name="omit_formatting_link" value="1" />
+      [% END %]
+      Omit &#8220;[% formatting_rules_node %]&#8221; link from navbar.
+      </p>
+    [% END %]
+
     <input type="submit" value="Set it" class="form_button" />
     <input type="hidden" name="action" value="set_preferences">
   </form>
@@ -77,6 +88,12 @@
       decimal.
     [% END %]
   </p>
+
+  [% IF formatting_rules_node %]
+    <p>&#8220;[% formatting_rules_node %]&#8221; link
+      [% IF omit_formatting_link %] not [% END %]
+    included in navbar</p>
+  [% END %]
 
   <p><a href="[% full_cgi_url %]">Return to the wiki</a></p>
 

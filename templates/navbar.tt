@@ -9,6 +9,9 @@
     <li>[% geocache_link %]</li>
     [% END %]
     <li><a href="preferences.cgi">Set username/preferences</a></li>
+    [% IF formatting_rules_link %]
+      <li><a href="[% formatting_rules_link %]">[% formatting_rules_node %]</a></li>
+    [% END %]
     [% IF not_editable %]
     </ul><br />
     [% ELSE %]

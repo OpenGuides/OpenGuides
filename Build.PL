@@ -70,7 +70,11 @@ my @questions = (
   },
 { question => "contact email address for the wiki admin?",
   variable => "contact_email"
-  }
+  },
+{ question => "what's the name of the node to use for the text formatting rules link?",
+  variable => "formatting_rules_node",
+  default  => "Text Formatting Examples"
+  },
 );
 
 my $skip_config = Module::Build->y_n("Skip OpenGuides configuration?", "n");

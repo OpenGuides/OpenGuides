@@ -25,12 +25,14 @@ sub set_preferences {
     my $gc_link      = $cgi->param("include_geocache_link")  || 0;
     my $pre_above    = $cgi->param("preview_above_edit_box") || 0;
     my $latlong_trad = $cgi->param("latlong_traditional")    || 0;
+    my $omit_fmt_lnk = $cgi->param("omit_formatting_link")   || 0;
     my $cookie = OpenGuides::CGI->make_prefs_cookie(
         config => $config,
         username => $username,
         include_geocache_link => $gc_link,
 	preview_above_edit_box => $pre_above,
-        latlong_traditional => $latlong_trad
+        latlong_traditional => $latlong_trad,
+        omit_formatting_link => $omit_fmt_lnk,
     );
     print OpenGuides::Template->output(
         wiki     => $wiki,
@@ -41,7 +43,8 @@ sub set_preferences {
                       username               => $username,
                       include_geocache_link  => $gc_link,
                       preview_above_edit_box => $pre_above,
-                      latlong_traditional    => $latlong_trad
+                      latlong_traditional    => $latlong_trad,
+                      omit_formatting_link   => $omit_fmt_lnk
                     }
     );
 }

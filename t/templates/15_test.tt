@@ -10,3 +10,6 @@ HOME NAME: [% home_name %]
 
 NODE NAME: [% node_name %]
 NODE PARAM: [% node_param %]
+
+FORMATTING RULES LINK: [% formatting_rules_link %]
+OMIT FORMATTING LINK: [% omit_formatting_link %]
