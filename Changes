@@ -1,3 +1,5 @@
+        Fixed bug relating to lat/long representation.
+
 0.44    17 November 2004
         Remove all traces of display_categories, which was obsoleted but
           not completely removed before.

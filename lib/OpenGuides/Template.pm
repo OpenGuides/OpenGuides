@@ -300,6 +300,7 @@ sub extract_metadata_vars {
     my %prefs = OpenGuides::CGI->get_prefs_from_cookie( config => $config );
     if ( $prefs{latlong_traditional} ) {
         foreach my $var ( qw( latitude longitude ) ) {
+            next unless defined $vars{$var};
             $vars{$var."_unmunged"} = $vars{$var};
             $vars{$var} = Geography::NationalGrid->deg2string($vars{$var});
         }

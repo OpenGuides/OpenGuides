@@ -10,7 +10,7 @@ eval { require DBD::SQLite; };
 if ( $@ ) {
     plan skip_all => "DBD::SQLite not installed";
 } else {
-    plan tests => 2;
+    plan tests => 4;
 
     # Clear out the database from any previous runs.
     unlink "t/node.db";
@@ -65,8 +65,8 @@ if ( $@ ) {
     $q->param( -name => "address", -value => "" );
     $q->param( -name => "postcode", -value => "" );
     $q->param( -name => "map_link", -value => "" );
-    $q->param( -name => "os_x", -value => "532125" );
-    $q->param( -name => "os_y", -value => "165504" );
+    $q->param( -name => "os_x", -value => "532125" );   # these two lines are
+    $q->param( -name => "os_y", -value => "165504" );   # the important ones
     $q->param( -name => "username", -value => "Kake" );
     $q->param( -name => "comment", -value => "foo" );
     $q->param( -name => "edit_type", -value => "Minor tidying" );
@@ -92,4 +92,26 @@ if ( $@ ) {
                                   );
     unlike( $output, qr/name="lat"\svalue="[-0-9]*d/,
             "lat in non-dms format in distance search form" );
+
+    # Now write a node with no location data, and check that it doesn't
+    # claim to have any when we display it.
+    $q->param( -name => "os_x", -value => "" );
+    $q->param( -name => "os_y", -value => "" );
+    eval {
+        local $SIG{__WARN__} = sub { die $_[0]; };
+        $output = $guide->commit_node(
+                                       return_output => 1,
+                                       id => "Locationless Page",
+                                       cgi_obj => $q,
+                                     );
+    };
+    is( $@, "",
+    "commit doesn't warn when prefs say dms format and node has no loc data" );
+
+    $output = $guide->display_node(
+                                    return_output => 1,
+                                    id => "Locationless Page",
+                                  );
+    unlike( $output, qr/latitude:/i,
+            "node with no location data doesn't display a latitude" );
 }
