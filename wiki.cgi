@@ -13,13 +13,13 @@ use CGI::Wiki::Search::SII;
 use CGI::Wiki::Formatter::UseMod;
 use CGI::Wiki::Plugin::GeoCache;
 use CGI::Wiki::Plugin::Locator::UK;
-use CGI::Wiki::Plugin::Diff;
 use Config::Tiny;
 use Geography::NationalGrid;
 use Geography::NationalGrid::GB;
 use OpenGuides::CGI;
 use OpenGuides::RDF;
 use OpenGuides::Utils;
+use OpenGuides::Diff;
 use OpenGuides::Template;
 use Time::Piece;
 use URI::Escape;
@@ -35,14 +35,12 @@ my $script_url = $config->{_}->{script_url};
 # we need to allow for people editing the config file by hand later.
 $script_url .= "/" unless $script_url =~ /\/$/;
 
-my ($wiki, $formatter, $locator, $diff_plugin, $q);
+my ($wiki, $formatter, $locator, $q);
 eval {
     $wiki = OpenGuides::Utils->make_wiki_object( config => $config );
     $formatter = $wiki->formatter;
     $locator = CGI::Wiki::Plugin::Locator::UK->new;
     $wiki->register_plugin( plugin => $locator );
-    $diff_plugin = CGI::Wiki::Plugin::Diff->new;
-    $wiki->register_plugin( plugin => $diff_plugin );
 
     # Get CGI object, find out what to do.
     $q = CGI->new;
@@ -107,6 +105,8 @@ eval {
 			   origin => $node,
 			   origin_param => $formatter->node_name_to_node_param($node),
 			   limit  => "$metres metres" } );
+    } elsif ($action eq 'delete') {
+        delete_node($node);
     } elsif ($action eq 'userstats') {
         show_userstats( $username );
     } elsif ($action eq 'list_all_versions') {
@@ -129,10 +129,10 @@ eval {
             my $version = $q->param("version");
 	    my $other_ver = $q->param("diffversion");
 	    if ( $other_ver ) {
-                my %diff_vars = $diff_plugin->differences(
-                    node          => $node,
-                    left_version  => $version, 
-		    right_version => $other_ver
+                my %diff_vars = OpenGuides::Diff->formatted_diff_vars(
+                    wiki     => $wiki,
+                    node     => $node,
+                    versions => [ $version, $other_ver ]
                 );
                 print OpenGuides::Template->output(
                     wiki     => $wiki,
@@ -187,7 +187,6 @@ sub display_node {
         $tt_vars{index_value} = $2;
 
         unless ( $wiki->node_exists($node) ) {
-            warn "Creating default node $node";
             my $category = $type eq "Category" ? "Category" : "Locales";
             $wiki->write_node( $node,
                                "\@INDEX_LINK [[$node]]",
@@ -434,6 +433,25 @@ sub edit_node {
     );
 
     process_template("edit_form.tt", $node, \%tt_vars);
+}
+
+sub delete_node {
+    my $node = shift;
+
+    my %tt_vars = ( name => $node );
+
+    my $password = $q->param('password');
+
+    if ($password) {
+        if ($password ne $config->{_}->{admin_pass}) {
+            process_template("delete_password_wrong.tt", $node, \%tt_vars) 
+        } else {
+            $wiki->delete_node($node);
+            process_template("delete_done.tt", $node, \%tt_vars);
+        }
+    } else {
+        process_template("delete_confirm.tt", $node, \%tt_vars);
+    }
 }
 
 sub get_cookie {
