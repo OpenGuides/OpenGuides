@@ -34,14 +34,14 @@ Answer "n" to this question unless you really know what you're doing.
 It's mainly there for developers.
 
 
-  "what type of database do you want the site to run on?"
+  "What type of database do you want the site to run on?"
 
 Answer "postgres", "mysql", or "sqlite".
 
 
   "What's the name of the database that this site runs on?"
-  "And the database user that can access that database?"
-  "And the password that they use to access the database?"
+  "...the database user that can access that database?"
+  "...the password that they use to access the database?"
 
 You should create (or ask your ISP/sysadmin to create) a database
 specifically for the use of OpenGuides.  If you have more than one
@@ -49,7 +49,7 @@ OpenGuides installation, for example if you run guides for more than
 one city, each installation will need its own database.
 
 
-  "And the machine that the database is hosted on? (blank if local)",
+  "...the machine that the database is hosted on? (blank if local"
 
 If the database is running on a local machine with username/password
 authentication then just press RETURN to skip this question.  If it
@@ -74,6 +74,14 @@ CGI scripts.  You will need to have write permission on this directory
 when you come to run "perl Build install"; unless this is a private
 directory belonging to you then this might require an 'su' or 'sudo'
 to root under Unix.
+
+
+  "What directory should I install the templates in?" 
+  "Where should I look for custom templates?"
+
+Normally these will be in the install directory, but they can be anywhere.
+Custom templates are intended to be user-modified, so you might want to
+put them somewhere in /etc.
 
 
   "What URL does the install directory map to?"
@@ -116,17 +124,18 @@ multi-user systems this will just be yourself.
 
 
   "Do you want to enable page deletion?"
+  "Please specify a password for the site admin."
 
 The default is to disable page deletion.  If you choose to enable the
 page deletion mechanism then you will need to add a password to your
-wiki.conf using a line such as
+wiki.conf by answering the question above or manually using a line such as
   admin_pass = putyourpasswordhere
 Users who know this password will be able to delete unwanted pages -
 along with all their history - from your wiki.
 *** USE WITH CAUTION.  DELETED PAGES CANNOT BE RECOVERED. ***
 
 
-  "What's the URL of the wiki's stylesheet?"
+  "What's the URL of the site's stylesheet?"
 
 Supplying an answer to this question is optional.  There are example
 stylesheets in the examples/ directory - note that these will not be 
@@ -147,8 +156,17 @@ Answer "y" or "n".
 
   "What should the home page of the wiki be called?"
   "How would you describe the wiki?"
+
+Self-explanatory.
+
+
   "What city is the wiki based in?"
   "What country is the wiki based in?"
+
+If the wiki will not be city or city specific you can leave either or
+both of these blank.
+
+
   "Contact email address for the wiki admin?"
 
 Self explanatory.
@@ -160,13 +178,18 @@ eg "en" for English, "it" for Italian.
 See http://ftp.ics.uci.edu/pub/ietf/http/related/iso639.txt
 
 
-  "What's the name of the node to use for the text formatting rules link?"
+  "What's the name of the node or page to use for the text formatting
+   rules link?"
+  "What URL do you want to use for the text formatting rules"
 
 From 0.19, OpenGuides allows users to choose whether or not to have a
-permanent link to the text formatting rules node in their navbar.  You
-need to put the name of that node in here for it to work, though.  You
-might want to call the node "Text Formatting Examples", "Text
-Formatting Rules", "House Style" or whatever.
+permanent link to the text formatting rules node or page in their navbar.
+You need to put the name of that node or URL in here for it to work, though.
+You might want to call the node "Text Formatting Examples",
+"Text Formatting Rules", "House Style" or whatever.
+
+Note that these the latter question will override the former, so if you
+want to use a local node make sure to leave the latter blank.
 
 
   "Distance calculation methods available are:
@@ -212,8 +235,9 @@ again.
 
 Once you have installed OpenGuides you may wish to edit templates that
 provide site-specific design. These templates are stored in the directory
-custom-templates/ and are described in the file CUSTOMISATION. The id and
-class tags used for the CSS in OpenGuides are specified in README.CSS.
+custom-templates/ by default and are described in the file CUSTOMISATION.
+The id and class tags used for the CSS in OpenGuides are specified in
+README.CSS.
 
 * Security
 
