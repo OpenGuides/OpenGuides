@@ -2,8 +2,8 @@
 
 <h1 align=center>
   [% site_name %] - Node List
-  [%- IF category -%]
-    - <a href="[% category.url %]">Category [%- category.name -%]</a>
+  [%- IF criterion -%]
+    - <a href="[% criterion.url %]">[%- criterion.name -%]</a>
   [%- END -%]
   [%- IF origin -%]
     - Things within [%- limit -%] of <a href="wiki.cgi?[%- origin_param -%]">[%- origin -%]</a>

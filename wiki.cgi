@@ -4,7 +4,7 @@ use strict;
 use warnings;
 
 use vars qw( $VERSION );
-$VERSION = '0.03';
+$VERSION = '0.04';
 
 use lib "lib"; # for OpenGuides modules that are installed with this script
 
@@ -72,8 +72,8 @@ my %macros = (
         qq(<form action="$search_url" method="get">
 	   <input type="text" size="20" name="search">
 	   <input type="submit" name="Go" value="Search"></form>),
-    qr/\@INDEX_LINK\s+\[\[Category\s+([^\]]+)\]\]/ =>
-        sub { return qq(<a href="$script_name?action=catindex&category=) . uri_escape($_[0]) . qq(">View all pages in Category $_[0]</a>)
+    qr/\@INDEX_LINK\s+\[\[(Category|Locale)\s+([^\]]+)\]\]/ =>
+        sub { return qq(<a href="$script_name?action=index;index_type=) . uri_escape(lc($_[0])) . qq(;index_value=) . uri_escape($_[1]) . qq(">View all pages in $_[0] $_[1]</a>)
             }
 );
 
@@ -126,54 +126,19 @@ eval {
     } elsif ($action eq 'show_backlinks') {
         show_backlinks($node);
     } elsif ($action eq 'index') {
-        my @all_nodes = $wiki->list_all_nodes();
-	my @nodes = map { { name  => $_,
-			    param => $formatter->node_name_to_node_param($_) }
-			} sort @all_nodes;
-        my ($template, $omit_header);
-        if ( $format eq "rdf" ) {
-            $template = "rdf_index.tt";
-            $omit_header = 1;
-            print "Content-type: text/plain\n\n";
-	} else {
-	    $template = "site_index.tt";
-        }
-        process_template($template,
-			 "index",
-			 { nodes => \@nodes },
-			 {},
-			 $omit_header,
-        );
+        show_index( type   => $q->param("index_type"),
+                    value  => $q->param("index_value"),
+                    format => $format );
+    } elsif ($action eq "catindex") {
+        # This is for backwards compatibility with pre-0.04 versions.
+        show_index( type   => "category",
+                    value  => $q->param("category"),
+                    format => $format );
     } elsif ($action eq 'random') {
         my @nodes = $wiki->list_all_nodes();
         $node = $nodes[int(rand(scalar(@nodes) + 1)) + 1];
         redirect_to_node($node);
         exit 0;
-    } elsif ($action eq 'catindex') {
-        my $cat = $q->param('category');
-        my @cats = $wiki->list_nodes_by_metadata( metadata_type => "category",
-						  metadata_value => $cat );
-	my @nodes = map { { name  => $_,
-			    param => $formatter->node_name_to_node_param($_) }
-			} sort @cats;
-        my ($template, $omit_header);
-        if ( $format eq "rdf" ) {
-            $template = "rdf_index.tt";
-            $omit_header = 1;
-#            print "Content-type: application/xml\n\n";
-            print "Content-type: text/plain\n\n";
-	} else {
-	    $template = "site_index.tt";
-        }
-        process_template($template, "Category Index",
-                         { nodes    => \@nodes,
-			   category => { name => $q->escapeHTML($cat),
-					 url  => "$script_name?Category_"
-                        . uri_escape($formatter->node_name_to_node_param($cat))
-			                }
-			  },
-			  {},
-			  $omit_header);
     } elsif ($action eq 'find_within_distance') {
         my $metres = $q->param("distance_in_metres");
         my @finds = $locator->find_within_distance( node => $node,
@@ -241,11 +206,12 @@ sub display_node {
 
     my %tt_vars;
 
-    # If this is a Category node, check whether it exists and write it
-    # a stub node if it doesn't.
-    if ( $node =~ /^Category (.*)$/ ) {
-        $tt_vars{is_category_node} = 1;
-        $tt_vars{category_name}    = $1;
+    # If this is a Category or Locale node, check whether it exists
+    # and write it a stub node if it doesn't.
+    if ( $node =~ /^(Category|Locale) (.*)$/ ) {
+        $tt_vars{is_indexable_node} = 1;
+        $tt_vars{index_type} = lc($1);
+        $tt_vars{index_value} = $2;
 
         unless ( $wiki->node_exists($node) ) {
             warn "Creating default node $node";
@@ -253,7 +219,7 @@ sub display_node {
                                "\@INDEX_LINK [[$node]]",
                                undef,
 			       { username => "Auto Create",
-				 comment  => "Auto created category stub page"
+				 comment  => "Auto created $tt_vars{index_type} stub page"
 			       }
 	    );
 	}
@@ -306,7 +272,7 @@ sub display_node {
             . uri_escape($formatter->node_name_to_node_param($_)) } } @$catref;
 
     my @locales    = map { { name => $_,
-                             url  => "$script_name?Category_"
+                             url  => "$script_name?Locale_"
             . uri_escape($formatter->node_name_to_node_param($_)) } } @$locref;
 
     %tt_vars = (    %tt_vars,
@@ -358,6 +324,41 @@ sub display_node {
     } else {
         process_template("node.tt", $node, \%tt_vars);
     }
+}
+
+sub show_index {
+    my %args = @_;
+    my %tt_vars;
+    my @selnodes;
+    if ( $args{type} and $args{value} ) {
+        @selnodes = $wiki->list_nodes_by_metadata(
+            metadata_type => $args{type},
+	    metadata_value => $args{value} );
+        $tt_vars{criterion} = {
+            name => $q->escapeHTML(ucfirst($args{type}) . " $args{value}"),
+	    url  => "$script_name?" . ucfirst($args{type}) . "_" . uri_escape($formatter->node_name_to_node_param($args{value})) };
+    } else {
+        @selnodes = $wiki->list_all_nodes();
+    }
+    my @nodes = map { { name  => $_,
+			param => $formatter->node_name_to_node_param($_) }
+		    } sort @selnodes;
+    $tt_vars{nodes} = \@nodes;
+    my ($template, $omit_header);
+    if ( $args{format} eq "rdf" ) {
+	$template = "rdf_index.tt";
+	$omit_header = 1;
+	print "Content-type: text/plain\n\n";
+    } else {
+	$template = "site_index.tt";
+    }
+
+    process_template($template,
+		     "$args{type} index",
+                     \%tt_vars,
+		     {},
+		     $omit_header,
+    );
 }
 
 sub list_all_versions {

@@ -5,7 +5,7 @@ CGI
 CGI::Carp
 CGI::Cookie
 CGI::Wiki (version 0.28 or later)
-CGI::Wiki::Formatter::UseMod (version 0.02 or later)
+CGI::Wiki::Formatter::UseMod (version 0.03 or later)
 CGI::Wiki::Plugin::GeoCache
 CGI::Wiki::Plugin::Locator::UK (version 0.04 or later)
 CGI::Wiki::Plugin::RSS::ModWiki
