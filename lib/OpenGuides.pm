@@ -4,6 +4,7 @@ use strict;
 use Carp "croak";
 use CGI;
 use CGI::Wiki::Plugin::Diff;
+use CGI::Wiki::Plugin::GeoCache;
 use CGI::Wiki::Plugin::Locator::UK;
 use OpenGuides::Template;
 use OpenGuides::Utils;
@@ -11,7 +12,7 @@ use URI::Escape;
 
 use vars qw( $VERSION );
 
-$VERSION = '0.33_02';
+$VERSION = '0.33_03';
 
 =head1 NAME
 
