@@ -7,7 +7,7 @@
   [% site_name %] - Differences between [% right_version %] and [% left_version %] of [% node_name %]
   </h1>
 [% IF diff %]
-<table width=100%>
+<table>
   <tr>
     <th width=50%> [% right_version %] </th>
     <th width=50%> [% left_version %] </th>
