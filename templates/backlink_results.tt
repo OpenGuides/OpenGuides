@@ -1,5 +1,5 @@
 [% INCLUDE header.tt %]
-
+<div id="content">
 <h1 align=center>[% site_name %] - Backlinks to [% node_name %]</h1>
 
 <p>Results found: [% num_results %]</p>
