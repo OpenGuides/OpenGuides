@@ -468,10 +468,17 @@ sub edit_node {
     my %metadata   = %{$node_data{metadata}};
     my $username   = get_cookie( "username" );
 
+    # We turn the categories and locales into arrays of hashrefs rather than
+    # simple arrays of strings, because the edit_form.tt template is also
+    # used for preview_node, which makes use of display_categories.tt to
+    # display the categories as links, and hence addresses as category.name
+    my @categories = map { { name => $_ } } @{$metadata{category} || []};
+    my @locales    = map { { name => $_ } } @{$metadata{locale}   || []};
+
     my %tt_vars = ( content    => $q->escapeHTML($content),
                     checksum   => $q->escapeHTML($checksum),
-                    categories => $metadata{category},
-		    locales    => $metadata{locale},
+                    categories => \@categories,
+		    locales    => \@locales,
 		    phone      => $metadata{phone}[0],
 		    fax        => $metadata{fax}[0],
 		    website    => $metadata{website}[0],
