@@ -34,7 +34,7 @@ my @questions = (
   variable => "stylesheet_url"
 },
 { question =>
-        "what's the name of the postgres database that this site runs on?",
+        "what's the name of the database that this site runs on?",
   variable => "dbname"
 },
 { question => "and the database user that can access that database?",
@@ -81,6 +81,29 @@ EOF
 }
 
 my @answers;
+
+# Database type is speshull - can be one of three.
+my $dbtype;
+my $dbtype_qu = "what type of database do you want the site to run on?  postgres/mysql/sqlite";
+if ( $skip_config ) {
+    $dbtype = $existing_config{dbtype} || "postgres";
+} else {
+    until ( $dbtype ) {
+        my $def = $existing_config{dbtype} || "postgres";
+	$dbtype = Module::Build->prompt("\n$dbtype_qu", $def);
+	$dbtype = lc($dbtype);
+	$dbtype =~ s/^\s*//;
+	$dbtype =~ s/\s*$//;
+	unless ( $dbtype eq "postgres" or $dbtype eq "mysql"
+		 or $dbtype eq "sqlite" ) {
+	    undef $dbtype;
+	}
+    }
+}
+push @answers, { question => $dbtype_qu,
+                 variable => "dbtype",
+                 value    => $dbtype };
+
 foreach my $qset (@questions) {
     my $qu  = $qset->{question};
     my $var = $qset->{variable};
