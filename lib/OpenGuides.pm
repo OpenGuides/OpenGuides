@@ -29,7 +29,7 @@ so the location features might not work so well outside the UK.
 
 =item * L<http://london.openguides.org/|The Open Guide to London>, the first and biggest OpenGuides site.
 
-=item * L<http://openguides.org/|OpenGuides.org>, the OpenGuides website with a list of all live OpenGuides installs.
+=item * L<http://openguides.org/|The OpenGuides website>, with a list of all live OpenGuides installs.
 
 =item * L<CGI::Wiki>, the Wiki toolkit which does the heavy lifting for OpenGuides
 
