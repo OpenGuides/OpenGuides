@@ -759,11 +759,17 @@ removed.
 If C<password> is not supplied then a form for entering the password
 will be displayed.
 
+As with other methods, parameters C<return_tt_vars> and
+C<return_output> can be used to return these things instead of
+printing the output to STDOUT.
+
 =cut
 
 sub delete_node {
     my ($self, %args) = @_;
     my $node = $args{id} or croak "No node ID supplied for deletion";
+    my $return_tt_vars = $args{return_tt_vars} || 0;
+    my $return_output = $args{return_output} || 0;
 
     my %tt_vars = (
                     not_editable  => 1,
@@ -776,11 +782,14 @@ sub delete_node {
 
     if ($password) {
         if ($password ne $self->config->{_}->{admin_pass}) {
-            print $self->process_template(
+            return %tt_vars if $return_tt_vars;
+            my $output = $self->process_template(
                                      id       => $node,
                                      template => "delete_password_wrong.tt",
                                      tt_vars  => \%tt_vars,
                                    );
+            return $output if $return_output;
+            print $output;
         } else {
             $self->wiki->delete_node(
                                       name    => $node,
@@ -789,18 +798,24 @@ sub delete_node {
             # Check whether any versions of this node remain.
             my %check = $self->wiki->retrieve_node( name => $node );
             $tt_vars{other_versions_remain} = 1 if $check{version};
-            print $self->process_template(
+            return %tt_vars if $return_tt_vars;
+            my $output = $self->process_template(
                                      id       => $node,
                                      template => "delete_done.tt",
                                      tt_vars  => \%tt_vars,
                                    );
+            return $output if $return_output;
+            print $output;
         }
     } else {
-        print $self->process_template(
+        return %tt_vars if $return_tt_vars;
+        my $output = $self->process_template(
                                  id       => $node,
                                  template => "delete_confirm.tt",
                                  tt_vars  => \%tt_vars,
                                );
+        return $output if $return_output;
+        print $output;
     }
 }
 
