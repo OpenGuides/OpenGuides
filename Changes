@@ -1,5 +1,6 @@
         Fixed bug with list_all_versions for nodes with only one version.
         Extended config changes to examples/reindex.pl (thanks jimbo).
+        Now require CGI::Wiki 0.62 to fix bug with deleting versions.
 
 0.46	21 December 2004
         Minor bug fixes: remove bogus edit link on index listings,
