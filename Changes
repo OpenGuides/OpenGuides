@@ -1,3 +1,4 @@
+0.31    
         Overhauled RDF output. Changes:
           - everything is no longer classified as a restaurant(!)
           - empty tags are no longer generated
@@ -18,7 +19,7 @@
           node names in newpage.cgi (a restriction which dates from all the way
           back when we were using UseModWiki): " ! $ ^ ~ @ [ ] { }
 
-0.30    2 January 2003
+0.30    2 January 2004
         Added method to allow admins to delete nodes.  You will need to
           explicitly enable this option in your wiki.conf, since it brings
           with it the risk of accidental data loss.
