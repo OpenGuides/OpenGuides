@@ -19,14 +19,24 @@
     <input type="text" size="20" name="username" value="[% username %]" />
 
     <h1>Preferences</h1>
+
+    <p>Check this to put the preview above the edit area when previewing
+    a page edit:</p>
+    [% IF preview_above_edit_box %]
+      <input type="checkbox" name="preview_above_edit_box" value="1" checked />
+    [% ELSE %]
+      <input type="checkbox" name="preview_above_edit_box" value="1" />
+    [% END %]
+    <br />
+
     <p>Check this to include &#8220;Look for nearby geocaches&#8221; link in navbar:</p>
     [% IF include_geocache_link %]
       <input type="checkbox" name="include_geocache_link" value="1" checked />
     [% ELSE %]
       <input type="checkbox" name="include_geocache_link" value="1" />
     [% END %]
-
     <br />
+
     <input type="submit" value="Set it">
     <input type="hidden" name="action" value="set_preferences">
   </form>
@@ -37,11 +47,19 @@
 
   <p>Username set to &#8220;[% username %]&#8221;</p>
 
+  <p>Preview area shown
+    [% IF preview_above_edit_box %]
+      above
+    [% ELSE %]
+      below
+    [% END %]
+  edit box.</p>
+
   <p>&#8220;Look for nearby geocaches&#8221; link
     [% UNLESS include_geocache_link %] not [% END %]
   included in navbar</p>
 
-  <p><a href="[% script_name %]">Return to the wiki</a></p>
+  <p><a href="[% cgi_url %]">Return to the wiki</a></p>
 
 [% END %]
 

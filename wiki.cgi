@@ -4,11 +4,10 @@ use strict;
 use warnings;
 
 use vars qw( $VERSION );
-$VERSION = '0.11';
+$VERSION = '0.12';
 
 use CGI qw/:standard/;
 use CGI::Carp qw(croak);
-use CGI::Cookie;
 use CGI::Wiki;
 use CGI::Wiki::Search::SII;
 use CGI::Wiki::Formatter::UseMod;
@@ -17,6 +16,7 @@ use CGI::Wiki::Plugin::Locator::UK;
 use Config::Tiny;
 use Geography::NationalGrid;
 use Geography::NationalGrid::GB;
+use OpenGuides::CGI;
 use OpenGuides::RDF;
 use OpenGuides::Utils;
 use OpenGuides::Diff qw(display_node_diff);
@@ -351,11 +351,13 @@ sub preview_node {
     }
 
     if ($wiki->verify_checksum($node, $checksum)) {
-        my %tt_vars = ( content      => $q->escapeHTML($content),
-                        %tt_metadata_vars,
-                        preview_html => $wiki->format($content),
-                        checksum     => $q->escapeHTML($checksum) );
-
+        my %tt_vars = (
+            %tt_metadata_vars,
+            content                => $q->escapeHTML($content),
+            preview_html           => $wiki->format($content),
+            preview_above_edit_box => get_cookie( "preview_above_edit_box" ),
+            checksum               => $q->escapeHTML($checksum)
+	);
         process_template("edit_form.tt", $node, \%tt_vars);
     } else {
         my %node_data = $wiki->retrieve_node($node);
@@ -398,16 +400,11 @@ sub edit_node {
 }
 
 sub get_cookie {
-    my $cookie_name = shift or return "";
-    my %defaults = ( username              => "Anonymous",
-		     include_geocache_link => 0 );
-    my %cookies = fetch CGI::Cookie;
-    if ($cookies{$cookie_name}) {
-	return $cookies{$cookie_name}->value;
-    }
-    else {
-	return $defaults{$cookie_name};
-    }
+    my $pref_name = shift or return "";
+warn "[$pref_name]";
+    my %cookie_data = OpenGuides::CGI->get_prefs_from_cookie(config=>$config);
+warn "[$cookie_data{$pref_name}]";
+    return $cookie_data{$pref_name};
 }
 
 sub emit_recent_changes_rss {

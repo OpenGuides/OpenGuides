@@ -94,7 +94,9 @@ optionally install a simple stylesheet with the OpenGuides distribution.
 
   "What's the wiki called?"
 
-This is a title which will appear at the top of every page.
+This is a title which will appear at the top of every page.  If you have
+more than one OpenGuides installation at the same site then each should
+have a unique name, since this name is used to manage user preferences.
 
 
   "What should the home page of the wiki be called?"

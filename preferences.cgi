@@ -2,10 +2,13 @@
 
 use strict;
 use CGI;
-use CGI::Cookie;
 use Config::Tiny;
-use Template;
+use OpenGuides::CGI;
+use OpenGuides::Utils;
+use OpenGuides::Template;
 
+my $config = Config::Tiny->read("wiki.conf");
+my $wiki = OpenGuides::Utils->make_wiki_object( config => $config );
 my $cgi = CGI->new();
 my $action = $cgi->param('action') || '';
 
@@ -18,56 +21,39 @@ if ( $action eq "set_preferences" ) {
 exit 0;
 
 sub set_preferences {
-    my $username = $cgi->param("username") || "";
-    my $gc_link  = $cgi->param('include_geocache_link') || 0,
-    my @cookies;
-    push @cookies, CGI::Cookie->new( -name    => 'username',
-				     -value   => $username,
-				     -expires => '+12M',
+    my $username  = $cgi->param("username") || "";
+    my $gc_link   = $cgi->param('include_geocache_link') || 0;
+    my $pre_above = $cgi->param('preview_above_edit_box') || 0;
+    my $cookie = OpenGuides::CGI->make_prefs_cookie(
+        config => $config,
+        username => $username,
+        include_geocache_link => $gc_link,
+	preview_above_edit_box => $pre_above
     );
-
-    push @cookies, CGI::Cookie->new( -name    => 'include_geocache_link',
-				     -value   => $gc_link,
-				     -expires => '+12M',
+    print OpenGuides::Template->output(
+        wiki     => $wiki,
+        config   => $config,
+        template => "preferences.tt",
+        cookies  => $cookie,
+	vars     => { not_editable           => 1,
+                      username               => $username,
+                      include_geocache_link  => $gc_link,
+                      preview_above_edit_box => $pre_above
+                    }
     );
-    print $cgi->header( -cookie => \@cookies );
-
-    process_prefs_template( username              => $username,
-			    include_geocache_link => $gc_link );
 }
-
 
 sub show_form {
     # Get defaults for form fields from cookies.
-    my %cookies = CGI::Cookie->fetch;
-    my $username = $cookies{"username"} ? $cookies{"username"}->value : "";
-    my $gc_link  = $cookies{"include_geocache_link"} ? $cookies{"include_geocache_link"}->value : 0;
+    my %prefs = OpenGuides::CGI->get_prefs_from_cookie( config => $config );
 
-    print $cgi->header;
-    process_prefs_template( show_form             => 1,
-			    username              => $username,
-			    include_geocache_link => $gc_link );
-}
-
-
-sub process_prefs_template {
-    # Some TT params are passed in to the sub.
-    my %tt_vars = @_;
-
-    # Others are global and we get them from the config file.
-    my $config = Config::Tiny->read("wiki.conf");
-    foreach my $param ( qw( site_name stylesheet_url script_name home_name
-			    ) ) {
-        $tt_vars{$param} = $config->{_}->{$param};
-    }
-
-    # This isn't a page you can edit.
-    $tt_vars{not_editable} = 1;
-
-    my %tt_conf = ( INCLUDE_PATH => $config->{_}->{template_path},
+    print OpenGuides::Template->output(
+        wiki     => $wiki,
+        config   => $config,
+        template => "preferences.tt",
+	vars     => { %prefs,
+                      not_editable => 1,
+                      show_form    => 1
+                    }
     );
-
-    my $tt = Template->new( \%tt_conf );
-    $tt->process( "preferences.tt", \%tt_vars ) or warn $tt->error;
 }
- 

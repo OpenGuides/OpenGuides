@@ -7,6 +7,7 @@ PREREQUISITES
 README
 TROUBLESHOOTING
 lib/OpenGuides/Build.pm
+lib/OpenGuides/CGI.pm
 lib/OpenGuides/Diff.pm
 lib/OpenGuides/RDF.pm
 lib/OpenGuides/Template.pm
@@ -41,6 +42,7 @@ templates/userstats.tt
 t/00_setup.t
 t/01_add_test_data.t
 t/11_utils.t
+t/13_cookies.t
 t/15_template.t
 t/21_rdf.t
 t/21_wiki.conf

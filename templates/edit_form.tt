@@ -2,8 +2,27 @@
 
 <h1 align="center">Edit "[% node_name %]"</h1>
 
+[% IF preview_html AND preview_above_edit_box %]
+  <h2>Preview</h2>
+  [% INCLUDE display_metadata.tt %]
+
+  [% preview_html %]
+
+  <br clear="all" />
+
+  [% INCLUDE display_categories.tt %]
+
+[% END %]
+
 <form action="[% cgi_url %]" method="POST" enctype="application/x-www-form-urlencoded">
 <table>
+	<tr>
+		<td align="center"><input type="submit" name="preview" value="Preview changes" /></td>
+		<td align="center"><input type="submit" name="Save" value="Save changes" /></td>
+	</tr>
+	<tr>
+		<td colspan="2" align="center"><a href="[% cgi_url %]?[% node_param %]">(cancel edit)</a></td>
+	</tr>
 	<tr>
 		<td colspan="2">
 		<fieldset>
@@ -93,7 +112,7 @@
 <input type="hidden" name="checksum" value="[% checksum %]" />
 </form>
 
-[% IF preview_html %]
+[% IF preview_html AND NOT preview_above_edit_box %]
   <h2>Preview</h2>
   [% INCLUDE display_metadata.tt %]
 
@@ -104,4 +123,5 @@
   [% INCLUDE display_categories.tt %]
 
 [% END %]
+
 [% INCLUDE footer.tt %]

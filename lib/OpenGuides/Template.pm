@@ -2,7 +2,7 @@ package OpenGuides::Template;
 
 use strict;
 use vars qw( $VERSION );
-$VERSION = '0.02';
+$VERSION = '0.03';
 
 use Carp qw( croak );
 use CGI; # want to get rid of this and put the burden on the templates
@@ -47,6 +47,7 @@ to OpenGuides developers.
                                       config       => $config,
                                       template     => "node.tt",
                                       content_type => "text/html",
+                                      cookies      => $cookie,
                                       vars         => { foo => "bar" }
   );
 
@@ -84,7 +85,7 @@ sub output {
 
     my $header = "";
     unless ( defined $args{content_type} and $args{content_type} eq "" ) {
-        $header = "Content-Type: text/html\n\n";
+        $header = CGI::header( -cookie => $args{cookies} );
     }
     my $output;
     $tt->process( $args{template}, $tt_vars, \$output );

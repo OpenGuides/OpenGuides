@@ -1,4 +1,8 @@
-0.11    
+0.12    14 May 2003
+        Added OpenGuides::CGI to manage cookies and things, used this to
+        do more code tidying.  Added edit box position option to preferences.
+
+0.11    14 May 2003
         Added newpage.cgi for an easy way to create new pages.
 
         Took loads of repeated code (for extracting and packaging metadata

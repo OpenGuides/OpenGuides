@@ -48,7 +48,7 @@ my @questions = (
 { question => "what's the URL of the wiki's stylesheet?",
   variable => "stylesheet_url"
 },
-{ question => "what's the wiki called?",
+{ question => "what's the wiki called? (should be unique)",
   variable => "site_name",
   default  => "OpenGuides Wiki"
   },

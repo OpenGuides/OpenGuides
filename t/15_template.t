@@ -1,7 +1,8 @@
 use strict;
-use Test::More tests => 16;
+use Test::More tests => 17;
 use Config::Tiny;
 use Cwd;
+use CGI::Cookie;
 use CGI::Wiki::Formatter::UseMod;
 use Test::MockObject;
 
@@ -79,3 +80,11 @@ $output = OpenGuides::Template->output(
 like( $output, qr/NODE NAME: Test Node/, "node_name var set" );
 like( $output, qr/NODE PARAM: Test_Node/, "node_param var set" );
 
+# Test that cookies go in.
+my $cookie = CGI::Cookie->new( -name => "x", -value => "y" );
+$output = OpenGuides::Template->output(
+    config   => $config,
+    template => "15_test.tt",
+    cookies  => $cookie
+);
+like( $output, qr/Set-Cookie: $cookie/, "cookie in header" );
