@@ -407,6 +407,7 @@ sub preview_node {
     $content =~ s/\r\n/\n/gs;
     my $checksum        = $q->param('checksum');
     my $categories_text = $q->param('categories');
+    my $locales_text    = $q->param('locales');
     my $phone           = $q->param('phone');
     my $fax             = $q->param('fax');
     my $website         = $q->param('website');
@@ -419,6 +420,7 @@ sub preview_node {
     my $comment         = $q->param('comment');
 
     my @categories = sort split("\r\n", $categories_text);
+    my @locales    = sort split("\r\n", $locales_text);
 
     # The 'website' attribute might contain a URL so we wiki-format it here
     # rather than just CGI::escapeHTMLing it all in the template.
@@ -430,6 +432,7 @@ sub preview_node {
     if ($wiki->verify_checksum($node, $checksum)) {
         my %tt_vars = ( content      => $q->escapeHTML($content),
 			categories   => \@categories,
+			locales      => \@locales,
   		        phone        => $phone,
 			fax          => $fax,
 			website      => $website,

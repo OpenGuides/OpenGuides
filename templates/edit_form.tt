@@ -15,19 +15,16 @@
 			</tr>
 			<tr>
 				<td><strong>Locales:</strong><br />(one per line)</td>
-				<td><textarea name="locales" rows="5" cols="70">
-				[%- FOREACH locale = locales %]
-				[%- locale %]
-				[% END %]
-				</textarea></td>
+[%# NOTE: The whitespace in the next two textareas is deliberate, to avoid
+    getting bogus tabs and blank lines in the textarea content.  Please
+    do not reintroduce this bug.  Test on more than one browser. #%]
+				<td><textarea name="locales" rows="5" cols="70">[% FOREACH locale = locales %][% locale %]
+[% END %]</textarea></td>
 			</tr>
 			<tr>
 				<td><strong>Categories:</strong><br />(one per line)</td>
-				<td><textarea name="categories" rows="5" cols="70">
-				[%- FOREACH category = categories %]
-				[%- category %]
-				[% END %]
-				</textarea></td>
+				<td><textarea name="categories" rows="5" cols="70">[% FOREACH category = categories %][% category %]
+[% END %]</textarea></td>
 			</tr>
 		</table>
 		</fieldset>
