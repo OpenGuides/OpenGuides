@@ -11,6 +11,10 @@ SKIP: {
     skip "DBD::SQLite not installed - no database to test with", 8
       unless $have_sqlite;
 
+    # Clear out the database from any previous runs.
+    unlink "t/node.db";
+    unlink <t/indexes/*>;
+
     CGI::Wiki::Setup::SQLite::setup( { dbname => "t/node.db" } );
     my $config = Config::Tiny->new;
     $config->{_} = {
@@ -23,16 +27,16 @@ SKIP: {
                      template_path      => "./templates",
                    };
 
-    my $search = OpenGuides::SuperSearch->new( config => $config );
-
-    # Clear out the database from any previous runs.
-    my $wiki = $search->{wiki}; # white boxiness
-    foreach my $del_node ( $wiki->list_all_nodes ) {
-        $wiki->delete_node( $del_node ) or die "Can't delete $del_node";
+    # Plucene is the recommended searcher now.
+    eval { require CGI::Wiki::Search::Plucene; };
+    unless ( $@ ) {
+        $config->{_}{use_plucene} = 1;
     }
 
+    my $search = OpenGuides::SuperSearch->new( config => $config );
+
     # Add some data.  Write more than one pub to avoid hitting the redirect.
-    $wiki = $search->{wiki}; # white boxiness
+    my $wiki = $search->{wiki}; # white boxiness
     my $ctdata = {
                    os_x      => 523465,
                    os_y      => 177490,

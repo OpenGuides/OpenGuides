@@ -2,14 +2,12 @@ package OpenGuides::Utils;
 
 use strict;
 use vars qw( $VERSION );
-$VERSION = '0.06';
+$VERSION = '0.07';
 
 use Carp qw( croak );
 use CGI::Wiki;
 use CGI::Wiki::Formatter::UseMod;
 use CGI::Wiki::Plugin::RSS::Reader;
-use CGI::Wiki::Search::SII;
-use Search::InvertedIndex::DB::DB_File_SplitHash;
 use URI::Escape;
 
 =head1 NAME
@@ -59,7 +57,7 @@ dbname
 
 =item *
 
-indexing_directory - for the L<Search::InvertedIndex> files to go
+indexing_directory - for the L<Search::InvertedIndex> or L<Plucene> files to go
 
 =back
 
@@ -93,11 +91,24 @@ sub make_wiki_object {
     );
 
     # Make search.
-    my $indexdb = Search::InvertedIndex::DB::DB_File_SplitHash->new(
-        -map_name  => $config->{_}{indexing_directory},
-        -lock_mode => "EX"
-    );
-    my $search  = CGI::Wiki::Search::SII->new( indexdb => $indexdb );
+    my $search;
+    if ( $config->{_}{use_plucene}
+         && ( lc($config->{_}{use_plucene}) eq "y"
+              || $config->{_}{use_plucene} == 1 )
+       ) {
+        require CGI::Wiki::Search::Plucene;
+        $search = CGI::Wiki::Search::Plucene->new(
+                                       path => $config->{_}{indexing_directory}
+                                                 );
+    } else {
+        require CGI::Wiki::Search::SII;
+        require Search::InvertedIndex::DB::DB_File_SplitHash;
+        my $indexdb = Search::InvertedIndex::DB::DB_File_SplitHash->new(
+            -map_name  => $config->{_}{indexing_directory},
+            -lock_mode => "EX"
+        );
+        $search = CGI::Wiki::Search::SII->new( indexdb => $indexdb );
+    }
 
     # Make formatter.
     my $script_name = $config->{_}->{script_name};

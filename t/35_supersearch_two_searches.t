@@ -10,6 +10,10 @@ if ( $@ ) {
 } else {
     plan tests => 2;
 
+    # Clear out the database from any previous runs.
+    unlink "t/node.db";
+    unlink <t/indexes/*>;
+
     CGI::Wiki::Setup::SQLite::setup( { dbname => "t/node.db" } );
     my $config = Config::Tiny->new;
     $config->{_} = {
@@ -22,16 +26,16 @@ if ( $@ ) {
                      template_path      => "./templates",
                    };
 
-    my $search = OpenGuides::SuperSearch->new( config => $config );
-
-    # Clear out the database from any previous runs.
-    my $wiki = $search->{wiki}; # white boxiness
-    foreach my $del_node ( $wiki->list_all_nodes ) {
-        print "# Deleting node $del_node\n";
-        $wiki->delete_node( $del_node ) or die "Can't delete $del_node";
+    # Plucene is the recommended searcher now.
+    eval { require CGI::Wiki::Search::Plucene; };
+    unless ( $@ ) {
+        $config->{_}{use_plucene} = 1;
     }
 
+    my $search = OpenGuides::SuperSearch->new( config => $config );
+
     # Write some data.
+    my $wiki = $search->{wiki};
     $wiki->write_node( "Wandsworth Common", "A common.", undef,
                        { category => "Parks" } )
         or die "Can't write node";

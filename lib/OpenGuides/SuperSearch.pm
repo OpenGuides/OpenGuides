@@ -147,45 +147,50 @@ sub run {
         delete $self->{wikitext};
 
         # Redirect to a single result only if the title is a good enough match.
-        my %fuzzies = $self->{wiki}->fuzzy_title_match($self->{search_string});
-        if ($numres == 1 && !$self->{return_tt_vars} && scalar keys %fuzzies) {
-            my $node = $results[0]{name};
-            my $output = CGI::redirect( $self->{wikimain} . "?"
-                                        . CGI::escape($node) );
-            return $output if $self->{return_output};
-            print $output;
-            exit;
-        } else {
-            # We browse through the results a page at a time.
+        # (Don't try a fuzzy search on a blank search string - Plucene chokes.)
+        if ( $self->{search_string} ) {
+            my %fuzzies =
+                      $self->{wiki}->fuzzy_title_match($self->{search_string});
+            if ( $numres == 1
+                 && !$self->{return_tt_vars} && scalar keys %fuzzies) {
+                my $node = $results[0]{name};
+                my $output = CGI::redirect( $self->{wikimain} . "?"
+                                            . CGI::escape($node) );
+                return $output if $self->{return_output};
+                print $output;
+                exit;
+	    }
+	}
 
-            # Figure out which results we're going to be showing on this
-            # page, and what the first one for the next page will be.
-            my $startpos = $vars{next} || 0;
-            $tt_vars{first_num} = $numres ? $startpos + 1 : 0;
-            $tt_vars{last_num}  = $numres > $startpos + 20
-                                    ? $startpos + 20
-                                    : $numres;
-            $tt_vars{total_num} = $numres;
-            if ( $numres > $startpos + 20 ) {
-                $tt_vars{next_page_startpos} = $startpos + 20;
-            }
+        # We browse through the results a page at a time.
 
-            # Sort the results - by distance if we're searching on that
-            # or by score otherwise.
-            if ( $vars{distance_in_metres} ) {
-                @results = sort { $a->{distance} <=> $b->{distance} } @results;
-	    } else {
-                @results = sort { $b->{score} <=> $a->{score} } @results;
-            }
-
-            # Now snip out just the ones for this page.  The -1 is
-            # because arrays index from 0 and people from 1.
-            my $from = $tt_vars{first_num} ? $tt_vars{first_num} - 1 : 0;
-            my $to   = $tt_vars{last_num} - 1; # kludge to empty arr for no res
-            @results = @results[ $from .. $to ];
-
-            $tt_vars{results} = \@results;
+        # Figure out which results we're going to be showing on this
+        # page, and what the first one for the next page will be.
+        my $startpos = $vars{next} || 0;
+        $tt_vars{first_num} = $numres ? $startpos + 1 : 0;
+        $tt_vars{last_num}  = $numres > $startpos + 20
+                                                       ? $startpos + 20
+                                                       : $numres;
+        $tt_vars{total_num} = $numres;
+        if ( $numres > $startpos + 20 ) {
+            $tt_vars{next_page_startpos} = $startpos + 20;
         }
+
+        # Sort the results - by distance if we're searching on that
+        # or by score otherwise.
+        if ( $vars{distance_in_metres} ) {
+            @results = sort { $a->{distance} <=> $b->{distance} } @results;
+	} else {
+            @results = sort { $b->{score} <=> $a->{score} } @results;
+        }
+
+        # Now snip out just the ones for this page.  The -1 is
+        # because arrays index from 0 and people from 1.
+        my $from = $tt_vars{first_num} ? $tt_vars{first_num} - 1 : 0;
+        my $to   = $tt_vars{last_num} - 1; # kludge to empty arr for no results
+        @results = @results[ $from .. $to ];
+
+        $tt_vars{results} = \@results;
     }
 
     $self->process_template( tt_vars => \%tt_vars );

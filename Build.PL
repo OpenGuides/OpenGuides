@@ -37,6 +37,11 @@ my @questions = (
 { question => "What URL does the install directory map to?",
   variable => "script_url",
   },
+{ question => "Do you want to use Plucene for searching? (recommended, but see Changes file before saying yes to this)",
+  variable => "use_plucene",
+  default  => "n",
+  type     => "y_n"
+  },
 { question => "What directory can I use to store indexes in for searching? "
             . "***NOTE*** This directory must exist and be writeable by the "
             . "user that your script will run as.  See README for more on this.",
