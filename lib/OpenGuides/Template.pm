@@ -116,12 +116,13 @@ sub output {
 
     # Check cookie to see if we need to set the formatting_rules_link.
     my ($formatting_rules_link, $omit_help_links);
-    my $formatting_rules_node = $config->formatting_rules_node ||"";
+    my $formatting_rules_node = $config->formatting_rules_node;
+    $formatting_rules_link = $config->formatting_rules_link;
     my %cookie_data = OpenGuides::CGI->get_prefs_from_cookie(config=>$config);
     if ( $cookie_data{omit_help_links} ) {
         $omit_help_links = 1;
     } else {
-        if ( $formatting_rules_node ) {
+        if (( $formatting_rules_node ) and !( $formatting_rules_link )){
             $formatting_rules_link = $script_url . $script_name . "?"
                                    . uri_escape($args{wiki}->formatter->node_name_to_node_param($formatting_rules_node));
 	}

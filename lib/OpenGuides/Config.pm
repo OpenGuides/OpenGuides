@@ -9,7 +9,7 @@ my @variables = qw(
    custom_lib_path use_plucene indexing_directory enable_page_deletion
    admin_pass stylesheet_url site_name navbar_on_home_page home_name
    site_desc default_city default_country contact_email default_language
-   formatting_rules_node backlinks_in_title template_path custom_template_path
+   formatting_rules_node formatting_rules_link backlinks_in_title template_path custom_template_path
    geo_handler ellipsoid
 );
 my @questions = map { $_ . "__qu" } @variables;
@@ -72,6 +72,7 @@ sub _init {
                      default_country => "United Kingdom",
                      default_language => "en",
                      formatting_rules_node => "Text Formatting Examples",
+                     formatting_rules_link => "http://openguides.org/page/text_formatting",
                      backlinks_in_title => 0,
                      geo_handler => 1,
                      ellipsoid => "International"
@@ -126,7 +127,8 @@ sub _init {
         default_country => "What country is the site based in?",
         contact_email => "Contact email address for the site administrator?",
         default_language => "What language will the site be in? (Please give an ISO language code.)",
-        formatting_rules_node => "What's the name of the node to use for the text formatting rules link?",
+        formatting_rules_node => "What's the name of the node or page to use for the text formatting rules link (this is by default an external document, but if you make formatting_rules_link empty, it will be a wiki node instead",
+	formatting_rules_link => "What URL do you want to use for the text formatting rules (leave blank to use a wiki node instead)?",
         backlinks_in_title => "Make node titles link to node backlinks (C2 style)?",
         ellipsoid => "Which ellipsoid do you want to use? (eg 'Airy', 'WGS-84')",
     );
@@ -208,6 +210,8 @@ sub script_url {
 =item * contact_email
 
 =item * formatting_rules_node (default: C<Text Formatting Examples>)
+
+=item * formatting_rules_link (default: C<http://openguides.org/page/text_formatting>
 
 =item * backlinks_in_title (default: false)
 

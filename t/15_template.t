@@ -5,7 +5,7 @@ use CGI::Wiki::Formatter::UseMod;
 use OpenGuides::Config;
 use OpenGuides::Template;
 use Test::MockObject;
-use Test::More tests => 27;
+use Test::More tests => 28;
 
 my $config = OpenGuides::Config->new(
        vars => {
@@ -19,6 +19,7 @@ my $config = OpenGuides::Config->new(
                  stylesheet_url        => 'http://wiki.example.com/styles.css',
                  home_name             => 'Home Page',
                  formatting_rules_node => 'Rules',
+                 formatting_rules_link => '',
                }
 );
 
@@ -110,6 +111,25 @@ $output = OpenGuides::Template->output(
     cookies  => $cookie
 );
 like( $output, qr/Set-Cookie: $cookie/, "cookie in header" );
+
+# Test that external URLs for text formatting work.
+$config = OpenGuides::Config->new(
+       vars => {
+                 template_path         => cwd . '/t/templates',
+                 site_name             => 'CGI::Wiki Test Site',
+                 script_url            => 'http://wiki.example.com/',
+                 script_name           => 'mywiki.cgi',
+		 formatting_rules_node => 'Some External Help',
+                 formatting_rules_link => 'http://www.example.com/wikitext',
+               }
+);
+$output = OpenGuides::Template->output(
+    wiki     => $fake_wiki,
+    config   => $config,
+    template => "15_test.tt"
+);
+like ( $output, qr/FORMATTING RULES LINK: http:\/\/www.example.com\/wikitext/,
+      "formatting_rules_link var honoured for explicit URLs" );
 
 # Test that home_link is set correctly when script_name is blank.
 $config = OpenGuides::Config->new(
