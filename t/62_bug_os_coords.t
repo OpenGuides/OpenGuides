@@ -22,6 +22,7 @@ SKIP: {
                      script_name        => "wiki.cgi",
                      site_name          => "Test Site",
                      template_path      => cwd . "/templates",
+                     geo_handler        => 1,
                    };
 
     my $wiki = OpenGuides::Utils->make_wiki_object( config => $config );

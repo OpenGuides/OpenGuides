@@ -154,6 +154,12 @@ Answer "y" or "n".
 Self explanatory.
 
 
+  "What language will the site be in? (Please give an ISO language code.)"
+
+eg "en" for English, "it" for Italian.
+See http://ftp.ics.uci.edu/pub/ietf/http/related/iso639.txt
+
+
   "What's the name of the node to use for the text formatting rules link?"
 
 From 0.19, OpenGuides allows users to choose whether or not to have a
@@ -161,6 +167,39 @@ permanent link to the text formatting rules node in their navbar.  You
 need to put the name of that node in here for it to work, though.  You
 might want to call the node "Text Formatting Examples", "Text
 Formatting Rules", "House Style" or whatever.
+
+
+  "Distance calculation methods available are:
+      1) British National Grid
+      2) Irish National Grid
+      3) UTM ellipsoid
+   Which would you like to use?"
+
+  (and if you choose UTM ellipsoid)
+  "Which ellipsoid would you like to use? (eg 'Airy', 'WGS-84')"
+
+See http://www.vterrain.org/Projections/ for how this all works.
+A UTM (Universal Transverse Mercator) ellipsoid maps latitude and
+longitude to eastings and northings on a square grid, which allows
+more accurate distance calculations within the guide.  The British and
+Irish National Grids are scaled and parametrised versions of UTM
+ellipsoids (Airy 1830 in the British case, Modified Airy in the Irish).
+
+Please note that at the moment there is no provision for changing your
+mind later about which ellipsoid to use, but it shouldn't be too hard
+to write a conversion script so don't worry too much about picking the
+wrong one.  However do note that once you've entered some location
+data you should not change this value in the config file without running
+some kind of converter.
+
+If you decide to use the British or Irish National Grid, your users
+will be able to choose between entering location data as lat/long
+or as grid co-ordinates.
+
+You must have Geography::NationalGrid::GB installed to use the British
+National Grid, Geography::NationalGrid::IE to use the Irish National
+Grid, and Geo::Coordinates::UTM to use a UTM ellipsoid.
+
 
 * Custom templates and CSS
 

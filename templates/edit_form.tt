@@ -82,12 +82,12 @@
               <td><input type="text" size="50" id="postcode" name="postcode" value="[% postcode %]" /></td>
             </tr>
             <tr>
-              <td class="label"><label for="os_x">OS X coordinate:</label></td>
-              <td><input type="text" size="50" id="os_x" name="os_x" value="[% os_x %]" /></td>
+              <td class="label"><label for="[% coord_field_1 %]">[% coord_field_1_name %]:</label></td>
+              <td><input type="text" size="50" id="[% coord_field_1 %]" name="[% coord_field_1 %]" value="[% coord_field_1_value %]" /></td>
             </tr>
             <tr>
-              <td class="label"><label for="os_y">OS Y coordinate:</label></td>
-              <td><input type="text" size="50" id="os_y" name="os_y" value="[% os_y %]" /></td>
+              <td class="label"><label for="[% coord_field_2 %]">[% coord_field_2_name %]:</label></td>
+              <td><input type="text" size="50" id="[% coord_field_2 %]" name="[% coord_field_2 %]" value="[% coord_field_2_value %]" /></td>
             </tr>
             <tr>
               <td class="label"><label for="map_link">Map link:</label></td>

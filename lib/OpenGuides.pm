@@ -4,7 +4,7 @@ use strict;
 use Carp "croak";
 use CGI;
 use CGI::Wiki::Plugin::Diff;
-use CGI::Wiki::Plugin::Locator::UK;
+use CGI::Wiki::Plugin::Locator::Grid;
 use OpenGuides::CGI;
 use OpenGuides::Template;
 use OpenGuides::Utils;
@@ -45,7 +45,19 @@ sub new {
     my $wiki = OpenGuides::Utils->make_wiki_object( config => $args{config} );
     $self->{wiki} = $wiki;
     $self->{config} = $args{config};
-    my $locator = CGI::Wiki::Plugin::Locator::UK->new;
+    # Default to British National Grid for historical reasons.
+    my $geo_handler = $self->config->{_}{geo_handler} || 1;
+    my $locator;
+    if ( $geo_handler == 1 ) {
+        $locator = CGI::Wiki::Plugin::Locator::Grid->new(
+                                             x => "os_x",    y => "os_y" );
+    } elsif ( $geo_handler == 2 ) {
+        $locator = CGI::Wiki::Plugin::Locator::Grid->new(
+                                             x => "osie_x",  y => "osie_y" );
+    } else {
+        $locator = CGI::Wiki::Plugin::Locator::Grid->new(
+                                             x => "easting", y => "northing" );
+    }
     $wiki->register_plugin( plugin => $locator );
     $self->{locator} = $locator;
     my $differ = CGI::Wiki::Plugin::Diff->new;
@@ -182,7 +194,6 @@ sub display_node {
                  node          => $id,
                  language      => $config->{_}->{default_language},
                );
-
 
     # We've undef'ed $version above if this is the current version.
     $tt_vars{current} = 1 unless $version;
@@ -572,6 +583,30 @@ sub display_rss {
 As with other methods, parameters C<return_tt_vars> and
 C<return_output> can be used to return these things instead of
 printing the output to STDOUT.
+
+The geographical data that you should provide in the L<CGI> object
+depends on the handler you chose in C<wiki.conf>.
+
+=over
+
+=item *
+
+B<British National Grid> - provide either C<os_x> and C<os_y> or
+C<latitude> and C<longitude>; whichever set of data you give, it will
+be converted to the other and both sets will be stored.
+
+=item *
+
+B<Irish National Grid> - provide either C<osie_x> and C<osie_y> or
+C<latitude> and C<longitude>; whichever set of data you give, it will
+be converted to the other and both sets will be stored.
+
+=item *
+
+B<UTM ellipsoid> - provide C<latitude> and C<longitude>; these will be
+converted to easting and northing and both sets of data will be stored.
+
+=back
 
 =cut
 

@@ -180,9 +180,11 @@ sub preview_node {
     my $checksum = $q->param('checksum');
 
     my %tt_metadata_vars = OpenGuides::Template->extract_metadata_vars(
-                                                   wiki    => $wiki,
-						   config  => $config,
-						   cgi_obj => $q );
+                                               wiki                 => $wiki,
+					       config               => $config,
+					       cgi_obj              => $q,
+                                               set_coord_field_vars => 1,
+    );
     foreach my $var ( qw( username comment edit_type ) ) {
         $tt_metadata_vars{$var} = $q->escapeHTML($q->param($var));
     }

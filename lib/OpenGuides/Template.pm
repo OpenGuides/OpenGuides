@@ -168,6 +168,16 @@ sub output {
     unless ( defined $args{content_type} and $args{content_type} eq "" ) {
         $header = CGI::header( -cookie => $args{cookies} );
     }
+
+    # vile hack
+    my %field_vars = OpenGuides::Template->extract_metadata_vars(
+                                        wiki                 => $args{wiki},
+                                        config               => $config,
+                                        set_coord_field_vars => 1,
+                                        metadata => {},
+      		                                           );
+    $tt_vars = { %field_vars, %$tt_vars };
+
     my $output;
     $tt->process( $args{template}, $tt_vars, \$output );
 
@@ -210,6 +220,13 @@ parameters in a L<CGI> object, and packages them nicely for passing to
 templates or storing in L<CGI::Wiki> datastore.  If you supply both
 C<metadata> and C<cgi_obj> then C<metadata> will take precedence, but
 don't do that.
+
+The variables C<dist_field>, C<coord_field_1>, C<coord_field_1_name>,
+C<coord_field_1_value>, C<coord_field_2>, C<coord_field_2_name>, and
+C<coord_field_2_value>, which are used to create various forms, will
+only be set if I<either> C<metadata> is supplied I<or>
+C<set_coord_field_vars> is true, to prevent these values from being
+stored in the database on a node commit.
 
 =cut
 
@@ -267,31 +284,169 @@ sub extract_metadata_vars {
     );
 
     if ( $args{metadata} ) {
-        foreach my $var ( qw( phone fax address postcode os_x os_y
-                              latitude longitude map_link website) ) {
+        foreach my $var ( qw( phone fax address postcode os_x os_y osie_x
+                              osie_y latitude longitude map_link website) ) {
             $vars{$var} = $metadata{$var}[0];
         }
+        # Data for the distance search forms on the node display.
+        my $geo_handler = $config->{_}{geo_handler} || 1;
+        if ( $geo_handler == 1 ) {
+            %vars = (
+                      %vars,
+                      coord_field_1       => "os_x",
+                      coord_field_2       => "os_y",
+                      dist_field          => "os_dist",
+                      coord_field_1_name  => "OS X coordinate",
+                      coord_field_2_name  => "OS Y coordinate",
+                      coord_field_1_value => $metadata{os_x}[0],
+                      coord_field_2_value => $metadata{os_y}[0],
+                    );
+	} elsif ( $geo_handler == 2 ) {
+            %vars = (
+                      %vars,
+                      coord_field_1       => "osie_x",
+                      coord_field_2       => "osie_y",
+                      dist_field          => "osie_dist",
+                      coord_field_1_name  =>"Irish National Grid X coordinate",
+                      coord_field_2_name  =>"Irish National Grid Y coordinate",
+                      coord_field_1_value => $metadata{osie_x}[0],
+                      coord_field_2_value => $metadata{osie_y}[0],
+                    );
+	} else {
+            %vars = (
+                      %vars,
+                      coord_field_1       => "latitude",
+                      coord_field_2       => "longitude",
+                      dist_field          => "latlong_dist",
+                      coord_field_1_name  => "Latitude",
+                      coord_field_2_name  => "Longitude",
+                      coord_field_1_value => $metadata{latitude}[0],
+                      coord_field_2_value => $metadata{longitude}[0],
+                    );
+	}
     } else {
         foreach my $var ( qw( phone fax address postcode map_link website) ) {
             $vars{$var} = $q->param($var);
         }
 
-	my $os_x = $q->param("os_x");
-	my $os_y = $q->param("os_y");
-        # Trim whitespace - trailing whitespace buggers up the integerification
-        # by postgres and it's an easy mistake to make when typing into a form.
-        $os_x =~ s/\s+//;
-        $os_y =~ s/\s+//;
-	# Work out latitude and longitude for the preview display.
-	if ($os_x and $os_y) {
-	    my $point = Geography::NationalGrid::GB->new( Easting  => $os_x,
-							  Northing => $os_y );
-	    %vars = ( %vars,
-		      latitude  => sprintf("%.6f", $point->latitude),
-		      longitude => sprintf("%.6f", $point->longitude),
-		      os_x      => $os_x,
-		      os_y      => $os_y
-	    );
+        my $geo_handler = $config->{_}{geo_handler};
+        if ( $geo_handler == 1 ) {
+	    require Geography::NationalGrid::GB;
+   	    my $os_x   = $q->param("os_x");
+	    my $os_y   = $q->param("os_y");
+	    my $lat    = $q->param("latitude");
+	    my $long   = $q->param("longitude");
+
+            # Trim whitespace - trailing whitespace buggers up the
+            # integerification by postgres and it's an easy mistake to
+            # make when typing into a form.
+            $os_x =~ s/\s+//;
+            $os_y =~ s/\s+//;
+
+	    # If we were sent x and y, work out lat/long; and vice versa.
+  	    if ( $os_x && $os_y ) {
+	        my $point = Geography::NationalGrid::GB->new( Easting =>$os_x,
+		   					      Northing=>$os_y);
+                $lat  = sprintf("%.6f", $point->latitude);
+                $long = sprintf("%.6f", $point->longitude);
+	    } elsif ( $lat && $long ) {
+	        my $point = Geography::NationalGrid::GB->new(Latitude =>$lat,
+		   					     Longitude=>$long);
+                $os_x = $point->easting;
+                $os_y = $point->northing;
+	    }
+	    %vars = (
+                      %vars,
+		      latitude  => $lat,
+	              longitude => $long,
+	              os_x      => $os_x,
+	              os_y      => $os_y,
+	            );
+            if ( $args{set_coord_field_vars} ) {
+                %vars = (
+                          %vars,
+                          coord_field_1       => "os_x",
+                          coord_field_2       => "os_y",
+                          dist_field          => "os_dist",
+                          coord_field_1_name  => "OS X coordinate",
+                          coord_field_2_name  => "OS Y coordinate",
+                          coord_field_1_value => $os_x,
+                          coord_field_2_value => $os_y,
+                        );
+	    }
+	} elsif ( $geo_handler == 2 ) {
+	    require Geography::NationalGrid::IE;
+   	    my $osie_x = $q->param("osie_x");
+	    my $osie_y = $q->param("osie_y");
+	    my $lat    = $q->param("latitude");
+	    my $long   = $q->param("longitude");
+
+            # Trim whitespace - trailing whitespace buggers up the
+            # integerification by postgres and it's an easy mistake to
+            # make when typing into a form.
+            $osie_x =~ s/\s+//;
+            $osie_y =~ s/\s+//;
+
+	    # If we were sent x and y, work out lat/long; and vice versa.
+  	    if ( $osie_x && $osie_y ) {
+	        my $point = Geography::NationalGrid::IE->new(Easting=>$osie_x,
+		   					    Northing=>$osie_y);
+                $lat = sprintf("%.6f", $point->latitude);
+		$long = sprintf("%.6f", $point->longitude);
+	    } elsif ( $lat && $long ) {
+	        my $point = Geography::NationalGrid::GB->new(Latitude =>$lat,
+		   					     Longitude=>$long);
+                $osie_x = $point->easting;
+                $osie_y = $point->northing;
+	    }
+	    %vars = (
+                      %vars,
+		      latitude  => $lat,
+	              longitude => $long,
+	              osie_x    => $osie_x,
+	              osie_y    => $osie_y,
+	            );
+            if ( $args{set_coord_field_vars} ) {
+                %vars = (
+                          %vars,
+                          coord_field_1       => "osie_x",
+                          coord_field_2       => "osie_y",
+                          dist_field          => "osie_dist",
+                     coord_field_1_name  => "Irish National Grid X coordinate",
+                     coord_field_2_name  => "Irish National Grid Y coordinate",
+                          coord_field_1_value => $osie_x,
+                          coord_field_2_value => $osie_y,
+                        );
+	    }
+	} elsif ( $geo_handler == 3 ) {
+	    require Geo::Coordinates::UTM;
+	    my $lat    = $q->param("latitude");
+	    my $long   = $q->param("longitude");
+            if ( $lat && $long ) {
+                my ($zone, $easting, $northing) =
+                 Geo::Coordinates::UTM::latlon_to_utm( $config->{_}{ellipsoid},
+                                                       $lat, $long );
+                $easting  =~ s/\..*//; # chop off decimal places
+                $northing =~ s/\..*//; # - metre accuracy enough
+	        %vars = ( %vars,
+		          latitude  => $lat,
+	                  longitude => $long,
+	                  easting   => $easting,
+	                  northing  => $northing,
+	                );
+	    }
+            if ( $args{set_coord_field_vars} ) {
+                %vars = (
+                          %vars,
+                          coord_field_1       => "latitude",
+                          coord_field_2       => "longitude",
+                          dist_field          => "latlong_dist",
+                          coord_field_1_name  => "Latitude",
+                          coord_field_2_name  => "Longitude",
+                          coord_field_1_value => $lat,
+                          coord_field_2_value => $long,
+                        );
+	    }
 	}
     }
 

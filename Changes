@@ -1,5 +1,15 @@
-        Fixed bug relating to lat/long representation.
-        Removed debugging warn accidentally left in last release.
+
+        Made the geolocation stuff work worldwide.  Squeeeeeee!
+        You can now choose between doing your distance calculations with
+          the British National Grid, the Irish National Grid, or a UTM
+          ellipsoid.  If you wish to use anything other than the British
+          National Grid and you have pre-existing location data then you
+          will need to save an edit of each node with location data before
+          distance searches will work.
+        In less exciting news:
+          Fixed bug relating to lat/long representation.
+          Removed debugging warn accidentally left in last release.
+          Fixed some HTML validation errors.
 
 0.44    17 November 2004
         Remove all traces of display_categories, which was obsoleted but

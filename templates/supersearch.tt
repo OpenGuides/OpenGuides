@@ -38,16 +38,19 @@ summary="Results of search queries are displayed here, and new searches can also
         <th>Location:</th>
         <td>
           <ul>
+            [% IF coord_field_1 == 'os_x' OR coord_field_1 == 'osie_x' %]
+              <li>
+                within <input type="text" name="[% dist_field %]" value="[% dist %]" size="5" maxlength="5" /> metres
+                of [% coord_field_1_name %]
+                <input type="text" name="[% coord_field_1 %]" value="[% coord_field_1_value %]" size="10" maxlength="10" />,
+                [% coord_field_2_name %]
+                <input type="text" name="[% coord_field_2 %]" value="[% coord_field_2_value %]" size="10" maxlength="10" />
+              </li>
+            [% END %]
             <li>
               within <input type="text" name="latlong_dist" value="[% dist %]" size="5" maxlength="5" /> metres
-              of latitude <input type="text" name="lat" value="[% lat %]" size="10" maxlength="10" />
-              longitude <input type="text" name="long" value="[% long %]" size="10" maxlength="10" />
-            </li>
-            <li>
-              within <input type="text" name="os_dist" value="[% dist %]" size="5" maxlength="5" /> metres
-              of OS co-ordinates
-              <input type="text" name="os_x" value="[% os_x %]" size="10" maxlength="10" />,
-              <input type="text" name="os_y" value="[% os_y %]" size="10" maxlength="10" />
+              of latitude <input type="text" name="latitude" value="[% latitude %]" size="10" maxlength="10" />
+              longitude <input type="text" name="longitude" value="[% longitude %]" size="10" maxlength="10" />
             </li>
           </ul>
         </td>

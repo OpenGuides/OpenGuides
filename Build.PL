@@ -89,12 +89,12 @@ my @questions = (
   variable => "default_country",
   default  => "United Kingdom"
   },
+{ question => "Contact email address for the site administrator?",
+  variable => "contact_email"
+  },
 { question => "What language will the site be in? (Please give an ISO language code.)",
   variable => "default_language",
   default  => "en"
-  },
-{ question => "Contact email address for the site administrator?",
-  variable => "contact_email"
   },
 { question => "What's the name of the node to use for the text formatting rules link?",
   variable => "formatting_rules_node",
@@ -218,6 +218,56 @@ foreach my $qset (@questions) {
     }
 }
 
+# Now deal with the geo stuff.
+my $geo_handler;
+my $geo_handler_qu = "Distance calculation methods available are:"
+                   . "\n  1) British National Grid"
+                   . "\n  2) Irish National Grid"
+                   . "\n  3) UTM ellipsoid"
+                   . "\nWhich would you like to use?";
+
+if ( $skip_config ) {
+    # We default to GB National Grid for historical reasons.
+    $geo_handler = $existing_config{geo_handler} || 1;
+} else {
+    my $choice;
+    until ( $choice ) {
+        my $def = $existing_config{geo_handler} || 1;
+	$choice = Module::Build->prompt("\n".$geo_handler_qu, $def);
+	$choice =~ s/^\s*//;
+	$choice =~ s/\s*$//;
+	unless ( $choice eq "1" or $choice eq "2" or $choice eq "3" ) {
+            undef $choice;
+	}
+    }
+    $geo_handler = $choice;
+}
+
+$geo_handler_qu =~ s/\n//gs;
+push @answers, {
+                 question => $geo_handler_qu,
+                 variable => "geo_handler",
+                 value    => $geo_handler,
+               };
+
+if ( $geo_handler eq "3" ) {
+    my $ellipsoid;
+    if ( $skip_config ) {
+        $ellipsoid = $existing_config{ellipsoid} || "International";
+    } else {
+        my $qu = "Which ellipsoid do you want to use? (eg 'Airy', 'WGS-84')";
+        my $def = $existing_config{ellipsoid} || "International";
+        my $choice = Module::Build->prompt("\n".$qu, $def);
+	$choice =~ s/^\s*//;
+	$choice =~ s/\s*$//;
+        push @answers, {
+                         question => $qu,
+                         variable => "ellipsoid",
+                         value    => $choice,
+                       };
+    }
+}
+
 # Create a user-friendly config file from answers to prompts.
 open FILE, ">wiki.conf" or die "Can't open wiki.conf for writing: $!";
 foreach my $ans (@answers) {
@@ -244,7 +294,7 @@ my $build = OpenGuides::Build->new(
 	'CGI::Wiki::Formatter::UseMod'    => '0.16', # macros
         'CGI::Wiki::Plugin::Categoriser'  => 0,
 	'CGI::Wiki::Plugin::Diff'         => '0.07', # earlier buggy
-	'CGI::Wiki::Plugin::Locator::UK'  => '0.09',
+	'CGI::Wiki::Plugin::Locator::Grid'=> 0,
 	'CGI::Wiki::Plugin::RSS::ModWiki' => '0.06', # for fancy stuff
         'CGI::Wiki::Plugin::RSS::Reader'  => '1.3',  # earlier versions don't support RSS 2.0
 	'Config::Tiny'                    => 0,
@@ -264,6 +314,10 @@ my $build = OpenGuides::Build->new(
     build_requires => {
         'Module::Build' => '0.18', # earlier doesn't install script files
         },
+    recommends => {
+        'DBD::SQLite'         => 0, # for testing
+        'Test::HTML::Content' => 0, # for testing, oddly enough
+    },
     dynamic_config => 1,
     create_makefile_pl => "passthrough"
 );

@@ -1,9 +1,9 @@
 package OpenGuides::SuperSearch;
 use strict;
-our $VERSION = '0.08';
+our $VERSION = '0.09';
 
 use CGI qw( :standard );
-use CGI::Wiki::Plugin::Locator::UK;
+use CGI::Wiki::Plugin::Locator::Grid;
 use File::Spec::Functions qw(:ALL);
 use OpenGuides::Template;
 use OpenGuides::Utils;
@@ -54,7 +54,17 @@ sub new {
     $self->{css}      = $config->{_}{stylesheet_url};
     $self->{head}     = $config->{_}{site_name} . " Search";
 
-    my $locator = CGI::Wiki::Plugin::Locator::UK->new;
+    my $geo_handler = $config->{_}{geo_handler};
+    my %locator_params;
+    if ( $geo_handler == 1 ) {
+        %locator_params = ( x => "os_x", y => "os_y" );
+    } elsif ( $geo_handler == 2 ) {
+        %locator_params = ( x => "osie_x", y => "osie_y" );
+    } elsif ( $geo_handler == 3 ) {
+        %locator_params = ( x => "easting", y => "northing" );
+    }
+
+    my $locator = CGI::Wiki::Plugin::Locator::Grid->new( %locator_params );
     $wiki->register_plugin( plugin => $locator );
     $self->{locator} = $locator;
 
@@ -141,14 +151,10 @@ sub run {
 
     # Run a distance search if we have sufficient criteria.
     if ( defined $self->{distance_in_metres}
-         && (
-                 ( defined $self->{lat}  && defined $self->{long} )
-              || ( defined $self->{os_x} && defined $self->{os_y} )
-            )
-       ) {
+         && defined $self->{x} && defined $self->{y} ) {
         $doing_search = 1;
         $tt_vars{dist} = $self->{distance_in_metres};
-        foreach my $param ( qw( os_x os_y lat long ) ) {
+        foreach my $param ( qw( os_x os_y osie_x osie_y latitude longitude )) {
             $tt_vars{$param} = $self->{$param};
 	}
         $self->run_distance_search;
@@ -468,30 +474,50 @@ sub _run_phrase_search {
     return %results;
 }
 
+=back
+
+=head1 SEARCHING BY DISTANCE
+
+To perform a distance search, you need to supply one of the following
+sets of criteria to specify the distance to search within, and the
+origin (centre) of the search:
+
+=over
+
+=item B<os_dist, os_x, and os_y>
+
+Only works if you chose to use British National Grid in wiki.conf
+
+=item B<osie_dist, osie_x, and osie_y>
+
+Only works if you chose to use Irish National Grid in wiki.conf
+
+=item B<latlong_dist, latitude, and longitude>
+
+Should always work, but has a habit of "finding" things a couple of
+metres away from themselves.
+
+=back
+
+You can perform both pure distance searches and distance searches in
+combination with text searches.
+
+=cut
+
 # Note this is called after any text search is run, and it is only called
 # if there are sufficient criteria to perform the search.
 sub run_distance_search {
     my $self = shift;
-    my $os_x = $self->{os_x};
-    my $os_y = $self->{os_y};
-    my $lat  = $self->{lat};
-    my $long = $self->{long};
+    my $x    = $self->{x};
+    my $y    = $self->{y};
     my $dist = $self->{distance_in_metres};
 
-    my @close;
-    if ( defined $lat && defined $long ) {
-        @close = $self->{locator}->find_within_distance(
-                                                         lat    => $lat,
-                                                         long   => $long,
-                                                         metres => $dist,
-                                                       );
-    } else {
-        @close = $self->{locator}->find_within_distance(
-                                                         os_x   => $os_x,
-                                                         os_y   => $os_y,
-                                                         metres => $dist,
-                                                       );
-    }
+    my @close = $self->{locator}->find_within_distance(
+                                                        x      => $x,
+                                                        y      => $y,
+                                                        metres => $dist,
+                                                      );
+
     if ( $self->{results} ) {
         my %close_hash = map { $_ => 1 } @close;
         my %results = %{ $self->{results} };
@@ -500,10 +526,8 @@ sub run_distance_search {
             if ( exists $close_hash{$node} ) {
                 my $distance = $self->_get_distance(
                                                      node => $node,
-                                                     lat  => $lat,
-                                                     long => $long,
-                                                     os_x => $os_x,
-                                                     os_y => $os_y,
+                                                     x    => $x,
+                                                     y    => $y,
                                                    );
                 $results{$node}{distance} = $distance;
 	    } else {
@@ -516,10 +540,8 @@ sub run_distance_search {
         foreach my $node ( @close ) {
             my $distance = $self->_get_distance (
                                                      node => $node,
-                                                     lat  => $lat,
-                                                     long => $long,
-                                                     os_x => $os_x,
-                                                     os_y => $os_y,
+                                                     x    => $x,
+                                                     y    => $y,
                                                    );
             $results{$node} = {
                                 name     => $node,
@@ -533,56 +555,96 @@ sub run_distance_search {
 
 sub _get_distance {
     my ($self, %args) = @_;
-    my ($node, $lat, $long, $x, $y) = @args{ qw( node lat long os_x os_y ) };
-    if ( defined $lat && defined $long ) {
-        return $self->{locator}->distance(
-                                           from_lat  => $lat,
-                                           from_long => $long,
-				           to_node   => $node,
-                                           unit      => "metres"
-                                         );
-    } else {
-        return $self->{locator}->distance(
-                                           from_os_x => $x,
-                                           from_os_y => $y,
-			                   to_node   => $node,
-                                           unit      => "metres"
-                                         );
-    }
+    my ($node, $x, $y) = @args{ qw( node x y ) };
+    return $self->{locator}->distance(
+                                       from_x  => $x,
+                                       from_y  => $y,
+	     	                       to_node => $node,
+                                       unit    => "metres"
+                                     );
 }
 
 sub process_params {
     my ($self, $vars_hashref) = @_;
     my %vars = %{ $vars_hashref || {} };
 
+    # Make sure that we don't have any data left over from previous invocation.
+    # This is useful for testing purposes at the moment and will be essential
+    # for mod_perl implementations.
+    delete $self->{x};
+    delete $self->{y};
+    delete $self->{distance_in_metres};
+    delete $self->{search_string};
+
     # Strip out any non-digits from distance and OS co-ords.
-    foreach my $param ( qw( os_x os_y os_dist latlong_dist ) ) {
+    foreach my $param ( qw( os_x os_y osie_x osie_y
+                            osie_dist os_dist latlong_dist ) ) {
         if ( defined $vars{$param} ) {
             $vars{$param} =~ s/[^0-9]//g;
             # 0 is an allowed value but the empty string isn't.
             delete $vars{$param} if $vars{$param} eq "";
-            $self->{$param} = $vars{$param} if defined $vars{$param};
 	}
     }
 
     # Latitude and longitude are also allowed '-' and '.'
-    foreach my $param( qw( lat long ) ) {
+    foreach my $param( qw( latitude longitude ) ) {
         if ( defined $vars{$param} ) {
             $vars{$param} =~ s/[^-\.0-9]//g;
             # 0 is an allowed value but the empty string isn't.
             delete $vars{$param} if $vars{$param} eq "";
-            $self->{$param} = $vars{$param} if defined $vars{$param};
 	}
     }
 
-    # Set $self->{distance_in_metres} depending on whether we got
-    # OS co-ords or lat/long.
-    if ( defined $self->{os_x} && defined $self->{os_y}
-         && defined $self->{os_dist} ) {
-        $self->{distance_in_metres} = $self->{os_dist};
-    } elsif ( defined $self->{lat} && defined $self->{long}
-              && defined $self->{latlong_dist} ) {
-        $self->{distance_in_metres} = $self->{latlong_dist};
+    # Set $self->{distance_in_metres}, $self->{x}, $self->{y},
+    # depending on whether we got
+    # OS co-ords or lat/long.  Only store parameters if they're complete,
+    # and supported by our method of distance calculation.
+    if ( defined $vars{os_x} && defined $vars{os_y} && defined $vars{os_dist}
+         && $self->config->{_}{geo_handler} eq 1 ) {
+        $self->{x} = $vars{os_x};
+        $self->{y} = $vars{os_y};
+        $self->{distance_in_metres} = $vars{os_dist};
+    } elsif ( defined $vars{osie_x} && defined $vars{osie_y}
+         && defined $vars{osie_dist}
+         && $self->config->{_}{geo_handler} eq 2 ) {
+        $self->{x} = $vars{osie_x};
+        $self->{y} = $vars{osie_y};
+        $self->{distance_in_metres} = $vars{osie_dist};
+    } elsif ( defined $vars{latitude} && defined $vars{longitude}
+              && defined $vars{latlong_dist} ) {
+        # All handlers can do lat/long, but they all do it differently.
+        if ( $self->config->{_}{geo_handler} eq 1 ) {
+	    require Geography::NationalGrid::GB;
+            my $point = Geography::NationalGrid::GB->new(
+                Latitude  => $vars{latitude},
+                Longitude => $vars{longitude},
+            );
+            $self->{x} = $point->easting;
+            $self->{y} = $point->northing;
+	} elsif ( $self->config->{_}{geo_handler} eq 2 ) {
+	    require Geography::NationalGrid::IE;
+            my $point = Geography::NationalGrid::IE->new(
+                Latitude  => $vars{latitude},
+                Longitude => $vars{longitude},
+            );
+            $self->{x} = $point->easting;
+            $self->{y} = $point->northing;
+        } elsif ( $self->config->{_}{geo_handler} eq 3 ) {
+	    require Geo::Coordinates::UTM;
+            my ($zone, $x, $y) = Geo::Coordinates::UTM::latlon_to_utm(
+                                                $self->config->{_}{ellipsoid},
+                                                $vars{latitude},
+                                                $vars{longitude},
+                                              );
+            $self->{x} = $x;
+            $self->{y} = $y;
+	}
+        $self->{distance_in_metres} = $vars{latlong_dist};
+    }
+
+    # Store os_x etc so we can pass them to template.
+    foreach my $param ( qw( os_x os_y osie_x osie_y latitude longitude ) ) {
+        $self->{$param} = $vars{$param};
     }
 
     # Strip leading and trailing whitespace from search text.
@@ -606,6 +668,7 @@ sub process_params {
 # thin wrapper around OpenGuides::Template
 sub process_template {
     my ($self, %args) = @_;
+
     my $tt_vars = $args{tt_vars} || {};
     $tt_vars->{not_editable} = 1;
     $tt_vars->{not_deletable} = 1;
