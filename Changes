@@ -1,8 +1,8 @@
-0.29    ???
+0.29    8 November 2003
         Expanded section in TROUBLESHOOTING about permissions problems.
-	Diff.pm now absorbs trailing punctuation and spaces into words
-	it is diffing (to give less blocky results).
-	SuperSearch.pm change NOT to use '-' instead of '!'.
+        Diff.pm now absorbs trailing punctuation and spaces into words
+          it is diffing (to give less blocky results).
+        SuperSearch.pm change NOT to use '-' instead of '!'.
 
 0.28    1 November 2003
         Allow running sites on SQLite databases.
