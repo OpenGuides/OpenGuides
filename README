@@ -4,9 +4,17 @@ OpenGuides Version 0.03
 This distribution contains the OpenGuides wiki software. It requires:
 
  - Module::Build for installation
- - other prerequisite modules as detailed in PREREQUISITES
+ - other Perl modules as detailed in the PREREQUISITES file
  - a webserver (such as Apache)
- - a Postgres database dedicated to the OpenGuides installation
+ - a Postgres or MySQL database dedicated to the OpenGuides installation
+
+
+
+If while following the instructions below or while trying to use your
+OpenGuides install you see an error that you don't understand, please
+consult the TROUBLESHOOTING file.
+
+
 
 Unpack the distribution (using for example 'tar' or 'WinZip'), and set
 your working directory to be the top level of the distribution, then
@@ -19,6 +27,16 @@ perl Build install
 
 The very first of these commands asks a number of questions regarding
 the installation.
+
+
+"Skip OpenGuides configuration?"
+
+Answer "n" to this question unless you really know what you're doing.
+It's mainly there for developers.
+
+"what type of database do you want the site to run on?  postgres/mysql"
+
+Answer either "postgres" or "mysql".
 
 "What do you want the script to be called?"
 
@@ -54,17 +72,17 @@ multi-user systems this will just be yourself.
 Supplying an answer to this question is optional.  TODO - supply and
 optionally install a simple stylesheet with the OpenGuides distribution.
 
-"What's the name of the postgres database that this site runs on?"
+"What's the name of the database that this site runs on?"
 "And the database user that can access that database?"
 "And the password that they use to access the database?"
 
-You should create (or ask your ISP/sysadmin to create) a Postgres
-database specifically for the use of OpenGuides.  If you have more
-than one OpenGuides installation, for example if you run guides for
-more than one city, each installation will need its own database.
+You should create (or ask your ISP/sysadmin to create) a Postgres or
+MySQL database specifically for the use of OpenGuides.  If you have
+more than one OpenGuides installation, for example if you run guides
+for more than one city, each installation will need its own database.
 
-TODO - support MySQL and SQLite as well (this is really going to be
-pretty trivial).
+TODO - support SQLite as well (requires faffing with install scripts,
+bit messy but CGI::Wiki already supports this so won't be hard)
 
 "What's the wiki called?"
 
