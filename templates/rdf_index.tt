@@ -31,6 +31,7 @@
 
   <rdf:li>
     <[% nodeType %] rdf:about="[% full_cgi_url %]?id=[% node.param %];format=rdf#obj">
+      <rdfs:seeAlso rdf:resource="[% full_cgi_url %]?id=[% node.param %];format=rdf" />
       <dc:title>[% node.name %]</dc:title>
     </[% nodeType %]>
   </rdf:li>
