@@ -23,5 +23,9 @@
     </gs:object>
   [% END %]
 
-</gs:[% criterion.type %]>
+[%- IF criterion -%]
+  </gs:[% criterion.type %]>
+[%- ELSE -%]
+  </gs:category>
+[%- END -%]
 </rdf:RDF>
