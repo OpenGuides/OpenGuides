@@ -8,6 +8,7 @@
           rules link in navbar.  Enable this by setting text_formatting_node
           in your config file.
         Added config option for including the navbar on the home page.
+        Implemented minor edits.
 
 0.18    16 June 2003
         Added a Makefile.PL as well as a Build.PL, for CPAN.pm users.

@@ -238,7 +238,11 @@ sub display_node {
     $tt_vars{current} = 1 unless $version;
 
     if ($node eq "RecentChanges") {
-        my @recent = $wiki->list_recent_changes( days => 7 );
+        my $minor_edits = get_cookie( "show_minor_edits_in_rc" );
+        my %criteria = ( days => 7 );
+        $criteria{metadata_isnt} = { edit_type => "Minor tidying" }
+          unless $minor_edits;
+        my @recent = $wiki->list_recent_changes( %criteria );
         @recent = map { {name          => $q->escapeHTML($_->{name}),
                          last_modified => $q->escapeHTML($_->{last_modified}),
                          comment       => $q->escapeHTML($_->{metadata}{comment}[0]),

@@ -1,6 +1,6 @@
 use strict;
 use Config::Tiny;
-use Test::More tests => 15;
+use Test::More tests => 16;
 
 use_ok( "OpenGuides::CGI" );
 
@@ -22,6 +22,7 @@ my $cookie = OpenGuides::CGI->make_prefs_cookie(
     preview_above_edit_box => 1,
     latlong_traditional    => 1,
     omit_formatting_link   => 1,
+    show_minor_edits_in_rc => 1,
 );
 isa_ok( $cookie, "CGI::Cookie", "->make_prefs_cookie returns a cookie" );
 
@@ -43,10 +44,11 @@ is( $prefs{include_geocache_link}, 1, "...and geocache prefs" );
 is( $prefs{preview_above_edit_box}, 1, "...and preview prefs" );
 is( $prefs{latlong_traditional}, 1, "...and latlong prefs" );
 is( $prefs{omit_formatting_link}, 1, "...and formatting link prefs" );
+is( $prefs{show_minor_edits_in_rc}, 1, "...and minor edits prefs" );
 
 # Check that cookie parsing fails nicely if no cookie set.
 delete $ENV{HTTP_COOKIE};
 %prefs = eval { OpenGuides::CGI->get_prefs_from_cookie( config => $config ); };
 is( $@, "", "->get_prefs_from_cookie doesn't die if no cookie set" );
-is( keys %prefs, 5, "...and returns five default values" );
+is( keys %prefs, 6, "...and returns six default values" );
 
