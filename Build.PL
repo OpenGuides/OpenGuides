@@ -210,7 +210,6 @@ close FILE or die "Can't close wiki.conf: $!";
 
 #####
 ##### When updating the prereqs PLEASE REMEMBER to update PREREQUISITES.
-##### Ivor, this means you too.
 #####
 
 # Create the build object.
@@ -226,7 +225,7 @@ my $build = OpenGuides::Build->new(
 	'CGI::Wiki'                       => '0.54',
 	'CGI::Wiki::Formatter::UseMod'    => '0.09',
         'CGI::Wiki::Plugin::Categoriser'  => 0,
-	'CGI::Wiki::Plugin::Diff'         => 0,
+	'CGI::Wiki::Plugin::Diff'         => '0.07', # earlier buggy
 	'CGI::Wiki::Plugin::GeoCache'     => 0,
 	'CGI::Wiki::Plugin::Locator::UK'  => '0.09',
 	'CGI::Wiki::Plugin::RSS::ModWiki' => '0.02',
