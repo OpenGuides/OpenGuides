@@ -47,10 +47,10 @@ my $store = CGI::Wiki::Store::Pg->new(
 
 # Make search.
 my $indexdb = Search::InvertedIndex::DB::DB_File_SplitHash->new(
-    -map_name  => "/home/kake/public_html/wiki-index.db",
+    -map_name  => $config->{_}{indexing_directory},
     -lock_mode => "EX"
 );
-#my $search  = CGI::Wiki::Search::SII->new( indexdb => $indexdb );
+my $search  = CGI::Wiki::Search::SII->new( indexdb => $indexdb );
 
 # Make formatter.
 my %macros = (
@@ -415,8 +415,8 @@ sub edit_node {
     my $node = shift;
     my %node_data = $wiki->retrieve_node($node);
     my ($content, $checksum) = @node_data{ qw( content checksum ) };
-    my %metadata  = %{$node_data{metadata}};
-    my $username  = &get_cookie;
+    my %metadata   = %{$node_data{metadata}};
+    my $username   = &get_cookie;
     my %tt_vars = ( content    => $q->escapeHTML($content),
                     checksum   => $q->escapeHTML($checksum),
                     categories => $metadata{category},
