@@ -1,3 +1,7 @@
+        Fixed bug that prevented automatic database initialization on
+	  SQLite databases.
+	Doc fix for private installations.
+
 0.30    2 January 2003
         Added method to allow admins to delete nodes.  You will need to
           explicitly enable this option in your wiki.conf, since it brings

@@ -4,7 +4,11 @@ OpenGuides Troubleshooting Guide
 If you wish to install the OpenGuides modules in a private directory,
 the Module::Build incantation for this is
 
-  perl Build.PL install_path=lib=/path/to/my/modules/   # version 0.20 of M::B
+  perl Build.PL install_path=lib=/path/to/my/modules/ \
+                install_path=arch=/path/to/my/modules/auto/ \
+		install_path=libdoc=/path/to/my/man/ \
+		install_path=bindoc=/path/to/my/man/ \
+		install_path=script=/path/to/my/bin/    # version 0.20 of M::B
 
   perl Build.PL config='sitelib=/path/to/my/modules/'   # version 0.18 of M::B
 
