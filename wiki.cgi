@@ -4,7 +4,7 @@ use strict;
 use warnings;
 
 use vars qw( $VERSION );
-$VERSION = '0.13';
+$VERSION = '0.14';
 
 use CGI qw/:standard/;
 use CGI::Carp qw(croak);
@@ -66,6 +66,8 @@ eval {
         do_search($search_terms);
     } elsif ($action eq 'show_backlinks') {
         show_backlinks($node);
+    } elsif ($action eq 'show_wanted_pages') {
+        show_wanted_pages();
     } elsif ($action eq 'index') {
         show_index( type   => $q->param("index_type") || "Full",
                     value  => $q->param("index_value") || "",
@@ -539,3 +541,25 @@ sub show_backlinks {
                     not_editable => 1 );
     process_template("backlink_results.tt", $node, \%tt_vars);
 }
+
+sub show_wanted_pages {
+    my @dangling = $wiki->list_dangling_links;
+    @dangling = sort @dangling;
+    my @wanted;
+    foreach my $node_name (@dangling) {
+        my $node_param =
+ 	    uri_escape($formatter->node_name_to_node_param($node_name));
+        push @wanted, {
+            name          => $q->escapeHTML($node_name),
+            edit_link     => $script_url . uri_escape($script_name)
+                           . "?action=edit;id=$node_param",
+            backlink_link => $script_url . uri_escape($script_name)
+ 		           . "?action=show_backlinks;id=$node_param"
+        };
+    }
+    process_template( "wanted_pages.tt",
+                      "",
+                      { not_editable => 1,
+                        wanted       => \@wanted } );
+}
+

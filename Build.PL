@@ -178,7 +178,7 @@ my $build = OpenGuides::Build->new(
 	'CGI' => 0,
 	'CGI::Carp' => 0,
 	'CGI::Cookie' => 0,
-	'CGI::Wiki' => '0.36',
+	'CGI::Wiki' => '0.38',
 	'CGI::Wiki::Formatter::UseMod' => '0.04', # for correct FreeUpper
         'CGI::Wiki::Plugin::Categoriser' => 0,
 	'CGI::Wiki::Plugin::GeoCache' => 0,
@@ -230,7 +230,8 @@ $build->{config}{__templates}         = [
                       "recent_changes.tt",
                       "search_results.tt",
                       "site_index.tt",
-                      "userstats.tt"
+                      "userstats.tt",
+                      "wanted_pages.tt"
     ];
 
 # Finally write the build script.

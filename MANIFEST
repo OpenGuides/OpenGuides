@@ -39,6 +39,7 @@ templates/recent_changes.tt
 templates/search_results.tt
 templates/site_index.tt
 templates/userstats.tt
+templates/wanted_pages.tt
 t/00_setup.t
 t/01_add_test_data.t
 t/11_utils.t

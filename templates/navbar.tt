@@ -5,6 +5,7 @@
     <li><a href="[% cgi_url %]?RecentChanges">RecentChanges</a></li>
     <li><a href="newpage.cgi">Create a new page</a></li>
     <li><a href="[% cgi_url %]?action=random">Random Page</a></li>
+    <li><a href="[% cgi_url %]?action=show_wanted_pages">Wanted Pages</a></li>
     [% IF geocache_link %]
     <li>[% geocache_link %]</li>
     [% END %]

@@ -1,7 +1,15 @@
+0.14    17 May 2003
+        Added "Wanted Pages" link to navbar, thanks to Simon Cozens for
+        the idea.
+
+        Fixed bug noticed by Dom Hargreaves - website metadata wasn't
+        making it through the preview.
+
 0.13    17 May 2003
         Added some more stylesheet hooks.
         Tweaked OpenGuides::Diff to make it testable, added a start at tests.
         Lat and long now stored to only 6dp instead of millions.
+        Added edit field for map link.
 
 0.12    14 May 2003
         Added OpenGuides::CGI to manage cookies and things, used this to
