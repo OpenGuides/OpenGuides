@@ -162,7 +162,7 @@ sub extract_tt_vars {
     # rather than just CGI::escapeHTMLing it all in the template.
     my $website = $args{metadata} ? $metadata{website}[0]
                                   : $q->param("website");
-    my $formatted_website_text;
+    my $formatted_website_text = "";
     if ( $website ) {
         $formatted_website_text = $class->format_website_text(
             formatter => $formatter,
