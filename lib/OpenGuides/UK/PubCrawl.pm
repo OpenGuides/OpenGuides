@@ -2,7 +2,7 @@ package OpenGuides::UK::PubCrawl;
 use strict;
 
 use vars qw( $VERSION @ISA );
-$VERSION = '0.01';
+$VERSION = '0.02';
 
 use Carp qw( croak );
 use CGI::Wiki::Plugin;
@@ -157,7 +157,7 @@ sub generate_crawl {
 
 =head1 AUTHOR
 
-The OpenGuides Project (grubstreet@hummous.earth.li)
+The OpenGuides Project (openguides-dev@openguides.org)
 
 =head1 COPYRIGHT
 

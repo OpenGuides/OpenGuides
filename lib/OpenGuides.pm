@@ -3,7 +3,7 @@ use strict;
 
 use vars qw( $VERSION );
 
-$VERSION = '0.19';
+$VERSION = '0.20';
 
 =head1 NAME
 
@@ -42,14 +42,14 @@ so the location features might not work so well outside the UK.
 =head1 FEEDBACK
 
 If you have a question, a bug report, or a patch, or you're interested
-in joining the development team, please contact grubstreet@hummous.earth.li
+in joining the development team, please contact openguides-dev@openguides.org
 (moderated mailing list, will reach all current developers but you'll have
 to wait for your post to be approved) or kake@earth.li (a real person who
 may take a little while to reply to your mail if she's busy).
 
 =head1 AUTHOR
 
-The OpenGuides Project (grubstreet@hummous.earth.li)
+The OpenGuides Project (openguides-dev@openguides.org)
 
 =head1 COPYRIGHT
 

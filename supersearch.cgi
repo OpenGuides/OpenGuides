@@ -4,7 +4,7 @@ use strict;
 use warnings;
 
 use vars qw( $VERSION );
-$VERSION = '1.05';
+$VERSION = '1.06';
 
 use CGI qw(:standard *ol *div);
 use CGI::Carp qw(fatalsToBrowser);	#Remove fatalsToBrowser if paranoid
@@ -398,7 +398,7 @@ represents NOT.
 
 =head1 AUTHOR
 
-The OpenGuides Project (grubstreet@hummous.earth.li)
+The OpenGuides Project (openguides-dev@openguides.org)
 
 =head1 COPYRIGHT
 

@@ -2,7 +2,7 @@ package OpenGuides::Template;
 
 use strict;
 use vars qw( $VERSION );
-$VERSION = '0.08';
+$VERSION = '0.09';
 
 use Carp qw( croak );
 use CGI; # want to get rid of this and put the burden on the templates
@@ -296,7 +296,7 @@ sub format_website_text {
 
 =head1 AUTHOR
 
-The OpenGuides Project (grubstreet@hummous.earth.li)
+The OpenGuides Project (openguides-dev@openguides.org)
 
 =head1 COPYRIGHT
 

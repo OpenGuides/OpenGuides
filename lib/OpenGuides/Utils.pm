@@ -2,7 +2,7 @@ package OpenGuides::Utils;
 
 use strict;
 use vars qw( $VERSION );
-$VERSION = '0.03';
+$VERSION = '0.04';
 
 use Carp qw( croak );
 use CGI::Wiki;
@@ -115,7 +115,7 @@ sub make_wiki_object {
 
 =head1 AUTHOR
 
-The OpenGuides Project (grubstreet@hummous.earth.li)
+The OpenGuides Project (openguides-dev@openguides.org)
 
 =head1 COPYRIGHT
 

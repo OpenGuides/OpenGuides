@@ -1,7 +1,7 @@
 package OpenGuides::CGI;
 use strict;
 use vars qw( $VERSION );
-$VERSION = '0.03';
+$VERSION = '0.04';
 
 use Carp qw( croak );
 use CGI::Cookie;
@@ -129,7 +129,7 @@ sub _get_cookie_name {
 
 =head1 AUTHOR
 
-The OpenGuides Project (grubstreet@hummous.earth.li)
+The OpenGuides Project (openguides-dev@openguides.org)
 
 =head1 COPYRIGHT
 

@@ -5,7 +5,8 @@ use warnings;
 
 use Algorithm::Diff;
 use VCS::Lite;
-our $VERSION = '0.03';
+use vars qw( $VERSION );
+$VERSION = '0.04';
 
 =head1 NAME
 
@@ -187,7 +188,7 @@ L<OpenGuides>
 
 =head1 AUTHOR
 
-The OpenGuides Project (grubstreet@hummous.earth.li)
+The OpenGuides Project (openguides-dev@openguides.org)
 
 =head1 COPYRIGHT
 

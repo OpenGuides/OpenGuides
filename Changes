@@ -1,3 +1,6 @@
+0.20    10 July 2003
+        Fixed all the email addresses to openguides-dev@openguides.org
+
 0.19    10 July 2003
         Extra checks that script_url ends in a '/'.
         Fixed small bug with edit conflict form - map link field was missing.
