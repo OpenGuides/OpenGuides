@@ -14,7 +14,7 @@ use URI::Escape;
 
 use vars qw( $VERSION );
 
-$VERSION = '0.41';
+$VERSION = '0.42';
 
 =head1 NAME
 
@@ -139,7 +139,8 @@ sub display_node {
         $tt_vars{is_indexable_node} = 1;
         $tt_vars{index_type} = lc($type);
         $tt_vars{index_value} = $2;
-        $tt_vars{rss_link} = $config->{_}{script_name} . "?action=rss;"
+        $tt_vars{"rss_".lc($type)."_url"} =
+                           $config->{_}{script_name} . "?action=rss;"
                            . lc($type) . "=" . lc(CGI->escape($2));
     }
 

@@ -54,8 +54,11 @@
 <div id="rdf_link">
   <a href="[% cgi_url %]?id=[% node_param %];format=rdf">RDF/XML for this
   node</a>
-  [% IF rss_link %]
-    / <a href="[% rss_link %]">RSS feed for this node</a>
+  [% IF rss_locale_url %]
+    / <a href="[% rss_locale_url %]">RSS feed for this locale</a>
+  [% END %]
+  [% IF rss_category_url %]
+    / <a href="[% rss_category_url %]">RSS feed for this category</a>
   [% END %]
 </div>
 <div id="version">
