@@ -4,7 +4,7 @@ use strict;
 use warnings;
 
 use vars qw( $VERSION );
-$VERSION = '0.04';
+$VERSION = '0.05';
 
 use lib "lib"; # for OpenGuides modules that are installed with this script
 

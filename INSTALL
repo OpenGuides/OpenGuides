@@ -40,9 +40,17 @@ You should create (or ask your ISP/sysadmin to create) a Postgres or
 MySQL database specifically for the use of OpenGuides.  If you have
 more than one OpenGuides installation, for example if you run guides
 for more than one city, each installation will need its own database.
-
 (TODO - support SQLite as well (requires faffing with install scripts,
 bit messy but CGI::Wiki already supports this so won't be hard))
+
+
+  "And the machine that the database is hosted on? (blank if local)",
+
+If the database is running on a local machine with username/password
+authentication then just press RETURN to skip this question.  If it
+is running on a local machine with IDENT authentication then you may
+need to answer "localhost" to this question.  If it is running on a
+remote machine then enter the full hostname of that machine.
 
 
   "What do you want the script to be called?"

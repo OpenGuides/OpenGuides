@@ -1,6 +1,13 @@
 OpenGuides Troubleshooting Guide
 ================================
 
+If you wish to install the OpenGuides modules in a private directory,
+the Module::Build incantation for this is
+
+  perl Build.PL config='sitelib=/path/to/my/modules/'
+
+----------------------------------------------------------------------
+
 If you see the following message in your webserver error logs:
 
   "Unable to tie -map_name [...] datafiles directory [...] does not exist
@@ -22,3 +29,4 @@ or
 or a combination of both.  Your ISP or sysadmin might be able to help you
 further with this problem if you can't figure it out yourself.
 
+----------------------------------------------------------------------

@@ -25,6 +25,9 @@ my @questions = (
 { question => "and the password that they use to access the database?",
   variable => "dbpass"
   },
+{ question => "and the machine that the database is hosted on? (blank if local)",
+  variable => "dbhost"
+  },
 { question => "what do you want the script to be called?",
   variable => "script_name",
   default  => "wiki.cgi"
@@ -35,6 +38,10 @@ my @questions = (
   },
 { question => "what URL does the install directory map to?",
   variable => "script_url",
+  },
+{ question => "what directory should I install the templates in?",
+  variable => "template_path",
+  default  => "/usr/lib/cgi-bin/openguides/templates/"
   },
 { question => "what directory can I use to store indexes in for searching? "
             . "***NOTE*** this directory must exist and be writeable by the "
@@ -129,14 +136,6 @@ foreach my $qset (@questions) {
     push @answers, { question => $qu,
 		     variable => $var,
 		     value    => $val };
-
-    # For now we put the templates in the same place as the script, since I
-    # can't figure out how to get Module::Build to put them in a subdirectory.
-    if ( $var eq "install_directory" ) {
-        push @answers, { question => "what directory are the templates in?",
-			 variable => "template_path",
-			 value    => $val };
-    }
 }
 
 # Create a user-friendly config file from answers to prompts.
@@ -172,25 +171,6 @@ my $build = OpenGuides::Build->new(
     dist_name => "OpenGuides",
     dist_version_from => "wiki.cgi",
     license => "perl",
-    script_files => [ "wiki.cgi", "wiki.conf", "preferences.cgi",
-		      "supersearch.cgi",
-		      "templates/backlink_results.tt",
-		      "templates/display_metadata.tt",
-                      "templates/edit_conflict.tt",
-                      "templates/edit_form.tt",
-                      "templates/footer.tt",
-                      "templates/header.tt",
-                      "templates/home_node.tt",
-                      "templates/navbar.tt",
-                      "templates/node.tt",
-                      "templates/node_history.tt",
-		      "templates/preferences.tt",
-                      "templates/rdf_index.tt",
-                      "templates/recent_changes.tt",
-                      "templates/search_results.tt",
-                      "templates/site_index.tt",
-                      "templates/userstats.tt"
-		      ],
     requires => {
 	'CGI' => 0,
 	'CGI::Carp' => 0,
@@ -219,11 +199,27 @@ my $build = OpenGuides::Build->new(
 
 $build->add_to_cleanup( "wiki.conf" );
 
-# Set the install directory:
-#  - scripts go in the actual directory.
-$build->{config}{installscript} = $existing_config{install_directory};
-#  - and modules go in lib/
-$build->{config}{sitelib} = $existing_config{install_directory} . "/lib";
+# Tell OpenGuides::Build which additional scripts and templates to install.
+$build->{config}{__extra_scripts}     = 
+                      [ "wiki.conf", "preferences.cgi", "supersearch.cgi" ];
+$build->{config}{__templates}         = [
+		      "backlink_results.tt",
+		      "display_metadata.tt",
+                      "edit_conflict.tt",
+                      "edit_form.tt",
+                      "footer.tt",
+                      "header.tt",
+                      "home_node.tt",
+                      "navbar.tt",
+                      "node.tt",
+                      "node_history.tt",
+		      "preferences.tt",
+                      "rdf_index.tt",
+                      "recent_changes.tt",
+                      "search_results.tt",
+                      "site_index.tt",
+                      "userstats.tt"
+    ];
 
 # Finally write the build script.
 $build->create_build_script;

@@ -55,7 +55,9 @@ and/or modify it under the same terms as Perl itself.
 =head1 CREDITS
 
 Programming by Earle Martin, Kake Pugh, Ivor Williams.  Testing and
-bug reporting by Cal Henderson and Bob Walker.
+bug reporting by Cal Henderson and Bob Walker.  Much of the
+Module::Build stuff copied from the Siesta project
+L<http://siesta.unixbeard.net/>
 
 =cut
 
