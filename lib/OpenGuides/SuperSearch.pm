@@ -140,6 +140,12 @@ sub run {
         my @results = values %{ $self->{results} || {} };
         my $numres = scalar @results;
 
+        # Clear out wikitext; we're done with this search.  (Avoids
+        # subsequent searches with this object erroneously matching things
+        # that matched this time.)  Do it here (ie at the last minute) to
+        # avoid screwing up "AND" searches.
+        delete $self->{wikitext};
+
         # For 0 or many we display results, for 1 we redirect to that page.
         if ( $numres == 1 && !$self->{return_tt_vars}) {
             my $node = $results[0]{name};
@@ -168,7 +174,7 @@ sub run {
             if ( $vars{distance_in_metres} ) {
                 @results = sort { $a->{distance} <=> $b->{distance} } @results;
 	    } else {
-                @results = sort { $a->{score} <=> $b->{score} } @results;
+                @results = sort { $b->{score} <=> $a->{score} } @results;
             }
 
             # Now snip out just the ones for this page.  The -1 is
@@ -224,7 +230,7 @@ sub _prime_wikitext {
 		next unless $node; # Search::InvertedIndex goes screwy sometimes
 		my $key = $wiki->formatter->node_name_to_node_param( $node );
 		my $text = $node . " " . $wiki->retrieve_node( $node );
-		$self->{wikitext}{$key} ||= $self->_mungepage( $text );
+		$self->{wikitext}{$key}{text} ||= $self->_mungepage( $text );
 	    }
 	}
 
@@ -241,9 +247,10 @@ sub _prime_wikitext {
 	foreach my $node ( @catmatches ) {
 		my $key = $wiki->formatter->node_name_to_node_param( $node );
 		my $text = $node. " " . $wiki->retrieve_node( $node );
-		$self->{wikitext}{$key} ||= $self->_mungepage( $text );
+		$self->{wikitext}{$key}{text} ||= $self->_mungepage( $text );
 		# Append this category so the regex finds it later.
-		$self->{wikitext}{$key} .= " [$matchstr]";
+		$self->{wikitext}{$key}{text} .= " [$matchstr]";
+                $self->{wikitext}{$key}{category_match} = 1;
 	}
 
 	# Search locales.
@@ -255,9 +262,10 @@ sub _prime_wikitext {
 	foreach my $node ( @locmatches ) {
 		my $key = $wiki->formatter->node_name_to_node_param( $node );
 		my $text = $node. " " . $wiki->retrieve_node( $node );
-		$self->{wikitext}{$key} ||= $self->_mungepage( $text );
+		$self->{wikitext}{$key}{text} ||= $self->_mungepage( $text );
 		# Append this locale so the regex finds it later.
-		$self->{wikitext}{$key} .= " [$matchstr]";
+		$self->{wikitext}{$key}{text} .= " [$matchstr]";
+                $self->{wikitext}{$key}{locale_match} = 1;
 	}
     } # $op eq 'word'
 } # sub _prime_wikitext
@@ -578,6 +586,30 @@ sub matched_literal {
     $self->_do_search(quotemeta $lit);
 }
 
+=back
+
+=head1 OUTPUT
+
+Results will be put into some form of relevance ordering.  These are
+the rules we have tests for so far (and hence the only rules that can
+be relied on):
+
+=over
+
+=item *
+
+A match on page title will score higher than a match on page category
+or locale.
+
+=item *
+
+A match on page category or locale will score higher than a match on
+page content.
+
+=back
+
+=cut
+
 sub intersperse {
     my $self = shift;
     my $pagnam = shift;
@@ -611,7 +643,7 @@ sub _do_search {
     my %wikitext = %{ $self->{wikitext} || {} };
     while (my ($k,$v) = each %wikitext) {
         my @out;
-        for ($v =~ /$wexp/g) {
+        for ($v->{text} =~ /$wexp/g) {
             my $match .= "...$_...";
             $match =~ s/<[^>]+>//gs;
             $match =~ s!\b($wmatch)\b!<b>$&</b>!i;
@@ -621,8 +653,14 @@ sub _do_search {
         $temp =~ s/_/ /g;
 
         # Compute score and create summary.
-        my $score = scalar @out;
-        $score +=10 if $temp =~ /$wexp/;
+        my $score = scalar @out; # 1 point for each match in body/title/cats
+        $score += 10 if $temp =~ /$wexp/; # 10 points if title matches
+        # 5 points for cat/locale match.  Check $score too since this might
+        # be a branch of an AND search and the cat/locale match may have
+        # been for the other branch,
+        $score += 5  if $v->{category_match} and $score;
+        $score += 5  if $v->{locale_match} and $score;
+
         $results{$k} = {
                          score   => $score,
                          summary => join( "", @out ),
