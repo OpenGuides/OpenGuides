@@ -1,0 +1,10 @@
+FOO: [% foo %]
+
+SITE NAME: [% site_name %]
+CGI URL: [% cgi_url %]
+FULL CGI URL: [% full_cgi_url %]
+CONTACT EMAIL: [% contact_email %]
+STYLESHEET: [% stylesheet %]
+HOME LINK: [% home_link %]
+HOME NAME: [% home_name %]
+

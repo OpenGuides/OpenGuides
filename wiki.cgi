@@ -5,7 +5,7 @@ use warnings;
 # use lib qw(/home/ivorw/public_html/cgi-bin/lib);
 
 use vars qw( $VERSION );
-$VERSION = '0.09';
+$VERSION = '0.10';
 
 use CGI qw/:standard/;
 use CGI::Carp qw(croak);
@@ -21,7 +21,7 @@ use Geography::NationalGrid::GB;
 use OpenGuides::RDF;
 use OpenGuides::Utils;
 use OpenGuides::Diff qw(display_node_diff);
-use Template;
+use OpenGuides::Template;
 use Time::Piece;
 use URI::Escape;
 
@@ -549,37 +549,19 @@ sub make_geocache_link {
 sub process_template {
     my ($template, $node, $vars, $conf, $omit_header) = @_;
 
-    $vars ||= {};
-    $conf ||= {};
-
-    my %tt_vars = ( %$vars,
-                    site_name     => $config->{_}->{site_name},
-                    cgi_url       => $script_name,
-                    full_cgi_url  => $script_url . $script_name,
-                    contact_email => $contact_email,
-                    description   => "",
-                    keywords      => "",
-                    stylesheet    => $config->{_}->{stylesheet_url},
-                    home_link     => $script_name,
-                    home_name     => $config->{_}->{home_name} );
-
+    my %tt_vars = %{ $vars || {} };
     if ($node) {
         $tt_vars{node_name} = $q->escapeHTML($node);
         $tt_vars{node_param} = $q->escape($formatter->node_name_to_node_param($node));
     }
 
-    my %tt_conf = ( %$conf,
-                INCLUDE_PATH => $config->{_}->{template_path} );
-
-    # Create Template object, print CGI header, process template.
-    my $tt = Template->new(\%tt_conf);
-    print $q->header unless $omit_header;
-    unless ($tt->process($template, \%tt_vars)) {
-        print qq(<html><head><title>ERROR</title></head><body><p>
-                 Failed to process template: )
-          . $tt->error
-          . qq(</p></body></html>);
-    }
+    my %output_conf = ( wiki   => $wiki,
+			config => $config,
+			template => $template,
+			vars   => \%tt_vars
+    );
+    $output_conf{content_type} = "" if $omit_header; # defaults otherwise
+    print OpenGuides::Template->output( %output_conf );
 }
 
 
