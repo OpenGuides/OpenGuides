@@ -294,6 +294,13 @@ sub display_node {
     my $longitude  = $metadata{longitude}[0];
     my $geocache_link = make_geocache_link($node);
 
+    # The 'website' attribute might contain a URL so we wiki-format it here
+    # rather than just CGI::escapeHTMLing it all in the template.
+    my $formatted_website_text;
+    if ( $website ) {
+        $formatted_website_text = _format_website($website);
+    }
+
     my @categories = map { { name => $_,
                              url  => "$script_name?Category_"
             . uri_escape($formatter->node_name_to_node_param($_)) } } @$catref;
@@ -308,7 +315,7 @@ sub display_node {
 		    locales       => \@locales,
 		    phone         => $phone,
                     fax           => $fax,
-		    website       => $website,
+		    formatted_website_text => $formatted_website_text,
 		    hours_text    => $hours_text,
 		    address       => $address,
 		    postcode      => $postcode,
@@ -411,12 +418,19 @@ sub preview_node {
 
     my @categories = sort split("\r\n", $categories_text);
 
+    # The 'website' attribute might contain a URL so we wiki-format it here
+    # rather than just CGI::escapeHTMLing it all in the template.
+    my $formatted_website_text;
+    if ( $website ) {
+        $formatted_website_text = _format_website($website);
+    }
+
     if ($wiki->verify_checksum($node, $checksum)) {
         my %tt_vars = ( content      => $q->escapeHTML($content),
 			categories   => \@categories,
   		        phone        => $phone,
 			fax          => $fax,
-		        website      => $website,
+		        formatted_website_text => $formatted_website_text,
 		        hours_text   => $hours_text,
 			address      => $address,
                         postcode     => $postcode,
@@ -445,6 +459,7 @@ sub edit_node {
     my ($content, $checksum) = @node_data{ qw( content checksum ) };
     my %metadata   = %{$node_data{metadata}};
     my $username   = get_cookie( "username" );
+
     my %tt_vars = ( content    => $q->escapeHTML($content),
                     checksum   => $q->escapeHTML($checksum),
                     categories => $metadata{category},
@@ -608,30 +623,36 @@ sub commit_node {
     my $username        = $q->param('username');
     my $comment         = $q->param('comment');
 
-    # We store latitude and longitude as well for the ICBM meta stuff.
-    my $point = Geography::NationalGrid::GB->new( Easting  => $os_x,
-						  Northing => $os_y );
-    my $latitude  = $point->latitude;
-    my $longitude = $point->longitude;
-
     my @categories = sort split("\r\n", $categories_text);
     my @locales    = sort split("\r\n", $locales_text);
 
-    my $written = $wiki->write_node($node, $content, $checksum,
-                                    { category   => \@categories,
-				      locale     => \@locales,
-				      phone      => $phone,
-				      fax        => $fax,
-				      website    => $website,
-				      address    => $address,
-			      opening_hours_text => $hours_text,
-				      postcode   => $postcode,
-				      os_x       => $os_x,
-				      os_y       => $os_y,
-				      latitude   => $latitude,
-				      longitude  => $longitude,
-				      username   => $username,
-				      comment    => $comment      } );
+    my %metadata = ( category   => \@categories,
+		     locale     => \@locales,
+		     phone      => $phone,
+		     fax        => $fax,
+                     website    => $website,
+		     address    => $address,
+		     opening_hours_text => $hours_text,
+		     postcode   => $postcode,
+		     username   => $username,
+		     comment    => $comment,
+    );
+
+
+    # We store latitude and longitude as well for the ICBM meta stuff.
+    if ($os_x and $os_y) {
+        my $point = Geography::NationalGrid::GB->new( Easting  => $os_x,
+						      Northing => $os_y );
+        %metadata = ( %metadata,
+		      latitude  => $point->latitude,
+		      longitude => $point->longitude,
+		      os_x      => $os_x,
+		      os_y      => $os_y
+	);
+    }
+
+    my $written = $wiki->write_node($node, $content, $checksum, \%metadata );
+
     if ($written) {
         redirect_to_node($node);
     } else {
@@ -675,3 +696,15 @@ sub show_backlinks {
     process_template("backlink_results.tt", $node, \%tt_vars);
 }
 
+
+sub _format_website {
+    my $text = shift;
+    my $formatted = $wiki->format($text);
+
+    # Strip out paragraph markers put in by formatter since we want this
+    # to be a single string to put in a <ul>.
+    $formatted =~ s/<p>//g;
+    $formatted =~ s/<\/p>//g;
+
+    return $formatted;
+}
