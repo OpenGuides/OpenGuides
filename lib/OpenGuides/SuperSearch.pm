@@ -175,6 +175,10 @@ sub _prime_wikitext {
     my ($self, $search) = @_;
     my $wiki = $self->{wiki};
 
+    # Clear out any previously-accumulated wikitext - need to do this
+    # for persistent environments such as testing.
+    $self->{wikitext} = {};
+
     # Search title and body.
     my %results = $wiki->search_nodes( $search );
     foreach my $node ( keys %results ) {
@@ -188,6 +192,7 @@ sub _prime_wikitext {
                          metadata_type => "category",
                          metadata_value => $search,
     );
+
     foreach my $node ( @catmatches ) {
         my $key = $wiki->formatter->node_name_to_node_param( $node );
         my $text = $node. " " . $wiki->retrieve_node( $node );
