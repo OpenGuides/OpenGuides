@@ -3,6 +3,7 @@
           - empty tags are no longer generated
           - switch to W3C contact namespace for addressing data
           - move homepage tag out of wiki metadata
+          - remove nonexistent "gs:" namespace from category indices
           - logical structure improvements (subjects of pages are now
             identified as spatial things instead of being anonymous 
             FOAF topics).
