@@ -52,7 +52,6 @@ sub new {
     $self->{wikimain} = $config->{_}{script_url} . $config->{_}{script_name};
     $self->{css}      = $config->{_}{stylesheet_url};
     $self->{head}     = $config->{_}{site_name} . " Search";
-    $self->{language} = $config->{_}{default_language}; 
 
     return $self;
 }
@@ -159,7 +158,6 @@ sub run {
 sub process_template {
     my ($self, %args) = @_;
     my $tt_vars = $args{tt_vars} || {};
-    $tt_vars->{language} = $self->{language};
 
     $tt_vars->{not_editable} = 1;
 

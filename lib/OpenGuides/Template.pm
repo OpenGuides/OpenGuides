@@ -146,6 +146,7 @@ sub output {
                     formatting_rules_node => $formatting_rules_node,
                     openguides_version    => $OpenGuides::VERSION,
                     enable_page_deletion  => $enable_page_deletion,
+                    language              => $config->{_}->{default_language},
     };
 
     if ($args{node}) {
