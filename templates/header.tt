@@ -31,7 +31,7 @@
     <link rel="alternate" type="application/rss+xml" title="RSS feed for this page" href="[% rss_link %]" />
   [% END %]
   [% IF deter_robots %]
-    <meta name="robots" content="noindex" />
+    <meta name="robots" content="noindex,nofollow" />
   [% END %]
 </head>
 <body>
