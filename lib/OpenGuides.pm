@@ -7,6 +7,7 @@ use CGI::Wiki::Plugin::Diff;
 use CGI::Wiki::Plugin::Locator::UK;
 use OpenGuides::Template;
 use OpenGuides::Utils;
+use URI::Escape;
 
 use vars qw( $VERSION );
 
@@ -335,6 +336,13 @@ sub find_within_distance {
                       format => "rdf",
                     );
 
+  # Or return output as a string (useful for writing tests).
+  $guide->show_index(
+                      type          => "category",
+                      value         => "pubs",
+                      return_output => 1,
+                    );
+
 =cut
 
 sub show_index {
@@ -386,7 +394,7 @@ sub show_index {
 
     my ($template, %conf);
 
-    if ( $args{format} eq "rdf" ) {
+    if ( $args{format} and $args{format} eq "rdf" ) {
 	$template = "rdf_index.tt";
         $conf{content_type} = "text/plain";
     } else {
@@ -400,7 +408,9 @@ sub show_index {
               tt_vars     => \%tt_vars,
     );
 
-    print $self->process_template( %conf );
+    my $output = $self->process_template( %conf );
+    return $output if $args{return_output};
+    print $output;
 }
 
 =item B<list_all_versions>
