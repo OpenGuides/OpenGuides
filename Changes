@@ -1,6 +1,7 @@
-0.37    
+0.37    16 July 2004
         Fixed bug in diff view - the versions are the right way round now...
-          Fixed bug with links in historic view.
+          Fixed bug with links in historic view.  Require CGI.pm 2.92 to
+          avoid escapeHTML bug.
 
 0.36    13 July 2004
         Added diff link to node template. Fixed case sensitivity bug in
