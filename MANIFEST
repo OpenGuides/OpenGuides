@@ -13,6 +13,7 @@ lib/OpenGuides/Template.pm
 lib/OpenGuides/UK/PubCrawl.pm
 lib/OpenGuides/Utils.pm
 lib/OpenGuides.pm
+newpage.cgi
 preferences.cgi
 pubcrawl.cgi
 supersearch.cgi
@@ -22,10 +23,12 @@ templates/display_categories.tt
 templates/display_metadata.tt
 templates/edit_conflict.tt
 templates/edit_form.tt
+templates/error.tt
 templates/footer.tt
 templates/header.tt
 templates/home_node.tt
 templates/navbar.tt
+templates/newpage.tt
 templates/node.tt
 templates/node_history.tt
 templates/preferences.tt
