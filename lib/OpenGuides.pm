@@ -176,8 +176,7 @@ sub display_node {
 		 geocache_link => $self->make_geocache_link($id),
 		 last_modified => $modified,
 		 version       => $node_data{version},
-		 node_name     => CGI->escapeHTML($id),
-		 node_param    => CGI->escape($id),
+                 node          => $id,
                  language      => $config->{_}->{default_language},
                );
 
