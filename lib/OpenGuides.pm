@@ -237,6 +237,23 @@ sub display_node {
                          other_version => 5,
                        );
 
+  # Or return output as a string (useful for writing tests).
+  my $output = $guide->display_diffs(
+                                      id            => "Home Page",
+                                      version       => 6,
+                                      other_version => 5,
+                                      return_output => 1,
+                                    );
+
+  # Or return the hash of variables that will be passed to the template
+  # (not including those set additionally by OpenGuides::Template).
+  my %vars = $guide->display_diffs(
+                                    id             => "Home Page",
+                                    version        => 6,
+                                    other_version  => 5,
+                                    return_tt_vars => 1,
+                                  );
+
 =cut
 
 sub display_diffs {
@@ -246,11 +263,14 @@ sub display_diffs {
                                         left_version  => $args{version},
    		                        right_version => $args{other_version},
                                               );
-    print $self->process_template(
-                                   id       => $args{id},
-                                   template => "differences.tt",
-                                   vars     => \%diff_vars
-                                 );
+    return %diff_vars if $args{return_tt_vars};
+    my $output = $self->process_template(
+                                          id       => $args{id},
+                                          template => "differences.tt",
+                                          tt_vars  => \%diff_vars
+                                        );
+    return $output if $args{return_output};
+    print $output;
 }
 
 =item B<find_within_distance>

@@ -1,13 +1,13 @@
 [% USE CGI %]
 [% INCLUDE header.tt %]
   <h1>
-  [% site_name %] - Differences between [% ver1 %] and [% ver2 %] of [% node_name %]
+  [% site_name %] - Differences between [% right_version %] and [% left_version %] of [% node_name %]
   </h1>
 [% IF diff %]
 <table width=100%>
   <tr>
-    <th width=50%> [% ver1 %] </th>
-    <th width=50%> [% ver2 %] </th>
+    <th width=50%> [% right_version %] </th>
+    <th width=50%> [% left_version %] </th>
   </tr>
 [% FOREACH hunk = diff %]
   <tr>
