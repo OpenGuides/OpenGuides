@@ -1,4 +1,4 @@
-Modules required by OpenGuides 0.40
+Modules required by OpenGuides 0.41
 ===================================
 
 Algorithm::Diff (version 0.13 or later)
@@ -6,7 +6,7 @@ CGI (version 2.92 or later)
 CGI::Carp
 CGI::Cookie
 CGI::Wiki (version 0.54 or later)
-CGI::Wiki::Formatter::UseMod (version 0.09 or later)
+CGI::Wiki::Formatter::UseMod (version 0.16 or later)
 CGI::Wiki::Plugin::Categoriser
 CGI::Wiki::Plugin::Diff (version 0.07 or later)
 CGI::Wiki::Plugin::GeoCache

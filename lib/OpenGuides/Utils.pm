@@ -2,7 +2,7 @@ package OpenGuides::Utils;
 
 use strict;
 use vars qw( $VERSION );
-$VERSION = '0.07';
+$VERSION = '0.08';
 
 use Carp qw( croak );
 use CGI::Wiki;
@@ -119,10 +119,35 @@ sub make_wiki_object {
             qq(<form action="$search_url" method="get"><input type="text" size="20" name="search"><input type="submit" name="Go" value="Search"></form>),
         qr/\@INDEX_LINK\s+\[\[(Category|Locale)\s+([^\]|]+)\|?([^\]]+)?\]\]/ =>
             sub {
+                  my $wiki = shift;
                   my $link_title = $_[2] || "View all pages in $_[0] $_[1]";
                   return qq(<a href="$script_name?action=index;index_type=) . uri_escape(lc($_[0])) . qq(;index_value=) . uri_escape($_[1]) . qq(">$link_title</a>);
                 },
-	qr/\@RSS\s+\[(.*?)\]/ => sub { 
+        qr/\@INDEX_LIST\s+\[\[(Category|Locale)\s+([^\]]+)]]/ =>
+             sub {
+                   my ($wiki, $type, $value) = @_;
+                   my @nodes = $wiki->list_nodes_by_metadata(
+                       metadata_type  => $type,
+                       metadata_value => $value,
+                       ignore_case    => 1,
+                   );
+                   unless ( scalar @nodes ) {
+                       return "\n* No pages currently in "
+                              . lc($type) . " $value\n";
+                   }
+                   my $return = "\n";
+                   foreach my $node ( @nodes ) {
+                       $return .= "* "
+                               . $wiki->formatter->format_link(
+                                                                wiki => $wiki,
+                                                                link => $node,
+                                                              )
+                                . "\n";
+	           }
+                   return $return;
+                 },
+	qr/\@RSS\s+\[(.*?)\]/ => sub {
+                                       my $wiki = shift; 
                                       # Get the URL. It's already been formatted into a 
                                       # hyperlink so we need to reverse that.
                                       my $url_raw = $_[0];
@@ -155,6 +180,7 @@ sub make_wiki_object {
                                    tr th br hr ul li center blockquote kbd
                                    div code strike sub sup font)],
         macros              => \%macros,
+        pass_wiki_to_macros => 1,
         node_prefix         => "$script_name?",
         edit_prefix         => "$script_name?action=edit&id=",
         munge_urls          => 1,
