@@ -11,11 +11,6 @@ SKIP: {
     skip "DBD::SQLite not installed - no database to test with", 16
       unless $have_sqlite;
 
-    CGI::Wiki::Setup::SQLite::cleardb( { dbname => "t/node.db" } ); # KLUDGE
-    # Er and delete the indexes too because it doesn't seem to be happening.
-    # KLUDGE remove when I've fixed CGI::Wiki::Search::SII.
-    unlink <t/indexes/*> or die "Couldn't perform kludge";
-
     CGI::Wiki::Setup::SQLite::setup( { dbname => "t/node.db" } );
     my $config = Config::Tiny->new;
     $config->{_} = {

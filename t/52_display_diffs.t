@@ -11,7 +11,6 @@ SKIP: {
     skip "DBD::SQLite not installed - no database to test with", 3
       unless $have_sqlite;
 
-    CGI::Wiki::Setup::SQLite::cleardb( { dbname => "t/node.db" } );
     CGI::Wiki::Setup::SQLite::setup( { dbname => "t/node.db" } );
     my $config = Config::Tiny->new;
     $config->{_} = {
@@ -25,6 +24,13 @@ SKIP: {
                    };
     my $guide = OpenGuides->new( config => $config );
     my $wiki = $guide->wiki;
+
+    # Clear out the database from any previous runs.
+    foreach my $del_node ( $wiki->list_all_nodes ) {
+        print "# Deleting node $del_node\n";
+        $wiki->delete_node( $del_node ) or die "Can't delete $del_node";
+    }
+
     $wiki->write_node( "I Like Pie", "Best pie is meat pie." )
       or die "Couldn't write node";
     my %data = $wiki->retrieve_node( "I Like Pie" );
