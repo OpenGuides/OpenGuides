@@ -7,7 +7,7 @@
     <div class="navbar_item"><a href="[% full_cgi_url %]?action=random">Random Page</a> <span class="hidden">/</span></div>
     <div class="navbar_item"><a href="[% full_cgi_url %]?action=show_wanted_pages">Wanted Pages</a> <span class="hidden">/</span></div>
     [% IF geocache_link AND latitude AND longitude %]
-      <div class="navbar_item"><a href="http://www.geocaching.com/seek/nearest_cache.asp?origin_lat=[% latitude %]&origin_long=[% longitude %]">Look for nearby geocaches</a></div>
+      <div class="navbar_item"><a href="http://www.geocaching.com/seek/nearest_cache.asp?origin_lat=[% latitude %];origin_long=[% longitude %]">Look for nearby geocaches</a></div>
     [% END %]
   </div>
 
@@ -47,7 +47,7 @@
       <div class="navbar_group_title">This page:</div>
         <div class="edit_page_link"><a href="[% full_cgi_url %]?id=[% node_param %];action=edit">Edit this page</a></div>
       <div class="navbar_item">
-        <a href="[% cgi_url %]?action=show_backlinks&id=[% node_param %]">Pages that link to here</a>
+        <a href="[% cgi_url %]?action=show_backlinks;id=[% node_param %]">Pages that link to here</a>
       </div>
     </div>
   [% END %]
