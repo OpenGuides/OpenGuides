@@ -1,6 +1,8 @@
 [% USE CGI %]
 [% INCLUDE header.tt %]
 
+<div id="content">
+
 [% IF current %]
   [% IF is_indexable_node %]
     <h1>[% site_name %] - <a href="[%cgi_url %]?action=index;index_type=[% CGI.escape(index_type) %];index_value=[% CGI.escape(index_value) %]">[% node_name %]</a></h1>

@@ -4,17 +4,16 @@
 <head>
   <title>[% node_name %] - [% site_name %]</title>
   [% IF contact_email %]
-    <link rev="made" href="mailto:[% contact_email %]" />
-    <link rel="meta" type="application/rdf+xml" title="RDF for this node" href="[% full_cgi_url %]?id=[% node_param %];format=rdf" />
+    <link rev=made href="mailto:[% contact_email %]">
   [% END %]
   [% IF description %]
-    <meta name="description" content="[% description %]" />
+    <meta name="description" content="[% description %]">
   [% END %]
   [% IF keywords %]
-    <meta name="keywords" content="[% keywords %]" />
+    <meta name="keywords" content="[% keywords %]">
   [% END %]
   [% IF stylesheet %]
-    <link rel="stylesheet" href="[% stylesheet %]" type="text/css" />
+    <link rel="stylesheet" href="[% stylesheet %]" type="text/css">
   [% END %]
   [% IF latitude AND longitude %]
     <meta name="ICBM" content="[% latitude %], [% longitude %]" />
@@ -23,6 +22,4 @@
 </head>
 
 <body>
-<div id="content">
-
 [% INCLUDE navbar.tt %]
