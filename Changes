@@ -1,5 +1,8 @@
 0.29    ???
         Expanded section in TROUBLESHOOTING about permissions problems.
+	Diff.pm now absorbs trailing punctuation and spaces into words
+	it is diffing (to give less blocky results).
+	SuperSearch.pm change NOT to use '-' instead of '!'.
 
 0.28    1 November 2003
         Allow running sites on SQLite databases.
@@ -10,8 +13,8 @@
 0.27    1 November 2003
         Fixed bug with category/locale indexing - no longer case-sensitive.
         Fixed bug that had the supersearch results page offering an edit link.
-        Some changes Ivor made to the search are in here too, but he didn't
-          update this file so I'm not entirely sure what they are.
+	Revamp of search syntax to make the SuperSearch UI much more like
+	Google and Alta Vista. See the POD of SuperSearch.pm for details.
 
 0.26    9 October 2003
         Modified TROUBLESHOOTING to reflect the correct invocation for
