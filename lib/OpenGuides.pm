@@ -532,7 +532,7 @@ return the output instead of printing it to STDOUT.
 
 sub display_rss {
     my ($self, %args) = @_;
-    use Data::Dumper;warn Dumper \%args;
+
     my $return_output = $args{return_output} ? 1 : 0;
 
     my $items = $args{items} || "";
