@@ -2,7 +2,7 @@ package OpenGuides::Template;
 
 use strict;
 use vars qw( $VERSION );
-$VERSION = '0.03';
+$VERSION = '0.04';
 
 use Carp qw( croak );
 use CGI; # want to get rid of this and put the burden on the templates
@@ -98,18 +98,18 @@ sub output {
     return $header . $output;
 }
 
-=item B<extract_tt_vars>
+=item B<extract_metadata_vars>
 
   my %node_data = $wiki->retrieve_node( "Home Page" );
 
-  my %metadata_vars = OpenGuides::Template->extract_tt_vars(
+  my %metadata_vars = OpenGuides::Template->extract_metadata_vars(
                                         wiki     => $wiki,
                                         config   => $config,
                                         metadata => $node_data{metadata} );
 
   # -- or --
 
-  my %metadata_vars = OpenGuides::Template->extract_tt_vars(
+  my %metadata_vars = OpenGuides::Template->extract_metadata_vars(
                                         wiki     => $wiki,
                                         config   => $config,
 					cgi_obj  => $q );
@@ -125,13 +125,14 @@ sub output {
 
 Picks out things like categories, locales, phone number etc from
 EITHER the metadata hash returned by L<CGI::Wiki> OR the query
-parameters in a L<CGI> object, and packages them nicely for templates.
-If you supply both C<metadata> and C<cgi_obj> then C<metadata will
-take precedence, but don't do that.
+parameters in a L<CGI> object, and packages them nicely for passing to
+templates or storing in L<CGI::Wiki> datastore.  If you supply both
+C<metadata> and C<cgi_obj> then C<metadata will take precedence, but
+don't do that.
 
 =cut
 
-sub extract_tt_vars {
+sub extract_metadata_vars {
     my ($class, %args) = @_;
     my %metadata = %{$args{metadata} || {} };
     my $q = $args{cgi_obj};
@@ -172,7 +173,7 @@ sub extract_tt_vars {
 
     my $hours_text = $args{metadata} ? $metadata{opening_hours_text}[0]
    	                             : $q->param("hours_text");
-    my %tt_vars = (
+    my %vars = (
         categories             => \@categories,
 	locales                => \@locales,
 	formatted_website_text => $formatted_website_text,
@@ -182,11 +183,11 @@ sub extract_tt_vars {
     if ( $args{metadata} ) {
         foreach my $var ( qw( phone fax address postcode os_x os_y latitude
                                                                longitude ) ) {
-            $tt_vars{$var} = $metadata{$var}[0];
+            $vars{$var} = $metadata{$var}[0];
         }
     } else {
         foreach my $var ( qw( phone fax address postcode ) ) {
-            $tt_vars{$var} = $q->param($var);
+            $vars{$var} = $q->param($var);
         }
 
 	my $os_x = $q->param("os_x");
@@ -195,16 +196,16 @@ sub extract_tt_vars {
 	if ($os_x and $os_y) {
 	    my $point = Geography::NationalGrid::GB->new( Easting  => $os_x,
 							  Northing => $os_y );
-	    %tt_vars = ( %tt_vars,
-			 latitude  => sprintf("%.6f", $point->latitude),
-			 longitude => sprintf("%.6f", $point->longitude),
-			 os_x      => $os_x,
-			 os_y      => $os_y
+	    %vars = ( %vars,
+		      latitude  => sprintf("%.6f", $point->latitude),
+		      longitude => sprintf("%.6f", $point->longitude),
+		      os_x      => $os_x,
+		      os_y      => $os_y
 	    );
 	}
     }
 
-    return %tt_vars;
+    return %vars;
 }
 
 sub format_website_text {

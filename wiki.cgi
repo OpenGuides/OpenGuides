@@ -214,7 +214,7 @@ sub display_node {
     my $modified   = $node_data{last_modified};
     my %metadata   = %{$node_data{metadata}};
 
-    my %metadata_vars = OpenGuides::Template->extract_tt_vars(
+    my %metadata_vars = OpenGuides::Template->extract_metadata_vars(
                             wiki     => $wiki,
 			    config   => $config,
                             metadata => $node_data{metadata} );
@@ -353,7 +353,7 @@ sub preview_node {
     $content     =~ s/\r\n/\n/gs;
     my $checksum = $q->param('checksum');
 
-    my %tt_metadata_vars = OpenGuides::Template->extract_tt_vars(
+    my %tt_metadata_vars = OpenGuides::Template->extract_metadata_vars(
                                                    wiki    => $wiki,
 						   config  => $config,
 						   cgi_obj => $q );
@@ -396,7 +396,7 @@ sub edit_node {
     my ($content, $checksum) = @node_data{ qw( content checksum ) };
     my $username = get_cookie( "username" );
 
-    my %metadata_vars = OpenGuides::Template->extract_tt_vars(
+    my %metadata_vars = OpenGuides::Template->extract_metadata_vars(
                              wiki     => $wiki,
                              config   => $config,
 			     metadata => $node_data{metadata} );
@@ -479,7 +479,7 @@ sub commit_node {
     $content =~ s/\r\n/\n/gs;
     my $checksum = $q->param('checksum');
 
-    my %metadata = OpenGuides::Template->extract_tt_vars(
+    my %metadata = OpenGuides::Template->extract_metadata_vars(
         wiki    => $wiki,
         config  => $config,
 	cgi_obj => $q
