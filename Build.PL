@@ -216,6 +216,7 @@ my $build = OpenGuides::Build->new(
         'Module::Build' => '0.18', # earlier doesn't install script files
         },
     dynamic_config => 1,
+    create_makefile_pl => "passthrough"
 );
 
 $build->add_to_cleanup( "wiki.conf" );

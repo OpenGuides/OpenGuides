@@ -2,6 +2,7 @@ Build.PL
 Changes
 INSTALL
 MANIFEST
+Makefile.PL
 META.yml
 PREREQUISITES
 README

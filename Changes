@@ -1,5 +1,6 @@
 0.22    
         Fixed bug with usernames containing spaces in recent changes/userstats.
+        Also try out create_makefile_pl => "passthrough" in Build.PL
 
 0.21    17 July 2003
         We no longer autogenerate a Makefile.PL, since it doesn't pick up
