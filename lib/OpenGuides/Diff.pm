@@ -159,8 +159,14 @@ sub intradiff {
 
     return (qq{<span class="diff1">$str1</span>},"") unless $str2;
     return ("",qq{<span class="diff2">$str2</span>}) unless $str1;
-    my @diffs = Algorithm::Diff::sdiff([$str1 =~ m!&.+?;|<br />|\w+|.!sg]
-    	,[$str2 =~ m!&.+?;|<br />|\w+|.!sg]);
+    my $re_wordmatcher = qr(
+    	&.+?;			#HTML special characters e.g. &lt;
+	|<br />			#Line breaks
+	|\w+[,.;:?!"]?\s+	#Word with trailing spaces
+	|.			#Any other single character
+	)xs;
+    my @diffs = Algorithm::Diff::sdiff([$str1 =~ /$re_wordmatcher/sg]
+    	,[$str2 =~ /$re_wordmatcher/sg]);
     my $out1 = '';
     my $out2 = '';
     my ($mode1,$mode2);
