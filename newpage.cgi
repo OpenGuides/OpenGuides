@@ -37,6 +37,7 @@ sub show_form {
 					vars     => {
 					    not_editable     => 1,
                                             not_deletable    => 1,
+                                            deter_robots     => 1,
 				       	    disallowed_chars => \@badchars,
                                             pagename         => $pagename }
     );
@@ -49,9 +50,11 @@ sub make_page {
             wiki     => $wiki,
 	    config   => $config,
 	    template => "error.tt",
-	    vars     => { not_editable => 1,
-			  message      => "Please enter a page name!",
-			  return_url   => "newpage.cgi" } );
+	    vars     => { not_editable  => 1,
+                          not_deletable => 1,
+                          deter_robots  => 1,
+			  message       => "Please enter a page name!",
+			  return_url    => "newpage.cgi" } );
         exit 0;
     }
 
@@ -71,6 +74,8 @@ sub make_page {
 	    vars     => {
                 pagename     => $pagename,
                 not_editable => 1,
+                not_deletable => 1,
+                deter_robots => 1,
 		message      => $message,
 		return_url   => "newpage.cgi?pagename=" . uri_escape($pagename)
             }

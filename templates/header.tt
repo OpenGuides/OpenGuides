@@ -30,7 +30,7 @@
     <link rel="alternate" type="application/rss+xml" title="RSS feed for this page" href="[% rss_link %]">
   [% END %]
   [% IF deter_robots %]
-    <meta robots="noindex" />
+    <meta name="robots" content="noindex" />
   [% END %]
 </head>
 <body>
