@@ -185,3 +185,15 @@ input.form_button
 {
   background-color: pink;
 }
+
+/* Hidden elements */
+.hidden
+{
+  display: none;
+}
+
+/* Labels for form elements */
+.label
+{
+  font-weight: bold;
+}
