@@ -10,7 +10,8 @@
         Fixed bug that allowed autocreation of locales and categories with
           trailing spaces in the name.
         Config management refactoring. This should not result in any
-          user-visible changes.
+          user-visible changes, apart from introducing a new dependency on
+          Class::Accessor.
         Make it clearer in documentation that overriding factory templates
           is a risky activity.
         Update feedback details and include URL of RT queue.
