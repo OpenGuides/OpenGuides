@@ -45,6 +45,7 @@ t/01_add_test_data.t
 t/11_utils.t
 t/13_cookies.t
 t/15_template.t
+t/15_wiki.conf
 t/21_rdf.t
 t/21_wiki.conf
 t/22_rss_modwiki.t

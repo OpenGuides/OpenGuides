@@ -2,10 +2,10 @@
 <!-- <div align="center"><a href="[% home_link %]"><img src="http://grault.net/grubstreet/grubstreet.gif" alt="" class="n"></a></div> -->
 <ul>
     <li><a href="[% home_link %]">[% home_name %]</a></li>
-    <li><a href="[% cgi_url %]?RecentChanges">RecentChanges</a></li>
+    <li><a href="[% full_cgi_url %]?RecentChanges">RecentChanges</a></li>
     <li><a href="newpage.cgi">Create a new page</a></li>
-    <li><a href="[% cgi_url %]?action=random">Random Page</a></li>
-    <li><a href="[% cgi_url %]?action=show_wanted_pages">Wanted Pages</a></li>
+    <li><a href="[% full_cgi_url %]?action=random">Random Page</a></li>
+    <li><a href="[% full_cgi_url %]?action=show_wanted_pages">Wanted Pages</a></li>
     [% IF geocache_link %]
     <li>[% geocache_link %]</li>
     [% END %]
@@ -13,7 +13,7 @@
     [% IF not_editable %]
     </ul><br />
     [% ELSE %]
-      <li><a href="[% cgi_url %]?id=[% node_param %];action=edit">Edit this page</a></li>
+      <li><a href="[% full_cgi_url %]?id=[% node_param %];action=edit">Edit this page</a></li>
     </ul>
     [% END %]
 <form method="post" action="supersearch.cgi" enctype="application/x-www-form-urlencoded">

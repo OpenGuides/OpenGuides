@@ -31,6 +31,8 @@ so the location features might not work so well outside the UK.
 
 =item * L<http://the.earth.li/~kake/cgi-bin/openguides/vegan-oxford.cgi>, an experimental OpenGuides install mirroring the Vegan Guide to Oxford at L<http://www.earth.li/~kake/vegan-oxford/>
 
+=item * L<http://www.ox.compsoc.net/oxfordguide/>, an Open Guide to Oxford run by Dominic Hargreaves (what a star)
+
 =item * grubstreet, the motivation behind OpenGuides; at L<http://grault.net/grubstreet/>
 
 =back
@@ -57,9 +59,9 @@ and/or modify it under the same terms as Perl itself.
 =head1 CREDITS
 
 Programming by Earle Martin, Kake Pugh, Ivor Williams.  Testing and
-bug reporting by Cal Henderson and Bob Walker.  Much of the
-Module::Build stuff copied from the Siesta project
-L<http://siesta.unixbeard.net/>
+bug reporting by Cal Henderson, Bob Walker, Kerry Bosworth, Dominic
+Hargreaves, Simon Cozens, among others.  Much of the Module::Build
+stuff copied from the Siesta project L<http://siesta.unixbeard.net/>
 
 =cut
 

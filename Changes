@@ -2,8 +2,9 @@
         Added "Wanted Pages" link to navbar, thanks to Simon Cozens for
         the idea.
 
-        Fixed bug noticed by Dom Hargreaves - website metadata wasn't
-        making it through the preview.
+        Fixed many bugs noticed by Dominic Hargreaves and other Oxonians.
+        Many thanks to Dominic for making an Oxford OpenGuides install for
+        us to find bugs in.
 
 0.13    17 May 2003
         Added some more stylesheet hooks.

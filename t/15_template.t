@@ -1,5 +1,5 @@
 use strict;
-use Test::More tests => 17;
+use Test::More tests => 18;
 use Config::Tiny;
 use Cwd;
 use CGI::Cookie;
@@ -57,7 +57,7 @@ like( $output, qr/FULL CGI URL: http:\/\/wiki.example.com\/mywiki.cgi/,
 like( $output, qr/CONTACT EMAIL: wiki\@example.com/, "contact_email var set" );
 like( $output, qr/STYLESHEET: http:\/\/wiki.example.com\/styles.css/,
       "stylesheet var set" );
-like( $output, qr/HOME LINK: mywiki.cgi/, "home_link var set" );
+like( $output, qr/HOME LINK: http:\/\/wiki.example.com\/mywiki.cgi/, "home_link var set" );
 like( $output, qr/HOME NAME: Home Page/, "home_name var set" );
 
 # Test TT variables auto-set from node name.
@@ -88,3 +88,13 @@ $output = OpenGuides::Template->output(
     cookies  => $cookie
 );
 like( $output, qr/Set-Cookie: $cookie/, "cookie in header" );
+
+# Test that home_link is set correctly when script_name is blank.
+$config = Config::Tiny->read( "t/15_wiki.conf" );
+$config->{_}->{template_path} = cwd . "/t/templates";
+$output = OpenGuides::Template->output(
+    config   => $config,
+    template => "15_test.tt"
+);
+like( $output, qr/HOME LINK: http:\/\/wiki.example.com/,
+      "home_link var set OK when script_name blank" );

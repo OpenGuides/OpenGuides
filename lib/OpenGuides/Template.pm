@@ -68,13 +68,14 @@ sub output {
     my $tt_vars = $args{vars} || {};
 
     my $script_name = $config->{_}->{script_name};
+    my $script_url  = $config->{_}->{script_url};
     $tt_vars = { %$tt_vars,
 		 site_name     => $config->{_}->{site_name},
 		 cgi_url       => $script_name,
-		 full_cgi_url  => $config->{_}->{script_url} . $script_name,
+		 full_cgi_url  => $script_url . $script_name,
 		 contact_email => $config->{_}->{contact_email},
 		 stylesheet    => $config->{_}->{stylesheet_url},
-		 home_link     => $script_name,
+		 home_link     => $script_url . $script_name,
 		 home_name     => $config->{_}->{home_name}
     };
 
