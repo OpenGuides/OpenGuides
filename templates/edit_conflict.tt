@@ -35,7 +35,7 @@ You will need to manually merge your changes into the new version.
       </tr>
       <tr>
         <td class="label"><label>Categories:<br />(one per line)</label></td>
-        <td><textarea name="categories" rows="5" cols="40">[% FOREACH category = stored_categories %][% category %]
+        <td><textarea id="categories" name="categories" rows="5" cols="40">[% FOREACH category = stored_categories %][% category %]
 [% END %]</textarea></td>
         <td>[% FOREACH category = new_categories %][% CGI.escapeHTML(category) %]<br/>[% END %]</td>
       </tr>
