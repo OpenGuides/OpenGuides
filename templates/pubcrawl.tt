@@ -1,0 +1,55 @@
+[%- USE CGI -%]
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html>
+<head>
+  <title>[% site_name %] - Pub Crawl Generator</title>
+  [% IF stylesheet %]
+    <link rel="stylesheet" href="[% stylesheet %]" type="text/css">
+  [% END %]
+</head>
+
+<body>
+<div id="content">
+
+[% IF show_form %]
+
+  <form action="pubcrawl.cgi" method="GET">
+    Start location OS X:
+    <input type="text" size="10" name="sx" value="[% sx %]"/><br />
+    Start location OS Y:
+    <input type="text" size="10" name="sy" value="[% sy %]"/><br />
+    Maximum distance between pubs (in kilometres):
+    <input type="text" size="6" name="max_km" value="[% max_km %]"/><br />
+    Number of pubs in crawl:
+    <input type="text" size="2" maxlength="2" name="n" value="[% n %]"/>
+    <br />
+    <input type="submit" value="Generate">
+    [% IF crawl %]
+      <input type="reset" value="Clear form">
+    [% END %]
+    <input type="hidden" name="action" value="generate">
+  </form>
+
+[% END %]
+
+[% IF crawl %]
+
+  <h1>Crawl</h1>
+
+  Start location: ([% sx %], [% sy %])<br />
+  Max distance between pubs: [% max_km %] kilometres<br />
+  Number of pubs: [% n %]<br />
+
+  <ul>
+    [% FOREACH pub = crawl %]
+      <li><a href="[% pub.url %]">[% CGI.escapeHTML( pub.name ) %]</a></li>
+    [% END %]
+  </ul>
+
+[% END %]
+
+</div>
+</body>
+</html>
