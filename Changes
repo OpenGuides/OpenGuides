@@ -1,5 +1,5 @@
 0.29    ???
-        Expanded section in TROUBLESHOOTING about SQLite permissions.
+        Expanded section in TROUBLESHOOTING about permissions problems.
 
 0.28    1 November 2003
         Allow running sites on SQLite databases.
