@@ -1,14 +1,16 @@
 [% USE CGI %]
-[% INCLUDE header.tt %]
+[% INCLUDE header.tt modifier = 'History of ' %]
 
-<h1 align=center>[% site_name %] - History of [% node_name %]</h1>
+<h1 align="center">[% site_name %] - History of [% node_name %]</h1>
 
 <ul>
 [% FOREACH revision = history %]
-  <li>Version [% revision.version %]:
-      <a href="[% cgi_url %]?id=[% node_param %]&version=[% revision.version %]">View</a>
+  <li>
+      <a href="[% cgi_url %]?id=[% node_param %]&version=[% revision.version %]">Version [% revision.version %]</a>
       [% IF revision.version != version %]
-      | <a href="[% cgi_url %]?id=[% node_param %]&version=[% revision.version %]&diffversion=[% version %]">Diff</a>
+      (diff:
+      <a href="[% cgi_url %]?id=[% node_param %]&version=[% revision.version - 1 %]&diffversion=[% revision.version %]">previous</a> /  
+      <a href="[% cgi_url %]?id=[% node_param %]&version=[% revision.version %]&diffversion=[% version %]">current</a>)
       [% END %] 
       .....
       [% revision.modified %]
