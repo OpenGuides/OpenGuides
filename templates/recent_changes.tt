@@ -4,8 +4,8 @@
 [% INCLUDE navbar.tt %]
 <h2>Site changes in the last [% days %] days</h2>
 [% content %]
-<table cellpadding="0" cellspacing="0" border="0"
-style="border-top: 1px dotted black; margin-top: 1em">
+<table cellpadding="0" cellspacing="0" border="0" style="border-top: 1px dotted black; margin-top: 1em"
+summary="Table containing the list of recent changes to this site">
 [% FOREACH node = recent_changes %]
 	<tr>
 		<td style="padding: 5px 0px 5px 0px"><em>[% node.last_modified %]

@@ -23,8 +23,8 @@
 <br clear="all" />
 <div id="find_within_distance">
   <form action="[% cgi_url %]">
-    Find all things within
-    <select name="distance_in_metres">
+    <label for="distance">Find all things within</label>
+    <select name="distance_in_metres" id="distance">
       <option value="200">200 metres</option>
       <option value="500">500 metres</option>
       <option value="1000">1 kilometre</option>

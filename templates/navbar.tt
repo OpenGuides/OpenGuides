@@ -1,21 +1,21 @@
 <div id="navbar">
 <div class="navbar_group">
 <div class="navbar_group_title">Tools:</div>
-<div class="navbar_item"><a href="[% full_cgi_url %]?RecentChanges">Recent Changes</a></div>
-<div class="navbar_item"><a href="newpage.cgi">Create a new page</a></div>
-<div class="navbar_item"><a href="[% full_cgi_url %]?action=random">Random Page</a></div>
-<div class="navbar_item"><a href="[% full_cgi_url %]?action=show_wanted_pages">Wanted Pages</a></div>
+<div class="navbar_item"><a href="[% full_cgi_url %]?RecentChanges">Recent Changes</a> <span class="hidden">/</span></div>
+<div class="navbar_item"><a href="newpage.cgi">Create a new page</a> <span class="hidden">/</span></div>
+<div class="navbar_item"><a href="[% full_cgi_url %]?action=random">Random Page</a> <span class="hidden">/</span></div>
+<div class="navbar_item"><a href="[% full_cgi_url %]?action=show_wanted_pages">Wanted Pages</a> <span class="hidden">/</span></div>
 [% IF geocache_link %]<div class="navbar_item">[% geocache_link %]</div>[% END %]
 </div>
 [% UNLESS omit_help_links %]
 <div class="navbar_group">
-<div class="navbar_group_title">Help:</div>
-<div class="navbar_item"><a href="[% full_cgi_url %]?FAQ">FAQ</a></div>
-<div class="navbar_item"><a href="[% full_cgi_url %]?How_To_Get_Started">How To Get Started</a></div>
+<div class="navbar_group_title">Help: <span class="hidden">/</span></div>
+<div class="navbar_item"><a href="[% full_cgi_url %]?FAQ">FAQ</a> <span class="hidden">/</span></div>
+<div class="navbar_item"><a href="[% full_cgi_url %]?How_To_Get_Started">How To Get Started</a> <span class="hidden">/</span></div>
 [% IF formatting_rules_link %]
-<div class="navbar_item"><a href="[% formatting_rules_link %]">[% formatting_rules_node %]</a></div>
+<div class="navbar_item"><a href="[% formatting_rules_link %]">[% formatting_rules_node %]</a> <span class="hidden">/</span></div>
 [% END %]
-<div class="navbar_item"><a href="[% full_cgi_url %]?Wiki_Etiquette">Wiki Etiquette</a></div>
+<div class="navbar_item"><a href="[% full_cgi_url %]?Wiki_Etiquette">Wiki Etiquette</a> <span class="hidden">/</span></div>
 </div>
 [% END %]
 <div class="navbar_group">
@@ -26,7 +26,7 @@
 <div class="navbar_group">
 <div class="navbar_group_title">Search:</div>
 <input type="hidden" name="action" value="search" />
-<input type="text" size="15" name="search" /> 
+<input type="text" size="15" name="search" id="nav_search" value="Search text" /> <label for="nav_search" class="hidden">Search text</label>
 <input type="submit" value="Go" class="form_button" />
 </div>
 </form>
