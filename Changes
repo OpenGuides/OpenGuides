@@ -14,6 +14,8 @@
         Make it clearer in documentation that overriding factory templates
           is a risky activity.
         Update feedback details and include URL of RT queue.
+        Add missing tests to MANIFEST so they are included with the
+          distribution.
 	
 0.45	1 December 2004
         Made the geolocation stuff work worldwide.  Squeeeeeee!
