@@ -1,7 +1,8 @@
 0.24    
         Fix to recent changes so minor changes don't mask major ones.
-        Fix supersearch.cgi to use a template instead of CGI.pm to avoid
+        Fixed supersearch.cgi to use a template instead of CGI.pm to avoid
           weird errors, also turned it into a module and added tests.
+        Strip whitespace from OS co-ords before storing in database.
 
 0.23    4 August 2003
         Removed the "POST_CHOMP" option as it was messing up textareas, added

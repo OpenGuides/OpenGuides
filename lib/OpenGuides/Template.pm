@@ -2,7 +2,7 @@ package OpenGuides::Template;
 
 use strict;
 use vars qw( $VERSION );
-$VERSION = '0.11';
+$VERSION = '0.12';
 
 use Carp qw( croak );
 use CGI; # want to get rid of this and put the burden on the templates
@@ -258,6 +258,10 @@ sub extract_metadata_vars {
 
 	my $os_x = $q->param("os_x");
 	my $os_y = $q->param("os_y");
+        # Trim whitespace - trailing whitespace buggers up the integerification
+        # by postgres and it's an easy mistake to make when typing into a form.
+        $os_x =~ s/\s+//;
+        $os_y =~ s/\s+//;
 	# Work out latitude and longitude for the preview display.
 	if ($os_x and $os_y) {
 	    my $point = Geography::NationalGrid::GB->new( Easting  => $os_x,
