@@ -91,13 +91,13 @@ sub ACTION_install_extras {
         }
     }
 
-    print "Installing templates to $template_path:\n";
+    print "Installing templates to $install_directory/templates:\n";
     foreach my $template ( @templates ) {
         if ( $FAKE ) {
-            print "templates/$template -> $template_path/$template (FAKE)\n";
+            print "templates/$template -> $install_directory/templates/$template (FAKE)\n";
 	} else {
-	    $self->copy_if_modified( "templates/$template", $template_path )
-                or print "Skipping $template_path/$template (unchanged)\n";
+	    $self->copy_if_modified("templates/$template", $install_directory)
+                or print "Skipping $install_directory/templates/$template (unchanged)\n";
         }
     }
 }

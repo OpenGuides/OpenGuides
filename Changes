@@ -2,9 +2,9 @@
         Redid the script and template installation so the script does
           actually get called what you said it should be (code copied
           somewhat from Siesta::Build).
-        Also you now need to specify the template installation directory.
         Fixed the support for non-local databases/IDENT authentication.
           I think.
+        Fixed the hardcoded 'wiki.cgi' in some of the templates (thanks Bob).
 
 0.04    29 April 2003
         First public release.

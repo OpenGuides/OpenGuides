@@ -39,10 +39,6 @@ my @questions = (
 { question => "what URL does the install directory map to?",
   variable => "script_url",
   },
-{ question => "what directory should I install the templates in?",
-  variable => "template_path",
-  default  => "/usr/lib/cgi-bin/openguides/templates/"
-  },
 { question => "what directory can I use to store indexes in for searching? "
             . "***NOTE*** this directory must exist and be writeable by the "
             . "user that your script will run as.  See README for more ",
@@ -136,6 +132,13 @@ foreach my $qset (@questions) {
     push @answers, { question => $qu,
 		     variable => $var,
 		     value    => $val };
+
+    if ( $var eq "install_directory" ) {
+        push @answers, {
+            question => "what directory should I install the templates in?",
+            variable => "template_path",
+            value    => $val . "/templates" };
+    }
 }
 
 # Create a user-friendly config file from answers to prompts.
