@@ -1,3 +1,5 @@
+        Fixed small bug with edit conflict form - map link field was missing.
+
 0.18    16 June 2003
         Added a Makefile.PL as well as a Build.PL, for CPAN.pm users.
 

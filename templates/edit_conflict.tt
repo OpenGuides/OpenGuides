@@ -83,6 +83,10 @@ You will need to manually merge your changes into the new version.
         <td><input type="text" size="50" name="os_y" value="[% stored_os_y %]"></td>
         <td>[% CGI.escapeHTML(new_os_y) %]</td>
       </tr>
+      <tr>
+	<td><strong>Map link:</strong></td>
+	<td><input type="text" size="70" name="map_link" value="[% map_link %]"></td>
+      </tr>
     </table>
     </fieldset>
     &nbsp;
