@@ -82,7 +82,7 @@ sub _init {
 	if ( defined $version ) {
 	    return $config->script_url . uri_escape($config->script_name) . "?id=" . uri_escape($wiki->formatter->node_name_to_node_param($node_name)) . ";version=" . uri_escape($version);
 	} else {
-	    return $config->script_url . uri_escape($config->script_name) . "?id=" . uri_escape($wiki->formatter->node_name_to_node_param($node_name));
+	    return $config->script_url . uri_escape($config->script_name) . "?" . uri_escape($wiki->formatter->node_name_to_node_param($node_name));
         }
     };
     $self->{default_city}     = $config->default_city     || "";
