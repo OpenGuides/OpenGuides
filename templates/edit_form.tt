@@ -1,4 +1,4 @@
-[% INCLUDE header.tt %]
+[% INCLUDE header.tt modifier='Edit ' %]
 <div id="content">
 <h1 align="center">Edit "[% node_name %]"</h1>
 
