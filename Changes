@@ -1,3 +1,7 @@
+0.23    4 August 2003
+        Removed the "POST_CHOMP" option as it was messing up textareas, added
+        a test to make sure this doesn't reoccur.
+
 0.22    4 August 2003
         Fixed bug with usernames containing spaces in recent changes/userstats.
 
