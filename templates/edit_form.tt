@@ -16,6 +16,14 @@
 
 <form action="[% cgi_url %]" method="POST" enctype="application/x-www-form-urlencoded">
 <table summary="Form for editing page attributes">
+  [% TRY %]
+    <tr>
+      <td colspan="2">
+        [% INCLUDE custom/licence.tt %]
+      </td>
+    </tr>
+  [% CATCH %]
+  [% END %]
   <tr>
     <td align="center"><input type="submit" name="preview" value="Preview changes" class="form_button" /></td>
     <td align="center"><input type="submit" name="Save" value="Save changes" class="form_button" /></td>

@@ -8,15 +8,22 @@
 </div>
 
 <div id="footer">
-  [% IF enable_page_deletion AND NOT not_deletable %]
-    <p>
+  [% BLOCK delete_link %]
+    [% IF enable_page_deletion AND NOT not_deletable %]
       <a href="[% full_cgi_url %]?id=[% node_param %];action=delete">Delete page</a> (admins only)
-    </p>
+    [% END %]
   [% END %]
 
-<p>
-  This wiki powered by <a href="http://openguides.org/">OpenGuides</a> (version [% openguides_version %]).
-</p>
+  [% TRY %]
+    [% INCLUDE custom/footer_credits.tt %]
+  [% CATCH %]
+    <p>
+      [% INCLUDE delete_link %]
+    </p>
+    <p>
+      This wiki powered by <a href="http://openguides.org/">OpenGuides</a> (version [% openguides_version %]).
+    </p>
+  [% END %]
 
 </div>
 </div>

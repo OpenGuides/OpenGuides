@@ -1,0 +1,25 @@
+It is not recommended that you amend the supplied templates - they
+contain logic and therefore can have bugs, they may have new features
+added in the future and so on.
+
+From OpenGuides 0.41, some of the supplied templates will optionally
+call out to other template fragments that you can put in
+templates/custom/.  If custom templates do not exist then sensible
+default wording will be used instead.
+
+The custom templates currently supported are:
+
+ - licence.tt
+   Will be included at the top of the page editing form.
+
+ - footer_credits.tt
+   Will be included in a <div id="footer"> at the base of every page.
+   You may wish to take advantage of the supplied TT variables
+     - [% delete_link %]
+       Will supply a link to delete the page, if and only if your
+       wiki.conf has deletion turned on.
+     - [% openguides_version %]
+       Contains the version of OpenGuides that your site is running on.
+
+Requests for further custom inserts are welcomed.
+
