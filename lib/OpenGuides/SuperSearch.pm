@@ -1,6 +1,6 @@
 package OpenGuides::SuperSearch;
 use strict;
-our $VERSION = '0.01';
+our $VERSION = '0.02';
 
 use CGI qw( :standard );
 use File::Spec::Functions qw(:ALL);
