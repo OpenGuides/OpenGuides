@@ -174,12 +174,39 @@ sub process_template {
 sub _prime_wikitext {
     my ($self, $search) = @_;
     my $wiki = $self->{wiki};
-    my %results = $wiki->search_nodes( $search );
 
+    # Search title and body.
+    my %results = $wiki->search_nodes( $search );
     foreach my $node ( keys %results ) {
         my $key = $wiki->formatter->node_name_to_node_param( $node );
         my $text = $node . " " . $wiki->retrieve_node( $node );
         $self->{wikitext}{$key} ||= $self->_mungepage( $text );
+    }
+
+    # Search categories.
+    my @catmatches = $wiki->list_nodes_by_metadata(
+                         metadata_type => "category",
+                         metadata_value => $search,
+    );
+    foreach my $node ( @catmatches ) {
+        my $key = $wiki->formatter->node_name_to_node_param( $node );
+        my $text = $node. " " . $wiki->retrieve_node( $node );
+        $self->{wikitext}{$key} ||= $self->_mungepage( $text );
+        # Append this category so the regex finds it later.
+        $self->{wikitext}{$key} .= " [$search]";
+    }
+
+    # Search locales.
+    my @locmatches = $wiki->list_nodes_by_metadata(
+                         metadata_type => "locale",
+                         metadata_value => $search,
+    );
+    foreach my $node ( @locmatches ) {
+        my $key = $wiki->formatter->node_name_to_node_param( $node );
+        my $text = $node. " " . $wiki->retrieve_node( $node );
+        $self->{wikitext}{$key} ||= $self->_mungepage( $text );
+        # Append this locale so the regex finds it later.
+        $self->{wikitext}{$key} .= " [$search]";
     }
 }
     

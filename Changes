@@ -1,5 +1,7 @@
-0.25    
+0.25    23 September 2003
         Applied recent changes fix to front page feed as well.
+        Search box now searches categories and locales as well as title and
+          body - so for example a search on "holborn & pubs" will DTRT.
 
 0.24    8 September 2003
         Fix to recent changes so minor changes don't mask major ones.
