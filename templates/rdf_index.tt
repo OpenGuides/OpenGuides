@@ -6,11 +6,15 @@
 	 xmlns:gs="http://the.earth.li/~kake/xmlns/gs/0.1/"
 	>
 
-<gs:category rdf:about="[% full_cgi_url %]?action=catindex;category=[% CGI.escape(category.name) %];format=rdf">
-
+[% IF category.name -%]
+  <gs:category rdf:about="[% full_cgi_url %]?action=catindex;category=[% CGI.escape(category.name) %];format=rdf">
   <gs:name>[% CGI.escapeHTML(category.name) %]</gs:name>
+[% ELSE -%]
+  <gs:category rdf:about="[% full_cgi_url %]?action=index;format=rdf">
+  <gs:name>Full site index</gs:name>
+[% END -%]
 
-  [% FOREACH node = nodes %]
+  [%- FOREACH node = nodes %]
     <gs:object>
       <rdf:Description rdf:about="[% full_cgi_url %]?[% node.param %]">
         <dc:title>[% node.name %]</dc:title>

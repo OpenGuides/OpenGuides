@@ -121,7 +121,15 @@ eval {
 	my @nodes = map { { name  => $_,
 			    param => $formatter->node_name_to_node_param($_) }
 			} sort @all_nodes;
-        process_template("site_index.tt", "index", { nodes => \@nodes });
+        my ($template, $omit_header);
+        if ( $format eq "rdf" ) {
+            $template = "rdf_index.tt";
+            $omit_header = 1;
+            print "Content-type: text/plain\n\n";
+	} else {
+	    $template = "site_index.tt";
+        }
+        process_template($template, "index", { nodes => \@nodes });
     } elsif ($action eq 'random') {
         my @nodes = $wiki->list_all_nodes();
         $node = $nodes[int(rand(scalar(@nodes) + 1)) + 1];
