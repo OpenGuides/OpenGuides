@@ -4,6 +4,7 @@ use CGI::Wiki::Setup::SQLite;
 use Config::Tiny;
 use OpenGuides::CGI;
 use OpenGuides;
+use OpenGuides::Test;
 use Test::More;
 
 eval { require DBD::SQLite; };
@@ -60,12 +61,12 @@ my $cookie = OpenGuides::CGI->make_prefs_cookie(
 );
 $ENV{HTTP_COOKIE} = $cookie;
 
-write_data(
-            guide      => $guide,
-            node       => "Test Page",
-            latitude   => 51.368,
-            longitude  => -0.0973,
-          );
+OpenGuides::Test->write_data(
+                              guide      => $guide,
+                              node       => "Test Page",
+                              latitude   => 51.368,
+                              longitude  => -0.0973,
+                            );
 
 my %data = $guide->wiki->retrieve_node( "Test Page" );
 my $lat = $data{metadata}{latitude}[0];
@@ -84,10 +85,10 @@ unlike( $output, qr/name="latitude"\svalue="[-0-9]*d/,
 # claim to have any when we display it.
 eval {
     local $SIG{__WARN__} = sub { die $_[0]; };
-    write_data(
-                guide      => $guide,
-                node       => "Locationless Page",
-              );
+    OpenGuides::Test->write_data(
+                                  guide      => $guide,
+                                  node       => "Locationless Page",
+                                );
 };
 is( $@, "",
     "commit doesn't warn when prefs say dms format and node has no loc data" );
@@ -98,39 +99,3 @@ $output = $guide->display_node(
                               );
 unlike( $output, qr/latitude:/i,
         "node with no location data doesn't display a latitude" );
-
-
-
-sub write_data {
-    my %args = @_;
-    
-    # Set up CGI parameters ready for a node write.
-    # Most of these are in here to avoid uninitialised value warnings.
-    my $q = CGI->new( "" );
-    $q->param( -name => "content", -value => "foo" );
-    $q->param( -name => "categories", -value => $args{categories} || "" );
-    $q->param( -name => "locales", -value => "" );
-    $q->param( -name => "phone", -value => "" );
-    $q->param( -name => "fax", -value => "" );
-    $q->param( -name => "website", -value => "" );
-    $q->param( -name => "hours_text", -value => "" );
-    $q->param( -name => "address", -value => "" );
-    $q->param( -name => "postcode", -value => "" );
-    $q->param( -name => "map_link", -value => "" );
-    $q->param( -name => "os_x", -value => $args{os_x} || "" );
-    $q->param( -name => "os_y", -value => $args{os_y} || "" );
-    $q->param( -name => "osie_x", -value => $args{osie_x} || "" );
-    $q->param( -name => "osie_y", -value => $args{osie_y} || "" );
-    $q->param( -name => "latitude", -value => $args{latitude} || "" );
-    $q->param( -name => "longitude", -value => $args{longitude} || "" );
-    $q->param( -name => "username", -value => "Kake" );
-    $q->param( -name => "comment", -value => "foo" );
-    $q->param( -name => "edit_type", -value => "Normal edit" );
-    $ENV{REMOTE_ADDR} = "127.0.0.1";
-    
-    $args{guide}->commit_node(
-                               return_output => 1,
-                               id => $args{node},
-                               cgi_obj => $q,
-                             );
-}
