@@ -51,16 +51,14 @@
     Display latitude and longitude as degrees and minutes instead of decimal.
     </p>
 
-    [% IF formatting_rules_node %]
-      <p>
-      [% IF omit_formatting_link %]
-        <input type="checkbox" name="omit_formatting_link" value="1" checked />
-      [% ELSE %]
-        <input type="checkbox" name="omit_formatting_link" value="1" />
-      [% END %]
-      Omit &#8220;[% formatting_rules_node %]&#8221; link from navbar.
-      </p>
+    <p>
+    [% IF omit_help_links %]
+      <input type="checkbox" name="omit_help_links" value="1" checked />
+    [% ELSE %]
+      <input type="checkbox" name="omit_help_links" value="1" />
     [% END %]
+    Omit help links from navbar.
+    </p>
 
     <p>
     [% IF show_minor_edits_in_rc %]
@@ -79,7 +77,7 @@
 
   <h1>Username/preferences saved</h1>
 
-  <p>Username set to &#8220;[% username %]&#8221;</p>
+  <p>Username set to &#8220;[% username %]&#8221;.</p>
 
   <p>Preview area shown
     [% IF preview_above_edit_box %]
@@ -91,7 +89,7 @@
 
   <p>&#8220;Look for nearby geocaches&#8221; link
     [% UNLESS include_geocache_link %] not [% END %]
-  included in navbar</p>
+  included in navbar.</p>
 
   <p>Latitude and longitude displayed as
     [% IF latlong_traditional %]
@@ -101,17 +99,19 @@
     [% END %]
   </p>
 
-  [% IF formatting_rules_node %]
-    <p>&#8220;[% formatting_rules_node %]&#8221; link
-      [% IF omit_formatting_link %] not [% END %]
-    included in navbar</p>
-  [% END %]
+  <p>Help links will
+    [% IF omit_help_links %] not [% END %]
+    be included in navbar.
+  </p>
 
   <p>Minor edits
     [% UNLESS show_minor_edits_in_rc %] not [% END %]
   included in Recent Changes.</p>
 
-  <p><a href="[% full_cgi_url %]">Return to the Guide</a></p>
+<ul>
+  <li><a href="[% full_cgi_url %]">Return to [% site_name %]</a></li>
+  <li><a href="preferences.cgi">Change preferences</a></li>
+</ul>
 
 [% END %]
 </td>
