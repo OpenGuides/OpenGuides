@@ -1,15 +1,15 @@
-OpenGuides Version ?.??
+OpenGuides Version 0.01
 =======================
 
-This module is for installing the OpenGuides wiki software. Note that it
-uses Module::Build, which is a major prerequisite to installation. This
-is website software, hence requires a webserver such as Apache to be 
-available on the host you are installing onto. The installation also
-requires a Postgres database to be available, with the user ID and password
-that the site will use.
+This distribution contains the OpenGuides wiki software. It requires:
 
-Expand out the distribution, and set your working directory to be the
-top level of the distribution, then execute the following commands:
+ - Module::Build for installation
+ - a webserver (such as Apache)
+ - a Postgres database dedicated to the OpenGuides installation
+
+Unpack the distribution (using for example 'tar' or 'WinZip'), and set
+your working directory to be the top level of the distribution, then
+execute the following commands:
 
 perl Build.PL
 perl Build
@@ -20,41 +20,60 @@ The very first of these commands asks a number of questions regarding
 the installation.
 
 "What do you want the script to be called?"
-You can call it what you like. The program is a perl script (file.pl), and
-calling it a .pl will definitely work, but some may argue that this conveys
-too much information to a cracker about your site - that you are running a
-perl script.
 
-"what directory should I install it in?"
-At the time you come to do "Build install", you need to have write permission
-to this directory. This may require a su or sudo as root, to place files in
-a directory such as /usr/lib/cgi-bin/openguides/. Note: you want to put the 
-file into a directory known to the webserver as containing CGI scripts.
+The default is for the main script to be called "wiki.cgi", but
+you may prefer to name it after your city - "leeds-guide.cgi" for
+example.  Note that your webserver may be configured to only allow
+execution of scripts ending in, for example, ".cgi"
 
-"what URL does the install directory map to?"
-Give the full http: address of the cgi-bin directory in the previous answer.
+"What directory should I install it in?"
 
-"what directory can I use to store indexes in for searching?"
-You need a directory to store files used as indexes for the site. The 
-webserver will need write permission to this directory.
+You need to pick a directory for the OpenGuides software to be
+installed in.  This must be one known to the webserver as containing
+CGI scripts.  You will need to have write permission on this directory
+when you come to run "perl Build install"; unless this is a private
+directory belonging to you then this might require an 'su' or 'sudo'
+to root under Unix.
 
-"what's the URL of the wiki's stylesheet?"
-The distribution comes supplied with a sample stylesheet for use with an
-OpenGuides site. You need to install this to a place where the webserver
-can see it. !!Todo!!
+"What URL does the install directory map to?"
 
-"what's the name of the postgres database that this site runs on?"
-"and the database user that can access that database?"
-"and the password that they use to access the database?"
-These questions refer to the postgres database referred to at the start.
+Give the full address needed to access the installation directory with
+a web browser - for example http://london.openguides.org/cgi-bin/
 
-"what's the wiki called?"
+"What directory can I use to store indexes in for searching?"
+
+You need a directory to store files used as indexes for the site. The
+webserver will need write permission on this directory.  Under some
+webserver configurations this might be a dedicated user - 'nobody' or
+'www-data' for example, but for many multi-user systems this will just
+be yourself.
+
+"What's the URL of the wiki's stylesheet?"
+
+Supplying an answer to this question is optional.  TODO - supply and
+optionally install a simple stylesheet with the OpenGuides distribution.
+
+"What's the name of the postgres database that this site runs on?"
+"And the database user that can access that database?"
+"And the password that they use to access the database?"
+
+You should create (or ask your ISP/sysadmin to create) a Postgres
+database specifically for the use of OpenGuides.  If you have more
+than one OpenGuides installation, for example if you run guides for
+more than one city, each installation will need its own database.
+
+TODO - support MySQL and SQLite as well (this is really going to be
+pretty trivial).
+
+"What's the wiki called?"
+
 This is a title which will appear at the top of every page.
 
-"what should the home page of the wiki be called?"
-"how would you describe the wiki?"
-"what city is the wiki based in?"
-"what country is the wiki based in?"
-"contact email address for the wiki admin?"
+"What should the home page of the wiki be called?"
+"How would you describe the wiki?"
+"What city is the wiki based in?"
+"What country is the wiki based in?"
+"Contact email address for the wiki admin?"
+
 Self explanatory.
 
