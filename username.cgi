@@ -60,7 +60,7 @@ else {
 You set 
 HTML
 
-if ($cookieset == "") {
+if ($cookieset eq "") {
 	print "\"$username\"";
 }
 else {
