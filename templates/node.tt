@@ -14,7 +14,11 @@
 [% END %]
 [% INCLUDE display_metadata.tt %]
 [% INCLUDE display_categories.tt %]
+
+<!-- NODE CONTENT STARTS -->
 [% content %]
+<!-- NODE CONTENT ENDS -->
+
 [% IF os_x AND os_y %]
 <br clear="all" />
 <div id="find_within_distance">
