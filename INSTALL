@@ -6,7 +6,10 @@ If while following the instructions below or while trying to use your
 OpenGuides install you see an error that you don't understand, please
 consult the TROUBLESHOOTING file.
 
+For details about installing multiple OpenGuides sites on a single
+server, see further down this file.
 
+* Basic installation
 
 Unpack the distribution (using for example 'tar' or 'WinZip'), and set
 your working directory to be the top level of the distribution.
@@ -123,3 +126,63 @@ permanent link to the text formatting rules node in their navbar.  You
 need to put the name of that node in here for it to work, though.  You
 might want to call the node "Text Formatting Examples", "Text
 Formatting Rules", "House Style" or whatever.
+
+
+* Web server configuration
+
+In order to let your web server serve up OpenGuides correctly, you will
+have to tell it to recognise your installation directory as one
+containing CGI scripts. However you can make your URLs nicer by
+employing mod_rewrite as well. The following Apache configuration
+directives show how:
+
+	Alias /myguide /usr/lib/cgi-bin/myguide
+	<Directory /usr/lib/cgi-bin/myguide>
+	    Options FollowSymLinks Indexes ExecCGI
+	    RewriteEngine on
+	    RewriteBase /myguide/
+	    RewriteRule ^$      wiki.cgi        [L]
+	</Directory>
+	Redirect /cgi-bin/myguide/ http://www.example.com/myguide/
+
+You will of course need to make the appropriate substitutions for
+your site. You also need to make sure that mod_rewrite is enabled in
+your web server before adding such a configuration. The final step in
+this URL tidying is to tell OpenGuides that the main CGI script can be
+assumed to be called from the root of the install directory; do this by
+setting the script name to be empty in wiki.conf:
+
+	# what do you want the script to be called?
+	script_name =
+
+Currently the Build script does not support this value, so you will
+have to make sure that you fix this up after an upgrade.
+
+
+* Multiple installations
+
+If you want to run multiple OpenGuides sites on one machine, you can use
+some tricks to make life easier. This isn't currently part of the official
+install routine, but will generally work. In the rest of this section we
+will assume that you already have a working OpenGuides install for a
+single site.
+
+Make a directory for the new site, and populate it with a set of symlinks
+to the main installation directory (ie. for wiki.cgi, supersearch.cgi,
+newpage.cgi, preferences.cgi, and the templates directory). wiki.conf
+will not be a symlink, since this will differ from the original site.
+In this case, simply copy the wiki.conf from the original install and
+modify it in the obvious way; most importantly, by giving it a different
+database name (we'll create the database in a moment). Don't forget to
+set up a separate directory for indices for the new site.
+
+Normally, the database is created by the installation process described
+above; however since we only want one copy of the modules and CGI
+programs, it isn't appropriate to run them again. So we will make use of
+the utility program "cgi-wiki-setupdb" which is included with the
+CGI::Wiki distribution. Documentation for this command can be found in
+its man page; run this with the appropriate arguments to create the
+new database.
+
+Once the key step of setting up the datbase has been performed, and the
+web server configured appropriately, the new site should be ready to go!
