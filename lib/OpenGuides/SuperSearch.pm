@@ -1,6 +1,6 @@
 package OpenGuides::SuperSearch;
 use strict;
-our $VERSION = '0.05';
+our $VERSION = '0.06';
 
 use CGI qw( :standard );
 use CGI::Wiki::Plugin::Locator::UK;
@@ -503,7 +503,7 @@ sub matched_AND {
         my @pages = keys %results;
         foreach my $page ( @pages ) {
 	    if ( exists $subres{$page} ) {
-                $results{$page}{score} += $subres{$page};
+                $results{$page}{score} += $subres{$page}{score};
 	    } else {
                 delete $results{$page};
             }
@@ -562,7 +562,7 @@ cannot use -foo standalone to give you all pages without foo.
 sub matched_NOT {
     my $self = shift;
     my %excludes = $self->_matched_items(tree => \@_);
-    my %out = map {$_=>[0]} keys %{ $self->{wikitext} };
+    my %out = map { $_ => { score => 0} } keys %{ $self->{wikitext} };
 
     delete $out{$_} for keys %excludes;
     return %out;
@@ -605,6 +605,10 @@ or locale.
 
 A match on page category or locale will score higher than a match on
 page content.
+
+=item *
+
+Two matches in the title beats one match in the title and one in the content.
 
 =back
 

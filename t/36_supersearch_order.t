@@ -8,7 +8,7 @@ eval { require DBD::SQLite; };
 if ( $@ ) {
     plan skip_all => "DBD::SQLite not installed";
 } else {
-    plan tests => 5;
+    plan tests => 6;
 
     CGI::Wiki::Setup::SQLite::setup( { dbname => "t/node.db" } );
     my $config = Config::Tiny->new;
@@ -63,17 +63,34 @@ if ( $@ ) {
     $wiki->write_node( "Kake Pugh", "I live in Hammersmith." )
         or die "Can't write node";
 
-    my %tt_vars = $search->run(
+    %tt_vars = $search->run(
                              return_tt_vars => 1,
                              vars           => { search => "hammersmith" },
                            );
     foreach my $result ( @{ $tt_vars{results} || [] } ) {
         print "# $result->{name} scores $result->{score}\n";
     }
-    my %scores = map { $_->{name} => $_->{score} } @{$tt_vars{results} || []};
+    %scores = map { $_->{name} => $_->{score} } @{$tt_vars{results} || []};
     ok( $scores{Kake_Pugh} < $scores{The_Gate},
         "content match scores less than locale match" );
     ok( $scores{The_Gate} < $scores{Hammersmith},
         "locale match scores less than title match" );
 
+    # Check that two words in the title beats one in the title and
+    # one in the content.
+    $wiki->write_node( "Putney Tandoori", "Indian food" )
+      or die "Couldn't write node";
+    $wiki->write_node( "Putney", "There is a tandoori restaurant here" )
+      or die "Couldn't write node";
+
+    %tt_vars = $search->run(
+                             return_tt_vars => 1,
+                             vars           => { search => "putney tandoori" },
+                           );
+    foreach my $result ( @{ $tt_vars{results} || [] } ) {
+        print "# $result->{name} scores $result->{score}\n";
+    }
+    %scores = map { $_->{name} => $_->{score} } @{$tt_vars{results} || []};
+    ok( $scores{Putney} < $scores{Putney_Tandoori},
+        "two words in title beats one in title and one in content" );
 }
