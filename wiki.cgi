@@ -283,6 +283,7 @@ sub show_index {
     my %args = @_;
     my %tt_vars;
     my @selnodes;
+
     if ( $args{type} and $args{value} ) {
         if ( $args{type} eq "fuzzy_title_match" ) {
             my %finds = $wiki->fuzzy_title_match( $args{value} );
@@ -309,11 +310,16 @@ sub show_index {
     } else {
         @selnodes = $wiki->list_all_nodes();
     }
-    my @nodes = map { { name  => $_,
-			param => $formatter->node_name_to_node_param($_) }
+
+    my @nodes = map { { name      => $_,
+                        node_data => {$wiki->retrieve_node( name => $_ )},
+			param     => $formatter->node_name_to_node_param($_) }
 		    } sort @selnodes;
+
     $tt_vars{nodes} = \@nodes;
+
     my ($template, $omit_header);
+
     if ( $args{format} eq "rdf" ) {
 	$template = "rdf_index.tt";
 	$omit_header = 1;
