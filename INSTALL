@@ -195,5 +195,5 @@ CGI::Wiki distribution. Documentation for this command can be found in
 its man page; run this with the appropriate arguments to create the
 new database.
 
-Once the key step of setting up the datbase has been performed, and the
+Once the key step of setting up the database has been performed, and the
 web server configured appropriately, the new site should be ready to go!
