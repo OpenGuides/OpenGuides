@@ -1,6 +1,6 @@
-0.15    
+0.15    18 May 2003
         Added Algorithm::Diff version dependency to prereqs, fixed bug
-        with preferences.cgi and blank script_name.
+        with preferences.cgi and blank script_name, fixed REDIRECT bug.
 
 0.14    17 May 2003
         Added "Wanted Pages" link to navbar, thanks to Simon Cozens for

@@ -202,11 +202,11 @@ sub display_node {
 
     my %node_data = $wiki->retrieve_node( %criteria );
     my $raw = $node_data{content};
-    if ( $raw =~ /^#REDIRECT\s+(.+?)\s+$/ ) {
+    if ( $raw =~ /^#REDIRECT\s+(.+?)\s*$/ ) {
         my $redirect = $1;
         # Strip off enclosing [[ ]] in case this is an extended link.
         $redirect =~ s/^\[\[//;
-        $redirect =~ s/\]\]$//;
+        $redirect =~ s/\]\]\s*$//;
         # See if this is a valid node, if not then just show the page as-is.
 	if ( $wiki->node_exists($redirect) ) {
             redirect_to_node($redirect);
