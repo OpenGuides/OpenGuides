@@ -3,8 +3,6 @@
 use strict;
 use warnings;
 
-#foo
-
 use CGI qw/:standard/;
 use CGI::Carp qw(croak);
 use CGI::Cookie;
