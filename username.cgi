@@ -60,11 +60,10 @@ else {
 You set 
 HTML
 
-if ($cookieset eq "") {
-	print "\"$username\"";
-}
-else {
-	print '"' . &get_cookie . '"';
+if ($cookieset) {
+    print '"' . get_cookie() . '"';
+} else {
+    print '"' . $username . '"';
 }
 
 print <<HTML;
