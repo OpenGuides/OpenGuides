@@ -300,6 +300,90 @@ sub find_within_distance {
                            );
 }
 
+=item B<show_index>
+
+  $guide->show_index(
+                      type   => "category",
+                      value  => "pubs",
+                    );
+
+  # RDF version.
+  $guide->show_index(
+                      type   => "locale",
+                      value  => "Holborn",
+                      format => "rdf",
+                    );
+
+=cut
+
+sub show_index {
+    my ($self, %args) = @_;
+    my $wiki = $self->wiki;
+    my $formatter = $wiki->formatter;
+    my %tt_vars;
+    my @selnodes;
+
+    if ( $args{type} and $args{value} ) {
+        if ( $args{type} eq "fuzzy_title_match" ) {
+            my %finds = $wiki->fuzzy_title_match( $args{value} );
+            @selnodes = sort { $finds{$a} <=> $finds{$b} } keys %finds;
+            $tt_vars{criterion} = {
+                type  => $args{type},  # for RDF version
+                value => $args{value}, # for RDF version
+                name  => $CGI->escapeHTML("Fuzzy Title Match on '$args{value}')
+	    };
+        } else {
+            @selnodes = $wiki->list_nodes_by_metadata(
+                metadata_type  => $args{type},
+	        metadata_value => $args{value},
+                ignore_case    => 1,
+            );
+            my $name = ucfirst($args{type}) . " $args{value}" ;
+            my $url = $self->config->{_}->{script_name}
+                      . ucfirst( $args{type} )
+                      . "_"
+                      . uri_escape(
+                              $formatter->node_name_to_node_param($args{value})
+                                  );
+            $tt_vars{criterion} = {
+                type  => $args{type},
+                value => $args{value}, # for RDF version
+                name  => $CGI->escapeHTML( $name ),
+	        url   => $url,
+            };
+        }
+    } else {
+        @selnodes = $wiki->list_all_nodes();
+    }
+
+    my @nodes = map { { name      => $_,
+                        node_data => { $wiki->retrieve_node( name => $_ ) },
+			param     => $formatter->node_name_to_node_param($_) }
+		    } sort @selnodes;
+
+    $tt_vars{nodes} = \@nodes;
+
+    my ($template, %conf);
+
+    if ( $args{format} eq "rdf" ) {
+	$template = "rdf_index.tt";
+        $conf{content_type} = "text/plain";
+    } else {
+	$template = "site_index.tt";
+    }
+
+    %conf = (
+              %conf,
+              node        => "$args{type} index", # KLUDGE
+              template    => $template,
+              tt_vars     => \%tt_vars,
+    );
+
+    print $self->process_template( %conf );
+}
+
+
+
 sub process_template {
     my ($self, %args) = @_;
     my %output_conf = ( wiki     => $self->wiki,
@@ -308,6 +392,7 @@ sub process_template {
 			template => $args{template},
 			vars     => $args{tt_vars},
     );
+    $output_conf{content_type} = $args{content_type} if $args{content_type};
     return OpenGuides::Template->output( %output_conf );
 }
 

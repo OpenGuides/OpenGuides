@@ -70,9 +70,11 @@ eval {
     } elsif ($action eq 'show_wanted_pages') {
         show_wanted_pages();
     } elsif ($action eq 'index') {
-        show_index( type   => $q->param("index_type") || "Full",
-                    value  => $q->param("index_value") || "",
-                    format => $format );
+        $guide->show_index(
+                            type   => $q->param("index_type") || "Full",
+                            value  => $q->param("index_value") || "",
+                            format => $format,
+                          );
     } elsif ($action eq 'random') {
         my @nodes = $wiki->list_all_nodes();
         $node = $nodes[int(rand(scalar(@nodes) + 1)) + 1];
@@ -144,63 +146,6 @@ sub redirect_to_node {
     my $node = shift;
     print $q->redirect("$script_url$script_name?" . $q->escape($formatter->node_name_to_node_param($node)));
     exit 0;
-}
-
-sub show_index {
-    my %args = @_;
-    my %tt_vars;
-    my @selnodes;
-
-    if ( $args{type} and $args{value} ) {
-        if ( $args{type} eq "fuzzy_title_match" ) {
-            my %finds = $wiki->fuzzy_title_match( $args{value} );
-            @selnodes = sort { $finds{$a} <=> $finds{$b} } keys %finds;
-            $tt_vars{criterion} = {
-                type  => $args{type},  # for RDF version
-                value => $args{value}, # for RDF version
-                name  => $q->escapeHTML( "Fuzzy Title Match on '$args{value}'")
-	    };
-        } else {
-            @selnodes = $wiki->list_nodes_by_metadata(
-                metadata_type  => $args{type},
-	        metadata_value => $args{value},
-                ignore_case    => 1,
-            );
-            $tt_vars{criterion} = {
-                type  => $args{type},
-                value => $args{value}, # for RDF version
-                name => $q->escapeHTML(ucfirst($args{type}) . " $args{value}"),
-	        url  => "$script_name?" . ucfirst($args{type}) . "_" .
-                  uri_escape($formatter->node_name_to_node_param($args{value}))
-            };
-        }
-    } else {
-        @selnodes = $wiki->list_all_nodes();
-    }
-
-    my @nodes = map { { name      => $_,
-                        node_data => {$wiki->retrieve_node( name => $_ )},
-			param     => $formatter->node_name_to_node_param($_) }
-		    } sort @selnodes;
-
-    $tt_vars{nodes} = \@nodes;
-
-    my ($template, $omit_header);
-
-    if ( $args{format} eq "rdf" ) {
-	$template = "rdf_index.tt";
-	$omit_header = 1;
-	print "Content-type: text/plain\n\n";
-    } else {
-	$template = "site_index.tt";
-    }
-
-    process_template($template,
-		     "$args{type} index",
-                     \%tt_vars,
-		     {},
-		     $omit_header,
-    );
 }
 
 sub list_all_versions {
