@@ -1,4 +1,6 @@
 0.33    
+        Improve node history page to allow diffing between each version and
+          the previous one or the current one.
         Test overhauls - you don't need to run the configuration step in
           order to run the tests now, but you do need to have DBD::SQLite
           for most of them.
