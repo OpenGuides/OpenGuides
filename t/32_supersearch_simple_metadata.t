@@ -30,9 +30,7 @@ SKIP: {
 
     # Plucene is the recommended searcher now.
     eval { require CGI::Wiki::Search::Plucene; };
-    unless ( $@ ) {
-        $config->use_plucene( 1 );
-    }
+    if ( $@ ) { $config->use_plucene( 0 ) };
 
     my $search = OpenGuides::SuperSearch->new( config => $config );
 

@@ -24,6 +24,8 @@ SKIP: {
                      template_path      => cwd . "/templates",
                    }
     );
+    eval { require CGI::Wiki::Search::Plucene; };
+    if ( $@ ) { $config->use_plucene ( 0 ) };
 
     my $guide = OpenGuides->new( config => $config );
 

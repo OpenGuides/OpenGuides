@@ -25,6 +25,9 @@ SKIP: {
                      default_country    => "United Kingdom",
                    }
     );
+    eval { require CGI::Wiki::Search::Plucene; };
+    if ( $@ ) { $config->use_plucene ( 0 ) };
+
 
     my $wiki = OpenGuides::Utils->make_wiki_object( config => $config );
 

@@ -26,6 +26,9 @@ SKIP: {
                    }
     );
 
+    eval { require CGI::Wiki::Search::Plucene; };
+    if ( $@ ) { $config->use_plucene ( 0 ) };
+
     my $wiki = eval {
         OpenGuides::Utils->make_wiki_object( config => $config );
     };

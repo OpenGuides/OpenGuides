@@ -9,6 +9,11 @@ if ( $@ ) {
     plan skip_all => "DBD::SQLite not installed";
 }
 
+eval { require Plucene; };
+if ( $@ ) {
+    plan skip_all => "Plucene not installed";
+}
+
 # Strictly speaking we don't need to skip _all_ tests if we don't have
 # the modules below.  Revisit this when not in a hurry.
 # We only actually need the former for the National Grid tests and the
@@ -45,9 +50,7 @@ my $config = OpenGuides::Config->new(
 
 # Plucene is the recommended searcher now.
 eval { require CGI::Wiki::Search::Plucene; };
-unless ( $@ ) {
-    $config->use_plucene( 1 );
-}
+if ( $@ ) { $config->use_plucene( 0 ) };
 
 my $search = OpenGuides::SuperSearch->new( config => $config );
 

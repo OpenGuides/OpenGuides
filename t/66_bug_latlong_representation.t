@@ -41,9 +41,7 @@ my $config = OpenGuides::Config->new(
 
 # Plucene is the recommended searcher now.
 eval { require CGI::Wiki::Search::Plucene; };
-unless ( $@ ) {
-    $config->use_plucene( 1 );
-}
+if ( $@ ) { $config->use_plucene( 0 ) };
 
 my $guide = OpenGuides->new( config => $config );
 

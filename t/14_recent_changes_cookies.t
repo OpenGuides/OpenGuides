@@ -70,6 +70,9 @@ SKIP: {
                      home_name          => "Home",
                    }
     );
+    eval { require CGI::Wiki::Search::Plucene; };
+    if ( $@ ) { $config->use_plucene ( 0 ) };
+    
     my $guide = OpenGuides->new( config => $config );
 
     my $prefs_cookie = OpenGuides::CGI->make_prefs_cookie(
