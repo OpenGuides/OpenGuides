@@ -1,7 +1,20 @@
+[% IF search_terms %]
+[% node_name = "Search results for $search_terms" %]
+[% ELSE %]
 [% node_name = "Search" %]
+[% END %]
 [% INCLUDE header.tt %]
-
+[% INCLUDE banner.tt %]
 <div id="content">
+<table border="0" cellpadding="0" cellspacing="0" width="100%">
+  <tr>
+    <td valign="top">
+  [% IF search_terms %]
+  <h2>Search Results for <em>[% search_terms %]</em></h2>
+  <h3>[% total_num %] matches found, showing [% first_num %] - [% last_num %]</h3>
+  [% ELSE %]
+  <h2>Search [% site_name %]</h2>
+  [% END %]
 
   <p><small>
     Version [% ss_version %].  See the
@@ -9,9 +22,10 @@
   </small></p>
 
   <form method="get" action="supersearch.cgi">
+    Search: 
     <input type="text" name="search" value="[% search_terms %]" size="50"
       maxlength="80" />
-    <input type="submit" name="go" value="Go" />
+    <input type="submit" name="go" class="form_button" value="Go" />
   </form>
 
   [% IF search_terms %]
@@ -20,7 +34,6 @@
 
     [% IF results.size %]
 
-      <h2>Search Results</h2>
       <ol start="[% first_num %]">
         [% FOREACH result = results %]
           <li>
@@ -37,7 +50,7 @@
         <form method="get" action="supersearch.cgi">
           <input type="hidden" name="search" value="[% search_terms %]" />
           <input type="hidden" name="next" value="[% next_page_startpos %]" />
-          <input type="submit" name="More" value="More" />
+          <input type="submit" name="More" class="form_button" value="More" />
         </form>
       [% END %]
 
@@ -45,8 +58,18 @@
       <h2>No Items Matched</h2>
     [% END %]  
 
+  <form method="get" action="supersearch.cgi">
+    Search: 
+    <input type="text" name="search" value="[% search_terms %]" size="50"
+      maxlength="80" />
+    <input type="submit" name="go" class="form_button" value="Go" />
+  </form>
   [% END %]
 
+    </td>
+    <td valign="top">[% INCLUDE navbar.tt %]</td>
+  </tr>
+</table>
 </div>
 
 [% INCLUDE footer.tt %]

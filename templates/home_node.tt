@@ -1,5 +1,5 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-
+[% USE CGI %]
 <html>
 <head>
   <title>[% node_name %] - [% site_name %]</title>
@@ -15,20 +15,16 @@
   [% IF stylesheet %]
     <link rel="stylesheet" href="[% stylesheet %]" type="text/css">
   [% END %]
-
 </head>
-
 <body>
 
-[% USE CGI %]
+[% INCLUDE banner.tt %]
+
+<div id="content">
 
 [% IF navbar_on_home_page %]
   [% INCLUDE navbar.tt %]
 [% END %]
-
-<div id="header">
-<h1>[% site_name %] - [% node_name %]</h1>
-</div>
 
 <div id="recent">
 
@@ -51,17 +47,6 @@
 <p><b><a href="[% cgi_url %]?action=edit;id=[% node_param %]">Edit this page</a></b></p>
 
 </div>
-<div id="content">
 [% content %]
-</div>
-
-<hr />
-
-<div class="search">
-  <form action="supersearch.cgi" method="get">
-    <input type="text" size="50" name="search">
-    <input type="submit" name="Go" value="Search" class="form_button" />
-  </form>
-</div>
 
 [% INCLUDE footer.tt %]

@@ -10,6 +10,4 @@
   [% END %]
 </ul>
 
-</div>
-
 [% INCLUDE footer.tt %]

@@ -1,48 +1,38 @@
 [% USE CGI %]
+<!-- METADATA STARTS -->
 
-[% IF os_x AND os_y %]
-  <small>OS X co-ord: [% CGI.escapeHTML(os_x) %]</small>
-  &nbsp;&nbsp;&nbsp;
-  <small>OS Y co-ord: [% CGI.escapeHTML(os_y) %]</small>
-  &nbsp;&nbsp;&nbsp;
-[% END %]
-[% IF latitude AND longitude %]
-  <small>(Latitude: [% latitude %] Longitude: [% longitude %])</small>
-  &nbsp;&nbsp;&nbsp;
-[% END %]
-<small><a href="[% cgi_url %]?id=[% node_param %];format=rdf">RDF/XML for this node</a></small>
-<br />
-
+<div id="metadata">
 [% IF phone OR fax OR address OR postcode OR formatted_website_text
       OR hours_text %]
   <ul>
     [% IF phone %]
-      <li><b>Telephone:</b> [% CGI.escapeHTML(phone) %]</li>
+      <li><strong>Telephone:</strong> [% CGI.escapeHTML(phone) %]</li>
     [% END %]
     [% IF fax %]
-      <li><b>Fax:</b> [% CGI.escapeHTML(fax) %]</li>
+      <li><strong>Fax:</strong> [% CGI.escapeHTML(fax) %]</li>
     [% END %]
     [% IF address %]
-      <li><b>Address:</b>
+      <li><strong>Address:</strong>
       [% IF map_link %]
         [<a href="[% map_link %]">[% CGI.escapeHTML(address) %]</a>]</li>
       [% ELSE %]
         [% CGI.escapeHTML(address) %]</li>
       [% END %]
     [% ELSIF map_link %]
-      <li><b>Map:</b>
+      <li><strong>Map:</strong>
         [<a href="[% map_link %]">[% CGI.escapeHTML(map_link) %]</a>]</li>
     [% END %]
     [% IF postcode %]
       <li><strong>Postcode:</strong> [% CGI.escapeHTML(postcode) %]</li>
     [% END %]
     [% IF formatted_website_text %]
-      <li><b>Website:</b> [% formatted_website_text %]</li>
+      <li><strong>Website:</strong> [% formatted_website_text %]</li>
     [% END %]
     [% IF hours_text %]
-      <li><b>Opening Hours:</b> [% CGI.escapeHTML(hours_text) %]</li>
+      <li><strong>Opening Hours:</strong> [% CGI.escapeHTML(hours_text) %]</li>
     [% END %]
   </ul>
 [% END %]
+</div>
 
-
+<!-- METADATA ENDS -->

@@ -6,14 +6,14 @@
 <ul>
 [% FOREACH revision = history %]
   <li>Version [% revision.version %]:
-      <a href="[% cgi_url %]?id=[% node_param %]&amp;version=[% revision.version %]">View</a>
+      <a href="[% cgi_url %]?id=[% node_param %]&version=[% revision.version %]">View</a>
       [% IF revision.version != version %]
-      | <a href="[% cgi_url %]?id=[% node_param %]&amp;version=[% revision.version %]&amp;diffversion=[% version %]">Diff</a>
+      | <a href="[% cgi_url %]?id=[% node_param %]&version=[% revision.version %]&diffversion=[% version %]">Diff</a>
       [% END %] 
       .....
       [% revision.modified %]
       [% IF revision.username %]
-        by <a href="[% cgi_url %]?username=[% revision.username %]&amp;action=userstats">[% revision.username %]</a>
+        by <a href="[% cgi_url %]?username=[% revision.username %]&action=userstats">[% revision.username %]</a>
       [% END %]
       [% IF revision.comment %]
         <b>[[% revision.comment %]]</b>

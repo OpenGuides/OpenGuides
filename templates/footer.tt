@@ -1,5 +1,13 @@
-<div align="right">
-<p>Powered by <a href="http://openguides.org/">OpenGuides</a> (version [% openguides_version %]).</p>
+<br clear="all" />
+<div id="search_form">
+<form action="supersearch.cgi" method="get">
+<strong>Search [% site_name %]:</strong> <input type="text" size="50" name="search" /> 
+<input type="submit" name="Go" value="Go" class="form_button" />
+</form>
+</div>
+<div id="footer">This wiki powered by <a
+href="http://openguides.org/">OpenGuides</a> (version [% openguides_version %]).
+</div>
 </div>
 </body>
 </html>

@@ -1,7 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-
 <html>
 <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
   [% IF (node_name == 'category index' || node_name == 'locale index') %]
   <title>Index of "[% criterion.name %]" - [% site_name %]</title>
   [% ELSE %]
@@ -17,7 +17,7 @@
     <meta name="keywords" content="[% keywords %]">
   [% END %]
   [% IF stylesheet %]
-    <link rel="stylesheet" href="[% stylesheet %]" type="text/css">
+    <link rel="stylesheet" href="[% stylesheet %]" type="text/css" title="Stylesheet for [% site_name %]">
   [% END %]
   [% IF latitude AND longitude %]
     <meta name="ICBM" content="[% latitude %], [% longitude %]">
@@ -27,6 +27,4 @@
     <link rel="alternate" type="application/rss+xml" title="RSS feed for this page" href="[% full_cgi_url %]?action=rss">
   [% END %]
 </head>
-
 <body>
-[% INCLUDE navbar.tt %]

@@ -1,17 +1,19 @@
+<!-- START CATEGORIES AND LOCALES -->
+
 [% IF categories.size > 0 %]
-  <hr />
   <small><b>Categories:</b>
   [% FOREACH category = categories %]
     <a href="[% category.url %]">[% category.name %]</a> [%- "/" UNLESS loop.last %]
   [% END %]
-  </small>
+  </small><br />
 [% END %]
 
 [% IF locales.size > 0 %]
-  <hr />
   <small><b>Locale:</b>
   [% FOREACH locale = locales %]
     <a href="[% locale.url %]">[% locale.name %]</a> [%- "/" UNLESS loop.last %]
   [% END %]
   </small>
 [% END %]
+
+<!-- END CATEGORIES AND LOCALES -->

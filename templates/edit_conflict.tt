@@ -1,7 +1,9 @@
 [% USE CGI %]
 [% INCLUDE header.tt %]
-
-<h1 align="center">Edit "[% node_name %]"</h1>
+[% INCLUDE banner.tt %]
+<div id="content">
+[% INCLUDE navbar.tt %]
+<h2>Edit "[% node_name %]"</h2>
 
 <div class="warning_text">
 Someone has committed changes to this node since you began editing.

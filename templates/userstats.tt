@@ -1,6 +1,8 @@
 [% INCLUDE header.tt %]
+[% INCLUDE banner.tt %]
 <div id="content">
-<h1 align=center>[% site_name %] - User Stats for [% username %]</h1>
+[% INCLUDE navbar.tt %]
+<h2>User Stats for [% username %]</h2>
 
 [% content %]
 
@@ -16,6 +18,5 @@
   </li>
 [% END %]
 </ul>
-</div>
 
 [% INCLUDE footer.tt %]

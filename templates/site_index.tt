@@ -1,7 +1,8 @@
 [% INCLUDE header.tt %]
-
-<h1 align=center>
-  [% site_name %] - Node List
+[% INCLUDE banner.tt %]
+<div id="content">
+[% INCLUDE navbar.tt %]
+<h2>Node List
   [%- IF criterion -%]
     [%- IF criterion.url -%]
       - <a href="[% criterion.url %]">[%- criterion.name -%]</a>
@@ -12,7 +13,7 @@
   [%- IF origin -%]
     - Things within [%- limit -%] of <a href="[% cgi_url %]?[%- origin_param -%]">[%- origin -%]</a>
   [%- END -%]
-</h1>
+</h2>
 <ul>
   [% FOREACH node = nodes %]
      <li><a href="[% cgi_url %]?[% node.param %]">[% node.name %]</a>
@@ -20,5 +21,4 @@
      </li>
   [% END %]
 </ul>
-
 [% INCLUDE footer.tt %]

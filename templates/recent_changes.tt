@@ -1,43 +1,30 @@
 [% INCLUDE header.tt %]
+[% INCLUDE banner.tt %]
 <div id="content">
-<h1 align=center>[% site_name %] - [% node_name %]</h1>
-
-[% content %]
-
+[% INCLUDE navbar.tt %]
 <h2>Site changes in the last [% days %] days</h2>
-
-<p>
-<small><a href="[% cgi_url %]?action=rss">RSS feed of this page</a></small>
-</p>
-
-<ul>
+[% content %]
+<table cellpadding="0" cellspacing="0" border="0"
+style="border-top: 1px dotted black; margin-top: 1em">
 [% FOREACH node = recent_changes %]
-  <li><a href="[% node.url %]">[% node.name %]</a>
-      [% node.last_modified %]
-      [% IF node.edit_type %]
-        <i>([% node.edit_type %])</i>
-      [% END %]
-      [% IF node.comment %]
-        <b>[[% node.comment %]]</b>
-      [% END %]
-      [% IF node.username %]
-        [% IF node.username == "Anonymous" %]
-          ..... Anonymous
-          [% IF node.host %]
-            ([% node.host %])
-          [% END %]
-        [% ELSE %]
-          ..... <a href="[% cgi_url %]?username=[% node.username_param %];action=userstats">[% node.username %]</a>
-        [% END %]
-      [% END %]
-  </li>
+	<tr>
+		<td style="padding: 5px 0px 5px 0px"><em>[% node.last_modified %]
+		[% IF node.edit_type %]
+		([% node.edit_type %])
+		[% END %]</em></td>
+		<td style="padding: 5px 0px 5px 5px">[% IF node.username %]
+			<a href="[% cgi_url %]?username=[% node.username %];action=userstats">[% node.username %]</a>
+		[% END %]</td>
+	</tr>
+	<tr>
+		<td style="padding: 0px 0px 5px 0px; border-bottom: 1px dotted black"><strong><a href="[% node.url %]">[% node.name %]</a></strong></td>
+		<td style="padding: 0px 0px 5px 5px; border-bottom: 1px dotted black">
+		[% IF node.comment %]
+			[% node.comment%]
+		[% ELSE %]
+			&nbsp;
+		[% END %]</td>
+	</tr>
 [% END %]
-</ul>
-
-<p>
-  <a href="[% cgi_url %]?id=[% node_param %];action=edit">Edit this page</a>
-</p>
-
-</div>
-
+</table>
 [% INCLUDE footer.tt %]

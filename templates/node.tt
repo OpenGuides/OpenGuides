@@ -1,26 +1,23 @@
 [% USE CGI %]
 [% INCLUDE header.tt %]
-
+[% INCLUDE banner.tt %]
 <div id="content">
-
+[% INCLUDE navbar.tt %]
 [% IF current %]
   [% IF is_indexable_node %]
-    <h1>[% site_name %] - <a href="[%cgi_url %]?action=index;index_type=[% CGI.escape(index_type) %];index_value=[% CGI.escape(index_value) %]">[% node_name %]</a></h1>
+    <h2 class="node_name"><a href="[%cgi_url %]?action=index;index_type=[% CGI.escape(index_type) %];index_value=[% CGI.escape(index_value) %]">[% node_name %]</a></h2>
   [% ELSE %]
-    <h1>[% site_name %] - <a href="[%cgi_url %]?action=show_backlinks&amp;id=[% CGI.escape(node_name) %]">[% node_name %]</a></h1>
+    <h2 class="node_name"><a href="[%cgi_url %]?action=show_backlinks&id=[% CGI.escape(node_name) %]">[% node_name %]</a></h2>
   [% END %]
 [% ELSE %]
-  <h1>
-    [% site_name %] - historical version [% version %] of [% node_name %]
-  </h1>
+  <h2><em>Historical version [% version %] of [% node_name %]</em></h2>
 [% END %]
-
 [% INCLUDE display_metadata.tt %]
-
+[% INCLUDE display_categories.tt %]
 [% content %]
-
 [% IF os_x AND os_y %]
-  <hr>
+<br clear="all" />
+<div id="find_within_distance">
   <form action="[% cgi_url %]">
     Find all things within
     <select name="distance_in_metres">
@@ -34,35 +31,36 @@
     <input type="hidden" name="action" value="find_within_distance" />
     <input type="submit" name="Go" value="Go" class="form_button" />
   </form>
-[% END %]
-
-<br clear="all" />
-
-[% INCLUDE display_categories.tt %]
-
-<hr />
-
-[% IF current %]
-  Last edited [% last_modified %] (this is version [% version %])<br />
-[% ELSE %]
-  This is version [% version %] (as of [% last_modified %])<br />
-  <a href="[% cgi_url %]?[% node_param %]">View current version</a><br />
-[% END %]
-
-[% IF version > 1 %]
-  <a href="[% cgi_url %]?action=list_all_versions;id=[% node_param %]">List all
-  versions</a><br />
-[% END %]
-
 </div>
-
-<br />
-
-<div class="search">
-  <form action="supersearch.cgi" method="get">
-    <input type="text" size="50" name="search" />
-    <input type="submit" name="Go" value="Search" class="form_button" />
-  </form>
+[% END %]
+[% IF (latitude AND longitude) OR (os_x AND os_y) %]
+<div id="coordinates">
+[% END %]
+[% IF os_x AND os_y %]
+  <small>OS X co-ord: [% CGI.escapeHTML(os_x) %]</small>
+  &nbsp;&nbsp;&nbsp;
+  <small>OS Y co-ord: [% CGI.escapeHTML(os_y) %]</small>
+  &nbsp;&nbsp;&nbsp;
+[% END %]
+[% IF latitude AND longitude %]
+  <small>(Latitude: [% latitude %] Longitude: [% longitude %])</small>
+[% END %]
+[% IF (latitude AND longitude) OR (os_x AND os_y) %]
+</div>
+[% END %]
+<div id="rdf_link"><a href="[% cgi_url %]?id=[% node_param %];format=rdf">RDF/XML for this
+node</a></div>
+<div id="version">
+[% IF current %]
+Last edited [% last_modified %] (this is version [% version %]).
+[% ELSE %]
+This is version [% version %] (as of [% last_modified %]). 
+<a href="[% cgi_url %]?[% node_param %]">View current version.</a> 
+[% END %]
+[% IF version > 1 %]
+<a href="[% cgi_url %]?action=list_all_versions;id=[% node_param %]">List all
+versions.</a>
+[% END %]
 </div>
 
 [% INCLUDE footer.tt %]

@@ -26,7 +26,7 @@
 	<tr>
 		<td colspan="2">
 		<fieldset>
-		<legend>Main information</legend>
+		<legend>Main information (required)</legend>
 		<table>
 			<tr>
 				<td><strong>Content:</strong></td>
@@ -49,7 +49,7 @@
 		</fieldset>
 		&nbsp;
 		<fieldset>
-		<legend>Metadata</legend>
+		<legend>Metadata (optional)</legend>
 		<table>
 			<tr>
 				<td><strong>Phone:</strong></td>
@@ -116,7 +116,5 @@
   [% INCLUDE display_categories.tt %]
 
 [% END %]
-
-</div>
 
 [% INCLUDE footer.tt %]
