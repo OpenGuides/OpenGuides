@@ -9,8 +9,6 @@ $VERSION = '0.33_03';
 use CGI qw/:standard/;
 use CGI::Carp qw(croak);
 use CGI::Wiki;
-use CGI::Wiki::Search::SII;
-use CGI::Wiki::Formatter::UseMod;
 use Config::Tiny;
 use Geography::NationalGrid;
 use Geography::NationalGrid::GB;

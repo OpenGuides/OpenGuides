@@ -87,7 +87,9 @@ SKIP: {
                             vars          => { search => "weebl" },
                           );
     like( $output, qr/Status: 302 Moved/, "prints redirect on single hit" );
-    like( $output, qr/Location: http:\/\/example.com\/wiki.cgi\?Want_Pie_Now/,
+    # Old versions of CGI.pm mistakenly print location: instead of Location:
+    like( $output,
+          qr/[lL]ocation: http:\/\/example.com\/wiki.cgi\?Want_Pie_Now/,
           "...and node name munged correctly in URL" );
 
     # Test the AND search
@@ -95,7 +97,7 @@ SKIP: {
                             return_output => 1,
                             vars          => { search => "monkey banana" },
                            );
-    like( $output, qr/Location: http:\/\/example.com\/wiki.cgi\?Monkey/,
+    like( $output, qr/[lL]ocation: http:\/\/example.com\/wiki.cgi\?Monkey/,
           "AND search returns right results" );
 
     # Test the OR search
@@ -114,7 +116,7 @@ SKIP: {
                             vars           => { search => "banana -monkey" },
                            );
     like( $output,
-          qr/Location: http:\/\/example.com\/wiki.cgi\?Banana/,    
+          qr/[lL]ocation: http:\/\/example.com\/wiki.cgi\?Banana/,    
           "NOT search returns right results"
         );
 
@@ -124,7 +126,7 @@ SKIP: {
                             vars          => { search => '"monkey brains"' },
                            );
     like( $output,
-          qr/Location: http:\/\/example.com\/wiki.cgi\?Monkey_Brains/,    
+          qr/[lL]ocation: http:\/\/example.com\/wiki.cgi\?Monkey_Brains/,    
           "phrase search returns right results"
         );
 
