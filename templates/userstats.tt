@@ -1,4 +1,4 @@
-[% INCLUDE header.tt modifier = "User stats for $username" %]
+[% INCLUDE header.tt page_title = "User stats for $username - $site_name" %]
 [% INCLUDE banner.tt %]
 <div id="content">
 [% INCLUDE navbar.tt %]

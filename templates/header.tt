@@ -5,7 +5,7 @@
   [% IF page_title %]
     <title>[% page_title %]</title>
   [% ELSE %]
-    <title>[% modifier %][% node_name %] - [% site_name %]</title>
+    <title>[% node_name %] - [% site_name %]</title>
   [% END %]
   [% IF contact_email %]
     <link rev="made" href="mailto:[% contact_email %]">

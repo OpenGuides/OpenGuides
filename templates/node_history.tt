@@ -1,5 +1,5 @@
 [% USE CGI %]
-[% INCLUDE header.tt modifier = 'History of ' %]
+[% INCLUDE header.tt page_title = "History of $node_name - $site_name" %]
 
 <h1 align="center">[% site_name %] - History of [% node_name %]</h1>
 

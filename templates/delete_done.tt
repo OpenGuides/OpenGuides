@@ -1,4 +1,4 @@
-[% INCLUDE header.tt modifier = 'Successfully deleted ' %]
+[% INCLUDE header.tt page_title = "Successfully deleted $node_name - $site_name " %]
 [% INCLUDE banner.tt %]
 <div id="content">
 [% INCLUDE navbar.tt %]
