@@ -445,14 +445,14 @@ sub show_index {
             $tt_vars{criterion} = {
                 type  => $args{type},  # for RDF version
                 value => $args{value}, # for RDF version
-                name  => CGI->escapeHTML("Fuzzy Title Match on '$args{value}'"),
-		not_editable => 1
+                name  => CGI->escapeHTML("Fuzzy Title Match on '$args{value}'")
 	    };
+	    $tt_vars{not_editable} = 1;
         } else {
             @selnodes = $wiki->list_nodes_by_metadata(
                 metadata_type  => $args{type},
 	        metadata_value => $args{value},
-                ignore_case    => 1,
+                ignore_case    => 1
             );
             my $name = ucfirst($args{type}) . " $args{value}" ;
             my $url = $self->config->{_}->{script_name}
@@ -466,9 +466,9 @@ sub show_index {
                 type  => $args{type},
                 value => $args{value}, # for RDF version
                 name  => CGI->escapeHTML( $name ),
-	        url   => $url,
-		not_editable => 1
+	        url   => $url
             };
+	    $tt_vars{not_editable} = 1;
         }
     } else {
         @selnodes = $wiki->list_all_nodes();
