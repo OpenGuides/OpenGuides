@@ -1,23 +1,15 @@
-OpenGuides Version 0.04
-=======================
+package OpenGuides;
+use strict;
 
-This distribution contains the OpenGuides wiki software. It requires:
+use vars qw( $VERSION );
 
- - Module::Build for installation
- - other Perl modules as detailed in the PREREQUISITES file
- - a webserver (such as Apache)
- - a Postgres or MySQL database dedicated to the OpenGuides installation
+$VERSION = '0.04';
 
-See the INSTALL file for details on how to install OpenGuides.
+=head1 NAME
 
+OpenGuides - A complete web application for managing a collaboratively-written guide to a city or town.
 
-About OpenGuides
-================
-
-
-**** THIS SOFTWARE IS VERY ALPHA.  It is released solely for those who ****
-****     know what they're doing and want to play around with it.      ****
-
+=head1 DESCRIPTION
 
 The OpenGuides software provides the framework for a collaboratively-written
 city guide.  It is similar to a wiki but provides somewhat more structured
@@ -26,12 +18,22 @@ category, location, and much more.  It provides searching facilities
 including "find me everything within a certain distance of this place".
 Every page includes a link to a machine-readable (RDF) version of the page.
 
+=head1 BUGS AND CAVEATS
+
 At the moment, the location data uses a United-Kingdom-specific module,
 so the location features might not work so well outside the UK.
 
+=head1 SEE ALSO
 
-Feedback
-========
+=over 4
+
+=item * The OpenGuides development site, temporarily at L<http://un.earth.li/~kake/cgi-bin/wiki.cgi>
+
+=item * grubstreet, the motivation behind OpenGuides; at L<http://grault.net/grubstreet/>
+
+=back
+
+=head1 FEEDBACK
 
 If you have a question, a bug report, or a patch, or you're interested
 in joining the development team, please contact grubstreet@hummous.earth.li
@@ -39,9 +41,17 @@ in joining the development team, please contact grubstreet@hummous.earth.li
 to wait for your post to be approved) or kake@earth.li (a real person who
 may take a little while to reply to your mail if she's busy).
 
+=head1 AUTHOR
 
-Authors
-=======
+The OpenGuides Project (grubstreet@hummous.earth.li)
 
-As of version 0.04, the development team consists of Earle Martin,
-Kake Pugh, and Ivor Williams.
+=head1 COPYRIGHT
+
+     Copyright (C) 2003 The OpenGuides Project.  All Rights Reserved.
+
+The OpenGuides distribution is free software; you can redistribute it
+and/or modify it under the same terms as Perl itself.
+
+=cut
+
+1;

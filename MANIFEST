@@ -8,6 +8,7 @@ README
 TROUBLESHOOTING
 lib/OpenGuides/Build.pm
 lib/OpenGuides/RDF.pm
+lib/OpenGuides.pm
 preferences.cgi
 supersearch.cgi
 templates/backlink_results.tt
