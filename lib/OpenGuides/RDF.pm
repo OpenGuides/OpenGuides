@@ -208,6 +208,33 @@ sub emit_rdfxml {
     return $rdf;
 }
 
+=item B<make_recentchanges_rss>
+
+  print "Content-type: text/plain\n\n";
+  print $rdf_writer->make_recentchanges_rss;
+
+=cut
+
+sub make_recentchanges_rss {
+    my ($self, %args) = @_;
+    my $rssmaker = CGI::Wiki::Plugin::RSS::ModWiki->new(
+        wiki      => $self->{wiki},
+        site_name => $self->{site_name},
+        site_description => $self->{site_description},
+        make_node_url => $self->{make_node_url},
+	recent_changes_link => $self->{config}->{_}->{script_url} . uri_escape($self->{config}->{_}->{script_name}) . "?RecentChanges"
+     );
+
+    print "Content-type: text/plain\n\n";
+    if ( $args{items} ) {
+        return $rssmaker->recent_changes( items => $args{items} );
+    } elsif ( $args{days} ) {
+        return $rssmaker->recent_changes( days => $args{days} );
+    } else {
+        return $rssmaker->recent_changes;
+    }
+}
+
 =back
 
 =head1 SEE ALSO

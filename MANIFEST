@@ -33,5 +33,7 @@ t/00_setup.t
 t/01_add_test_data.t
 t/11_utils.t
 t/21_rdf.t
+t/21_wiki.conf
+t/22_rss_modwiki.t
 t/41_pubcrawl.t
 wiki.cgi
