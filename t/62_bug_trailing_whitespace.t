@@ -1,7 +1,7 @@
 use CGI::Wiki::Setup::SQLite;
 use OpenGuides::Config;
-use Cwd;
 use OpenGuides::Template;
+use OpenGuides::Test;
 use OpenGuides::Utils;
 use Test::More tests => 2;
 
@@ -13,19 +13,7 @@ SKIP: {
       unless $have_sqlite;
 
     CGI::Wiki::Setup::SQLite::setup( { dbname => "t/node.db" } );
-    my $config = OpenGuides::Config->new(
-           vars => {
-                     dbtype             => "sqlite",
-                     dbname             => "t/node.db",
-                     indexing_directory => "t/indexes",
-                     script_url         => "http://example.com/",
-                     script_name        => "wiki.cgi",
-                     site_name          => "Test Site",
-                     template_path      => cwd . "/templates",
-                     geo_handler        => 1,
-                   }
-    );
-
+    my $config = OpenGuides::Test->make_basic_config;
     my $wiki = OpenGuides::Utils->make_wiki_object( config => $config );
 
     my $q = CGI->new;
