@@ -26,5 +26,8 @@
   [% IF (node_name == 'RecentChanges') %]
     <link rel="alternate" type="application/rss+xml" title="RSS feed for this page" href="[% full_cgi_url %]?action=rss">
   [% END %]
+  [% IF rss_link %]
+    <link rel="alternate" type="application/rss+xml" title="RSS feed for this page" href="[% rss_link %]">
+  [% END %]
 </head>
 <body>
