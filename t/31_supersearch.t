@@ -114,17 +114,14 @@ SKIP: {
     print "# Found in $_\n" foreach @found;
 
     # Test the NOT search
-SKIP: {
-    skip "NOT search doesn't work yet", 1;
-    %tt_vars = $search->run(
-                             return_tt_vars => 1,
-                             vars           => { search => "banana !monkey" },
+    $output = $search->run(
+                            return_output => 1,
+                            vars           => { search => "banana !monkey" },
                            );
-    @found = sort map { $_->{name} } @{ $tt_vars{results} || [] };
-    is_deeply( \@found, [ "Banana" ],
-               "NOT search returns right results" );
-    print "# Found in $_\n" foreach @found;
-}
+    like( $output,
+          qr/Location: http:\/\/example.com\/wiki.cgi\?Banana/,    
+          "NOT search returns right results"
+        );
 
     # Test the phrase search
     $output = $search->run(
