@@ -127,7 +127,7 @@ like( $output, qr/FULL CGI URL: http:\/\/wiki.example.com\/wiki.cgi/,
       "full_cgi_url OK when trailing '/' missed off script_url" );
 
 # Test that TT vars are picked up from user cookie prefs.
-my $cookie = OpenGuides::CGI->make_prefs_cookie(
+$cookie = OpenGuides::CGI->make_prefs_cookie(
     config                 => $config,
     omit_formatting_link   => 1,
 );
@@ -154,6 +154,8 @@ like( $output, qr/OMIT FORMATTING LINK: fish/,
 $config = Config::Tiny->new;
 $config->{_}->{template_path} = cwd . "/t/templates";
 $config->{_}->{site_name} = "Test Site";
+$config->{_}->{script_url} = "/";
+$config->{_}->{script_name} = "";
 
 $output = OpenGuides::Template->output(
     wiki     => $fake_wiki,

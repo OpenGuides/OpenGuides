@@ -61,7 +61,7 @@ Last edited [% last_modified %] (this is version [% version %]).
 This is version [% version %] (as of [% last_modified %]). 
 <a href="[% cgi_url %]?[% node_param %]">View current version.</a> 
 [% END %]
-[% IF version > 1 %]
+[% IF version AND version > 1 %]
 <a href="[% cgi_url %]?action=list_all_versions;id=[% node_param %]">List all
 versions.</a>
 [% END %]

@@ -1,6 +1,6 @@
 <!-- START CATEGORIES AND LOCALES -->
 <div id="categories_and_locales">
-[% IF categories.size > 0 %]
+[% IF categories.size AND categories.size > 0 %]
   <strong>Categories:</strong>
   [% FOREACH category = categories %]
     <a href="[% category.url %]">[% category.name %]</a> [%- "/" UNLESS loop.last %]
@@ -8,7 +8,7 @@
   <br />
 [% END %]
 
-[% IF locales.size > 0 %]
+[% IF locales.size AND locales.size > 0 %]
   <strong>Locale:</strong>
   [% FOREACH locale = locales %]
     <a href="[% locale.url %]">[% locale.name %]</a> [%- "/" UNLESS loop.last %]

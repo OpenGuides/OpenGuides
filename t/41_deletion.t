@@ -9,6 +9,8 @@ use Test::MockObject;
 my $config = Config::Tiny->new;
 $config->{_}->{template_path} = cwd . "/templates";
 $config->{_}->{site_name} = "Test Site";
+$config->{_}->{script_url} = "/";
+$config->{_}->{script_name} = "";
 
 # White box testing - we know that OpenGuides::Template only actually uses
 # the node_name_to_node_param method of the formatter component of the wiki
