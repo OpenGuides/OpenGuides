@@ -313,7 +313,8 @@ sub _perform_search {
               my $name = $formatter->node_name_to_node_param( $_ );
               my %data = $wiki->retrieve_node( $_ );
               my $content = $wiki->format( @data{ qw( content metadata ) } );
-              my $summary = substr( $content, 0, 60 );
+              $content = $self->_mungepage( $content );
+              my $summary = substr( $content, 0, 150 );
               $name => {
                          name    => $name,
                          score   => 0,
