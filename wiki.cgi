@@ -8,17 +8,19 @@ use lib qw( /home/kake/local/share/perl/5.6.1/
           );
 
 use CGI qw/:standard/;
+use CGI::Carp qw(fatalsToBrowser);
+use CGI::Cookie;
 use CGI::Wiki;
-use CGI::Wiki::Store::SQLite;
+use CGI::Wiki::Store::Pg;
 use CGI::Wiki::Search::SII;
 use CGI::Wiki::Formatter::UseMod;
 use CGI::Wiki::Plugin::Locator::UK;
+use CGI::Wiki::Plugin::RSS::ChefMoz;
+use CGI::Wiki::Plugin::RSS::ModWiki;
+use Config::Tiny;
 use Geography::NationalGrid;
 use Geography::NationalGrid::GB;
-use CGI::Wiki::Plugin::RSS::ModWiki;
-use CGI::Wiki::Plugin::RSS::ChefMoz;
 use Template;
-use CGI::Carp qw(fatalsToBrowser);
 use Time::Piece;
 use URI::Escape;
 
