@@ -41,9 +41,9 @@ my @questions = (
              . "If so, enter it here.  Separate path entries with whitespace:",
   variable => "custom_lib_path",
   },
-{ question => "Do you want to use Plucene for searching? (recommended, but see Changes file before saying yes to this)",
+{ question => "Do you want to use Plucene for searching? (recommended, but see Changes file before saying yes to this if you are upgrading)",
   variable => "use_plucene",
-  default  => "n",
+  default  => "y",
   type     => "y_n"
   },
 { question => "What directory can I use to store indexes in for searching? "
