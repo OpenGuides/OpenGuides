@@ -3,7 +3,7 @@ use Data::Dumper;
 use strict;
 
 eval "use Config::Tiny";
-die "Config::Tiny is required to configure this application" if $@;
+die "Config::Tiny is required to configure this application.\n" if $@;
 
 # Create the build object.
 my $build = Module::Build->new(

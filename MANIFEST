@@ -1,6 +1,7 @@
 Build.PL
-MANIFEST
 lib/OpenGuides/RDF.pm
+MANIFEST
+META.yml
 templates/backlink_results.tt
 templates/display_metadata.tt
 templates/edit_conflict.tt
@@ -16,5 +17,8 @@ templates/recent_changes.tt
 templates/search_results.tt
 templates/site_index.tt
 templates/userstats.tt
+t/00_setup.t
+t/01_add_test_data.t
+t/rdf.t
 username.cgi
 wiki.cgi
