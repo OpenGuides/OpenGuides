@@ -11,12 +11,12 @@ use CGI::Carp qw(croak);
 use CGI::Wiki;
 use CGI::Wiki::Search::SII;
 use CGI::Wiki::Formatter::UseMod;
-use CGI::Wiki::Plugin::GeoCache;
 use CGI::Wiki::Plugin::Locator::UK;
 use CGI::Wiki::Plugin::Diff;
 use Config::Tiny;
 use Geography::NationalGrid;
 use Geography::NationalGrid::GB;
+use OpenGuides;
 use OpenGuides::CGI;
 use OpenGuides::RDF;
 use OpenGuides::Utils;
@@ -30,15 +30,15 @@ my $config = Config::Tiny->read('wiki.conf');
 # Read in configuration values from config file.
 my $script_name = $config->{_}->{script_name};
 my $script_url  = $config->{_}->{script_url};
-my $language    = $config->{_}->{default_language};
 
 # Ensure that script_url ends in a '/' - this is done in Build.PL but
 # we need to allow for people editing the config file by hand later.
 $script_url .= "/" unless $script_url =~ /\/$/;
 
-my ($wiki, $formatter, $locator, $q, $differ);
+my ($guide, $wiki, $formatter, $locator, $q, $differ);
 eval {
-    $wiki = OpenGuides::Utils->make_wiki_object( config => $config );
+    $guide = OpenGuides->new( config => $config );
+    $wiki = $guide->wiki;
     $formatter = $wiki->formatter;
     $locator = CGI::Wiki::Plugin::Locator::UK->new;
     $wiki->register_plugin( plugin => $locator );
@@ -149,7 +149,7 @@ eval {
                     vars     => \%diff_vars
                 );
 	    } else {
-        	display_node($node, $version);
+        	$guide->display_node( id => $node, version => $version);
 	    }
         }
     }
@@ -177,99 +177,6 @@ sub redirect_to_node {
     my $node = shift;
     print $q->redirect("$script_url$script_name?" . $q->escape($formatter->node_name_to_node_param($node)));
     exit 0;
-}
-
-sub display_node {
-    my ($node, $version) = @_;
-    $node ||= "Home";
-
-    my %tt_vars;
-
-    if ( $node =~ /^(Category|Locale) (.*)$/ ) {
-        my $type = $1;
-        $tt_vars{is_indexable_node} = 1;
-        $tt_vars{index_type} = lc($type);
-        $tt_vars{index_value} = $2;
-    }
-
-    my %current_data = $wiki->retrieve_node( $node );
-    my $current_version = $current_data{version};
-    undef $version if ($version && $version == $current_version);
-    my %criteria = ( name => $node );
-    $criteria{version} = $version if $version;#retrieve_node default is current
-
-    my %node_data = $wiki->retrieve_node( %criteria );
-    my $raw = $node_data{content};
-    if ( $raw =~ /^#REDIRECT\s+(.+?)\s*$/ ) {
-        my $redirect = $1;
-        # Strip off enclosing [[ ]] in case this is an extended link.
-        $redirect =~ s/^\[\[//;
-        $redirect =~ s/\]\]\s*$//;
-        # See if this is a valid node, if not then just show the page as-is.
-	if ( $wiki->node_exists($redirect) ) {
-            redirect_to_node($redirect);
-	}
-    }
-    my $content    = $wiki->format($raw);
-    my $modified   = $node_data{last_modified};
-    my %metadata   = %{$node_data{metadata}};
-
-    my %metadata_vars = OpenGuides::Template->extract_metadata_vars(
-                            wiki     => $wiki,
-			    config   => $config,
-                            metadata => $node_data{metadata} );
-
-    %tt_vars = (
-                 %tt_vars,
-		 %metadata_vars,
-		 content       => $content,
-		 geocache_link => make_geocache_link($node),
-		 last_modified => $modified,
-		 version       => $node_data{version},
-		 node_name     => $q->escapeHTML($node),
-		 node_param    => $q->escape($node),
-                 language      => $language, );
-
-
-    # We've undef'ed $version above if this is the current version.
-    $tt_vars{current} = 1 unless $version;
-
-    if ($node eq "RecentChanges") {
-        my $minor_edits = get_cookie( "show_minor_edits_in_rc" );
-        my %criteria = ( days => 7 );
-        $criteria{metadata_was} = { edit_type => "Normal edit" }
-          unless $minor_edits;
-        my @recent = $wiki->list_recent_changes( %criteria );
-        @recent = map { {name          => $q->escapeHTML($_->{name}),
-                         last_modified => $q->escapeHTML($_->{last_modified}),
-                         comment       => $q->escapeHTML($_->{metadata}{comment}[0]),
-                         username      => $q->escapeHTML($_->{metadata}{username}[0]),
-                         host          => $q->escapeHTML($_->{metadata}{host}[0]),
-                         username_param => $q->escape($_->{metadata}{username}[0]),
-                         edit_type     => $q->escapeHTML($_->{metadata}{edit_type}[0]),
-                         url           => "$script_name?"
-          . $q->escape($formatter->node_name_to_node_param($_->{name})) }
-                       } @recent;
-        $tt_vars{recent_changes} = \@recent;
-        $tt_vars{days} = 7;
-        process_template("recent_changes.tt", $node, \%tt_vars);
-    } elsif ($node eq "Home") {
-        my @recent = $wiki->list_recent_changes(
-            last_n_changes => 10,
-            metadata_was   => { edit_type => "Normal edit" },
-        );
-        @recent = map { {name          => $q->escapeHTML($_->{name}),
-                         last_modified => $q->escapeHTML($_->{last_modified}),
-                         comment       => $q->escapeHTML($_->{metadata}{comment}[0]),
-                         username      => $q->escapeHTML($_->{metadata}{username}[0]),
-                         url           => "$script_name?"
-          . $q->escape($formatter->node_name_to_node_param($_->{name})) }
-                       } @recent;
-        $tt_vars{recent_changes} = \@recent;
-        process_template("home_node.tt", $node, \%tt_vars);
-    } else {
-        process_template("node.tt", $node, \%tt_vars);
-    }
 }
 
 sub show_index {
@@ -481,31 +388,6 @@ sub display_node_rdf {
     print "Content-type: text/plain\n\n";
     print $rdf_writer->emit_rdfxml( node => $args{node} );
     exit 0;
-}
-
-sub make_geocache_link {
-    return "" unless get_cookie( "include_geocache_link" );
-    my $node = shift || $config->{_}->{home_name};
-    my %current_data = $wiki->retrieve_node( $node );
-    my %criteria     = ( name => $node );
-    my %node_data    = $wiki->retrieve_node( %criteria );
-    my %metadata     = %{$node_data{metadata}};
-    my $latitude     = $metadata{latitude}[0];
-    my $longitude    = $metadata{longitude}[0];
-    my $geocache     = CGI::Wiki::Plugin::GeoCache->new();
-    my $link_text    = "Look for nearby geocaches";
-
-    if ($latitude && $longitude) {
-        my $cache_url    = $geocache->make_link(
-					latitude  => $latitude,
-					longitude => $longitude,
-					link_text => $link_text
-				);
-        return $cache_url;
-    }
-    else {
-        return "";
-    }
 }
 
 sub process_template {
