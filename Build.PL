@@ -35,6 +35,7 @@ my $build = OpenGuides::Build->new(
 	'CGI::Cookie' => 0,
 	'CGI::Wiki' => '0.28',
 	'CGI::Wiki::Formatter::UseMod' => '0.02',
+	'CGI::Wiki::Plugin::GeoCache' => 0,
 	'CGI::Wiki::Plugin::Locator::UK' => '0.04',
 	'CGI::Wiki::Plugin::RSS::ModWiki' => '0.01',
 	'Config::Tiny' => 0,
