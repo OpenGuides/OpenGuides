@@ -58,7 +58,7 @@ sub make_wiki_object {
     my %cgi_wiki_exts = (
                           postgres => "Pg",
 		          mysql    => "MySQL",
-                          sqlite   => "SQLite", # used for testing
+                          sqlite   => "SQLite",
                         );
 
     my $cgi_wiki_module = "CGI::Wiki::Store::" . $cgi_wiki_exts{$dbtype};

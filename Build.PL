@@ -96,9 +96,9 @@ EOF
 
 my @answers;
 
-# Database type is speshull - can be one of two.
+# Database type is speshull - can be one of three.
 my $dbtype;
-my $dbtype_qu = "what type of database do you want the site to run on?  postgres/mysql";
+my $dbtype_qu = "what type of database do you want the site to run on?  postgres/mysql/sqlite";
 if ( $skip_config ) {
     $dbtype = $existing_config{dbtype} || "postgres";
 } else {
@@ -108,7 +108,8 @@ if ( $skip_config ) {
 	$dbtype = lc($dbtype);
 	$dbtype =~ s/^\s*//;
 	$dbtype =~ s/\s*$//;
-	unless ( $dbtype eq "postgres" or $dbtype eq "mysql" ) {
+	unless ( $dbtype eq "postgres" or $dbtype eq "mysql"
+                 or $dbtype eq "sqlite" ) {
 	    undef $dbtype;
 	}
     }
@@ -116,7 +117,9 @@ if ( $skip_config ) {
 
 # Check they have the relevant DBD driver installed.
 my %drivers = ( postgres => "DBD::Pg",
-                mysql    => "DBD::mysql" );
+                mysql    => "DBD::mysql",
+                sqlite   => "DBD::SQLite",
+              );
 eval "require $drivers{$dbtype}";
 die "$drivers{$dbtype} is needed to run a $dbtype database" if $@;
 
@@ -130,8 +133,24 @@ foreach my $qset (@questions) {
     my $var = $qset->{variable};
     my $def = $existing_config{$var} || $qset->{default};
     my $val = $def;
+
+    if ( $dbtype eq "sqlite" and $var eq "dbname" ) {
+        $qu = "what's the full filename of the SQLite database this site runs on?";
+    }
+
+    if ( $dbtype eq "sqlite" and
+         ( $var eq "dbuser" or $var eq "dbpass" or $var eq "dbhost" )
+       ) {
+        print "$var not relevant for SQLite... skipping...\n";
+        push @answers, { question => $qu,
+	   	         variable => $var,
+		         value    => "not-used" };
+        next;
+    }
+
     unless ( $skip_config ) {
         if ( $type eq "y_n" ) {
+            $def = $def ? "y" : "n";
             $val = Module::Build->y_n("\n$qu ", $def);
 	} else {
             $val = Module::Build->prompt("\n$qu ", $def);
