@@ -56,6 +56,10 @@ dbtype - one of C<postgres>, C<mysql> and C<sqlite>
 
 dbname
 
+=item *
+
+indexing_directory - for the L<Search::InvertedIndex> files to go
+
 =back
 
 =cut
