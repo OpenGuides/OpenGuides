@@ -6,6 +6,7 @@ MANIFEST
 META.yml
 PREREQUISITES
 README
+TROUBLESHOOTING
 preferences.cgi
 supersearch.cgi
 templates/backlink_results.tt
