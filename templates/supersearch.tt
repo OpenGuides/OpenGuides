@@ -91,6 +91,5 @@ summary="Results of search queries are displayed here, and new searches can also
     <td valign="top">[% INCLUDE navbar.tt %]</td>
   </tr>
 </table>
-</div>
 
 [% INCLUDE footer.tt %]
