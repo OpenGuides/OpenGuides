@@ -4,7 +4,7 @@ use strict;
 use warnings;
 
 use vars qw( $VERSION );
-$VERSION = '0.21';
+$VERSION = '0.22';
 
 use CGI qw/:standard/;
 use CGI::Carp qw(croak);
@@ -247,6 +247,7 @@ sub display_node {
                          last_modified => $q->escapeHTML($_->{last_modified}),
                          comment       => $q->escapeHTML($_->{metadata}{comment}[0]),
                          username      => $q->escapeHTML($_->{metadata}{username}[0]),
+                         username_param => $q->escape($_->{metadata}{username}[0]),
                          edit_type     => $q->escapeHTML($_->{metadata}{edit_type}[0]),
                          url           => "$script_name?"
           . $q->escape($formatter->node_name_to_node_param($_->{name})) }
@@ -357,7 +358,9 @@ sub show_userstats {
           . $q->escape($formatter->node_name_to_node_param($_->{name})) }
                        } @nodes;
     my %tt_vars = ( last_five_nodes => \@nodes,
-		    username        => $username );
+		    username        => $username,
+		    username_param  => $wiki->formatter->node_name_to_node_param($username),
+                  );
     process_template("userstats.tt", "", \%tt_vars);
 }
 

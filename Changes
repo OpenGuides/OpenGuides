@@ -1,3 +1,6 @@
+0.22    
+        Fixed bug with usernames containing spaces in recent changes/userstats.
+
 0.21    17 July 2003
         We no longer autogenerate a Makefile.PL, since it doesn't pick up
         all the questions that need to be asked.  Sorry.  Use Module::Build
