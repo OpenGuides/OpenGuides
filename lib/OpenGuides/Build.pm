@@ -22,11 +22,12 @@ sub ACTION_install {
     my $dbtype = $config->{_}->{dbtype};
 
     my %cgi_wiki_exts = ( postgres => "Pg",
-			  mysql    => "MySQL" );
+			  mysql    => "MySQL",
+			  sqlite   => "SQLite" );
 
     my $cgi_wiki_module = "CGI::Wiki::Setup::" . $cgi_wiki_exts{$dbtype};
     eval "require $cgi_wiki_module";
-    die "CGI::Wiki is required to set up this application.\n" if $@;
+    die "There was a problem: $@" if $@;
 
     print "Checking database schema...\n";
     {
