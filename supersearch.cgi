@@ -20,22 +20,25 @@ use CGI::Carp qw(fatalsToBrowser);	#Remove fatalsToBrowser if paranoid
 use Parse::RecDescent;
 use Data::Dumper;
 use File::Spec::Functions qw(:ALL);
+use Config::Tiny;
 
 use CGI::Wiki::Store::Pg;
 use CGI::Wiki::Search::SII;
 use CGI::Wiki::Formatter::UseMod;
 
+my $config = Config::Tiny->read('wiki.conf');
+
 use vars qw($wiki_dbpath $wikimain $css $head 
 	$wikistore $wiki_search $wiki_formatter %wikitext
 	$db_name $db_user $db_pass);
 
-$db_name = "ivorw";
-$db_user = "ivorw";
-$db_pass = "hackfest";
-$wiki_dbpath = "/home/ivorw/public_html/cgi-bin/ivorw";
-$wikimain = "wiki.cgi";
-$css = "/grubstreet/grubstreet.css";
-$head = "Grubstreet Search";
+$db_name = $config->{_}->{dbname};
+$db_user = $config->{_}->{dbuser};
+$db_pass = $config->{_}->{dbpass};
+$wiki_dbpath = $config->{_}->{indexing_directory};
+$wikimain = $config->{_}->{script_name};
+$css = $config->{_}->{stylesheet_url};
+$head = $config->{_}->{site_name} . " Search";
 
 # sub matched_items is called with parse tree. Uses horrible subname concatenation - this
 # could be rewritten to us OO instead and be much neater. This would be a major refactor:
