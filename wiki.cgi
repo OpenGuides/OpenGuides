@@ -363,7 +363,7 @@ sub preview_node {
                                                    wiki    => $wiki,
 						   config  => $config,
 						   cgi_obj => $q );
-    foreach my $var ( qw( username comment ) ) {
+    foreach my $var ( qw( username comment edit_type ) ) {
         $tt_metadata_vars{$var} = $q->param($var);
     }
 
@@ -388,6 +388,9 @@ sub preview_node {
             } elsif ($mdvar eq "categories") {
                 $tt_vars{"stored_$mdvar"} = $node_data{metadata}{category};
                 $tt_vars{"new_$mdvar"}    = $tt_metadata_vars{category};
+            } elsif ($mdvar eq "username" or $mdvar eq "comment"
+                      or $mdvar eq "edit_type" ) {
+                $tt_vars{$mdvar} = $tt_metadata_vars{$mdvar};
             } else {
                 $tt_vars{"stored_$mdvar"} = $node_data{metadata}{$mdvar}[0];
                 $tt_vars{"new_$mdvar"}    = $tt_metadata_vars{$mdvar};
@@ -494,7 +497,7 @@ sub commit_node {
 
     $metadata{opening_hours_text} = $q->param("hours_text") || "";
 
-    foreach my $var ( qw( username comment ) ) {
+    foreach my $var ( qw( username comment edit_type ) ) {
         $metadata{$var} = $q->param($var) || "";
     }
 
@@ -514,6 +517,9 @@ sub commit_node {
             } elsif ($mdvar eq "categories") {
                 $tt_vars{"stored_$mdvar"} = $node_data{metadata}{category};
                 $tt_vars{"new_$mdvar"}    = $metadata{category};
+            } elsif ($mdvar eq "username" or $mdvar eq "comment"
+                      or $mdvar eq "edit_type" ) {
+                $tt_vars{$mdvar} = $metadata{$mdvar};
             } else {
                 $tt_vars{"stored_$mdvar"} = $node_data{metadata}{$mdvar}[0];
                 $tt_vars{"new_$mdvar"}    = $metadata{$mdvar};

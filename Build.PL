@@ -240,6 +240,7 @@ $build->{config}{__templates}         = [
                       "newpage.tt",
                       "node.tt",
                       "node_history.tt",
+                      "openguides_information_boxes.tt",
 		      "preferences.tt",
                       "pubcrawl.tt",
                       "rdf_index.tt",
