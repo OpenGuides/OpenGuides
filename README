@@ -44,10 +44,10 @@ a web browser - for example http://london.openguides.org/cgi-bin/
 "What directory can I use to store indexes in for searching?"
 
 You need a directory to store files used as indexes for the site. The
-webserver will need write permission on this directory.  Under some
-webserver configurations this might be a dedicated user - 'nobody' or
-'www-data' for example, but for many multi-user systems this will just
-be yourself.
+user that your script will run as will need write permission on this
+directory.  Under some webserver configurations this might be a
+dedicated user - 'nobody' or 'www-data' for example, but for many
+multi-user systems this will just be yourself.
 
 "What's the URL of the wiki's stylesheet?"
 
