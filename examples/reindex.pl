@@ -3,13 +3,13 @@
 use strict;
 use warnings;
 
-use Config::Tiny;
+use OpenGuides::Config;
 use OpenGuides::Utils;
 
 # This is a simple script to reindex every node in the wiki, useful if
 # your indexes got screwed up or you're swapping to a different searcher.
 
-my $config = Config::Tiny->read('wiki.conf');
+my $config = OpenGuides::Config->new( file => "wiki.conf" );
 my $wiki = OpenGuides::Utils->make_wiki_object( config => $config );
 
 my @nodes = $wiki->list_all_nodes;
