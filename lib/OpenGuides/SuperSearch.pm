@@ -1,6 +1,6 @@
 package OpenGuides::SuperSearch;
 use strict;
-our $VERSION = '0.03';
+our $VERSION = '0.04';
 
 use CGI qw( :standard );
 use File::Spec::Functions qw(:ALL);
@@ -155,6 +155,7 @@ sub run {
 sub process_template {
     my ($self, %args) = @_;
     my $tt_vars = $args{tt_vars} || {};
+    $tt_vars->{not_editable} = 1;
 
     return %$tt_vars if $self->{return_tt_vars};
 

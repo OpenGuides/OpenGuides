@@ -1,7 +1,7 @@
 local $^W = 1;
 use strict;
 use vars qw( $sqlite_tests );
-BEGIN { $sqlite_tests = 15; }
+BEGIN { $sqlite_tests = 16; }
 use Test::More tests => 1 + $sqlite_tests;
 
 use CGI::Wiki::Setup::SQLite;
@@ -41,6 +41,8 @@ SKIP: {
     my $output = $search->run( return_output => 1 );
     unlike( $output, qr/no items matched/i,
             "doesn't output 'no items matched' if no terms supplied" );
+    unlike( $output, qr/action=edit/,
+            "doesn't offer edit link" );
 
     my %tt_vars = $search->run(
                                 return_tt_vars => 1,
