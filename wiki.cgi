@@ -163,7 +163,9 @@ eval {
     } elsif ($action eq 'rss') {
         my $feed = $q->param("feed");
         if ( !defined $feed or $feed eq "recent_changes" ) {
-            emit_recent_changes_rss();
+            my $items = $q->param("items") || "";
+            my $days  = $q->param("days")  || "";
+            emit_recent_changes_rss( items => $items, days => $days);
         } elsif ( $feed eq "chef_dan" ) {
             display_node_rdf( node => $node );
         } else {
@@ -521,6 +523,7 @@ sub get_cookie {
 }
 
 sub emit_recent_changes_rss {
+    my %args = @_;
     my $rss = CGI::Wiki::Plugin::RSS::ModWiki->new(
         wiki      => $wiki,
         site_name => $site_name,
@@ -538,7 +541,13 @@ sub emit_recent_changes_rss {
      );
 
     print "Content-type: text/plain\n\n";
-    print $rss->recent_changes;
+    if ( $args{items} ) {
+        print $rss->recent_changes( items => $args{items} );
+    } elsif ( $args{days} ) {
+        print $rss->recent_changes( days => $args{days} );
+    } else {
+        print $rss->recent_changes;
+    }
     exit 0;
 }
 
