@@ -1,6 +1,8 @@
 0.19    
         Extra checks that script_url ends in a '/'
         Fixed small bug with edit conflict form - map link field was missing.
+        @INDEX_LINK macros now have optional title text like so:
+          @INDEX_LINK [[Category Pubs|Pubs]]
 
 0.18    16 June 2003
         Added a Makefile.PL as well as a Build.PL, for CPAN.pm users.

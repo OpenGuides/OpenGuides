@@ -45,6 +45,7 @@ templates/wanted_pages.tt
 t/00_setup.t
 t/01_add_test_data.t
 t/11_utils.t
+t/12_macros.t
 t/13_cookies.t
 t/15_template.t
 t/15_wiki.conf
