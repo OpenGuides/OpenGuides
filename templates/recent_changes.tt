@@ -4,7 +4,11 @@
 
 [% content %]
 
-<h2>Changes in the last [% days %] days:</h2>
+<h2>Site changes in the last [% days %] days</h2>
+
+<p>
+<small><a href="[% cgi_url %]?action=rss">RSS feed of this page</a></small>
+</p>
 
 <ul>
 [% FOREACH node = recent_changes %]
