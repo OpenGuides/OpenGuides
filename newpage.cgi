@@ -85,7 +85,7 @@ sub make_page {
 
     # Hurrah, we're OK.
     my $node_param = $wiki->formatter->node_name_to_node_param($pagename);
-    print "Location: ".$config->{_}->{script_url}.$config->{_}->{script_name}."?action=edit;id=$node_param\n\n";
+    print "Location: ".$config->script_url.$config->script_name."?action=edit;id=$node_param\n\n";
     exit 0;
 }
 
