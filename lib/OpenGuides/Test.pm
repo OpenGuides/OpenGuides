@@ -84,7 +84,7 @@ sub make_basic_config {
 
 sub write_data {
     my ($class, %args) = @_;
-    
+
     # Set up CGI parameters ready for a node write.
     # Most of these are in here to avoid uninitialised value warnings.
     my $q = CGI->new( "" );
@@ -109,6 +109,13 @@ sub write_data {
     $q->param( -name => "edit_type", -value => "Normal edit" );
     $ENV{REMOTE_ADDR} = "127.0.0.1";
     
+    # Get the checksum of the current contents if necessary.
+    my $wiki = $args{guide}->wiki;
+    if ( $wiki->node_exists( $args{node} ) ) {
+        my %data = $wiki->retrieve_node( $args{node} );
+        $q->param( -name => "checksum", -value => $data{checksum} );
+    }
+
     $args{guide}->commit_node(
                                return_output => 1,
                                id => $args{node},
