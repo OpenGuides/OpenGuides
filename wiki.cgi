@@ -37,7 +37,8 @@ my $site_desc = $config->{_}->{site_desc};
 my $default_city = $config->{_}->{default_city};
 my $default_country = $config->{_}->{default_country};
 my $contact_email = $config->{_}->{contact_email};
-
+my $search_url = $config->{_}->{search_url};
+my $template_path = $config->{_}->{template_path};
 # Make store.
 my $store = CGI::Wiki::Store::Pg->new(
     dbname => $config->{_}{dbname},
@@ -55,10 +56,9 @@ my $search  = CGI::Wiki::Search::SII->new( indexdb => $indexdb );
 # Make formatter.
 my %macros = (
     '@SEARCHBOX' =>
-        qq(<form action="$script_name" method="get">
-	   <input type="hidden" name="action" value="search">
-	   <input type="text" size="20" name="terms">
-	   <input type="submit" name="Search" value="Search"></form>),
+        qq(<form action="$search_url" method="get">
+	   <input type="text" size="20" name="search">
+	   <input type="submit" name="Go" value="Search"></form>),
     qr/\@INDEX_LINK\s+\[\[Category\s+([^\]]+)\]\]/ =>
         sub { return qq(<a href="$script_name?action=catindex&category=) . uri_escape($_[0]) . qq(">View all pages in Category $_[0]</a>)
             }
@@ -524,7 +524,7 @@ sub process_template {
     }
 
     my %tt_conf = ( %$conf,
-                INCLUDE_PATH => "/home/kake/public_html/cgi-bin/templates" );
+                INCLUDE_PATH => $template_path );
 
     # Create Template object, print CGI header, process template.
     my $tt = Template->new(\%tt_conf);
