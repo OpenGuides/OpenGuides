@@ -1,0 +1,43 @@
+[% USE CGI %]
+
+[% IF os_x %]
+  <small>OS X co-ord: [% CGI.escapeHTML(os_x) %]</small>
+  &nbsp;&nbsp;&nbsp;
+[% END %]
+[% IF os_y %]
+  <small>OS Y co-ord: [% CGI.escapeHTML(os_y) %]</small>
+  &nbsp;&nbsp;&nbsp;
+[% END %]
+[% IF os_x AND os_y %]
+  <small>(Latitude: [% latitude %] Longitude: [% longitude %])</small>
+  &nbsp;&nbsp;&nbsp;
+[% END %]
+<small><a href="wiki.cgi?action=rss&feed=chef_moz&id=[% node_param %]">ChefMoz RSS</a></small>
+&nbsp;&nbsp;&nbsp;
+<small><a href="wiki.cgi?action=rss&feed=chef_dan&id=[% node_param %]">ChefDan RDF/XML</a></small>
+<br />
+
+[% IF phone OR fax OR address OR postcode OR website OR hours_text %]
+  <ul>
+    [% IF phone %]
+      <li><b>Telephone:</b> [% CGI.escapeHTML(phone) %]</li>
+    [% END %]
+    [% IF fax %]
+      <li><b>Fax:</b> [% CGI.escapeHTML(fax) %]</li>
+    [% END %]
+    [% IF address %]
+      <li><b>Address:</b> [% CGI.escapeHTML(address) %]</li>
+    [% END %]
+    [% IF postcode %]
+      <li><strong>Postcode:</strong> [% CGI.escapeHTML(postcode) %]</li>
+    [% END %]
+    [% IF website %]
+      <li><b>Website:</b> <a href="[% CGI.escape(website) %]">[% CGI.escapeHTML(website) %]</a></li>
+    [% END %]
+    [% IF hours_text %]
+      <li><b>Opening Hours:</b> [% CGI.escapeHTML(hours_text) %]</li>
+    [% END %]
+  </ul>
+[% END %]
+
+

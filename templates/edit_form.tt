@@ -3,9 +3,6 @@
 <h1 align=center>[% site_name %] - Editing [% node_name %]</h1>
 
 <form action="[% cgi_url %]" method="POST" enctype="application/x-www-form-urlencoded">
-<b>Phone:</b> <input type="text" name="phone" value="[% phone %]"><br />
-<b>Website:</b> <input type="text" size="70" name="website" value="[% website %]"><br />
-<b>Opening hours:</b> <input type="text" size="70" name="hours_text" value="[% hours_text %]"><br />
 <b>Content:</b><br />
 <textarea name="content" rows="10" cols="70">[% content %]</textarea>
 <br />
@@ -21,9 +18,14 @@
 [%- category %]
 [% END %]
 </textarea><br />
+<b>Phone:</b> <input type="text" name="phone" value="[% phone %]"><br />
+<b>Fax:</b> <input type="text" name="fax" value="[% fax %]"><br />
+<b>Website:</b> <input type="text" size="70" name="website" value="[% website %]"><br />
+<b>Opening hours:</b> <input type="text" size="70" name="hours_text" value="[% hours_text %]"><br />
+<b>Postcode:</b> <input type="text" name="postcode" value="[% postcode %]"><br />
+<b>Address:</b> <input type="text" name="address" value="[% address %]"><br />
 <b>OS X co-ord:</b> <input type="text" name="os_x" value="[% os_x %]">
 <b>OS Y co-ord:</b> <input type="text" name="os_y" value="[% os_y %]"><br />
-<b>Postcode:</b> <input type="text" name="postcode" value="[% postcode %]"><br />
 <br />
 <b>Your username:</b> <input type="text" name="username" value="[% username %]"><br />
 <b>Comment:</b> <input type="text" size="70"name="comment" value="[% comment %]"><br />
@@ -37,7 +39,8 @@
 
 [% IF preview_html %]
   <h2>Preview</h2>
+  [% INCLUDE display_metadata.tt %]
+
   [% preview_html %]
 [% END %]
-
 [% INCLUDE footer.tt %]

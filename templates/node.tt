@@ -13,35 +13,7 @@
   </h1>
 [% END %]
 
-[% IF os_x %]
-  <small>OS X co-ord: [% CGI.escapeHTML(os_x) %]</small>
-  &nbsp;&nbsp;&nbsp;[% END %]
-[% IF os_y %]
-  <small>OS Y co-ord: [% CGI.escapeHTML(os_y) %]</small>
-  &nbsp;&nbsp;&nbsp;
-[% END %]
-[% IF postcode %]
-  <small>Postcode: [% CGI.escapeHTML(postcode) %]</small>
-  &nbsp;&nbsp;&nbsp;
-[% END %]
-<small><a href="wiki.cgi?action=rss&feed=chef_moz&id=[% node_param %]">ChefMoz RSS</a></small>
-&nbsp;&nbsp;&nbsp;
-<small><a href="wiki.cgi?action=rss&feed=chef_dan&id=[% node_param %]">ChefDan RDF/XML</a></small>
-<br />
-
-[% IF phone OR website OR hours_text %]
-  <ul>
-    [% IF phone %]
-      <li><b>Phone:</b> [% CGI.escapeHTML(phone) %]</li>
-    [% END %]
-    [% IF website %]
-      <li><b>Website:</b> <a href="[% CGI.escape(website) %]">[% CGI.escapeHTML(website) %]</a></li>
-    [% END %]
-    [% IF hours_text %]
-      <li><b>Opening Hours:</b> [% CGI.escapeHTML(hours_text) %]</li>
-    [% END %]
-  </ul>
-[% END %]
+[% INCLUDE display_metadata.tt %]
 
 [% content %]
 
@@ -56,14 +28,16 @@
       <option value="2000">2 kilometres</option>
     </select>
     of here.
-    <input type="hidden" name="id" value="[% node_name %]">
-    <input type="hidden" name="action" value="find_within_distance">
-    <input type="submit" name="Go" value="Go">
+    <input type="hidden" name="id" value="[% node_name %]" />
+    <input type="hidden" name="action" value="find_within_distance" />
+    <input type="submit" name="Go" value="Go" />
   </form>
 [% END %]
 
+<br clear="all" />
+
 [% IF categories %]
-  <hr>
+  <hr />
   <small><b>Categories:</b>
   [% FOREACH category = categories %]
     <a href="[% category.url %]">[% category.name %]</a> /
@@ -72,7 +46,7 @@
 [% END %]
 
 [% IF locales %]
-  <hr>
+  <hr />
   <small><b>Locale:</b>
   [% FOREACH locale = locales %]
     <a href="[% locale.url %]">[% locale.name %]</a> /
@@ -80,7 +54,7 @@
   </small>
 [% END %]
 
-<hr>
+<hr />
 
 [% IF current %]
   Last edited [% last_modified %] (this is version [% version %])<br />
@@ -90,15 +64,15 @@
 [% END %]
 
 [% IF version > 1 %]
-  <a href="wiki.cgi?action=list_all_versions&id=[% node_param %]">List all
+  <a href="wiki.cgi?action=list_all_versions;id=[% node_param %]">List all
   versions</a><br />
 [% END %]
 
 <p>
   <form action="wiki.cgi" method="get">
-    <input type="hidden" name="action" value="search">
-    <input type="text" size="50" name="terms">
-    <input type="submit" name="Search" value="Search">
+    <input type="hidden" name="action" value="search" />
+    <input type="text" size="50" name="terms" />
+    <input type="submit" name="Search" value="Search" />
   </form>
 </p>
 

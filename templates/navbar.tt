@@ -11,11 +11,11 @@
     [% IF not_editable %]
     </ul><br />
     [% ELSE %]
-      <li><a href="[% cgi_url %]?id=[% node_param %]&action=edit">Edit this page</a></li>
+      <li><a href="[% cgi_url %]?id=[% node_param %];action=edit">Edit this page</a></li>
     </ul>
     [% END %]
 <strong>Search:</strong><br>
-<input type="hidden" name="action" value="search">
-<input type="text" size="15" name="terms">
+<input type="hidden" name="action" value="search" />
+<input type="text" size="15" name="terms" />
 </form>
 </div>

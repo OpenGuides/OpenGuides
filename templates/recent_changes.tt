@@ -14,14 +14,14 @@
         <b>[[% node.comment %]]</b>
       [% END %]
       [% IF node.username %]
-        ..... <a href="[% cgi_url %]?username=[% node.username %]&action=userstats">[% node.username %]</a>
+        ..... <a href="[% cgi_url %]?username=[% node.username %];action=userstats">[% node.username %]</a>
       [% END %]
   </li>
 [% END %]
 </ul>
 
 <p>
-  <a href="[% cgi_url %]?id=[% node_param %]&action=edit">Edit this page</a>
+  <a href="[% cgi_url %]?id=[% node_param %];action=edit">Edit this page</a>
 </p>
 
 [% INCLUDE footer.tt %]
