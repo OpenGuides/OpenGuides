@@ -11,6 +11,7 @@ SKIP: {
     skip "DBD::SQLite not installed - no database to test with", 1
       unless $have_sqlite;
 
+    CGI::Wiki::Setup::SQLite::cleardb( { dbname => "t/node.db" } );
     CGI::Wiki::Setup::SQLite::setup( { dbname => "t/node.db" } );
     my $config = Config::Tiny->new;
     $config->{_} = {
@@ -25,7 +26,7 @@ SKIP: {
 
     my $guide = OpenGuides->new( config => $config );
 
-    $guide->wiki->write_node( "South Croydon Station", "A sleepy main-line station in what is arguably the nicest part of Croydon.", undef, { map_link => "http://www.streetmap.co.uk/newmap.srf?x=532804&y=164398&z=1" } );
+    $guide->wiki->write_node( "South Croydon Station", "A sleepy main-line station in what is arguably the nicest part of Croydon.", undef, { map_link => "http://www.streetmap.co.uk/newmap.srf?x=532804&y=164398&z=1" } ) or die "Couldn't write node";
 
     my $output = $guide->display_node(
                                        id => "South Croydon Station",
