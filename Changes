@@ -1,6 +1,8 @@
         Remove all traces of display_categories, which was obsoleted but
 	  not completely removed before.
         Improved the efficiency of the search.
+        Fixed a couple of minor bugs in the search - note that node.tt
+          and supersearch.tt have changed.
 
 0.43    21 October 2004
         Fix broken navbar changes that crept into last release.

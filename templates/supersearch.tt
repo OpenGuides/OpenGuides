@@ -12,7 +12,9 @@ summary="Results of search queries are displayed here, and new searches can also
     <td valign="top">
   [% IF search_terms %]
   <h2>Search Results for <em>[% search_terms %]</em></h2>
-  <h3>[% total_num %] matches found, showing [% first_num %] - [% last_num %]</h3>
+    [% IF results.size %]
+      <h3>[% total_num %] matches found, showing [% first_num %] - [% last_num %]</h3>
+    [% END %]
   [% ELSE %]
   <h2>Search [% site_name %]</h2>
   [% END %]

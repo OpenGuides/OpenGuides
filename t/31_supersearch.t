@@ -8,7 +8,7 @@ eval { require DBD::SQLite; };
 if ( $@ ) {
     plan skip_all => "DBD::SQLite not installed";
 } else {
-    plan tests => 17;
+    plan tests => 18;
 
     # Clear out the database from any previous runs.
     unlink "t/node.db";
@@ -54,6 +54,8 @@ if ( $@ ) {
                            );
     like( $output, qr/no items matched/i,
           "outputs 'no items matched' if term not found" );
+    unlike( $output, qr/matches found, showing/i,
+            "doesn't output 'matches found, showing' if term not found" );
 
     # Pop some data in and search again.
     my $wiki = $search->{wiki}; # white boxiness
