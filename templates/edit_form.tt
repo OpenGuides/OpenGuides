@@ -18,12 +18,12 @@
 [%# NOTE: The whitespace in the next two textareas is deliberate, to avoid
     getting bogus tabs and blank lines in the textarea content.  Please
     do not reintroduce this bug.  Test on more than one browser. #%]
-				<td><textarea name="locales" rows="5" cols="70">[% FOREACH locale = locales %][% locale %]
+				<td><textarea name="locales" rows="5" cols="70">[% FOREACH locale = locales %][% locale.name %]
 [% END %]</textarea></td>
 			</tr>
 			<tr>
 				<td><strong>Categories:</strong><br />(one per line)</td>
-				<td><textarea name="categories" rows="5" cols="70">[% FOREACH category = categories %][% category %]
+				<td><textarea name="categories" rows="5" cols="70">[% FOREACH category = categories %][% category.name %]
 [% END %]</textarea></td>
 			</tr>
 		</table>
@@ -98,5 +98,10 @@
   [% INCLUDE display_metadata.tt %]
 
   [% preview_html %]
+
+  <br clear="all" />
+
+  [% INCLUDE display_categories.tt %]
+
 [% END %]
 [% INCLUDE footer.tt %]

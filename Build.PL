@@ -209,6 +209,7 @@ $build->{config}{__extra_scripts}     =
                         "pubcrawl.cgi" ];
 $build->{config}{__templates}         = [
 		      "backlink_results.tt",
+		      "display_categories.tt",
 		      "display_metadata.tt",
                       "edit_conflict.tt",
                       "edit_form.tt",

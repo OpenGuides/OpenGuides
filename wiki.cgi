@@ -431,8 +431,20 @@ sub preview_node {
     # Multiple categories and locales can be supplied, one per line.
     my $categories_text = $q->param('categories');
     my $locales_text    = $q->param('locales');
-    my @categories = sort split("\r\n", $categories_text);
-    my @locales    = sort split("\r\n", $locales_text);
+    my @catlist = sort split("\r\n", $categories_text);
+    my @loclist = sort split("\r\n", $locales_text);
+
+    my @categories = map { { name => $_,
+                             url  => "$script_name?Category_"
+ 		          . uri_escape($formatter->node_name_to_node_param($_))
+			   }
+		         } @catlist;
+
+    my @locales    = map { { name => $_,
+                             url  => "$script_name?Locale_"
+			  . uri_escape($formatter->node_name_to_node_param($_))
+                           }
+                         } @loclist;
 
     # The 'website' attribute might contain a URL so we wiki-format it here
     # rather than just CGI::escapeHTMLing it all in the template.
@@ -452,11 +464,23 @@ sub preview_node {
 		        hours_text   => $q->param("hours_text"),
 			address      => $q->param("address"),
                         postcode     => $q->param("postcode"),
-			os_x         => $q->param("os_x"),
-			os_y         => $q->param("os_y"),
 			username     => $q->param("username"),
 			comment      => $q->param("comment")
      );
+
+    my $os_x = $q->param("os_x");
+    my $os_y = $q->param("os_y");
+    # Work out latitude and longitude for the preview display.
+    if ($os_x and $os_y) {
+        my $point = Geography::NationalGrid::GB->new( Easting  => $os_x,
+						      Northing => $os_y );
+        %tt_metadata_vars = ( %tt_metadata_vars,
+  		              latitude  => $point->latitude,
+			      longitude => $point->longitude,
+			      os_x      => $os_x,
+			      os_y      => $os_y
+	);
+    }
 
     if ($wiki->verify_checksum($node, $checksum)) {
         my %tt_vars = ( content      => $q->escapeHTML($content),

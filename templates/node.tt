@@ -36,23 +36,7 @@
 
 <br clear="all" />
 
-[% IF categories %]
-  <hr />
-  <small><b>Categories:</b>
-  [% FOREACH category = categories %]
-    <a href="[% category.url %]">[% category.name %]</a> /
-  [% END %]
-  </small>
-[% END %]
-
-[% IF locales %]
-  <hr />
-  <small><b>Locale:</b>
-  [% FOREACH locale = locales %]
-    <a href="[% locale.url %]">[% locale.name %]</a> /
-  [% END %]
-  </small>
-[% END %]
+[% INCLUDE display_categories.tt %]
 
 <hr />
 
