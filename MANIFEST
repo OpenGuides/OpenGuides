@@ -15,6 +15,7 @@ preferences.cgi
 pubcrawl.cgi
 supersearch.cgi
 templates/backlink_results.tt
+templates/display_categories.tt
 templates/display_metadata.tt
 templates/edit_conflict.tt
 templates/edit_form.tt
@@ -25,6 +26,7 @@ templates/navbar.tt
 templates/node.tt
 templates/node_history.tt
 templates/preferences.tt
+templates/pubcrawl.tt
 templates/rdf_index.tt
 templates/recent_changes.tt
 templates/search_results.tt
