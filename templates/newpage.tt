@@ -1,4 +1,5 @@
 [%- USE CGI -%]
+[% node_name = "Create a New Page" %]
 [% INCLUDE header.tt %]
 <div id="content">
 <h1>[% site_name %] - Create a new page</h1>
