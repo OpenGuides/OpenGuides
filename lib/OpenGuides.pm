@@ -139,6 +139,8 @@ sub display_node {
         $tt_vars{is_indexable_node} = 1;
         $tt_vars{index_type} = lc($type);
         $tt_vars{index_value} = $2;
+        $tt_vars{rss_link} = $config->{_}{script_name} . "?action=rss;"
+                           . lc($type) . "=" . lc(CGI->escape($2));
     }
 
     my %current_data = $wiki->retrieve_node( $id );

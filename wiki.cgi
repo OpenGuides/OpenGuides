@@ -108,16 +108,20 @@ eval {
             my $days  = $q->param("days")  || "";
             my $ignore_minor_edits = $q->param("ignore_minor_edits") ? 1 : 0;
             my $username = $q->param("username") || "";
+            my $category = $q->param("category") || "";
+            my $locale   = $q->param("locale")   || "";
             my %criteria = (
                              items              => $items,
                              days               => $days,
                              ignore_minor_edits => $ignore_minor_edits,
                            );
-            if ( $username ) {
-                $criteria{filter_on_metadata} = {
-                                                  username => $username,
-                                                };
-	    }
+            my %filter;
+            $filter{username} = $username if $username;
+            $filter{category} = $category if $category;
+            $filter{locale}   = $locale   if $locale;
+            if ( scalar keys %filter ) {
+                $criteria{filter_on_metadata} = \%filter;
+            }
             emit_recent_changes_rss( %criteria );
         } elsif ( $feed eq "chef_dan" ) {
             display_node_rdf( node => $node );
