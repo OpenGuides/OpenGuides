@@ -1,6 +1,7 @@
+0.43    21 October 2004
         Fix broken navbar changes that crept into last release.
 
-0.42    
+0.42    20 October 2004
         Handle distance searching with OpenGuides::Supersearch instead of
           find_within_distance action.
         Fixed bug with paging on distance-only search (reported by Bob Walker).
