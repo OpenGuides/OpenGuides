@@ -342,15 +342,13 @@ sub preview_node {
     $content     =~ s/\r\n/\n/gs;
     my $checksum = $q->param('checksum');
 
-    my %metadata_vars = OpenGuides::Template->extract_tt_vars(
+    my %tt_metadata_vars = OpenGuides::Template->extract_tt_vars(
                                                    wiki    => $wiki,
 						   config  => $config,
 						   cgi_obj => $q );
-
-    my %tt_metadata_vars = ( %metadata_vars,
-			     username => $q->param("username"),
-			     comment  => $q->param("comment")
-    );
+    foreach my $var ( qw( username comment ) ) {
+        $tt_metadata_vars{$var} = $q->param($var);
+    }
 
     if ($wiki->verify_checksum($node, $checksum)) {
         my %tt_vars = ( content      => $q->escapeHTML($content),
