@@ -137,6 +137,8 @@ sub serialise_metadata {
 
     delete $metadata{comment};
     delete $metadata{username};
+    delete $metadata{__categories__checksum};
+    delete $metadata{__locales__checksum};
     
     join "<br />\n", map {"$_='".join (',',@{$metadata{$_}})."'"} sort keys %metadata;
 }
