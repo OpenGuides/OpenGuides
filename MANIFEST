@@ -23,6 +23,9 @@ preferences.cgi
 supersearch.cgi
 templates/backlink_results.tt
 templates/banner.tt
+templates/delete_confirm.tt
+templates/delete_done.tt
+templates/delete_password_wrong.tt
 templates/differences.tt
 templates/display_categories.tt
 templates/display_metadata.tt

@@ -250,6 +250,9 @@ $build->{config}{__extra_scripts}     =
 $build->{config}{__templates}         = [
 		      "backlink_results.tt",
 		      "banner.tt",
+                      "delete_confirm.tt",
+                      "delete_done.tt",
+                      "delete_password_wrong.tt",
                       "differences.tt",
 		      "display_categories.tt",
 		      "display_metadata.tt",
