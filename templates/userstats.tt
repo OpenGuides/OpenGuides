@@ -1,3 +1,4 @@
+[% USE CGI %]
 [% INCLUDE header.tt page_title = "User stats for $username - $site_name" %]
 [% INCLUDE banner.tt %]
 <div id="content">
@@ -14,11 +15,11 @@
 [% content %]
 
 <h2>
-  Last five nodes edited by
+  Last five pages edited by
   [% IF username %]
-    <a href="[% full_cgi_url %]?[% username_param %]">[% username %]</a>
+    <a href="[% full_cgi_url %]?[% username_param %]">[% username %]</a>:
   [% ELSE %]
-    [% host %]
+    [% host %]:
   [% END %]
 </h2>
 
@@ -32,5 +33,15 @@
   </li>
 [% END %]
 </ul>
+
+[% IF username %]
+  <h2>Personalised RSS feeds:</h2>
+  <ul>
+    <li><a href="[% full_cgi_url %]?action=rss;username=[% CGI.escape(username) %];items=10">Last ten pages edited by [% username %]</a></li>
+    <li><a href="[% full_cgi_url %]?action=rss;username=[% CGI.escape(username) %];items=20">Last twenty pages edited by [% username %]</a></li>
+    <li><a href="[% full_cgi_url %]?action=rss;username=[% CGI.escape(username) %];items=10;ignore_minor_edits=1">Last ten pages edited by [% username %], ignoring minor edits</a></li>
+    <li><a href="[% full_cgi_url %]?action=rss;username=[% CGI.escape(username) %];items=20;ignore_minor_edits=1">Last twenty pages edited by [% username %], ignoring minor edits</a></li>
+  </ul>
+[% END %]
 
 [% INCLUDE footer.tt %]
