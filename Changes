@@ -2,6 +2,8 @@
         Overhauled RDF output. Changes:
           - everything is no longer classified as a restaurant(!)
           - empty tags are no longer generated
+          - show categories, locales and OS x/y coords in invididual 
+            node RDF view
           - switch to W3C contact namespace for addressing data
           - move homepage tag out of wiki metadata
           - remove nonexistent "gs:" namespace from category indices
