@@ -1,3 +1,8 @@
+        Minor bug fixes: remove bogus edit link on index listings,
+	  add missing default behaviour for geolocation
+	Update supersearch help text URL.
+	Add nofollow to robots meta tag.
+	
 0.45	1 December 2004
         Made the geolocation stuff work worldwide.  Squeeeeeee!
         You can now choose between doing your distance calculations with

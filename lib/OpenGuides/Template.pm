@@ -329,7 +329,7 @@ sub extract_metadata_vars {
             $vars{$var} = $q->param($var);
         }
 
-        my $geo_handler = $config->{_}{geo_handler};
+        my $geo_handler = $config->{_}{geo_handler} || 1;
         if ( $geo_handler == 1 ) {
 	    require Geography::NationalGrid::GB;
    	    my $os_x   = $q->param("os_x");
