@@ -5,6 +5,7 @@ use vars qw( $VERSION );
 $VERSION = '0.01';
 
 use Carp qw( croak );
+use CGI; # want to get rid of this and put the burden on the templates
 use Template;
 
 =head1 NAME
@@ -72,6 +73,11 @@ sub output {
 		 home_link     => $script_name,
 		 home_name     => $config->{_}->{home_name}
     };
+
+    if ($args{node}) {
+        $tt_vars->{node_name} = CGI->escapeHTML($args{node});
+        $tt_vars->{node_param} = CGI->escape($args{wiki}->formatter->node_name_to_node_param($args{node}));
+    }
 
     my $header = "";
     unless ( defined $args{content_type} and $args{content_type} eq "" ) {

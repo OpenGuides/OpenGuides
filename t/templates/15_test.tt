@@ -8,3 +8,5 @@ STYLESHEET: [% stylesheet %]
 HOME LINK: [% home_link %]
 HOME NAME: [% home_name %]
 
+NODE NAME: [% node_name %]
+NODE PARAM: [% node_param %]

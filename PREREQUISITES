@@ -1,4 +1,4 @@
-Modules required by OpenGuides 0.08
+Modules required by OpenGuides 0.10
 ===================================
 
 CGI
@@ -23,5 +23,6 @@ Module::Build (version 0.18 or later)
 Parse::RecDescent
 Search::InvertedIndex
 Template
+Test::MockObject (version 0.07 or later)
 Time::Piece
 URI::Escape

@@ -549,16 +549,11 @@ sub make_geocache_link {
 sub process_template {
     my ($template, $node, $vars, $conf, $omit_header) = @_;
 
-    my %tt_vars = %{ $vars || {} };
-    if ($node) {
-        $tt_vars{node_name} = $q->escapeHTML($node);
-        $tt_vars{node_param} = $q->escape($formatter->node_name_to_node_param($node));
-    }
-
-    my %output_conf = ( wiki   => $wiki,
-			config => $config,
+    my %output_conf = ( wiki     => $wiki,
+			config   => $config,
+                        node     => $node,
 			template => $template,
-			vars   => \%tt_vars
+			vars     => $vars
     );
     $output_conf{content_type} = "" if $omit_header; # defaults otherwise
     print OpenGuides::Template->output( %output_conf );

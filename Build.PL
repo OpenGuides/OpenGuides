@@ -192,6 +192,7 @@ my $build = OpenGuides::Build->new(
 	'Parse::RecDescent' => 0,
 	'Search::InvertedIndex' => 0,
 	'Template' => 0,
+        'Test::MockObject' => '0.07', # earlier doesn't use 'mock'
 	'Time::Piece' => 0,
 	'URI::Escape' => 0
 	},

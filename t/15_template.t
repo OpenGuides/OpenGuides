@@ -1,7 +1,9 @@
 use strict;
-use Test::More tests => 14;
+use Test::More tests => 16;
 use Config::Tiny;
 use Cwd;
+use CGI::Wiki::Formatter::UseMod;
+use Test::MockObject;
 
 use_ok( "OpenGuides::Template" );
 
@@ -56,3 +58,24 @@ like( $output, qr/STYLESHEET: http:\/\/wiki.example.com\/styles.css/,
       "stylesheet var set" );
 like( $output, qr/HOME LINK: mywiki.cgi/, "home_link var set" );
 like( $output, qr/HOME NAME: Home Page/, "home_name var set" );
+
+# Test TT variables auto-set from node name.
+
+# White box testing - we know that OpenGuides::Template only actually uses
+# the node_name_to_node_param method of the formatter component of the wiki
+# object passed in, and I CBA to faff about with picking out the test DB
+# info to make a proper wiki object here.
+my $fake_wiki = Test::MockObject->new;
+$fake_wiki->mock("formatter",
+                 sub { return CGI::Wiki::Formatter::UseMod->new; } );
+
+$output = OpenGuides::Template->output(
+    wiki     => $fake_wiki,
+    config   => $config,
+    node     => "Test Node",
+    template => "15_test.tt"
+);
+
+like( $output, qr/NODE NAME: Test Node/, "node_name var set" );
+like( $output, qr/NODE PARAM: Test_Node/, "node_param var set" );
+
