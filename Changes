@@ -2,6 +2,11 @@
         Added OpenGuides::UK::PubCrawl and pubcrawl.cgi as a start at a
         pub crawl generator.
 
+        Added OpenGuides::Utils to make it easier to write little standalone
+        scripts like supersearch.cgi, pubcrawl. cgi, etc.  Made wiki.cgi and
+        supersearch.cgi use it, and lost loads of duplicated code in the
+        process, hurrah.
+
 0.08    3 May 2003
 
         Added fuzzy matching capability -
