@@ -49,7 +49,6 @@ eval {
     my $commit = $q->param('Save') || 0;
     my $preview = $q->param('preview') || 0;
     my $search_terms = $q->param('terms') || $q->param('search') || '';
-    my $username = $q->param('username') || '';
     my $format = $q->param('format') || '';
 
     # Alternative method of calling search, supported by usemod.
@@ -89,7 +88,10 @@ eval {
             ) {
         delete_node($node);
     } elsif ($action eq 'userstats') {
-        show_userstats( $username );
+        show_userstats(
+                        username => $q->param("username") || "",
+                        host     => $q->param("host") || "",
+                      );
     } elsif ($action eq 'list_all_versions') {
         $guide->list_all_versions( id => $node );
     } elsif ($action eq 'rss') {
@@ -141,12 +143,14 @@ exit 0;
 ############################ subroutines ###################################
 
 sub show_userstats {
-    my $username = shift;
-    croak "No username supplied to show_userstats" unless $username;
-    my @nodes = $wiki->list_recent_changes(
-        last_n_changes => 5,
-	metadata_is    => { username => $username }
-    );
+    my %args = @_;
+    my ($username, $host) = @args{ qw( username host ) };
+    croak "No username or host supplied to show_userstats"
+        unless $username or $host;
+    my %criteria = ( last_n_changes => 5 );
+    $criteria{metadata_is} = $username ? { username => $username }
+                                       : { host     => $host };
+    my @nodes = $wiki->list_recent_changes( %criteria );
     @nodes = map { {name          => $q->escapeHTML($_->{name}),
 		    last_modified => $q->escapeHTML($_->{last_modified}),
 		    comment       => $q->escapeHTML($_->{metadata}{comment}[0]),
@@ -156,6 +160,7 @@ sub show_userstats {
     my %tt_vars = ( last_five_nodes => \@nodes,
 		    username        => $username,
 		    username_param  => $wiki->formatter->node_name_to_node_param($username),
+                    host            => $host,
                   );
     process_template("userstats.tt", "", \%tt_vars);
 }

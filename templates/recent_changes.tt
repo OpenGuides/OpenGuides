@@ -17,7 +17,7 @@
           [% IF (node.username != 'Anonymous') %]
             <a href="[% cgi_url %]?username=[% node.username %];action=userstats">[% node.username %]</a>
           [% ELSE %]
-            <a href="[% cgi_url %]?username=[% node.host %];action=userstats">[% node.host %]</a>
+            <a href="[% cgi_url %]?host=[% node.host %];action=userstats">[% node.host %]</a>
           [% END %]
         </td>
       </tr>

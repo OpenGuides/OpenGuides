@@ -2,11 +2,25 @@
 [% INCLUDE banner.tt %]
 <div id="content">
 [% INCLUDE navbar.tt %]
-<h2>User Stats for [% username %]</h2>
+<h2>
+  User Stats for
+    [% IF username %]
+      [% username %]
+    [% ELSE %]
+      [% host %]
+    [% END %]
+</h2>
 
 [% content %]
 
-<h2>Last five nodes edited by <a href="[% full_cgi_url %]?[% username_param %]">[% username %]</a></h2>
+<h2>
+  Last five nodes edited by
+  [% IF username %]
+    <a href="[% full_cgi_url %]?[% username_param %]">[% username %]</a>
+  [% ELSE %]
+    [% host %]
+  [% END %]
+</h2>
 
 <ul>
 [% FOREACH node = last_five_nodes %]
