@@ -56,6 +56,7 @@ sub _init {
     my ($self, %args) = @_;
 
     # Here are the defaults for the variable values.
+    # Don't forget to add to INSTALL when changing these.
     my %defaults = (
                      dbtype => "postgres",
                      script_name => "wiki.cgi",
@@ -102,6 +103,7 @@ sub _init {
     }
 
     # And the questions.
+    # Don't forget to add to INSTALL when changing these.
     my %questions = (
         dbtype => "What type of database do you want the site to run on?  postgres/mysql/sqlite",
         dbname => "What's the name of the database that this site runs on?",
