@@ -1,0 +1,20 @@
+[%- USE CGI -%]
+[% INCLUDE header.tt %]
+
+<h1>[% site_name %] - Create a new page</h1>
+
+<form action="newpage.cgi" method="POST">
+Enter the name of the page to make:<br />
+<input type="text" size="50" name="pagename" value="[% CGI.escapeHTML(pagename) %]" />
+<input type="submit" value="Go" />
+<input type="hidden" name="action" value="makepage" />
+
+<p>Note: you may not use the following characters in page names:<br />
+<strong>
+  [% FOREACH naughty = disallowed_chars %]
+    [% CGI.escapeHTML(naughty) %]
+  [% END %]
+</strong>
+</form>
+
+[% INCLUDE footer.tt %]

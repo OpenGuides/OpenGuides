@@ -3,6 +3,7 @@
 <ul>
     <li><a href="[% home_link %]">[% home_name %]</a></li>
     <li><a href="[% cgi_url %]?RecentChanges">RecentChanges</a></li>
+    <li><a href="newpage.cgi">Create a new page</a></li>
     <li><a href="[% cgi_url %]?action=random">Random Page</a></li>
     [% IF geocache_link %]
     <li>[% geocache_link %]</li>

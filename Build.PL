@@ -179,7 +179,7 @@ my $build = OpenGuides::Build->new(
 	'CGI::Carp' => 0,
 	'CGI::Cookie' => 0,
 	'CGI::Wiki' => '0.36',
-	'CGI::Wiki::Formatter::UseMod' => '0.03',
+	'CGI::Wiki::Formatter::UseMod' => '0.04', # for correct FreeUpper
         'CGI::Wiki::Plugin::Categoriser' => 0,
 	'CGI::Wiki::Plugin::GeoCache' => 0,
 	'CGI::Wiki::Plugin::Locator::UK' => '0.06',
@@ -208,7 +208,7 @@ $build->add_to_cleanup( "wiki.conf" );
 # Tell OpenGuides::Build which additional scripts and templates to install.
 $build->{config}{__extra_scripts}     = 
                       [ "wiki.conf", "preferences.cgi", "supersearch.cgi",
-                        "pubcrawl.cgi" ];
+                        "newpage.cgi", "pubcrawl.cgi" ];
 $build->{config}{__templates}         = [
 		      "backlink_results.tt",
                       "differences.tt",
@@ -216,10 +216,12 @@ $build->{config}{__templates}         = [
 		      "display_metadata.tt",
                       "edit_conflict.tt",
                       "edit_form.tt",
+                      "error.tt",
                       "footer.tt",
                       "header.tt",
                       "home_node.tt",
                       "navbar.tt",
+                      "newpage.tt",
                       "node.tt",
                       "node_history.tt",
 		      "preferences.tt",

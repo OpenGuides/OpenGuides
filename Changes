@@ -1,4 +1,10 @@
-0.10    
+0.11    
+        Added newpage.cgi for an easy way to create new pages.
+
+        Took loads of repeated code (for extracting and packaging metadata
+        variables) out of wiki.cgi into OpenGuides::Template.
+
+0.10    11 May 2003
         Added OpenGuides::Diff to provide nice diff output between
         node versions.
 
