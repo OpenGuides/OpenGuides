@@ -172,8 +172,6 @@ eval {
         my $feed = $q->param("feed");
         if ( !defined $feed or $feed eq "recent_changes" ) {
             emit_recent_changes_rss();
-        } elsif ( $feed eq "chef_moz" ) {
-            emit_chef_moz_rss( node => $node );
         } elsif ( $feed eq "chef_dan" ) {
             emit_chef_dan_rss( node => $node );
         } else {
@@ -463,31 +461,6 @@ sub emit_recent_changes_rss {
 
     print "Content-type: text/plain\n\n";
     print $rss->recent_changes;
-    exit 0;
-}
-
-sub emit_chef_moz_rss {
-    my %args = @_;
-    my $node = $args{node};
-    my $rss = CGI::Wiki::Plugin::RSS::ChefMoz->new(
-        wiki      => $wiki,
-        site_name => $site_name,
-        site_description => $site_desc,
-        make_node_url => sub {
-            my ( $node_name, $version ) = @_;
-            return "$script_url$script_name?id="
-                 . uri_escape(
-                        $wiki->formatter->node_name_to_node_param( $node_name )
-			     )
-                 . ";version=" . uri_escape($version);
-        },
-        full_node_prefix => "$script_url$script_name",
-	default_city => $default_city,
-        default_country => $default_country
-     );
-
-    print "Content-type: text/plain\n\n";
-    print $rss->chef_moz( node => $node );
     exit 0;
 }
 

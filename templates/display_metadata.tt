@@ -12,8 +12,6 @@
   <small>(Latitude: [% latitude %] Longitude: [% longitude %])</small>
   &nbsp;&nbsp;&nbsp;
 [% END %]
-<small><a href="wiki.cgi?action=rss&feed=chef_moz&id=[% node_param %]">ChefMoz RSS</a></small>
-&nbsp;&nbsp;&nbsp;
 <small><a href="wiki.cgi?action=rss&feed=chef_dan&id=[% node_param %]">ChefDan RDF/XML</a></small>
 <br />
 
