@@ -61,6 +61,32 @@ sub new {
     return $self;
 }
 
+=item B<wiki>
+
+  my $wiki = $search->wiki;
+
+An accessor; returns the underlying L<CGI::Wiki> object.
+
+=cut
+
+sub wiki {
+    my $self = shift;
+    return $self->{wiki};
+}
+
+=item B<config>
+
+  my $config = $search->config;
+
+An accessor; returns the underlying L<Config::Tiny> object.
+
+=cut
+
+sub config {
+    my $self = shift;
+    return $self->{config};
+}
+
 =item B<run>
 
   my %vars = CGI::Vars();
@@ -150,7 +176,7 @@ sub run {
         # (Don't try a fuzzy search on a blank search string - Plucene chokes.)
         if ( $self->{search_string} ) {
             my %fuzzies =
-                      $self->{wiki}->fuzzy_title_match($self->{search_string});
+                      $self->wiki->fuzzy_title_match($self->{search_string});
             if ( $numres == 1
                  && !$self->{return_tt_vars} && scalar keys %fuzzies) {
                 my $node = $results[0]{name};
@@ -207,8 +233,8 @@ sub process_template {
     return %$tt_vars if $self->{return_tt_vars};
 
     my $output =  OpenGuides::Template->output(
-                                                wiki     => $self->{wiki},
-                                                config   => $self->{config},
+                                                wiki     => $self->wiki,
+                                                config   => $self->config,
                                                 template => "supersearch.tt",
                                                 vars     => $tt_vars,
                                               );
@@ -223,7 +249,7 @@ sub process_template {
 sub _prime_wikitext {
     my ($self, %args) = @_;
     my ($op, @leaves) = @{ $args{tree} };
-    my $wiki = $self->{wiki};
+    my $wiki = $self->wiki;
 
     if ($op =~ /AND|OR/) {
 	# Recurse into parse tree for boolean op nodes
@@ -334,7 +360,7 @@ sub _perform_search {
 	      }
 	}
     } else {
-        my $wiki = $self->{wiki};
+        my $wiki = $self->wiki;
         my @all_nodes = $wiki->list_all_nodes;
         my $formatter = $wiki->formatter;
         my %results = map {

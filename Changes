@@ -1,6 +1,8 @@
 0.42    
         Handle distance searching with OpenGuides::Supersearch instead of
           find_within_distance action.
+        Fixed bug with paging on distance-only search (reported by Bob Walker).
+        Improved encapsulation in OpenGuides::Supersearch - accessors.
 
 0.41    21 September 2004
         Added backlinks link to navbar.
