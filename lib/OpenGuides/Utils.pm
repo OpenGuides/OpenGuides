@@ -166,9 +166,12 @@ sub make_wiki_object {
                     # *after* inline links like [http://foo/ bar]
                     my $list = "\n";
                     foreach (@items) {
-                        my $link  = $_->{link};
-                        my $title = $_->{title};
-                        $list .= qq{* <a href="$link">$title</a>\n};
+                        my $link        = $_->{link};
+                        my $title       = $_->{title};
+                        my $description = $_->{description};
+                        $list .= qq{* <a href="$link">$title</a>};
+                        $list .= " - $description" if $description;
+                        $list .= "\n";
                     }
                     $list .= "</ul>\n";
         },
