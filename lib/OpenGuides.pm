@@ -3,7 +3,7 @@ use strict;
 
 use vars qw( $VERSION );
 
-$VERSION = '0.04';
+$VERSION = '0.05';
 
 =head1 NAME
 
@@ -51,6 +51,11 @@ The OpenGuides Project (grubstreet@hummous.earth.li)
 
 The OpenGuides distribution is free software; you can redistribute it
 and/or modify it under the same terms as Perl itself.
+
+=head1 CREDITS
+
+Programming by Earle Martin, Kake Pugh, Ivor Williams.  Testing and
+bug reporting by Cal Henderson and Bob Walker.
 
 =cut
 
