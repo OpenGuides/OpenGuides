@@ -355,13 +355,15 @@ sub extract_metadata_vars {
                 $os_x = $point->easting;
                 $os_y = $point->northing;
 	    }
-	    %vars = (
-                      %vars,
-		      latitude  => $lat,
-	              longitude => $long,
-	              os_x      => $os_x,
-	              os_y      => $os_y,
-	            );
+            if ( $os_x && $os_y ) {
+	        %vars = (
+                          %vars,
+		          latitude  => $lat,
+	                  longitude => $long,
+	                  os_x      => $os_x,
+	                  os_y      => $os_y,
+	                );
+	    }
             if ( $args{set_coord_field_vars} ) {
                 %vars = (
                           %vars,
@@ -399,13 +401,15 @@ sub extract_metadata_vars {
                 $osie_x = $point->easting;
                 $osie_y = $point->northing;
 	    }
-	    %vars = (
-                      %vars,
-		      latitude  => $lat,
-	              longitude => $long,
-	              osie_x    => $osie_x,
-	              osie_y    => $osie_y,
-	            );
+	    if ( $osie_x && $osie_y ) {
+	        %vars = (
+                          %vars,
+		          latitude  => $lat,
+	                  longitude => $long,
+	                  osie_x    => $osie_x,
+	                  osie_y    => $osie_y,
+	                );
+	    }
             if ( $args{set_coord_field_vars} ) {
                 %vars = (
                           %vars,

@@ -28,7 +28,7 @@ if ( $@ ) {
     plan skip_all => "Geo::Coordinates::UTM not installed";
 }
 
-plan tests => 33;
+plan tests => 53;
 
 # Clear out the database from any previous runs.
 unlink "t/node.db";
@@ -82,6 +82,23 @@ like( $data{metadata}{os_y}[0], qr/^\d+$/,  "...as integer" );
 is( $data{metadata}{latitude}[0], 51.368,  "latitude stored correctly" );
 is( $data{metadata}{longitude}[0], -0.097, "longitude stored correctly" );
 
+eval {
+    local $SIG{__WARN__} = sub { die $_[0]; };
+    write_data(
+                guide      => $guide,
+                node       => "Locationless Page 1",
+              );
+};
+is( $@, "",
+    "commit doesn't warn when using BNG and node has no location data" );
+%data = $guide->wiki->retrieve_node( "Locationless Page 1" );
+ok( !defined $data{metadata}{latitude}[0],  "...and latitude not stored" );
+ok( !defined $data{metadata}{longitude}[0], "...nor longitude" );
+ok( !defined $data{metadata}{os_x}[0],      "...nor os_x" );
+ok( !defined $data{metadata}{os_y}[0],      "...nor os_y" );
+ok( !defined $data{metadata}{osie_x}[0],    "...nor osie_x" );
+ok( !defined $data{metadata}{osie_y}[0],    "...nor osie_y" );
+
 # Now check Irish National Grid.
 $config->{_}{geo_handler} = 2;
 $guide = OpenGuides->new( config => $config );
@@ -114,6 +131,23 @@ like( $data{metadata}{osie_y}[0], qr/^\d+$/,  "...as integer" );
 is( $data{metadata}{latitude}[0], 54.6434,  "latitude stored correctly" );
 is( $data{metadata}{longitude}[0], -5.6731, "longitude stored correctly" );
 
+eval {
+    local $SIG{__WARN__} = sub { die $_[0]; };
+    write_data(
+                guide      => $guide,
+                node       => "Locationless Page 2",
+              );
+};
+is( $@, "",
+    "commit doesn't warn when using ING and node has no location data" );
+%data = $guide->wiki->retrieve_node( "Locationless Page 2" );
+ok( !defined $data{metadata}{latitude}[0],  "...and latitude not stored" );
+ok( !defined $data{metadata}{longitude}[0], "...nor longitude" );
+ok( !defined $data{metadata}{os_x}[0],      "...nor os_x" );
+ok( !defined $data{metadata}{os_y}[0],      "...nor os_y" );
+ok( !defined $data{metadata}{osie_x}[0],    "...nor osie_x" );
+ok( !defined $data{metadata}{osie_y}[0],    "...nor osie_y" );
+
 # Finally check UTM.
 $config->{_}{geo_handler} = 3;
 $config->{_}{ellipsoid} = "Airy";
@@ -139,11 +173,19 @@ eval {
     local $SIG{__WARN__} = sub { die $_[0]; };
     write_data(
                 guide      => $guide,
-                node       => "Locationless Page",
+                node       => "Locationless Page 3",
               );
 };
 is( $@, "",
     "commit doesn't warn when using UTM and node has no location data" );
+%data = $guide->wiki->retrieve_node( "Locationless Page 3" );
+ok( !defined $data{metadata}{latitude}[0],  "...and latitude not stored" );
+ok( !defined $data{metadata}{longitude}[0], "...nor longitude" );
+ok( !defined $data{metadata}{os_x}[0],      "...nor os_x" );
+ok( !defined $data{metadata}{os_y}[0],      "...nor os_y" );
+ok( !defined $data{metadata}{osie_x}[0],    "...nor osie_x" );
+ok( !defined $data{metadata}{osie_y}[0],    "...nor osie_y" );
+
 
 sub write_data {
     my %args = @_;
