@@ -335,6 +335,7 @@ sub show_index {
             metadata_type => $args{type},
 	    metadata_value => $args{value} );
         $tt_vars{criterion} = {
+            type => $args{type},
             name => $q->escapeHTML(ucfirst($args{type}) . " $args{value}"),
 	    url  => "$script_name?" . ucfirst($args{type}) . "_" . uri_escape($formatter->node_name_to_node_param($args{value})) };
     } else {

@@ -6,9 +6,9 @@
 	 xmlns:gs="http://the.earth.li/~kake/xmlns/gs/0.1/"
 	>
 
-[% IF category.name -%]
-  <gs:category rdf:about="[% full_cgi_url %]?action=catindex;category=[% CGI.escape(category.name) %];format=rdf">
-  <gs:name>[% CGI.escapeHTML(category.name) %]</gs:name>
+[%- IF criterion -%]
+  <gs:[% criterion.type %] rdf:about="[% full_cgi_url %]?action=index;index_type=[% CGI.escape(criterion.type) %];index_value=[% CGI.escape(criterion.value) %];format=rdf">
+  <gs:name>[% CGI.escapeHTML(criterion.name) %]</gs:name>
 [% ELSE -%]
   <gs:category rdf:about="[% full_cgi_url %]?action=index;format=rdf">
   <gs:name>Full site index</gs:name>
