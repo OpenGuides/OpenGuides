@@ -11,7 +11,7 @@ use CGI::Wiki::Store::Pg;
 use CGI::Wiki::Search::SII;
 use CGI::Wiki::Formatter::UseMod;
 use CGI::Wiki::Plugin::Locator::UK;
-use CGI::Wiki::Plugin::RSS::ChefMoz;
+use CGI::Wiki::Plugin::ChefMoz;
 use CGI::Wiki::Plugin::RSS::ModWiki;
 use Config::Tiny;
 use Geography::NationalGrid;
@@ -467,7 +467,7 @@ sub emit_recent_changes_rss {
 sub emit_chef_dan_rss {
     my %args = @_;
     my $node = $args{node};
-    my $rss = CGI::Wiki::Plugin::RSS::ChefMoz->new(
+    my $rss = CGI::Wiki::Plugin::ChefMoz->new(
         wiki      => $wiki,
         site_name => $site_name,
         site_description => $site_desc,
