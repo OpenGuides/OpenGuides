@@ -82,9 +82,9 @@ EOF
 
 my @answers;
 
-# Database type is speshull - can be one of three.
+# Database type is speshull - can be one of two.
 my $dbtype;
-my $dbtype_qu = "what type of database do you want the site to run on?  postgres/mysql/sqlite";
+my $dbtype_qu = "what type of database do you want the site to run on?  postgres/mysql";
 if ( $skip_config ) {
     $dbtype = $existing_config{dbtype} || "postgres";
 } else {
@@ -94,12 +94,18 @@ if ( $skip_config ) {
 	$dbtype = lc($dbtype);
 	$dbtype =~ s/^\s*//;
 	$dbtype =~ s/\s*$//;
-	unless ( $dbtype eq "postgres" or $dbtype eq "mysql"
-		 or $dbtype eq "sqlite" ) {
+	unless ( $dbtype eq "postgres" or $dbtype eq "mysql" ) {
 	    undef $dbtype;
 	}
     }
 }
+
+# Check they have the relevant DBD driver installed.
+my %drivers = ( postgres => "DBD::Pg",
+                mysql    => "DBD:mysql" );
+eval "require $drivers{$dbtype}";
+die "$drivers{$dbtype} is needed to run a $dbtype database" if $@;
+
 push @answers, { question => $dbtype_qu,
                  variable => "dbtype",
                  value    => $dbtype };
@@ -188,6 +194,7 @@ my $build = OpenGuides::Build->new(
 	'CGI::Wiki::Plugin::RSS::ModWiki' => '0.01',
 	'Config::Tiny' => 0,
 	'Data::Dumper' => 0,
+        $drivers{$dbtype} => 0,
 	'File::Spec::Functions' => 0,
 	'Geography::NationalGrid' => 0,
 	'Parse::RecDescent' => 0,

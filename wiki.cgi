@@ -12,7 +12,6 @@ use CGI qw/:standard/;
 use CGI::Carp qw(croak);
 use CGI::Cookie;
 use CGI::Wiki;
-use CGI::Wiki::Store::Pg;
 use CGI::Wiki::Search::SII;
 use CGI::Wiki::Formatter::UseMod;
 use CGI::Wiki::Plugin::GeoCache;
@@ -43,8 +42,18 @@ my $contact_email = $config->{_}->{contact_email};
 my $search_url = $config->{_}->{script_url} . "/supersearch.cgi";
 my $template_path = $config->{_}->{template_path};
 
+# Require in the right database module.
+my $dbtype = $config->{_}->{dbtype};
+
+my %cgi_wiki_exts = ( postgres => "Pg",
+		      mysql    => "MySQL" );
+
+my $cgi_wiki_module = "CGI::Wiki::Store::" . $cgi_wiki_exts{$dbtype};
+eval "require $cgi_wiki_module";
+die "Can't 'require' $cgi_wiki_module.\n" if $@;
+
 # Make store.
-my $store = CGI::Wiki::Store::Pg->new(
+my $store = $cgi_wiki_module->new(
     dbname => $config->{_}{dbname},
     dbuser => $config->{_}{dbuser},
     dbpass => $config->{_}{dbpass},
