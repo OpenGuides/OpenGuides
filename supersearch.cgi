@@ -92,43 +92,6 @@ sub mungepage {
 	$text;
 }
 
-###!!!!! load_wiki_text -UseMod version commented out.
-#
-# sub load_wiki_text is used to load the entire wiki into global hash %wikitext. This is a 
-# performance hit everytime the search is used. Looks OK for small wikis. Could replace 
-# this sub with something that makes %wikitext persistent, using a tied hash - issue of when
-# to reload comes up.
-#
-# Note: uses File::Spec routines so as to be fully portable. Works on Windoze, should work on
-# Unix just as well. Uses the patent Perlmonks superslurper trick.
-
-#sub load_wiki_text {
-#
-## glob for topics
-#
-#	my $wikiglob = catdir($wikiroot,'page','*','*.db');
-#	
-#	for (glob $wikiglob) {
-#		my ($dev,$dir,$term) = splitpath($_);
-#		
-#		$term =~ s/\.db//;
-#		readpage($term,$_);
-#	}
-#
-## glob for subtopics
-#
-#	$wikiglob = catdir($wikiroot,'page','*','*','*.db');
-#		
-#	for (glob $wikiglob) {
-#		my ($dev,$dir,$term) = splitpath($_);
-#		my @sd = splitdir($dir);
-#
-#		$term =~ s/\.db//;
-#		$term = $sd[-2].'/'.$term;
-#		readpage($term,$_);
-#	}
-#}
-
 sub load_wiki_text {
 
 # Make store
