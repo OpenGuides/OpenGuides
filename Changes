@@ -1,3 +1,7 @@
+0.06    2 May 2003
+        Fixed supersearch.cgi so it works with MySQL as well as Postgres
+          (thanks again to Bob for finding the bug).
+
 0.05    2 May 2003
         Redid the script and template installation so the script does
           actually get called what you said it should be (code copied

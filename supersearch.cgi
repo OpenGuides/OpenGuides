@@ -13,13 +13,12 @@ use Data::Dumper;
 use File::Spec::Functions qw(:ALL);
 use Config::Tiny;
 
-use CGI::Wiki::Store::Pg;
 use CGI::Wiki::Search::SII;
 use CGI::Wiki::Formatter::UseMod;
 
 my $config = Config::Tiny->read('wiki.conf');
 
-use vars qw($wiki_dbpath $wikimain $css $head 
+use vars qw($store_class $wiki_dbpath $wikimain $css $head 
 	$wikistore $wiki_search $wiki_formatter %wikitext
 	$db_name $db_user $db_pass);
 
@@ -30,6 +29,16 @@ $wiki_dbpath = $config->{_}->{indexing_directory};
 $wikimain = $config->{_}->{script_name};
 $css = $config->{_}->{stylesheet_url};
 $head = $config->{_}->{site_name} . " Search";
+
+# Require in the right database module.
+my $dbtype = $config->{_}->{dbtype};
+
+my %cgi_wiki_exts = ( postgres => "Pg",
+		      mysql    => "MySQL" );
+
+$store_class = "CGI::Wiki::Store::" . $cgi_wiki_exts{$dbtype};
+eval "require $store_class";
+die "Can't 'require' $store_class.\n" if $@;
 
 # sub matched_items is called with parse tree. Uses horrible subname concatenation - this
 # could be rewritten to us OO instead and be much neater. This would be a major refactor:
@@ -81,7 +90,7 @@ sub mungepage {
 sub load_wiki_text {
 
 # Make store
-	$wikistore = CGI::Wiki::Store::Pg->new( 
+	$wikistore = $store_class->new( 
 		dbname => $db_name,
 		dbuser => $db_user,
 		dbpass => $db_pass,
