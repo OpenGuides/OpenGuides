@@ -102,7 +102,7 @@ if ( $skip_config ) {
 
 # Check they have the relevant DBD driver installed.
 my %drivers = ( postgres => "DBD::Pg",
-                mysql    => "DBD:mysql" );
+                mysql    => "DBD::mysql" );
 eval "require $drivers{$dbtype}";
 die "$drivers{$dbtype} is needed to run a $dbtype database" if $@;
 
