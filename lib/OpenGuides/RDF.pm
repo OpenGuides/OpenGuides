@@ -3,7 +3,7 @@ package OpenGuides::RDF;
 use strict;
 
 use vars qw( $VERSION );
-$VERSION = '0.04';
+$VERSION = '0.05';
 
 use CGI::Wiki::Plugin::RSS::ModWiki;
 use Time::Piece;
@@ -225,7 +225,6 @@ sub make_recentchanges_rss {
 	recent_changes_link => $self->{config}->{_}->{script_url} . uri_escape($self->{config}->{_}->{script_name}) . "?RecentChanges"
      );
 
-    print "Content-type: text/plain\n\n";
     if ( $args{items} ) {
         return $rssmaker->recent_changes( items => $args{items} );
     } elsif ( $args{days} ) {
