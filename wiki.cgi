@@ -1,11 +1,7 @@
-#!/usr/bin/perl -w
+#!/usr/local/bin/perl -w
 
 use strict;
 use warnings;
-
-use lib qw( /home/kake/local/share/perl/5.6.1/
-	    /home/kake/local/lib/perl/5.6.1/
-          );
 
 use CGI qw/:standard/;
 use CGI::Carp qw(fatalsToBrowser);
@@ -25,19 +21,20 @@ use Time::Piece;
 use URI::Escape;
 
 # config vars
-my $FULL_CGI_URL = "http://the.earth.li/~kake/cgi-bin/cgi-wiki/wiki.cgi?";
+my $FULL_CGI_URL = "http://un.earth.li/~kake/cgi-bin/wiki.cgi?";
 
 # Make store.
-my $store   = CGI::Wiki::Store::SQLite->new(
-    dbname     => "/home/kake/public_html/cgi-out/cgi-wiki.db"
+my $store = CGI::Wiki::Store::Pg->new(
+    dbname => "kake",
+    dbuser => "kake",
+    dbpass => "hackfest"
 );
 
 # Make search.
 my $indexdb = Search::InvertedIndex::DB::DB_File_SplitHash->new(
-    -map_name  => "/home/kake/public_html/cgi-out/cgi-wiki-index.db",
+    -map_name  => "/home/kake/public_html/wiki-index.db",
     -lock_mode => "EX"
 );
-
 my $search  = CGI::Wiki::Search::SII->new( indexdb => $indexdb );
 
 # Make formatter.
@@ -532,7 +529,7 @@ sub process_template {
     }
 
     my %tt_conf = ( %$conf,
-                INCLUDE_PATH => "/home/kake/public_html/cgi-bin/cgi-wiki/templates" );
+                INCLUDE_PATH => "/home/kake/public_html/cgi-bin/templates" );
 
     # Create Template object, print CGI header, process template.
     my $tt = Template->new(\%tt_conf);
