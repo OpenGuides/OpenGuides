@@ -2,7 +2,9 @@
 [% INCLUDE header.tt page_title = "History of $node_name - $site_name" %]
 
 <h1 align="center">[% site_name %] - History of [% node_name %]</h1>
-
+<p>
+Note: only administrators can delete historical versions.
+</p>
 <ul>
 [% FOREACH revision = history %]
   <li>
@@ -21,7 +23,7 @@
         <b>[[% revision.comment %]]</b>
       [% END %]
       [% IF enable_page_deletion %]
-        [admin: <a href="[% full_cgi_url %]?id=[% node_param %];version=[% revision.version %];action=delete">Delete version [% revision.version %]</a>]
+        [<a href="[% full_cgi_url %]?id=[% node_param %];version=[% revision.version %];action=delete">delete</a>]
       [% END %]
   </li>
 [% END %]
