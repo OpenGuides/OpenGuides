@@ -79,11 +79,13 @@ sub make_basic_config {
                                 node       => "Crabtree Tavern",
                                 os_x       => 523465,
                                 os_y       => 177490,
-                                categories => "Pubs",
+                                categories => "Pubs\r\nPub Food",
                               );
 
-You can supply values for the following keys: C<content>, C<categories>,
-C<locales>, C<os_x>, C<os_y>, C<osie_x>, C<osie_y>, C<latitude>, C<longitude>.
+You can supply values for the following keys: C<content>,
+C<categories>, C<locales>, C<os_x>, C<os_y>, C<osie_x>, C<osie_y>,
+C<latitude>, C<longitude>.  You should supply them exactly as they
+would come from a CGI form, eg lines in a textarea are separated by C<\r\n>.
 
 =cut
 
