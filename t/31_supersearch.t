@@ -116,7 +116,7 @@ SKIP: {
     # Test the NOT search
     $output = $search->run(
                             return_output => 1,
-                            vars           => { search => "banana !monkey" },
+                            vars           => { search => "banana -monkey" },
                            );
     like( $output,
           qr/Location: http:\/\/example.com\/wiki.cgi\?Banana/,    
