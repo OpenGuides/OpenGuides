@@ -4,7 +4,7 @@ use strict;
 use warnings;
 
 use vars qw( $VERSION );
-$VERSION = '0.07';
+$VERSION = '0.08';
 
 use CGI qw/:standard/;
 use CGI::Carp qw(croak);
@@ -408,58 +408,63 @@ sub show_userstats {
 
 sub preview_node {
     my $node = shift;
-    my $content         = $q->param('content');
-    $content =~ s/\r\n/\n/gs;
-    my $checksum        = $q->param('checksum');
+    my $content  = $q->param('content');
+    $content     =~ s/\r\n/\n/gs;
+    my $checksum = $q->param('checksum');
+
+    # Multiple categories and locales can be supplied, one per line.
     my $categories_text = $q->param('categories');
     my $locales_text    = $q->param('locales');
-    my $phone           = $q->param('phone');
-    my $fax             = $q->param('fax');
-    my $website         = $q->param('website');
-    my $hours_text      = $q->param('hours_text');
-    my $address         = $q->param('address');
-    my $postcode        = $q->param('postcode');
-    my $os_x            = $q->param('os_x');
-    my $os_y            = $q->param('os_y');
-    my $username        = $q->param('username');
-    my $comment         = $q->param('comment');
-
     my @categories = sort split("\r\n", $categories_text);
     my @locales    = sort split("\r\n", $locales_text);
 
     # The 'website' attribute might contain a URL so we wiki-format it here
     # rather than just CGI::escapeHTMLing it all in the template.
+    my $website = $q->param('website');
     my $formatted_website_text;
     if ( $website ) {
         $formatted_website_text = _format_website($website);
     }
 
-    if ($wiki->verify_checksum($node, $checksum)) {
-        my %tt_vars = ( content      => $q->escapeHTML($content),
+    my %tt_metadata_vars = (
 			categories   => \@categories,
 			locales      => \@locales,
-  		        phone        => $phone,
-			fax          => $fax,
-			website      => $website,
+  		        phone        => $q->param("phone"),
+			fax          => $q->param("fax"),
+                        website      => $website,
 		        formatted_website_text => $formatted_website_text,
-		        hours_text   => $hours_text,
-			address      => $address,
-                        postcode     => $postcode,
-			os_x         => $os_x,
-			os_y         => $os_y,
-			username     => $username,
-			comment      => $comment,
+		        hours_text   => $q->param("hours_text"),
+			address      => $q->param("address"),
+                        postcode     => $q->param("postcode"),
+			os_x         => $q->param("os_x"),
+			os_y         => $q->param("os_y"),
+			username     => $q->param("username"),
+			comment      => $q->param("comment")
+     );
+
+    if ($wiki->verify_checksum($node, $checksum)) {
+        my %tt_vars = ( content      => $q->escapeHTML($content),
+                        %tt_metadata_vars,
                         preview_html => $wiki->format($content),
                         checksum     => $q->escapeHTML($checksum) );
 
         process_template("edit_form.tt", $node, \%tt_vars);
     } else {
-    croak "edit_conflict needs to be brought up to date to cope with metadata";
         my %node_data = $wiki->retrieve_node($node);
-        my ($stored, $checksum) = @node_data{ qw( content checksum ) };
-        my %tt_vars = ( checksum    => $q->escapeHTML($checksum),
-                        new_content => $q->escapeHTML($content),
-                        stored      => $q->escapeHTML($stored) );
+        my %tt_vars = ( checksum       => $node_data{checksum},
+                        new_content    => $content,
+                        stored_content => $node_data{content} );
+        foreach my $mdvar ( keys %tt_metadata_vars ) {
+            $tt_vars{"new_$mdvar"} = $tt_metadata_vars{$mdvar};
+            my $stored = $node_data{metadata}{$mdvar};
+            $stored = $node_data{metadata}{locale} if $mdvar eq "locales";
+            $stored = $node_data{metadata}{category} if $mdvar eq "categories";
+            if ( $mdvar eq "locales" or $mdvar eq "categories" ) {
+                $tt_vars{"stored_$mdvar"} = $stored;
+            } else {
+                $tt_vars{"stored_$mdvar"} = $stored->[0];
+            }
+        }
         process_template("edit_conflict.tt", $node, \%tt_vars);
     }
 }

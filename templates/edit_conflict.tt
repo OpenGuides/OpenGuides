@@ -1,33 +1,121 @@
+[% USE CGI %]
 [% INCLUDE header.tt %]
 
-<h1 align=center>[% site_name %] - Editing [% node_name %]</h1>
+<h1 align="center">Edit "[% node_name %]"</h1>
 
 <div class="warning_text">
 Someone has committed changes to this node since you began editing.
 You will need to manually merge your changes into the new version.
 </div>
 
-<h2>Current node contents:</h2>
+<br clear="all" />
 
-<form action="[% cgi_url %]" method="POST" enctype="application/x-www-form-urlencoded">
-<textarea name="content" rows="10" cols="70">[% stored %]</textarea>
-<br />
+<form action="[% cgi_url %]" method="POST">
+<table>
+  <tr>
+    <td colspan="3">
+    <fieldset>
+    <legend>Main information</legend>
+    <table>
+      <tr>
+        <td><strong>Content:</strong></td>
+        <td><textarea name="content" rows="21" cols="40">[% stored_content %]</textarea></td>
+        <td><small>[% CGI.escapeHTML(new_content) %]</small></td>
+      </tr>
+      <tr>
+        <td><strong>Locales:</strong><br />(one per line)</td>
+[%# NOTE: The whitespace in the next two textareas is deliberate, to avoid
+    getting bogus tabs and blank lines in the textarea content.  Please
+    do not reintroduce this bug.  Test on more than one browser. #%]
+        <td><textarea name="locales" rows="5" cols="40">[% FOREACH locale = stored_locales %][% locale %]
+[% END %]</textarea></td>
+        <td>[% FOREACH locale = new_locales %][% CGI.escapeHTML(locale) %]<br/>[% END %]</td>
+      </tr>
+      <tr>
+        <td><strong>Categories:</strong><br />(one per line)</td>
+        <td><textarea name="categories" rows="5" cols="40">[% FOREACH category = stored_categories %][% category %]
+[% END %]</textarea></td>
+        <td>[% FOREACH category = new_categories %][% CGI.escapeHTML(category) %]<br/>[% END %]</td>
+      </tr>
+    </table>
+    </fieldset>
+    &nbsp;
+    <fieldset>
+    <legend>Metadata</legend>
+    <table>
+      <tr>
+        <td><strong>Phone:</strong></td>
+        <td><input type="text" size="50" name="phone" value="[% stored_phone %]"></td>
+        <td>[% CGI.escapeHTML(new_phone) %]</td>
+      </tr>
+      <tr>
+        <td><strong>Fax:</strong></td>
+        <td><input type="text" size="50" name="fax" value="[% stored_fax %]"></td>
+        <td>[% CGI.escapeHTML(new_fax) %]</td>
+      </tr>
+            <tr>
+        <td><strong>Website:</strong></td>
+        <td><input type="text" size="50" name="website" value="[% stored_website %]"></td>
+        <td>[% CGI.escapeHTML(new_website) %]
+      </tr>
+            <tr>
+        <td><strong>Opening hours:</strong></td>
+        <td><input type="text" size="50" name="hours_text" value="[% stored_hours_text %]"></td>
+        <td>[% CGI.escapeHTML(new_hours_text) %]</td>
+      </tr>
+            <tr>
+        <td><strong>Postcode:</strong></td>
+        <td><input type="text" size="50" name="postcode" value="[% stored_postcode %]"></td>
+        <td>[% CGI.escapeHTML(new_postcode) %]</td>
+      </tr>
+            <tr>
+        <td><strong>Address:</strong></td>
+        <td><input type="text" size="50" name="address" value="[% stored_address %]"></td>
+        <td>[% CGI.escapeHTML(new_address) %]</td>
+      </tr>
+            <tr>
+        <td><strong>OS X coordinate:</strong></td>
+        <td><input type="text" size="50" name="os_x" value="[% stored_os_x %]">
+        <td>[% CGI.escapeHTML(new_os_x) %]</td>
+      </tr>
+            <tr>
+        <td><strong>OS Y coordinate:</strong></td>
+        <td><input type="text" size="50" name="os_y" value="[% stored_os_y %]"></td>
+        <td>[% CGI.escapeHTML(new_os_y) %]</td>
+      </tr>
+    </table>
+    </fieldset>
+    &nbsp;
+    <fieldset>
+    <legend>OpenGuides information</legend>
+    <table>
+            <tr>
+        <td><strong>Your username (<a href="preferences.cgi">set</a>):</strong></td>
+        <td><input type="text" size="30" name="username" value="[% new_username %]"></td>
+      </tr>
+            <tr>
+        <td><strong>Comment about your changes:</strong></td>
+        <td><input type="text" size="30" name="comment" value="[% new_comment %]"></td>
+      </tr>
+    </table>
+    </fieldset></td>
+  </tr>
+  <tr>
+    <td align="center"><input type="submit" name="preview" value="Preview changes" /></td>
+    <td align="center"><input type="submit" name="Save" value="Save changes" /></td>
+  </tr>
+  <tr>
+    <td colspan="2" align="center"><a href="[% cgi_url %]?[% node_param %]">(cancel edit)</a></td>
+  </tr>
+</table>
 <input type="hidden" name="title" value="[% node_name %]">
 <input type="hidden" name="checksum" value="[% checksum %]" />
-<input type="submit" name="preview" value="preview" />
-<input type="submit" name="Save" value="Save" />
 </form>
-
-<p><a href="[% cgi_url %]?[% node_param %]">Cancel edit</a></p>
-
-<h2>Your proposed revision:</h2>
-
-<pre>
-[% new_content %]
-</pre>
 
 [% IF preview_html %]
   <h2>Preview</h2>
+  [% INCLUDE display_metadata.tt %]
+
   [% preview_html %]
 [% END %]
 
