@@ -35,7 +35,7 @@ summary="Results of search queries are displayed here, and new searches can also
     <input type="submit" name="go" class="form_button" value="Go" />
   </form>
 
-  [% IF search_terms %]
+  [% IF search_terms OR dist %]
 
     <hr />
 

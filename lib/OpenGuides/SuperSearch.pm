@@ -293,14 +293,18 @@ sub _perform_search {
         $self->_build_parser && exists($self->{error}) && return;
         $self->_apply_parser($srh);
     } else {
-        my @all_nodes = $self->{wiki}->list_all_nodes;
-        my $formatter = $self->{wiki}->formatter;
+        my $wiki = $self->{wiki};
+        my @all_nodes = $wiki->list_all_nodes;
+        my $formatter = $wiki->formatter;
         my %results = map {
               my $name = $formatter->node_name_to_node_param( $_ );
+              my %data = $wiki->retrieve_node( $_ );
+              my $content = $wiki->format( @data{ qw( content metadata ) } );
+              my $summary = substr( $content, 0, 60 );
               $name => {
                          name    => $name,
                          score   => 0,
-                         summary => "FIXME",
+                         summary => $summary,
                        }
                           } @all_nodes;
         $self->{results} = \%results;
