@@ -3,33 +3,71 @@
 
 <div id="metadata">
 [% IF phone OR fax OR address OR postcode OR formatted_website_text
-      OR hours_text OR map_link %]
+      OR hours_text OR map_link OR (categories.size AND categories.size > 0)
+      OR (locales.size AND locales.size > 0) %]
   <ul>
+
+    [% IF categories.size AND categories.size > 0 %]
+      <li class="categories_list">
+        <label>Categories:</label>
+        [% FOREACH category = categories %]
+          <a href="[% category.url %]">[% category.name %]</a>
+          [%- "/" UNLESS loop.last %]
+        [% END %]
+      </li>
+    [% END %]
+
+    [% IF locales.size AND locales.size > 0 %]
+      <li class="locales_list">
+        <label>Locale:</label>
+        [% FOREACH locale = locales %]
+          <a href="[% locale.url %]">[% locale.name %]</a>
+          [%- "/" UNLESS loop.last %]
+        [% END %]
+      </li>
+    [% END %]
+
     [% IF phone %]
-      <li><strong>Telephone:</strong> [% CGI.escapeHTML(phone) %]</li>
+      <li class="telephone">
+        <label>Telephone:</label> [% CGI.escapeHTML(phone) %]
+      </li>
     [% END %]
     [% IF fax %]
-      <li><strong>Fax:</strong> [% CGI.escapeHTML(fax) %]</li>
+      <li class="fax">
+        <label>Fax:</label> [% CGI.escapeHTML(fax) %]
+      </li>
     [% END %]
     [% IF address %]
-      <li><strong>Address:</strong>
-      [% IF map_link %]
-        [<a href="[% map_link %]">[% CGI.escapeHTML(address) %]</a>]</li>
-      [% ELSE %]
-        [% CGI.escapeHTML(address) %]</li>
-      [% END %]
+      <li class="address">
+        <label>Address:</label>
+        [% IF map_link %]
+          [<a href="[% map_link %]">[% CGI.escapeHTML(address) %]</a>]
+        [% ELSE %]
+          [% CGI.escapeHTML(address) %]
+        [% END %]
+      </li>
     [% ELSIF map_link %]
-      <li><strong>Map:</strong>
-        [<a href="[% map_link %]">[% CGI.escapeHTML(map_link) %]</a>]</li>
+      <li class="map">
+        <label>Map:</label>
+          [<a href="[% map_link %]">[% CGI.escapeHTML(map_link) %]</a>]
+      </li>
     [% END %]
     [% IF postcode %]
-      <li><strong>Postcode:</strong> [% CGI.escapeHTML(postcode) %]</li>
+      <li class="postcode">
+        <label>Postcode:</label>
+        [% CGI.escapeHTML(postcode) %]
+      </li>
     [% END %]
     [% IF formatted_website_text %]
-      <li><strong>Website:</strong> [% formatted_website_text %]</li>
+      <li class="website_link">
+        <label>Website:</label> [% formatted_website_text %]
+      </li>
     [% END %]
     [% IF hours_text %]
-      <li><strong>Opening Hours:</strong> [% CGI.escapeHTML(hours_text) %]</li>
+      <li class="opening_hours">
+        <label>Opening Hours:</label>
+        [% CGI.escapeHTML(hours_text) %]
+      </li>
     [% END %]
   </ul>
 [% END %]

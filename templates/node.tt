@@ -13,7 +13,6 @@
   <h2><em>Historical version [% version %] of [% node_name %]</em></h2>
 [% END %]
 [% INCLUDE display_metadata.tt %]
-[% INCLUDE display_categories.tt %]
 
 <!-- NODE CONTENT STARTS -->
 [% content %]

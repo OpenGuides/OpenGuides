@@ -38,6 +38,17 @@ label.hidden
     Purpose: A label for the search box that will be hidden for users with
              a CSS-conforming user agent
 
+li.categories_list
+li.locales_list
+li.telephone
+li.address
+li.map
+li.postcode
+li.website_link
+li.opening_hours
+    Used in: display_metadata.tt
+    Purpose: List items containing various metadata bits.
+
 h2.nodename
     Used in: node.tt
     Purpose: Displays the node name
@@ -73,10 +84,6 @@ IDs
 div#banner
     Used in: banner.tt
     Purpose: The site banner/title
-
-div#categories_and_locales
-    Used in: display_categories.tt
-    Purpose: Displays the index a node belongs to
 
 div#content
     Used in: backlink_results.tt, delete_confirm.tt, delete_done.tt,
