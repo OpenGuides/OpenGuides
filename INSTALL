@@ -91,6 +91,21 @@ to search here just as you would enter them in a 'use lib qw( ... );'
 in a Perl script.
 
 
+  "Do you want to use Plucene for searching?"
+
+From version 0.39 of OpenGuides, you have the option of using Plucene
+to index your wiki instead of Search::InvertedIndex.  If you answer
+yes to this question, you will need to make sure you have installed
+both Plucene, and CGI::Wiki version 0.56 or later.
+
+If you are changing to Plucene from Search::InvertedIndex, you will
+need to do two things:
+    - either delete your old indexes (they're just files in the index
+      directory) or use a different index directory
+    - reindex your entire wiki (see reindex.pl in the examples/
+      directory of this distribution)
+
+
   "What directory can I use to store indexes in for searching?"
 
 You need a directory to store files used as indexes for the site. The
