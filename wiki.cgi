@@ -472,45 +472,21 @@ sub commit_node {
     my $content  = $q->param('content');
     $content =~ s/\r\n/\n/gs;
     my $checksum = $q->param('checksum');
-    my $categories_text = $q->param('categories');
-    my $locales_text    = $q->param('locales');
-    my $phone           = $q->param('phone');
-    my $fax             = $q->param('fax');
-    my $website         = $q->param('website');
-    my $address         = $q->param('address');
-    my $hours_text      = $q->param('hours_text');
-    my $postcode        = $q->param('postcode');
-    my $os_x            = $q->param('os_x');
-    my $os_y            = $q->param('os_y');
-    my $username        = $q->param('username');
-    my $comment         = $q->param('comment');
 
-    my @categories = sort split("\r\n", $categories_text);
-    my @locales    = sort split("\r\n", $locales_text);
-
-    my %metadata = ( category   => \@categories,
-		     locale     => \@locales,
-		     phone      => $phone,
-		     fax        => $fax,
-                     website    => $website,
-		     address    => $address,
-		     opening_hours_text => $hours_text,
-		     postcode   => $postcode,
-		     username   => $username,
-		     comment    => $comment,
+    my %metadata = OpenGuides::Template->extract_tt_vars(
+        wiki    => $wiki,
+        config  => $config,
+	cgi_obj => $q
     );
 
-
-    # We store latitude and longitude as well for the ICBM meta stuff.
-    if ($os_x and $os_y) {
-        my $point = Geography::NationalGrid::GB->new( Easting  => $os_x,
-						      Northing => $os_y );
-        %metadata = ( %metadata,
-		      latitude  => $point->latitude,
-		      longitude => $point->longitude,
-		      os_x      => $os_x,
-		      os_y      => $os_y
-	);
+    $metadata{opening_hours_text} = $q->param("hours_text") || "";
+    # kludge
+    my @cats = map { $_->{name} } @{$metadata{categories}};
+    $metadata{category} = \@cats;
+    my @locs = map { $_->{name} } @{$metadata{locales}};
+    $metadata{locale}   = \@locs;
+    foreach my $var ( qw( username comment ) ) {
+        $metadata{$var} = $q->param($var) || "";
     }
 
     my $written = $wiki->write_node($node, $content, $checksum, \%metadata );
