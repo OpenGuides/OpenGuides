@@ -208,6 +208,7 @@ my $search_module = $use_plucene ? "Plucene" : "Search::InvertedIndex";
 
 # Create the build object.
 my $build = OpenGuides::Build->new(
+    sign => 1,
     dist_name => "OpenGuides",
     dist_version_from => "wiki.cgi",
     license => "perl",
