@@ -3,6 +3,7 @@
         Added MySQL support.
         Added PREREQUISITES file as requested by Cal.
         Fixed OpenGuides::Build to die if it can't find its prereqs.
+        Ivor did something to supersearch.cgi
         Loads more shit I didn't write down.
 
 0.02    23 April 2003
