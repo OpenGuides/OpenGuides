@@ -1,0 +1,26 @@
+Modules required by OpenGuides 0.03
+===================================
+
+CGI
+CGI::Carp
+CGI::Cookie
+CGI::Wiki (version 0.28 or later)
+CGI::Wiki::Formatter::UseMod (version 0.02 or later)
+CGI::Wiki::Plugin::GeoCache
+CGI::Wiki::Plugin::Locator::UK (version 0.04 or later)
+CGI::Wiki::Plugin::RSS::ModWiki
+Config::Tiny
+Data::Dumper
+(
+  DBD::Pg
+    -- or --
+  DBD::mysql
+)
+File::Spec::Functions
+Geography::NationalGrid
+Module::Build (version 0.18 or later)
+Parse::RecDescent
+Search::InvertedIndex
+Template
+Time::Piece
+URI::Escape
