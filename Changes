@@ -1,3 +1,7 @@
+0.16    
+        Fixed edit conflict up so it works nicely when you click the
+        Save button as well as the Preview one.
+
 0.15    18 May 2003
         Added Algorithm::Diff version dependency to prereqs, fixed bug
         with preferences.cgi and blank script_name, fixed REDIRECT bug.

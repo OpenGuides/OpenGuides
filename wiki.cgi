@@ -4,7 +4,7 @@ use strict;
 use warnings;
 
 use vars qw( $VERSION );
-$VERSION = '0.15';
+$VERSION = '0.16';
 
 use CGI qw/:standard/;
 use CGI::Carp qw(croak);
@@ -378,14 +378,15 @@ sub preview_node {
                         new_content    => $content,
                         stored_content => $node_data{content} );
         foreach my $mdvar ( keys %tt_metadata_vars ) {
-            $tt_vars{"new_$mdvar"} = $tt_metadata_vars{$mdvar};
-            my $stored = $node_data{metadata}{$mdvar};
-            $stored = $node_data{metadata}{locale} if $mdvar eq "locales";
-            $stored = $node_data{metadata}{category} if $mdvar eq "categories";
-            if ( $mdvar eq "locales" or $mdvar eq "categories" ) {
-                $tt_vars{"stored_$mdvar"} = $stored;
+            if ($mdvar eq "locales") {
+                $tt_vars{"stored_$mdvar"} = $node_data{metadata}{locale};
+                $tt_vars{"new_$mdvar"}    = $tt_metadata_vars{locale};
+            } elsif ($mdvar eq "categories") {
+                $tt_vars{"stored_$mdvar"} = $node_data{metadata}{category};
+                $tt_vars{"new_$mdvar"}    = $tt_metadata_vars{category};
             } else {
-                $tt_vars{"stored_$mdvar"} = $stored->[0];
+                $tt_vars{"stored_$mdvar"} = $node_data{metadata}{$mdvar}[0];
+                $tt_vars{"new_$mdvar"}    = $tt_metadata_vars{$mdvar};
             }
         }
         process_template("edit_conflict.tt", $node, \%tt_vars);
@@ -488,11 +489,7 @@ sub commit_node {
     );
 
     $metadata{opening_hours_text} = $q->param("hours_text") || "";
-    # kludge
-    my @cats = map { $_->{name} } @{$metadata{categories}};
-    $metadata{category} = \@cats;
-    my @locs = map { $_->{name} } @{$metadata{locales}};
-    $metadata{locale}   = \@locs;
+
     foreach my $var ( qw( username comment ) ) {
         $metadata{$var} = $q->param($var) || "";
     }
@@ -502,12 +499,22 @@ sub commit_node {
     if ($written) {
         redirect_to_node($node);
     } else {
-    croak "edit_conflict needs to be brought up to date to cope with metadata";
         my %node_data = $wiki->retrieve_node($node);
-	my ($stored, $checksum) = @node_data{ qw( content checksum ) };
-        my %tt_vars = ( checksum    => $q->escapeHTML($checksum),
-                        new_content => $q->escapeHTML($content),
-                        stored      => $q->escapeHTML($stored) );
+        my %tt_vars = ( checksum       => $node_data{checksum},
+                        new_content    => $content,
+                        stored_content => $node_data{content} );
+        foreach my $mdvar ( keys %metadata ) {
+            if ($mdvar eq "locales") {
+                $tt_vars{"stored_$mdvar"} = $node_data{metadata}{locale};
+                $tt_vars{"new_$mdvar"}    = $metadata{locale};
+            } elsif ($mdvar eq "categories") {
+                $tt_vars{"stored_$mdvar"} = $node_data{metadata}{category};
+                $tt_vars{"new_$mdvar"}    = $metadata{category};
+            } else {
+                $tt_vars{"stored_$mdvar"} = $node_data{metadata}{$mdvar}[0];
+                $tt_vars{"new_$mdvar"}    = $metadata{$mdvar};
+            }
+        }
         process_template("edit_conflict.tt", $node, \%tt_vars);
     }
 }

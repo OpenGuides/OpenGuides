@@ -2,7 +2,7 @@ package OpenGuides::Template;
 
 use strict;
 use vars qw( $VERSION );
-$VERSION = '0.05';
+$VERSION = '0.06';
 
 use Carp qw( croak );
 use CGI; # want to get rid of this and put the burden on the templates
@@ -142,6 +142,9 @@ sub extract_metadata_vars {
     my $script_name = $config->{_}->{script_name};
 
     # Categories and locales are displayed as links in the page footer.
+    # We return these twice, as eg 'category' being a simple array of
+    # category names, but 'categories' being an array of hashrefs including
+    # a URL too.  This is ick.
     my (@catlist, @loclist);
     if ( $args{metadata} ) {
         @catlist = @{ $metadata{category} || [] };
@@ -177,6 +180,8 @@ sub extract_metadata_vars {
     my %vars = (
         categories             => \@categories,
 	locales                => \@locales,
+	category               => \@catlist,
+        locale                 => \@loclist,
 	formatted_website_text => $formatted_website_text,
 	hours_text             => $hours_text
     );
