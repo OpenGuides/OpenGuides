@@ -30,7 +30,7 @@ my $guide = OpenGuides->new( config => $config );
 # Test with OS co-ords.
 eval { require Geography::NationalGrid::GB; };
 SKIP: {
-    skip "Geography::NationalGrid::GB not installed", 1 if $@;
+    skip "Geography::NationalGrid::GB not installed", 3 if $@;
     $config->geo_handler( 1 );
 
     foreach my $i ( 1 .. 30 ) {
@@ -62,7 +62,7 @@ SKIP: {
 # Test with OSIE co-ords.
 eval { require Geography::NationalGrid::IE; };
 SKIP: {
-    skip "Geography::NationalGrid::IE not installed", 1 if $@;
+    skip "Geography::NationalGrid::IE not installed", 3 if $@;
 
     # We must create a new search object after changing the geo_handler
     # in order to force it to create a fresh locator.
@@ -97,7 +97,7 @@ SKIP: {
 # Test with UTM.
 eval { require Geo::Coordinates::UTM; };
 SKIP: {
-    skip "Geo::Coordinates::UTM not installed", 1 if $@;
+    skip "Geo::Coordinates::UTM not installed", 3 if $@;
 
     # We must create a new search object after changing the geo_handler
     # in order to force it to create a fresh locator.
