@@ -107,11 +107,18 @@ eval {
             my $items = $q->param("items") || "";
             my $days  = $q->param("days")  || "";
             my $ignore_minor_edits = $q->param("ignore_minor_edits") ? 1 : 0;
-            emit_recent_changes_rss(
-                                     items              => $items,
-                                     days               => $days,
-                                     ignore_minor_edits => $ignore_minor_edits,
-                                   );
+            my $username = $q->param("username") || "";
+            my %criteria = (
+                             items              => $items,
+                             days               => $days,
+                             ignore_minor_edits => $ignore_minor_edits,
+                           );
+            if ( $username ) {
+                $criteria{filter_on_metadata} = {
+                                                  username => $username,
+                                                };
+	    }
+            emit_recent_changes_rss( %criteria );
         } elsif ( $feed eq "chef_dan" ) {
             display_node_rdf( node => $node );
         } else {

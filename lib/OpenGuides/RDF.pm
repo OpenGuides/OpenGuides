@@ -274,6 +274,8 @@ sub make_recentchanges_rss {
     $criteria{days} = $args{days} if $args{days};
     $criteria{ignore_minor_changes} = $args{ignore_minor_edits}
                                                   if $args{ignore_minor_edits};
+    $criteria{filter_on_metadata} = $args{filter_on_metadata}
+                                                  if $args{filter_on_metadata};
     return $rssmaker->recent_changes( %criteria );
 }
 
