@@ -10,7 +10,7 @@ CGI::Wiki::Formatter::UseMod (version 0.09 or later)
 CGI::Wiki::Plugin::Categoriser
 CGI::Wiki::Plugin::Diff
 CGI::Wiki::Plugin::GeoCache
-CGI::Wiki::Plugin::Locator::UK (version 0.06 or later)
+CGI::Wiki::Plugin::Locator::UK (version 0.09 or later)
 CGI::Wiki::Plugin::RSS::ModWiki (version 0.02 or later)
 CGI::Wiki::Plugin::RSS::Reader (version 1.3 or later)
 Config::Tiny

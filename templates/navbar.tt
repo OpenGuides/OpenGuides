@@ -37,6 +37,9 @@
         <input type="submit" value="Go" class="form_button" />
       </form>
     </div>
+    <div class="navbar_item">
+      <a href="supersearch.cgi">Advanced Search</a>
+    </div>
   </div>
 
   [% UNLESS (node_param == 'Category_Index') or not_editable %]

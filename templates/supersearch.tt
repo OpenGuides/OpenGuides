@@ -23,8 +23,15 @@ summary="Results of search queries are displayed here, and new searches can also
   </small></p>
 
   <form method="get" action="supersearch.cgi">
-    <label for="search_upper">Search:</label> 
+    <label for="search_upper">Search text:</label> 
     <input type="text" name="search" value="[% search_terms %]" size="50" maxlength="80" id="search_upper" value="Search text" onclick="this.value=''" />
+    <br />
+    Located within
+    <input type="text" name="distance_in_metres" value="[% dist %]" size="4" maxlength="4" />
+    metres of
+    latitude <input type="text" name="lat" value="[% lat %]" size="10" maxlength="10" />
+    longitude <input type="text" name="long" value="[% long %]" size="10" maxlength="10" />
+    <br />
     <input type="submit" name="go" class="form_button" value="Go" />
   </form>
 
@@ -37,7 +44,10 @@ summary="Results of search queries are displayed here, and new searches can also
       <ol start="[% first_num %]">
         [% FOREACH result = results %]
           <li>
-            <a href="[% result.url %]"><b>[% result.name.replace('_', ' ') %]</b></a>
+            <a href="[% full_cgi_url %]?[% result.name %]"><b>[% result.name.replace('_', ' ') %]</b></a>
+            [% IF result.distance %]
+              ([% result.distance %] metres away)
+            [% END %]
             <br />
             [% result.summary %]
           </li>

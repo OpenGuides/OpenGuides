@@ -55,6 +55,7 @@ t/21_rdf.t
 t/22_rss_modwiki.t
 t/31_supersearch.t
 t/32_supersearch_simple_metadata.t
+t/33_supersearch_advanced_search.t
 t/41_deletion.t
 t/51_display_node.t
 t/52_display_diffs.t
