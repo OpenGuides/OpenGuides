@@ -4,7 +4,7 @@
     <li><a href="[% home_link %]">[% home_name %]</a></li>
     <li><a href="[% cgi_url %]?RecentChanges">RecentChanges</a></li>
     <li><a href="[% cgi_url %]?action=random">Random Page</a></li>
-    <li>Preferences</li>
+    <li><a href="username.cgi">Preferences</a></li>
     <li>Utilities</li>
     <li>Add a page</li>
     [% IF not_editable %]
