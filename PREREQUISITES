@@ -4,11 +4,12 @@ Modules required by OpenGuides 0.08
 CGI
 CGI::Carp
 CGI::Cookie
-CGI::Wiki (version 0.33 or later)
+CGI::Wiki (version 0.36 or later)
 CGI::Wiki::Formatter::UseMod (version 0.03 or later)
+CGI::Wiki::Plugin::Categoriser
 CGI::Wiki::Plugin::GeoCache
-CGI::Wiki::Plugin::Locator::UK (version 0.04 or later)
-CGI::Wiki::Plugin::RSS::ModWiki
+CGI::Wiki::Plugin::Locator::UK (version 0.06 or later)
+CGI::Wiki::Plugin::RSS::ModWiki (version 0.02 or later)
 Config::Tiny
 Data::Dumper
 (
