@@ -4,7 +4,7 @@ use strict;
 use warnings;
 
 use vars qw( $VERSION );
-$VERSION = '0.01';
+$VERSION = '0.02';
 
 use lib "lib"; # for OpenGuides modules that are installed with this script
 
@@ -129,7 +129,12 @@ eval {
 	} else {
 	    $template = "site_index.tt";
         }
-        process_template($template, "index", { nodes => \@nodes });
+        process_template($template,
+			 "index",
+			 { nodes => \@nodes },
+			 {},
+			 $omit_header,
+        );
     } elsif ($action eq 'random') {
         my @nodes = $wiki->list_all_nodes();
         $node = $nodes[int(rand(scalar(@nodes) + 1)) + 1];

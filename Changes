@@ -1,0 +1,4 @@
+0.02    Fixed stray content-type header in RDF full index output.
+
+0.01    22 April 2003
+        Initial (private) release.
