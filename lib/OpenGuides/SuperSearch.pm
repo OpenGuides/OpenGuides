@@ -146,8 +146,9 @@ sub run {
         # avoid screwing up "AND" searches.
         delete $self->{wikitext};
 
-        # For 0 or many we display results, for 1 we redirect to that page.
-        if ( $numres == 1 && !$self->{return_tt_vars}) {
+        # Redirect to a single result only if the title is a good enough match.
+        my %fuzzies = $self->{wiki}->fuzzy_title_match($self->{search_string});
+        if ($numres == 1 && !$self->{return_tt_vars} && scalar keys %fuzzies) {
             my $node = $results[0]{name};
             my $output = CGI::redirect( $self->{wikimain} . "?"
                                         . CGI::escape($node) );
@@ -434,6 +435,9 @@ sub _apply_parser {
         $self->{error} = "Search syntax error";
         return;
     }
+
+    # Store search string too.
+    $self->{search_string} = $search;
 
     #Prime the search
     $self->_prime_wikitext( tree => $tree);

@@ -2,14 +2,13 @@ use strict;
 use CGI::Wiki::Setup::SQLite;
 use Config::Tiny;
 use OpenGuides::SuperSearch;
-use Test::More tests => 16;
+use Test::More;
 
 eval { require DBD::SQLite; };
-my $have_sqlite = $@ ? 0 : 1;
-
-SKIP: {
-    skip "DBD::SQLite not installed - no database to test with", 16
-      unless $have_sqlite;
+if ( $@ ) {
+    plan skip_all => "DBD::SQLite not installed";
+} else {
+    plan tests => 17;
 
     CGI::Wiki::Setup::SQLite::setup( { dbname => "t/node.db" } );
     my $config = Config::Tiny->new;
@@ -81,24 +80,32 @@ SKIP: {
     like( $output, qr/<a href="http:\/\/example.com\/wiki.cgi\?Banana">/,
           "...and link is included in template output" );
 
-    # Now try with one hit - should print redirect to that page.
+    # One hit in body only should show result list.
     $output = $search->run(
                             return_output => 1,
                             vars          => { search => "weebl" },
                           );
-    like( $output, qr/Status: 302 Moved/, "prints redirect on single hit" );
+    unlike( $output, qr/Status: 302 Moved/, "no redirect if match is in body");
+
+    # One hit in title should redirect to that page.
+    $output = $search->run(
+                            return_output => 1,
+                            vars          => { search => "want pie now" },
+                          );
+    like( $output, qr/Status: 302 Moved/,
+          "prints redirect on single hit and match in title" );
     # Old versions of CGI.pm mistakenly print location: instead of Location:
     like( $output,
           qr/[lL]ocation: http:\/\/example.com\/wiki.cgi\?Want_Pie_Now/,
           "...and node name munged correctly in URL" );
 
     # Test the AND search
-    $output = $search->run(
-                            return_output => 1,
-                            vars          => { search => "monkey banana" },
+    %tt_vars = $search->run(
+                            return_tt_vars => 1,
+                            vars           => { search => "monkey banana" },
                            );
-    like( $output, qr/[lL]ocation: http:\/\/example.com\/wiki.cgi\?Monkey/,
-          "AND search returns right results" );
+    @found = map { $_->{name} } @{ $tt_vars{results} || [] };
+    is_deeply( \@found, [ "Monkey" ], "AND search returns right results" );
 
     # Test the OR search
     %tt_vars = $search->run(
@@ -111,14 +118,12 @@ SKIP: {
     print "# Found in $_\n" foreach @found;
 
     # Test the NOT search
-    $output = $search->run(
-                            return_output => 1,
-                            vars           => { search => "banana -monkey" },
+    %tt_vars = $search->run(
+                             return_tt_vars => 1,
+                             vars           => { search => "banana -monkey" },
                            );
-    like( $output,
-          qr/[lL]ocation: http:\/\/example.com\/wiki.cgi\?Banana/,    
-          "NOT search returns right results"
-        );
+    @found = sort map { $_->{name} } @{ $tt_vars{results} || [] };
+    is_deeply( \@found, [ "Banana" ], "NOT search returns right results" );
 
     # Test the phrase search
     $output = $search->run(
@@ -127,7 +132,7 @@ SKIP: {
                            );
     like( $output,
           qr/[lL]ocation: http:\/\/example.com\/wiki.cgi\?Monkey_Brains/,    
-          "phrase search returns right results"
+          "phrase search returns right results and redirects to page"
         );
 
     #####
