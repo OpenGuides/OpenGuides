@@ -19,7 +19,6 @@ lib/OpenGuides/Utils.pm
 lib/OpenGuides.pm
 newpage.cgi
 preferences.cgi
-pubcrawl.cgi
 supersearch.cgi
 templates/backlink_results.tt
 templates/banner.tt
@@ -38,7 +37,6 @@ templates/node.tt
 templates/node_history.tt
 templates/openguides_information_boxes.tt
 templates/preferences.tt
-templates/pubcrawl.tt
 templates/rdf_index.tt
 templates/recent_changes.tt
 templates/search_results.tt
