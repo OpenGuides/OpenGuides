@@ -1,5 +1,5 @@
 use strict;
-use Test::More tests => 18;
+use Test::More tests => 19;
 use Config::Tiny;
 use Cwd;
 use CGI::Cookie;
@@ -98,3 +98,18 @@ $output = OpenGuides::Template->output(
 );
 like( $output, qr/HOME LINK: http:\/\/wiki.example.com/,
       "home_link var set OK when script_name blank" );
+
+# Test that full_cgi_url comes out right if the trailing '/' is
+# missing from script_url in the config file.
+$config = Config::Tiny->read( "t/15_wiki.conf" );
+$config->{_}->{template_path} = cwd . "/t/templates";
+$config->{_}->{script_url} = "http://wiki.example.com";
+$config->{_}->{script_name} = "wiki.cgi";
+$output = OpenGuides::Template->output(
+    config   => $config,
+    template => "15_test.tt"
+);
+like( $output, qr/FULL CGI URL: http:\/\/wiki.example.com\/wiki.cgi/,
+      "full_cgi_url OK when trailing '/' missed off script_url" );
+
+

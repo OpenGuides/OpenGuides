@@ -70,6 +70,11 @@ sub output {
 
     my $script_name = $config->{_}->{script_name};
     my $script_url  = $config->{_}->{script_url};
+
+    # Ensure that script_url ends in a '/' - this is done in Build.PL but
+    # we need to allow for people editing the config file by hand later.
+    $script_url .= "/" unless $script_url =~ /\/$/;
+
     $tt_vars = { %$tt_vars,
 		 site_name     => $config->{_}->{site_name},
 		 cgi_url       => $script_name,

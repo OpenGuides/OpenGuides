@@ -3,7 +3,7 @@ use strict;
 
 use vars qw( $VERSION );
 
-$VERSION = '0.18';
+$VERSION = '0.19';
 
 =head1 NAME
 
@@ -34,6 +34,8 @@ so the location features might not work so well outside the UK.
 =item * L<http://www.ox.compsoc.net/oxfordguide/>, an Open Guide to Oxford run by Dominic Hargreaves (what a star)
 
 =item * grubstreet, the motivation behind OpenGuides; at L<http://grault.net/grubstreet/>
+
+=item * L<CGI::Wiki>, the Wiki toolkit which does the heavy lifting for OpenGuides
 
 =back
 

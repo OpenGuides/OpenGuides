@@ -4,7 +4,7 @@ use strict;
 use warnings;
 
 use vars qw( $VERSION );
-$VERSION = '0.18';
+$VERSION = '0.19';
 
 use CGI qw/:standard/;
 use CGI::Carp qw(croak);
@@ -30,6 +30,10 @@ my $config = Config::Tiny->read('wiki.conf');
 # Read in configuration values from config file.
 my $script_name = $config->{_}->{script_name};
 my $script_url = $config->{_}->{script_url};
+
+# Ensure that script_url ends in a '/' - this is done in Build.PL but
+# we need to allow for people editing the config file by hand later.
+$script_url .= "/" unless $script_url =~ /\/$/;
 
 my ($wiki, $formatter, $locator, $q);
 eval {
