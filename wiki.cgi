@@ -430,6 +430,7 @@ sub preview_node {
 			categories   => \@categories,
   		        phone        => $phone,
 			fax          => $fax,
+			website      => $website,
 		        formatted_website_text => $formatted_website_text,
 		        hours_text   => $hours_text,
 			address      => $address,
