@@ -1,6 +1,7 @@
 0.36
         Changed node template to include link to diff of current version
           from previous version. 
+	Fixed case sensitivity bug in index node autocreation.
 
 0.35    25 June 2004
         Forgot to add version prerequisite on CGI::Wiki.  Don't use 0.34,
