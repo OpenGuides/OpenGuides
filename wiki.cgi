@@ -14,6 +14,8 @@ use CGI::Wiki::Plugin::Locator::UK;
 use CGI::Wiki::Plugin::RSS::ChefMoz;
 use CGI::Wiki::Plugin::RSS::ModWiki;
 use Config::Tiny;
+use Geography::NationalGrid;
+use Geography::NationalGrid::GB;
 use Template;
 use Time::Piece;
 use URI::Escape;
