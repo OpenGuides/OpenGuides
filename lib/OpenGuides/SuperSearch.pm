@@ -171,53 +171,59 @@ sub process_template {
     return 1;
 }
 
-# method to populate $self with text of nodes matching a single-term search
+# method to populate $self with text of nodes potentially matching a query
+# This could contain many more nodes than actually match the query
 sub _prime_wikitext {
-    my ($self, $search) = @_;
+    my ($self, $op, @leaves) = @_;
     my $wiki = $self->{wiki};
 
-    # Clear out any previously-accumulated wikitext - need to do this
-    # for persistent environments such as testing.
-    $self->{wikitext} = {};
+    if ($op =~ /AND|OR/) {
+	# Recurse into parse tree for boolean op nodes
+	$self->_prime_wikitext(@$_) for @leaves;
+    } elsif ($op eq 'NOT') {
+	$self->_prime_wikitext(@leaves);
+    } elsif ($op eq 'word') {
+	foreach (@leaves) {
+	    # Search title and body.
+	    my %results = $wiki->search_nodes( $_ );
+	    foreach my $node ( keys %results ) {
+		next unless $node; # Search::InvertedIndex goes screwy sometimes
+		my $key = $wiki->formatter->node_name_to_node_param( $node );
+		my $text = $node . " " . $wiki->retrieve_node( $node );
+		$self->{wikitext}{$key} ||= $self->_mungepage( $text );
+	    }
 
-    # Search title and body.
-    my %results = $wiki->search_nodes( $search );
-    foreach my $node ( keys %results ) {
-        next unless $node; # Search::InvertedIndex goes screwy sometimes
-        my $key = $wiki->formatter->node_name_to_node_param( $node );
-        my $text = $node . " " . $wiki->retrieve_node( $node );
-        $self->{wikitext}{$key} ||= $self->_mungepage( $text );
-    }
+	    # Search categories.
+	    my @catmatches = $wiki->list_nodes_by_metadata(
+				 metadata_type  => "category",
+				 metadata_value => $_,
+				 ignore_case    => 1,
+	    );
 
-    # Search categories.
-    my @catmatches = $wiki->list_nodes_by_metadata(
-                         metadata_type  => "category",
-                         metadata_value => $search,
-                         ignore_case    => 1,
-    );
+	    foreach my $node ( @catmatches ) {
+		my $key = $wiki->formatter->node_name_to_node_param( $node );
+		my $text = $node. " " . $wiki->retrieve_node( $node );
+		$self->{wikitext}{$key} ||= $self->_mungepage( $text );
+		# Append this category so the regex finds it later.
+		$self->{wikitext}{$key} .= " [$_]";
+	    }
 
-    foreach my $node ( @catmatches ) {
-        my $key = $wiki->formatter->node_name_to_node_param( $node );
-        my $text = $node. " " . $wiki->retrieve_node( $node );
-        $self->{wikitext}{$key} ||= $self->_mungepage( $text );
-        # Append this category so the regex finds it later.
-        $self->{wikitext}{$key} .= " [$search]";
-    }
-
-    # Search locales.
-    my @locmatches = $wiki->list_nodes_by_metadata(
-                         metadata_type  => "locale",
-                         metadata_value => $search,
-                         ignore_case    => 1,
-    );
-    foreach my $node ( @locmatches ) {
-        my $key = $wiki->formatter->node_name_to_node_param( $node );
-        my $text = $node. " " . $wiki->retrieve_node( $node );
-        $self->{wikitext}{$key} ||= $self->_mungepage( $text );
-        # Append this locale so the regex finds it later.
-        $self->{wikitext}{$key} .= " [$search]";
-    }
-}
+	    # Search locales.
+	    my @locmatches = $wiki->list_nodes_by_metadata(
+				 metadata_type  => "locale",
+				 metadata_value => $_,
+				 ignore_case    => 1,
+	    );
+	    foreach my $node ( @locmatches ) {
+		my $key = $wiki->formatter->node_name_to_node_param( $node );
+		my $text = $node. " " . $wiki->retrieve_node( $node );
+		$self->{wikitext}{$key} ||= $self->_mungepage( $text );
+		# Append this locale so the regex finds it later.
+		$self->{wikitext}{$key} .= " [$_]";
+	    }
+	} # foreach (@leaves)
+    } # $op eq 'word'
+} # sub _prime_wikitext
     
 # method to filter out undesirable markup from the raw wiki text
 sub _mungepage {
@@ -311,6 +317,9 @@ sub _apply_parser {
         return;
     }
 
+    #Prime the search
+    $self->_prime_wikitext(@$tree);
+
     # Apply search and return results
     my %results = $self->_matched_items( tree => $tree );
     $self->{results} = \%results;
@@ -350,9 +359,6 @@ sub matched_word {
     my $wmatch = join '\W+',@_;
     $wmatch =~ s/%/\\w/g;
     $wmatch =~ s/\*/\\w*/g;
-
-    # Read in pages from the database that are candidates for the search.
-    $self->_prime_wikitext(join ' ',@_);
 
     return $self->_do_search($wmatch);
 }
