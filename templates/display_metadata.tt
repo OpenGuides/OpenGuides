@@ -3,7 +3,7 @@
 
 <div id="metadata">
 [% IF phone OR fax OR address OR postcode OR formatted_website_text
-      OR hours_text %]
+      OR hours_text OR map_link %]
   <ul>
     [% IF phone %]
       <li><strong>Telephone:</strong> [% CGI.escapeHTML(phone) %]</li>
