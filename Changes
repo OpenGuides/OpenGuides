@@ -1,6 +1,7 @@
 0.40
         Recent Changes now shows changes in the past 24 hours, past week,
           past fortnight, and past 30 days.
+        New preferences option to allow Recent Changes visit tracking.
         Preferences now has an option for when your prefs expire.
         Navbar added to diff and history pages.
         The "omit help links" preference now actually works.
