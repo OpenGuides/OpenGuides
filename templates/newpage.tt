@@ -6,7 +6,7 @@
 <form action="newpage.cgi" method="POST">
 Enter the name of the page to make:<br />
 <input type="text" size="50" name="pagename" value="[% CGI.escapeHTML(pagename) %]" />
-<input type="submit" value="Go" />
+<input type="submit" value="Go" class="form_button" />
 <input type="hidden" name="action" value="makepage" />
 
 <p>Note: you may not use the following characters in page names:<br />

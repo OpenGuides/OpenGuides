@@ -30,7 +30,7 @@
     of here.
     <input type="hidden" name="id" value="[% node_name %]" />
     <input type="hidden" name="action" value="find_within_distance" />
-    <input type="submit" name="Go" value="Go" />
+    <input type="submit" name="Go" value="Go" class="form_button" />
   </form>
 [% END %]
 
@@ -55,7 +55,7 @@
 <p>
   <form action="supersearch.cgi" method="get">
     <input type="text" size="50" name="search" />
-    <input type="submit" name="Go" value="Search" />
+    <input type="submit" name="Go" value="Search" class="form_button" />
   </form>
 </p>
 

@@ -101,8 +101,8 @@ You will need to manually merge your changes into the new version.
     </fieldset></td>
   </tr>
   <tr>
-    <td align="center"><input type="submit" name="preview" value="Preview changes" /></td>
-    <td align="center"><input type="submit" name="Save" value="Save changes" /></td>
+    <td align="center"><input type="submit" name="preview" value="Preview changes" class="form_button" /></td>
+    <td align="center"><input type="submit" name="Save" value="Save changes" class="form_button" /></td>
   </tr>
   <tr>
     <td colspan="2" align="center"><a href="[% cgi_url %]?[% node_param %]">(cancel edit)</a></td>

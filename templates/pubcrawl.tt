@@ -25,7 +25,7 @@
     Number of pubs in crawl:
     <input type="text" size="2" maxlength="2" name="n" value="[% n %]"/>
     <br />
-    <input type="submit" value="Generate">
+    <input type="submit" value="Generate" class="form_button" />
     [% IF crawl %]
       <input type="reset" value="Clear form">
     [% END %]

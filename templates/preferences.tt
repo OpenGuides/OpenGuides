@@ -37,7 +37,7 @@
     [% END %]
     <br />
 
-    <input type="submit" value="Set it">
+    <input type="submit" value="Set it" class="form_button" />
     <input type="hidden" name="action" value="set_preferences">
   </form>
 
