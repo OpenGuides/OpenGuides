@@ -8,6 +8,7 @@ README
 TROUBLESHOOTING
 lib/OpenGuides/Build.pm
 lib/OpenGuides/RDF.pm
+lib/OpenGuides/UK/PubCrawl.pm
 lib/OpenGuides.pm
 preferences.cgi
 supersearch.cgi
@@ -29,5 +30,6 @@ templates/site_index.tt
 templates/userstats.tt
 t/00_setup.t
 t/01_add_test_data.t
-t/rdf.t
+t/21_rdf.t
+t/41_pubcrawl.t
 wiki.cgi
