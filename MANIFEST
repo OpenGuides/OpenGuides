@@ -7,7 +7,7 @@ META.yml
 PREREQUISITES
 README
 TROUBLESHOOTING
-examples/oxfordguide.css
+examples/wiki.css
 lib/OpenGuides/Build.pm
 lib/OpenGuides/CGI.pm
 lib/OpenGuides/Diff.pm
@@ -22,6 +22,7 @@ preferences.cgi
 pubcrawl.cgi
 supersearch.cgi
 templates/backlink_results.tt
+templates/banner.tt
 templates/differences.tt
 templates/display_categories.tt
 templates/display_metadata.tt

@@ -1,4 +1,20 @@
 0.30    
+        Major overhaul of templates. Added numerous style hooks and replaced
+          Oxford Guide stylesheet in examples/ with generic wiki.css that
+          takes advantage of them. Added new banner template for page
+          headers. Also ensured presence of navigation bar is consistent.
+          *** INCOMPATIBLE CHANGE: *** The navbar class in the stylesheet
+          has been renamed to, unsurprisingly, "navbar", for consistency 
+          (from "toolbar"). You are advised to create a duplicate wiki.cgi
+          that reads its data from your database but its stylesheet and 
+          templates from the new ones in order to test them *before* 
+          deploying them.
+        Added "FAQ", "How To Get Started" and "Wiki Etiquette" to the
+          navigation, under "Help" - these won't exist unless you create them 
+          on your site, so at first the links serve as examples of 
+          documentation you can provide.
+        Modified preferences.cgi so that all the help links in the navbar
+          can be hidden, not just the text formatting link.
         Fixed some HTML validation bugs.
 	Added multiple install and pretty URL notes to INSTALL.
 	Removed pubcrawl stuff from distro for now - it doesn't really work.
