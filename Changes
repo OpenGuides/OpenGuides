@@ -3,6 +3,7 @@
         Also try out create_makefile_pl => "passthrough" in Build.PL
         Minor fixes to tests to make them work with newest UseMod formatter.
 	Prevented "Edit this page" from showing up on category indexes.
+	Set TT "POST_CHOMP" option to strip unnecessary newlines from HTML.
 
 0.21    17 July 2003
         We no longer autogenerate a Makefile.PL, since it doesn't pick up
