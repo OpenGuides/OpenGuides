@@ -13,13 +13,13 @@ use CGI::Wiki::Search::SII;
 use CGI::Wiki::Formatter::UseMod;
 use CGI::Wiki::Plugin::GeoCache;
 use CGI::Wiki::Plugin::Locator::UK;
+use CGI::Wiki::Plugin::Diff;
 use Config::Tiny;
 use Geography::NationalGrid;
 use Geography::NationalGrid::GB;
 use OpenGuides::CGI;
 use OpenGuides::RDF;
 use OpenGuides::Utils;
-use OpenGuides::Diff;
 use OpenGuides::Template;
 use Time::Piece;
 use URI::Escape;
@@ -35,12 +35,14 @@ my $script_url = $config->{_}->{script_url};
 # we need to allow for people editing the config file by hand later.
 $script_url .= "/" unless $script_url =~ /\/$/;
 
-my ($wiki, $formatter, $locator, $q);
+my ($wiki, $formatter, $locator, $diff_plugin, $q);
 eval {
     $wiki = OpenGuides::Utils->make_wiki_object( config => $config );
     $formatter = $wiki->formatter;
     $locator = CGI::Wiki::Plugin::Locator::UK->new;
     $wiki->register_plugin( plugin => $locator );
+    $diff_plugin = CGI::Wiki::Plugin::Diff->new;
+    $wiki->register_plugin( plugin => $diff_plugin );
 
     # Get CGI object, find out what to do.
     $q = CGI->new;
@@ -127,10 +129,10 @@ eval {
             my $version = $q->param("version");
 	    my $other_ver = $q->param("diffversion");
 	    if ( $other_ver ) {
-                my %diff_vars = OpenGuides::Diff->formatted_diff_vars(
-                    wiki     => $wiki,
-                    node     => $node,
-                    versions => [ $version, $other_ver ]
+                my %diff_vars = $diff_plugin->differences(
+                    node          => $node,
+                    left_version  => $version, 
+		    right_version => $other_ver
                 );
                 print OpenGuides::Template->output(
                     wiki     => $wiki,
