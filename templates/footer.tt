@@ -8,7 +8,7 @@
 </div>
 
 <div id="footer">
-  [% IF enable_page_deletion %]
+  [% IF enable_page_deletion AND NOT not_deletable %]
     <p>
       <a href="[% full_cgi_url %]?id=[% node_param %];action=delete">Delete page</a> (admins only)
     </p>
