@@ -12,7 +12,7 @@ DESCRIPTION
     machine-readable (RDF) version of the page.
 
 BUGS AND CAVEATS
-    UTF8 data is currently not handled correctly throughout.
+    UTF8 data are currently not handled correctly throughout.
 
     Other bugs are documented at
     <http://rt.cpan.org/NoAuth/Bugs.html?Dist=OpenGuides>

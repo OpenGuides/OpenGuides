@@ -859,7 +859,7 @@ sub get_cookie {
 
 =head1 BUGS AND CAVEATS
 
-UTF8 data is currently not handled correctly throughout.
+UTF8 data are currently not handled correctly throughout.
 
 Other bugs are documented at
 L<http://rt.cpan.org/NoAuth/Bugs.html?Dist=OpenGuides>
