@@ -1,6 +1,6 @@
 package OpenGuides::SuperSearch;
 use strict;
-our $VERSION = '0.02';
+our $VERSION = '0.03';
 
 use CGI qw( :standard );
 use File::Spec::Functions qw(:ALL);
@@ -182,6 +182,7 @@ sub _prime_wikitext {
     # Search title and body.
     my %results = $wiki->search_nodes( $search );
     foreach my $node ( keys %results ) {
+        next unless $node; # Search::InvertedIndex goes screwy sometimes
         my $key = $wiki->formatter->node_name_to_node_param( $node );
         my $text = $node . " " . $wiki->retrieve_node( $node );
         $self->{wikitext}{$key} ||= $self->_mungepage( $text );

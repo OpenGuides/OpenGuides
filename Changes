@@ -3,6 +3,8 @@
           Module::Build to install into a private directory.
         Show IP address for anonymous edits.
         Changed CGI.pm version dependency for Dom (CPAN bug #3895).
+        Added check to OpenGuides::SuperSearch to stop it trying to
+          retrieve a nonexistent node when the search indexes have screwed up.
 
 0.25    23 September 2003
         Applied recent changes fix to front page feed as well.
