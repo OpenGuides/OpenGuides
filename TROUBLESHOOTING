@@ -45,9 +45,14 @@ further with this problem if you can't figure it out yourself.
 
 ----------------------------------------------------------------------
 
-Again relating to permissions - if you are using SQLite then note that
-the user your CGI is running as must have write access to not only the
-database file itself, but the directory that the file is in (in order
-that it can write a lockfile).
+Important note for those using SQLite:
+
+The user your CGI is running as must have write access to not only the
+database file itself, but the directory that the file is in, in order
+that it can write a lockfile.
+
+A symptom of having incorrect permissions set is being able to run 
+wiki.cgi from the command line but receiving an Error 500 when trying to 
+view it in your browser. 
 
 ----------------------------------------------------------------------
