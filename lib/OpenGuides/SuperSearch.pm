@@ -286,7 +286,7 @@ sub _build_parser {
             {$return = (@{$item[1]}>1) ? ['OR', @{$item[1]}] : $item[1][0]}
 
         term: '(' list ')' {$return = $item[2]}
-            |        '!' term {$return = ['NOT', @{$item[2]}]}
+            |        '-' term {$return = ['NOT', @{$item[2]}]}
 #           |        word ':' term {$return = ['meta', $item[1], $item[3]];}
             |        '"' word(s) '"' {$return = ['word', @{$item[2]}]}
             |        word {$return = ['word', $item[1]]}
@@ -441,11 +441,15 @@ sub matched_OR {
 
 =item B<NOT searches>
 
-Clauses preceded by exclamation marks (C<!>), for example:
+Words and phrases preceded by a minus sign are excluded, for example:
 
-  !expensive
+  restaurant -expensive
 
-will return all pages that do not contain the word "expensive".
+will return all pages that contain the word "restaurant" and do not 
+contain "expensive".
+
+Note that a NOT search is used to qualify an existing search, so you
+cannot use -foo standalone to give you all pages without foo.
 
 =cut
 
