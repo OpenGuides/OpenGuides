@@ -1,12 +1,13 @@
-use Module::Build;
-use Data::Dumper;
 use strict;
+use lib "lib";
+use OpenGuides::Build;
+use Data::Dumper;
 
 eval "use Config::Tiny";
 die "Config::Tiny is required to configure this application.\n" if $@;
 
 # Create the build object.
-my $build = Module::Build->new(
+my $build = OpenGuides::Build->new(
     dist_name => "OpenGuides",
     dist_version_from => "wiki.cgi",
     license => "perl",
