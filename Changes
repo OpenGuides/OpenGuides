@@ -1,4 +1,4 @@
-0.30    29 December 2003
+0.30    2 January 2003
         Added method to allow admins to delete nodes.  You will need to
           explicitly enable this option in your wiki.conf, since it brings
           with it the risk of accidental data loss.
