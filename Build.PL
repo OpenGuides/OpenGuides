@@ -100,6 +100,11 @@ my @questions = (
   variable => "formatting_rules_node",
   default  => "Text Formatting Examples"
   },
+{ question => "Make node titles link to node backlinks (C2 style)?",
+  variable => "backlinks_in_title",
+  default  => "n",
+  type     => "y_n"
+  },
 );
 
 print <<EOF;
@@ -239,7 +244,6 @@ my $build = OpenGuides::Build->new(
 	'CGI::Wiki::Formatter::UseMod'    => '0.16', # macros
         'CGI::Wiki::Plugin::Categoriser'  => 0,
 	'CGI::Wiki::Plugin::Diff'         => '0.07', # earlier buggy
-	'CGI::Wiki::Plugin::GeoCache'     => 0,
 	'CGI::Wiki::Plugin::Locator::UK'  => '0.09',
 	'CGI::Wiki::Plugin::RSS::ModWiki' => '0.06', # for fancy stuff
         'CGI::Wiki::Plugin::RSS::Reader'  => '1.3',  # earlier versions don't support RSS 2.0

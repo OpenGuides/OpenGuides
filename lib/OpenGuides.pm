@@ -4,7 +4,6 @@ use strict;
 use Carp "croak";
 use CGI;
 use CGI::Wiki::Plugin::Diff;
-use CGI::Wiki::Plugin::GeoCache;
 use CGI::Wiki::Plugin::Locator::UK;
 use OpenGuides::CGI;
 use OpenGuides::Template;
@@ -178,7 +177,6 @@ sub display_node {
                  %tt_vars,
 		 %metadata_vars,
 		 content       => $content,
-		 geocache_link => $self->make_geocache_link($id),
 		 last_modified => $modified,
 		 version       => $node_data{version},
                  node          => $id,
@@ -704,33 +702,6 @@ sub get_cookie {
     return $cookie_data{$pref_name};
 }
 
-sub make_geocache_link {
-    my $self = shift;
-    my $wiki = $self->wiki;
-    my $config = $self->config;
-    return "" unless $self->get_cookie( "include_geocache_link" );
-    my $node = shift || $config->{_}->{home_name};
-    my %current_data = $wiki->retrieve_node( $node );
-    my %criteria     = ( name => $node );
-    my %node_data    = $wiki->retrieve_node( %criteria );
-    my %metadata     = %{$node_data{metadata}};
-    my $latitude     = $metadata{latitude}[0];
-    my $longitude    = $metadata{longitude}[0];
-    my $geocache     = CGI::Wiki::Plugin::GeoCache->new();
-    my $link_text    = "Look for nearby geocaches";
-
-    if ($latitude && $longitude) {
-        my $cache_url    = $geocache->make_link(
-					latitude  => $latitude,
-					longitude => $longitude,
-					link_text => $link_text
-				);
-        return $cache_url;
-    }
-    else {
-        return "";
-    }
-}
 
 =back
 
