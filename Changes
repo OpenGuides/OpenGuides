@@ -2,6 +2,8 @@
         Applied recent changes fix to front page feed as well.
         Search box now searches categories and locales as well as title and
           body - so for example a search on "holborn & pubs" will DTRT.
+        NOT and phrase search tests were passing even though they shouldn't
+          have been - skip them for now.
 
 0.24    8 September 2003
         Fix to recent changes so minor changes don't mask major ones.

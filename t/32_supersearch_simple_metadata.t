@@ -49,8 +49,6 @@ if ( $@ ) {
     is_deeply( \@found, [ "Calthorpe_Arms", "Calthorpe_Arms_2" ],
                "simple search looks in category" );
 
-SKIP: {
-    skip "TODO - need case-insensitive metadata search", 1;
     %tt_vars = $search->run(
                              return_tt_vars => 1,
                              vars           => { search => "pubs" },
@@ -58,7 +56,6 @@ SKIP: {
     @found = sort map { $_->{name} } @{ $tt_vars{results} || [] };
     is_deeply( \@found, [ "Calthorpe_Arms", "Calthorpe_Arms_2" ],
                "...and is case-insensitive" );
-}
 
     # Check that a search on its locale works.
     %tt_vars = $search->run(
@@ -69,8 +66,6 @@ SKIP: {
     is_deeply( \@found, [ "Calthorpe_Arms", "Calthorpe_Arms_2" ],
                "simple search looks in locale" );
 
-SKIP: {
-    skip "TODO - need case-insensitive metadata search", 1;
     %tt_vars = $search->run(
                              return_tt_vars => 1,
                              vars           => { search => "holborn" },
@@ -78,7 +73,6 @@ SKIP: {
     @found = sort map { $_->{name} } @{ $tt_vars{results} || [] };
     is_deeply( \@found, [ "Calthorpe_Arms", "Calthorpe_Arms_2" ],
                "...and is case-insensitive" );
-}
 
     # Test AND search in various combinations.
     %tt_vars = $search->run(

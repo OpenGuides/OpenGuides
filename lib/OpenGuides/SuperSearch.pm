@@ -189,8 +189,9 @@ sub _prime_wikitext {
 
     # Search categories.
     my @catmatches = $wiki->list_nodes_by_metadata(
-                         metadata_type => "category",
+                         metadata_type  => "category",
                          metadata_value => $search,
+                         ignore_case    => 1,
     );
 
     foreach my $node ( @catmatches ) {
@@ -203,8 +204,9 @@ sub _prime_wikitext {
 
     # Search locales.
     my @locmatches = $wiki->list_nodes_by_metadata(
-                         metadata_type => "locale",
+                         metadata_type  => "locale",
                          metadata_value => $search,
+                         ignore_case    => 1,
     );
     foreach my $node ( @locmatches ) {
         my $key = $wiki->formatter->node_name_to_node_param( $node );
