@@ -126,13 +126,13 @@ eval {
     } elsif ($action eq 'show_backlinks') {
         show_backlinks($node);
     } elsif ($action eq 'index') {
-        show_index( type   => $q->param("index_type"),
-                    value  => $q->param("index_value"),
+        show_index( type   => $q->param("index_type") || "Full",
+                    value  => $q->param("index_value") || "",
                     format => $format );
     } elsif ($action eq "catindex") {
         # This is for backwards compatibility with pre-0.04 versions.
         show_index( type   => "category",
-                    value  => $q->param("category"),
+                    value  => $q->param("category") || "",
                     format => $format );
     } elsif ($action eq 'random') {
         my @nodes = $wiki->list_all_nodes();
