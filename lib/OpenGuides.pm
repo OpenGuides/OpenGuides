@@ -527,7 +527,6 @@ sub list_all_versions {
     my $node = $args{id};
     my %curr_data = $self->wiki->retrieve_node($node);
     my $curr_version = $curr_data{version};
-    croak "This is the first version" unless $curr_version > 1;
     my @history;
     for my $version ( 1 .. $curr_version ) {
         my %node_data = $self->wiki->retrieve_node( name    => $node,

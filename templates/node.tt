@@ -68,10 +68,16 @@
 </div>
 <div id="version">
 [% IF current %]
-Last edited [% last_modified %] (version [% version %]; <a href="[% cgi_url %]?id=[% node_param %];version=[% version - 1 %];diffversion=[% version %]">diff</a>).
+  Last edited [% last_modified %]
+  [% IF version == 1 %]
+    (version [% version %])
+  [% ELSE %]
+    (version [% version %];
+    <a href="[% cgi_url %]?id=[% node_param %];version=[% version - 1 %];diffversion=[% version %]">diff</a>).
+  [% END %]
 [% ELSE %]
-This is version [% version %] (as of [% last_modified %]). 
-<a href="[% cgi_url %]?[% node_param %]">View current version.</a> 
+  This is version [% version %] (as of [% last_modified %]). 
+  <a href="[% cgi_url %]?[% node_param %]">View current version.</a> 
 [% END %]
 [% IF version AND version > 1 %]
 <a href="[% cgi_url %]?action=list_all_versions;id=[% node_param %]">List all
