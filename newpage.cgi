@@ -36,6 +36,7 @@ sub show_form {
 					template => "newpage.tt",
 					vars     => {
 					    not_editable     => 1,
+                                            not_deletable    => 1,
 				       	    disallowed_chars => \@badchars,
                                             pagename         => $pagename }
     );

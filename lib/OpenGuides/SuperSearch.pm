@@ -1,6 +1,6 @@
 package OpenGuides::SuperSearch;
 use strict;
-our $VERSION = '0.06';
+our $VERSION = '0.07';
 
 use CGI qw( :standard );
 use CGI::Wiki::Plugin::Locator::UK;
@@ -202,6 +202,7 @@ sub process_template {
     my $tt_vars = $args{tt_vars} || {};
 
     $tt_vars->{not_editable} = 1;
+    $tt_vars->{not_deletable} = 1;
 
     return %$tt_vars if $self->{return_tt_vars};
 
