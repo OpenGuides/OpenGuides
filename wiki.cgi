@@ -30,7 +30,6 @@ my $config = Config::Tiny->read('wiki.conf');
 # Read in configuration values from config file.
 my $script_name = $config->{_}->{script_name};
 my $script_url = $config->{_}->{script_url};
-my $contact_email = $config->{_}->{contact_email};
 
 my ($wiki, $formatter, $locator, $q);
 eval {
@@ -134,6 +133,7 @@ if ($@) {
     my $error = $@;
     warn $error;
     print $q->header;
+    my $contact_email = $config->{_}->{contact_email};
     print qq(<html><head><title>ERROR</title></head><body>
              <p>Sorry!  Something went wrong.  Please contact the
              Wiki administrator at
