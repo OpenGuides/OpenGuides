@@ -418,7 +418,7 @@ sub show_index {
                 type  => $args{type},
                 value => $args{value}, # for RDF version
                 name  => CGI->escapeHTML( $name ),
-	        url   => $url
+	        url   => $url,
 		not_editable => 1
             };
         }
