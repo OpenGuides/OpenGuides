@@ -148,7 +148,8 @@ sub emit_rdfxml {
     my $longitude          = $node_data{metadata}{longitude}[0]          || '';
     my $version            = $node_data{version};
     my $username           = $node_data{metadata}{username}[0]           || '';
-
+    my $os_x               = $node_data{metadata}{os_x}[0]               || '';
+    my $os_y               = $node_data{metadata}{os_y}[0]               || '';
     my $catrefs            = $node_data{metadata}{category};
     my @locales            = @{ $node_data{metadata}{locale} || [] };
 
@@ -185,6 +186,7 @@ sub emit_rdfxml {
     xmlns:chefmoz="http://chefmoz.org/rdf/elements/1.0/"
     xmlns:wn="http://xmlns.com/wordnet/1.6/"
     xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#"
+    xmlns:os="http://downlode.org/rdf/os/0.1/"
     xmlns="http://www.w3.org/2000/10/swap/pim/contact#"
   >
 
@@ -198,20 +200,16 @@ sub emit_rdfxml {
     <foaf:topic rdf:resource="#obj" />
   </rdf:Description>
 
-  <$objType rdf:ID="obj">
-    <dc:title>$node_name</dc:title>
+  <$objType rdf:ID="obj" dc:title="$node_name">
 };
+
+    $rdf .= "    <!-- categories -->\n";
+    $rdf .= "    <dc:subject>$_</dc:subject>\n" foreach @{$catrefs};
+    $rdf .= "\n    <!-- address and geospatial data -->\n";
     $rdf .= "    <city>$city</city>" if $city;
     $rdf .= "    <postalCode>$postcode</postalCode>\n" if $postcode;
     $rdf .= "    <country>$country</country>\n" if $country;
-    $rdf .= "    <phone>$phone</phone>\n" if $phone;
-    $rdf .= "    <fax>$fax</fax>\n" if $fax;
-    $rdf .= "    <homePage>$website</homePage>\n" if $website;
-    $rdf .= "    <chefmoz:Hours>$opening_hours_text</chefmoz:Hours>\n" if $opening_hours_text;
-
-    foreach my $locale (@locales) {
-      $rdf .= "    <wn:Neighborhood>$locale</wn:Neighborhood>\n";
-    }
+    $rdf .= "    <wn:Neighborhood>$_</wn:Neighborhood>\n" foreach @locales;
 
     if ($latitude && $longitude) {
       $rdf .= qq{    <geo:lat>$latitude</geo:lat>
@@ -219,7 +217,19 @@ sub emit_rdfxml {
 };
     }
 
-    $rdf .= qq{  </$objType>
+    if ($os_x && $os_y) {
+      $rdf .= qq{    <os:x>$os_x</os:x>
+    <os:y>$os_y</os:y>};
+    }
+
+    $rdf .= "\n    <!-- contact information -->\n";
+    $rdf .= "    <phone>$phone</phone>\n" if $phone;
+    $rdf .= "    <fax>$fax</fax>\n" if $fax;
+    $rdf .= "    <homePage>$website</homePage>\n" if $website;
+    $rdf .= "    <chefmoz:Hours>$opening_hours_text</chefmoz:Hours>\n" if $opening_hours_text;
+
+    $rdf .= qq{
+  </$objType>
 </rdf:RDF>
 
 };
