@@ -8,7 +8,7 @@ eval { require DBD::SQLite; };
 if ( $@ ) {
     plan skip_all => "DBD::SQLite not installed";
 } else {
-    plan tests => 6;
+    plan tests => 7;
 
     CGI::Wiki::Setup::SQLite::setup( { dbname => "t/node.db" } );
     my $config = Config::Tiny->new;
@@ -93,4 +93,23 @@ if ( $@ ) {
     %scores = map { $_->{name} => $_->{score} } @{$tt_vars{results} || []};
     ok( $scores{Putney} < $scores{Putney_Tandoori},
         "two words in title beats one in title and one in content" );
+
+    # Check that in an AND match words closer together get higher priority.
+    $wiki->write_node( "Spitalfields Market",
+                       "Mango juice from the Indian stall" )
+      or die "Can't write node";
+    $wiki->write_node( "Borough Market", "dried mango and real apple juice" )
+      or die "Can't write node";
+
+    %tt_vars = $search->run(
+                             return_tt_vars => 1,
+                             vars           => { search => "mango juice" },
+                           );
+    foreach my $result ( @{ $tt_vars{results} || [] } ) {
+        print "# $result->{name} scores $result->{score}\n";
+    }
+    %scores = map { $_->{name} => $_->{score} } @{$tt_vars{results} || []};
+    ok( $scores{Borough_Market} < $scores{Spitalfields_Market},
+        "words closer together gives higher score" );
+
 }

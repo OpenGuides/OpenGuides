@@ -315,6 +315,18 @@ sub _perform_search {
         }
         $self->_build_parser && exists($self->{error}) && return;
         $self->_apply_parser($srh);
+
+        # Now give extra bonus points to any nodes matching the entire
+        # search string verbatim.  This is really shonky and inefficient
+        # but then the whole of this module needs rewriting to be less
+        # ick in any case.
+        foreach my $page ( keys %{ $self->{results} } ) {
+            my $summary = $self->{results}{$page}{summary};
+            $summary =~ s/<\/?b>//g;
+            if ( $summary =~ /$self->{search_string}/i ) {
+                $self->{results}{$page}{score} += 5;
+	      }
+	}
     } else {
         my $wiki = $self->{wiki};
         my @all_nodes = $wiki->list_all_nodes;
@@ -664,11 +676,11 @@ sub _do_search {
         # Compute score and create summary.
         my $score = scalar @out; # 1 point for each match in body/title/cats
         $score += 10 if $temp =~ /$wexp/; # 10 points if title matches
-        # 5 points for cat/locale match.  Check $score too since this might
+        # 3 points for cat/locale match.  Check $score too since this might
         # be a branch of an AND search and the cat/locale match may have
         # been for the other branch,
-        $score += 5  if $v->{category_match} and $score;
-        $score += 5  if $v->{locale_match} and $score;
+        $score += 3  if $v->{category_match} and $score;
+        $score += 3  if $v->{locale_match} and $score;
 
         $results{$k} = {
                          score   => $score,
