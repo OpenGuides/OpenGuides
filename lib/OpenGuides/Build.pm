@@ -84,7 +84,7 @@ sub ACTION_install_extras {
 	    my $copy = $self->copy_if_modified( $script, $install_directory );
 	    if ( $copy ) {
 		$self->fix_shebang_line($copy);
-		$self->make_executable($copy);
+		$self->make_executable($copy) unless $script eq "wiki.conf";
 	    } else {
 		print "Skipping $install_directory/$script (unchanged)\n";
 	    }
