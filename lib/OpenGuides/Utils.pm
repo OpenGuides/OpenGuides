@@ -104,9 +104,7 @@ sub make_wiki_object {
 
     my %macros = (
         '@SEARCHBOX' =>
-            qq(<form action="$search_url" method="get">
-	       <input type="text" size="20" name="search">
-	       <input type="submit" name="Go" value="Search"></form>),
+            qq(<form action="$search_url" method="get"><input type="text" size="20" name="search"><input type="submit" name="Go" value="Search"></form>),
         qr/\@INDEX_LINK\s+\[\[(Category|Locale)\s+([^\]|]+)\|?([^\]]+)?\]\]/ =>
             sub { my $link_title = $_[2] || "View all pages in $_[0] $_[1]"; return qq(<a href="$script_name?action=index;index_type=) . uri_escape(lc($_[0])) . qq(;index_value=) . uri_escape($_[1]) . qq(">$link_title</a>)
                 }
