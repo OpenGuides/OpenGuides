@@ -21,7 +21,7 @@ my $cookie = OpenGuides::CGI->make_prefs_cookie(
     include_geocache_link  => 1,
     preview_above_edit_box => 1,
     latlong_traditional    => 1,
-    omit_formatting_link   => 1,
+    omit_help_links        => 1,
     show_minor_edits_in_rc => 1,
 );
 isa_ok( $cookie, "CGI::Cookie", "->make_prefs_cookie returns a cookie" );
@@ -43,7 +43,7 @@ is( $prefs{username}, "Kake",
 is( $prefs{include_geocache_link}, 1, "...and geocache prefs" );
 is( $prefs{preview_above_edit_box}, 1, "...and preview prefs" );
 is( $prefs{latlong_traditional}, 1, "...and latlong prefs" );
-is( $prefs{omit_formatting_link}, 1, "...and formatting link prefs" );
+is( $prefs{omit_help_links}, 1, "...and help link prefs" );
 is( $prefs{show_minor_edits_in_rc}, 1, "...and minor edits prefs" );
 
 # Check that cookie parsing fails nicely if no cookie set.
