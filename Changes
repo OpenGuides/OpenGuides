@@ -6,16 +6,16 @@
           links being displayed for nodes with no address data (spotted
           by Steve Jolly).
 	Remove inline style from recent_changes.tt. You will need to add
-	the styles table#recentchanges, td.recentchanges_meta,
-	td.recentchanges_user, td.recentchanges_node_name and
-	td.recentchanges_comment to your stylesheets.
+	  the styles table#recentchanges, td.recentchanges_meta,
+	  td.recentchanges_user, td.recentchanges_node_name and
+	  td.recentchanges_comment to your stylesheets.
 
 0.32    7 June 2004
         Change auto-creating behaviour of index nodes (categories and
-	locales): instead of being created on access they are created when
-	the referring node is committed. This fixes compliance with RFC 2616
-	section 9.1.1 and prevents corrupted index nodes being created
-	accidentally.
+	  locales): instead of being created on access they are created
+	  when the referring node is committed. This fixes compliance with
+	  RFC 2616 section 9.1.1 and prevents corrupted index nodes being
+	  created accidentally.
 
 0.31    09 May 2004
         Created a new macro to allow the embedding of RSS feeds into
