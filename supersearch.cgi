@@ -19,7 +19,6 @@ my $config = Config::Tiny->read('wiki.conf');
 my $wiki = OpenGuides::Utils->make_wiki_object( config => $config );
 
 use vars qw($wiki_dbpath $wikimain $css $head %wikitext);
-	$db_name $db_user $db_pass);
 
 $wikimain = $config->{_}->{script_name};
 $css = $config->{_}->{stylesheet_url};
