@@ -2,13 +2,14 @@ package OpenGuides::Utils;
 
 use strict;
 use vars qw( $VERSION );
-$VERSION = '0.01';
+$VERSION = '0.02';
 
 use Carp qw( croak );
 use CGI::Wiki;
 use CGI::Wiki::Formatter::UseMod;
 use CGI::Wiki::Search::SII;
 use Search::InvertedIndex::DB::DB_File_SplitHash;
+use URI::Escape;
 
 =head1 NAME
 
