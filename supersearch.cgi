@@ -42,8 +42,6 @@ sub matched_items {
 	goto &{matched_.$op};
 }
 
-my $fs = '\xb3';
-
 # sub mungepage is used to filter out undesirable markup from the raw wiki text
 
 sub mungepage {
