@@ -1,5 +1,6 @@
-#!/usr/local/bin/perl -w
+#!/usr/local/bin/perl
 
+use warnings;
 use strict;
 
 use CGI;

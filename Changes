@@ -1,4 +1,25 @@
 0.31    
+       
+        Numerous template tweaks to comply with the W3C's Web Content 
+          Accessibility Guidelines (http://www.w3.org/TR/WAI-WEBCONTENT/):
+          - summaries for all HTML tables
+          - labels for all form input elements and some textual additions 
+            to templates, such as '/' separators between navbar items, 
+            because the guidelines specify links should not only be 
+            separated by whitespace. If you don't want these to appear,
+            put the following in your stylesheet and they'll be hidden by 
+            CSS (but will still appear for people using textual browsers or 
+            screen readers): ".hidden { display: none }".
+          - the "lang" element (a two-letter code identifying the language 
+            you're writing pages in) will now be added to the <html> tag on 
+            all pages; a new question has been added to the configuration 
+            script to ask for it and it will be stored in wiki.conf.
+            ***         YOU WILL NEED TO RUN BUILD.PL AGAIN.          ***
+            *** Remember to keep a backup copy of your old wiki.conf! ***   
+
+        Improved navigation for search results (next and previous n hits).
+          Removed underscores from page names in search results.
+
         Overhauled RDF output. Changes:
           - everything is no longer classified as a restaurant(!)
           - empty tags are no longer generated
@@ -10,7 +31,8 @@
           - logical structure improvements (subjects of pages are now
             identified as spatial things if they are, or are RDF
             descriptions if they're not, instead of being anonymous 
-            FOAF topics).
+            FOAF topics)
+          - include city and country in RDF only for spatial things.
 
         Fixed bug that prevented automatic database initialization on
 	  SQLite databases.
