@@ -1,4 +1,8 @@
-[% INCLUDE header.tt page_title = "Index of $criterion.name - $site_name" %]
+[% IF criterion %]
+  [% INCLUDE header.tt page_title = "Index of $criterion.name - $site_name" %]
+[% ELSE %]
+  [% INCLUDE header.tt page_title = "Things within $limit of $origin - $site_name" %]
+[% END %]
 [% INCLUDE banner.tt %]
 <div id="content">
 [% INCLUDE navbar.tt %]
