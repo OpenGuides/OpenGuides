@@ -7,6 +7,7 @@ Makefile.PL
 META.yml
 PREREQUISITES
 README
+README.CSS
 TROUBLESHOOTING
 examples/london.css
 examples/reindex.pl
