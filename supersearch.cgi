@@ -1,21 +1,9 @@
 #!/usr/local/stow/perl-5.8.0/bin/perl 
 
-eval 'exec /usr/local/stow/perl-5.8.0/bin/perl  -S $0 ${1+"$@"}'
-    if 0; # not running under some shell
-#
-# Usemod Wiki search facility
-#
-# Ivor Williams: October 2002
-#
-# Change the variable $wikiroot and $wikimain below for your site specific
-# datadir path and wiki url.
-#
-# The prog uses bog-standard CGI.pm stuff. The main program can be tailored for look and feel.
-
 use strict;
 use warnings;
 
-our $VERSION = '1.03';
+our $VERSION = '1.04';
 
 use CGI qw(:standard *ol *div);
 use CGI::Carp qw(fatalsToBrowser);	#Remove fatalsToBrowser if paranoid
