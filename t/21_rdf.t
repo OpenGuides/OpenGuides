@@ -21,7 +21,8 @@ while ( ($store_name, $store) = each %stores ) {
 
       my $wiki = CGI::Wiki->new(
           store     => $store,
-          formatter => CGI::Wiki::Formatter::UseMod->new );
+          formatter => CGI::Wiki::Formatter::UseMod->new( munge_urls => 1 ),
+      );
       my $config = Config::Tiny->read( "t/21_wiki.conf" );
 
       my $rdf_writer = eval {

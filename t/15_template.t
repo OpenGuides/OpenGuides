@@ -17,7 +17,7 @@ $config->{_}->{template_path} = cwd . "/t/templates";
 # info to make a proper wiki object here.
 my $fake_wiki = Test::MockObject->new;
 $fake_wiki->mock("formatter",
-                 sub { return CGI::Wiki::Formatter::UseMod->new; } );
+                 sub { return CGI::Wiki::Formatter::UseMod->new( munge_urls => 1 ); } );
 
 eval { OpenGuides::Template->output( wiki   => $fake_wiki,
                                      config => $config ); };
