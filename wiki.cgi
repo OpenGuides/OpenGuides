@@ -441,19 +441,17 @@ sub edit_node {
 sub delete_node {
     my $node = shift;
 
-    my %tt_vars = ( name => $node );
-
     my $password = $q->param('password');
 
     if ($password) {
         if ($password ne $config->{_}->{admin_pass}) {
-            process_template("delete_password_wrong.tt", $node, \%tt_vars) 
+            process_template("delete_password_wrong.tt", $node); 
         } else {
             $wiki->delete_node($node);
-            process_template("delete_done.tt", $node, \%tt_vars);
+            process_template("delete_done.tt", $node);
         }
     } else {
-        process_template("delete_confirm.tt", $node, \%tt_vars);
+        process_template("delete_confirm.tt", $node);
     }
 }
 

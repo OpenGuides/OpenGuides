@@ -1,13 +1,13 @@
 [% INCLUDE header.tt %]
 <h1>Confirm Deletion</h1>
 <p>
-Are you sure you want to delete <em>[% name %]</em>? If so, please enter the admin
-password. If not, you can <a href="[% cgi_url %]?[% name %]">go back to the
+Are you sure you want to delete <em>[% node_name %]</em>? If so, please enter the admin
+password. If not, you can <a href="[% cgi_url %]?[% node_param %]">go back to the
 page</a>.
 </p>
 <form action="[% cgi_url %]" method="post">
 <input type="hidden" name="action" value="delete">
-<input type="hidden" name="id" value="[% name %]">
+<input type="hidden" name="id" value="[% node_name %]">
 <strong>Password:</strong> <input type="password" name="password"> <input type="submit" value="Delete">
 </form>
 [% INCLUDE footer.tt %]
