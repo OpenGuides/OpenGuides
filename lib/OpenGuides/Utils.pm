@@ -119,13 +119,25 @@ sub make_wiki_object {
             qq(<form action="$search_url" method="get"><input type="text" size="20" name="search"><input type="submit" name="Go" value="Search"></form>),
         qr/\@INDEX_LINK\s+\[\[(Category|Locale)\s+([^\]|]+)\|?([^\]]+)?\]\]/ =>
             sub {
-                  my $wiki = shift;
+                  # We may be being called by CGI::Wiki::Plugin::Diff,
+                  # which doesn't know it has to pass us $wiki - and
+                  # we don't use it anyway.
+                  if ( UNIVERSAL::isa( $_[0], "CGI::Wiki" ) ) {
+                      shift; # just throw it away
+                  }
                   my $link_title = $_[2] || "View all pages in $_[0] $_[1]";
                   return qq(<a href="$script_name?action=index;index_type=) . uri_escape(lc($_[0])) . qq(;index_value=) . uri_escape($_[1]) . qq(">$link_title</a>);
                 },
         qr/\@INDEX_LIST\s+\[\[(Category|Locale)\s+([^\]]+)]]/ =>
              sub {
                    my ($wiki, $type, $value) = @_;
+
+                   # We may be being called by CGI::Wiki::Plugin::Diff,
+                   # which doesn't know it has to pass us $wiki
+                   unless ( UNIVERSAL::isa( $wiki, "CGI::Wiki" ) ) {
+                       return "(unprocessed INDEX_LIST macro)";
+		   }
+
                    my @nodes = sort $wiki->list_nodes_by_metadata(
                        metadata_type  => $type,
                        metadata_value => $value,
@@ -147,7 +159,14 @@ sub make_wiki_object {
                    return $return;
                  },
 	qr/\@RSS\s+(.+)/ => sub {
-                    my ($wiki, $url) = @_;
+                    # We may be being called by CGI::Wiki::Plugin::Diff,
+                    # which doesn't know it has to pass us $wiki - and
+                    # we don't use it anyway.
+                    if ( UNIVERSAL::isa( $_[0], "CGI::Wiki" ) ) {
+                        shift; # just throw it away
+                    }
+
+                    my $url = shift;
 
                     # The URL will already have been processed as an inline
                     # link, so transform it back again.

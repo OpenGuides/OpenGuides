@@ -301,6 +301,7 @@ my $build = OpenGuides::Build->new(
 	'Data::Dumper'                    => 0,
         $drivers{$dbtype}                 => 0,
 	'File::Spec::Functions'           => 0,
+        'File::Temp'                      => 0,
 	'Geography::NationalGrid'         => 0,
         'LWP::Simple'                     => 0,
 	'Parse::RecDescent'               => 0,

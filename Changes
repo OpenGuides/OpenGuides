@@ -4,6 +4,7 @@
 	Add nofollow to robots meta tag.
         Added new CSS class "node_name" for inline non-hyperlink references
          to node names - see README.CSS for details.
+        Fix bug with diff display on nodes containing macros.
 	
 0.45	1 December 2004
         Made the geolocation stuff work worldwide.  Squeeeeeee!
