@@ -1,4 +1,6 @@
-0.02    Fixed stray content-type header in RDF full index output.
+0.02    23 April 2003
+        Fixed stray content-type header in RDF full index output.
+        Added lib/OpenGuides/Build.pm to MANIFEST (whoops, thanks cal).
 
 0.01    22 April 2003
         Initial (private) release.
