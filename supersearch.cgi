@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-our $VERSION = '1.04';
+our $VERSION = '1.05';
 
 use CGI qw(:standard *ol *div);
 use CGI::Carp qw(fatalsToBrowser);	#Remove fatalsToBrowser if paranoid
@@ -12,33 +12,18 @@ use Parse::RecDescent;
 use Data::Dumper;
 use File::Spec::Functions qw(:ALL);
 use Config::Tiny;
-
-use CGI::Wiki::Search::SII;
-use CGI::Wiki::Formatter::UseMod;
+use OpenGuides::Utils;
 
 my $config = Config::Tiny->read('wiki.conf');
 
-use vars qw($store_class $wiki_dbpath $wikimain $css $head 
-	$wikistore $wiki_search $wiki_formatter %wikitext
+my $wiki = OpenGuides::Utils->make_wiki_object( config => $config );
+
+use vars qw($wiki_dbpath $wikimain $css $head %wikitext);
 	$db_name $db_user $db_pass);
 
-$db_name = $config->{_}->{dbname};
-$db_user = $config->{_}->{dbuser};
-$db_pass = $config->{_}->{dbpass};
-$wiki_dbpath = $config->{_}->{indexing_directory};
 $wikimain = $config->{_}->{script_name};
 $css = $config->{_}->{stylesheet_url};
 $head = $config->{_}->{site_name} . " Search";
-
-# Require in the right database module.
-my $dbtype = $config->{_}->{dbtype};
-
-my %cgi_wiki_exts = ( postgres => "Pg",
-		      mysql    => "MySQL" );
-
-$store_class = "CGI::Wiki::Store::" . $cgi_wiki_exts{$dbtype};
-eval "require $store_class";
-die "Can't 'require' $store_class.\n" if $@;
 
 # sub matched_items is called with parse tree. Uses horrible subname concatenation - this
 # could be rewritten to us OO instead and be much neater. This would be a major refactor:
@@ -87,36 +72,14 @@ sub mungepage {
 	$text;
 }
 
-sub load_wiki_text {
-
-# Make store
-	$wikistore = $store_class->new( 
-		dbname => $db_name,
-		dbuser => $db_user,
-		dbpass => $db_pass,
-		);
-
-# Make search.
-my $indexdb = Search::InvertedIndex::DB::DB_File_SplitHash->new(
-	-map_name  => $wiki_dbpath,
-        -lock_mode => "EX"
-        );
-
-        $wiki_search  = CGI::Wiki::Search::SII->new( indexdb => $indexdb );
-
-	$wiki_formatter = CGI::Wiki::Formatter::UseMod->new( {
-		node_prefix => "$wikimain?"
-		} );
-}
-
 sub prime_wikitext {
 	my $search = shift;
 
-	my %res = $wiki_search->search_nodes($search,' ','or');
+	my %res = $wiki->search_nodes($search,' ','or');
 
 	for (keys %res) {
-		$wikitext{$wiki_formatter->node_name_to_node_param($_)} 
-			||= mungepage($_ . ' ' . $wikistore->retrieve_node($_));
+		$wikitext{$wiki->formatter->node_name_to_node_param($_)} 
+			||= mungepage($_ . ' ' . $wiki->retrieve_node($_));
 	}
 }
 	
@@ -129,7 +92,7 @@ my $outstr = header . start_html(-style => {src => $css}, -title => $head) .
 		p(small("Version $VERSION. See the <a
 href=\"http://grault.net/cgi-bin/grubstreet.pl?Search_Script\">information
 page</a> for help and more details.")). "\n".
-		start_form . 
+		start_form( -method => "GET" ) . 
 		textfield(
 			-name=>'search',
 			-size=>50,
@@ -153,11 +116,6 @@ RESULTS:
 			print $outstr,h1("Search expression contains invalid character");
 			last RESULTS;
 		}
-
-# For UseMod, slurp in entire wiki into %wikitext
-# for CGI::Wiki, just set up the database connection
-
- 		load_wiki_text();
 
 # Build RecDescent grammar for search syntax.
 # Note: '&' and '|' can be replaced with other non-alpha. This may be needed if
