@@ -252,7 +252,7 @@ sub _perform_search {
 
     # Check for only valid characters in tainted search param
     # (quoted literals are OK, as they are escaped)
-    if ( $srh !~ /^("[^"]*"|[\w \-'&|()!*%\[\]])+$/i) { #"
+    if ( $srh !~ /^("[^"]*"|[\w \-',()!*%\[\]])+$/i) { #"
         $self->{error} = "Search expression contains invalid character(s)";
         return;
     }
@@ -269,22 +269,25 @@ sub _perform_search {
 
         search: list eostring {$return = $item[1]}
 
-        list: <leftop: comby '|' comby> 
-            {$return = (@{$item[1]}>1) ? ['OR', @{$item[1]}] : $item[1][0]}
-
-        comby: <leftop: term '&' term> 
+	list: comby(s)
             {$return = (@{$item[1]}>1) ? ['AND', @{$item[1]}] : $item[1][0]}
+
+        comby: <leftop: term ',' term> 
+            {$return = (@{$item[1]}>1) ? ['OR', @{$item[1]}] : $item[1][0]}
 
         term: '(' list ')' {$return = $item[2]}
             |        '!' term {$return = ['NOT', @{$item[2]}]}
-            |        '"' /[^"]*/ '"' {$return = ['literal', $item[2]]}
-            |        word(s) {$return = ['word', @{$item[1]}]}
+#           |        word ':' term {$return = ['meta', $item[1], $item[3]];}
+            |        '"' word(s) '"' {$return = ['word', @{$item[2]}]}
+            |        word {$return = ['word', $item[1]]}
             |        '[' word(s) ']' {$return = ['title', @{$item[2]}]}
+#	    |        m([/|\\]) m([^$item[1]]+) $item[1]
+#	    		{ $return = ['regexp', qr($item[2])] }
 
         word: /[\w'*%]+/ {$return = $item[1]}
             
         eostring: /^\Z/
-
+	
     });
 
     unless ( $parse ) {
