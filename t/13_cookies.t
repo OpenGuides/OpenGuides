@@ -1,5 +1,5 @@
 use strict;
-use Config::Tiny;
+use OpenGuides::Config;
 use OpenGuides::CGI;
 use Time::Piece;
 use Time::Seconds;
@@ -9,12 +9,9 @@ eval { OpenGuides::CGI->make_prefs_cookie; };
 ok( $@, "->make_prefs_cookie dies if no config object supplied" );
 
 eval { OpenGuides::CGI->make_prefs_cookie( config => "foo" ); };
-ok( $@, "...or if config isn't a Config::Tiny" );
+ok( $@, "...or if config isn't an OpenGuides::Config" );
 
-my $config = Config::Tiny->new;
-$config->{_} = {
-                 site_name => "Test Site",
-               };
+my $config = OpenGuides::Config->new( vars => { site_name => "Test Site" } );
 
 eval { OpenGuides::CGI->make_prefs_cookie( config => $config ); };
 is( $@, "", "...but not if it is" );
@@ -50,7 +47,7 @@ eval { OpenGuides::CGI->get_prefs_from_cookie; };
 ok( $@, "->get_prefs_from_cookie dies if no config object supplied" );
 
 eval { OpenGuides::CGI->get_prefs_from_cookie( config => "foo" ); };
-ok( $@, "...or if config isn't a Config::Tiny" );
+ok( $@, "...or if config isn't an OpenGuides::Config" );
 
 eval { OpenGuides::CGI->get_prefs_from_cookie( config => $config ); };
 is( $@, "", "...but not if it is" );

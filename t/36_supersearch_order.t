@@ -1,6 +1,6 @@
 use strict;
 use CGI::Wiki::Setup::SQLite;
-use Config::Tiny;
+use OpenGuides::Config;
 use OpenGuides::SuperSearch;
 use Test::More;
 
@@ -23,8 +23,8 @@ unlink "t/node.db";
 unlink <t/indexes/*>;
 
 CGI::Wiki::Setup::SQLite::setup( { dbname => "t/node.db" } );
-my $config = Config::Tiny->new;
-$config->{_} = {
+my $config = OpenGuides::Config->new(
+       vars => {
                  dbtype             => "sqlite",
                  dbname             => "t/node.db",
                  indexing_directory => "t/indexes",
@@ -33,7 +33,8 @@ $config->{_} = {
                  site_name          => "Test Site",
                  template_path      => "./templates",
                  use_plucene        => 1
-               };
+               }
+);
 
 my $search = OpenGuides::SuperSearch->new( config => $config );
 isa_ok( $search, "OpenGuides::SuperSearch" );

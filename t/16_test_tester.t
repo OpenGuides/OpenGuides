@@ -22,7 +22,7 @@ unlink <t/indexes/*>;
 
 CGI::Wiki::Setup::SQLite::setup( { dbname => "t/node.db" } );
 my $config = OpenGuides::Test->make_basic_config;
-$config->{_}{site_name} = "Test Site";
+$config->site_name( "Test Site" );
 my $guide = OpenGuides->new( config => $config );
 
 OpenGuides::Test->write_data(

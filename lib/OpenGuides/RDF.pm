@@ -24,11 +24,11 @@ developers.
 =head1 SYNOPSIS
 
   use CGI::Wiki;
-  use Config::Tiny;
+  use OpenGuides::Config;
   use OpenGuides::RDF;
 
   my $wiki = CGI::Wiki->new( ... );
-  my $config = Config::Tiny->read( "wiki.conf" );
+  my $config = OpenGuides::Config->new( file => "wiki.conf" );
   my $rdf_writer = OpenGuides::RDF->new( wiki   => $wiki,
                                          config => $config ); 
 
@@ -49,8 +49,8 @@ developers.
   my $rdf_writer = OpenGuides::RDF->new( wiki   => $wiki,
                                          config => $config ); 
 
-C<wiki> must be a L<CGI::Wiki> object and C<config> must be a
-L<Config::Tiny> object.  Both arguments mandatory.
+C<wiki> must be a L<CGI::Wiki> object and C<config> must be an
+L<OpenGuides::Config> object.  Both arguments mandatory.
 
 =cut
 
@@ -71,23 +71,23 @@ sub _init {
     $self->{wiki} = $wiki;
 
     my $config = $args{config};
-    unless ( $config && UNIVERSAL::isa( $config, "Config::Tiny" ) ) {
-        croak "No Config::Tiny object supplied.";
+    unless ( $config && UNIVERSAL::isa( $config, "OpenGuides::Config" ) ) {
+        croak "No OpenGuides::Config object supplied.";
     }
     $self->{config} = $config;
 
-    $self->{site_name} = $config->{_}->{site_name};
+    $self->{site_name} = $config->site_name;
     $self->{make_node_url} = sub {
         my ($node_name, $version) = @_;
 	if ( defined $version ) {
-	    return $config->{_}->{script_url} . uri_escape($config->{_}->{script_name}) . "?id=" . uri_escape($wiki->formatter->node_name_to_node_param($node_name)) . ";version=" . uri_escape($version);
+	    return $config->script_url . uri_escape($config->script_name) . "?id=" . uri_escape($wiki->formatter->node_name_to_node_param($node_name)) . ";version=" . uri_escape($version);
 	} else {
-	    return $config->{_}->{script_url} . uri_escape($config->{_}->{script_name}) . "?id=" . uri_escape($wiki->formatter->node_name_to_node_param($node_name));
+	    return $config->script_url . uri_escape($config->script_name) . "?id=" . uri_escape($wiki->formatter->node_name_to_node_param($node_name));
         }
     };
-    $self->{default_city}     = $config->{_}->{default_city}     || "";
-    $self->{default_country}  = $config->{_}->{default_country}  || "";
-    $self->{site_description} = $config->{_}->{site_description} || "";
+    $self->{default_city}     = $config->default_city     || "";
+    $self->{default_country}  = $config->default_country  || "";
+    $self->{site_description} = $config->site_desc        || "";
 
     return $self;
 }
@@ -268,7 +268,7 @@ sub make_recentchanges_rss {
         site_name => $self->{site_name},
         site_description => $self->{site_description},
         make_node_url => $self->{make_node_url},
-	recent_changes_link => $self->{config}->{_}->{script_url} . uri_escape($self->{config}->{_}->{script_name}) . "?RecentChanges"
+	recent_changes_link => $self->{config}->script_url . uri_escape($self->{config}->script_name) . "?RecentChanges"
      );
 
     my %criteria;

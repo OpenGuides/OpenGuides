@@ -1,6 +1,6 @@
 use strict;
 use CGI::Wiki::Setup::SQLite;
-use Config::Tiny;
+use OpenGuides::Config;
 use OpenGuides;
 use OpenGuides::RDF;
 use OpenGuides::Utils;
@@ -25,8 +25,8 @@ unlink "t/node.db";
 unlink <t/indexes/*>;
 
 CGI::Wiki::Setup::SQLite::setup( { dbname => "t/node.db" } );
-my $config = Config::Tiny->new;
-$config->{_} = {
+my $config = OpenGuides::Config->new(
+       vars => {
                  dbtype             => "sqlite",
                  dbname             => "t/node.db",
                  indexing_directory => "t/indexes",
@@ -36,7 +36,8 @@ $config->{_} = {
                  template_path      => "./templates",
                  home_name          => "Home",
                  use_plucene        => 1
-               };
+               }
+);
 
 # Basic sanity check first.
 my $wiki = OpenGuides::Utils->make_wiki_object( config => $config );

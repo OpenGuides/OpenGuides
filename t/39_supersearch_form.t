@@ -42,7 +42,7 @@ unlink <t/indexes/*>;
 
 CGI::Wiki::Setup::SQLite::setup( { dbname => "t/node.db" } );
 my $config = OpenGuides::Test->make_basic_config;
-$config->{_}{use_plucene} = 1;
+$config->use_plucene( 1 );
 
 # British National Grid guides should have os and latlong search fields.
 my $search = OpenGuides::SuperSearch->new( config => $config );
@@ -70,7 +70,7 @@ Test::HTML::Content::no_tag( $output, "input", { name => "osie_y" },
                              "...nor osie_y" );
 
 # Irish National Grid guides should have osie and latlong.
-$config->{_}{geo_handler} = 2;
+$config->geo_handler( 2 );
 $search = OpenGuides::SuperSearch->new( config => $config );
 $output = $search->run( return_output => 1 );
 $output =~ s/^Content-Type.*[\r\n]+//m;
@@ -95,8 +95,8 @@ Test::HTML::Content::no_tag( $output, "input", { name => "os_y" },
                              "...nor os_y" );
 
 # UTM guides should have latitude/longitude/latlong_dist only.
-$config->{_}{geo_handler} = 3;
-$config->{_}{ellipsoid} = "Airy";
+$config->geo_handler( 3 );
+$config->ellipsoid( "Airy" );
 $search = OpenGuides::SuperSearch->new( config => $config );
 $output = $search->run( return_output => 1 );
 $output =~ s/^Content-Type.*[\r\n]+//m;

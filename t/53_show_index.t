@@ -13,8 +13,8 @@ SKIP: {
 
     CGI::Wiki::Setup::SQLite::setup( { dbname => "t/node.db" } );
     my $config = OpenGuides::Test->make_basic_config;
-    $config->{_}{script_name} = "wiki.cgi";
-    $config->{_}{script_url} = "http://example.com/";
+    $config->script_name( "wiki.cgi" );
+    $config->script_url( "http://example.com/" );
     my $guide = OpenGuides->new( config => $config );
     isa_ok( $guide, "OpenGuides" );
     my $wiki = $guide->wiki;

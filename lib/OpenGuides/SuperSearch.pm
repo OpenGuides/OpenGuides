@@ -22,10 +22,10 @@ This documentation is probably only useful to OpenGuides developers.
 =head1 SYNOPSIS
 
   use CGI;
-  use Config::Tiny;
+  use OpenGuides::Config;
   use OpenGuides::SuperSearch;
 
-  my $config = Config::Tiny->read( "wiki.conf" );
+  my $config = OpenGuides::Config->new( file => "wiki.conf" );
   my $search = OpenGuides::SuperSearch->new( config => $config );
   my %vars = CGI::Vars();
   $search->run( vars => \%vars );
@@ -36,7 +36,7 @@ This documentation is probably only useful to OpenGuides developers.
 
 =item B<new>
 
-  my $config = Config::Tiny->read( "wiki.conf" );
+  my $config = OpenGuides::Config->new( file => "wiki.conf" );
   my $search = OpenGuides::SuperSearch->new( config => $config );
 
 =cut
@@ -50,11 +50,11 @@ sub new {
     my $wiki = OpenGuides::Utils->make_wiki_object( config => $config );
 
     $self->{wiki}     = $wiki;
-    $self->{wikimain} = $config->{_}{script_url} . $config->{_}{script_name};
-    $self->{css}      = $config->{_}{stylesheet_url};
-    $self->{head}     = $config->{_}{site_name} . " Search";
+    $self->{wikimain} = $config->script_url . $config->script_name;
+    $self->{css}      = $config->stylesheet_url;
+    $self->{head}     = $config->site_name . " Search";
 
-    my $geo_handler = $config->{_}{geo_handler} || 1;
+    my $geo_handler = $config->geo_handler;
     my %locator_params;
     if ( $geo_handler == 1 ) {
         %locator_params = ( x => "os_x", y => "os_y" );
@@ -88,7 +88,7 @@ sub wiki {
 
   my $config = $search->config;
 
-An accessor; returns the underlying L<Config::Tiny> object.
+An accessor; returns the underlying L<OpenGuides::Config> object.
 
 =cut
 
@@ -153,18 +153,18 @@ sub run {
     if ( defined $self->{distance_in_metres}
          && defined $self->{x} && defined $self->{y} ) {
         $doing_search = 1;
-        # Make sure to pass the criteria to the template.                   
-        $tt_vars{dist} = $self->{distance_in_metres}; 
-        if ( $self->config->{_}{geo_handler} eq 1 ) { 
-            $tt_vars{coord_field_1_value} = $self->{os_x}; 
-            $tt_vars{coord_field_2_value} = $self->{os_y}; 
-        } elsif ( $self->config->{_}{geo_handler} eq 2 ) { 
-            $tt_vars{coord_field_1_value} = $self->{osie_x}; 
-            $tt_vars{coord_field_2_value} = $self->{osie_y}; 
-        } elsif ( $self->config->{_}{geo_handler} eq 3 ) { 
-            $tt_vars{coord_field_1_value} = $self->{latitude}; 
-            $tt_vars{coord_field_2_value} = $self->{longitude}; 
-        }                                                
+        # Make sure to pass the criteria to the template.
+        $tt_vars{dist} = $self->{distance_in_metres};
+        if ( $self->config->geo_handler eq 1 ) {
+            $tt_vars{coord_field_1_value} = $self->{os_x};
+            $tt_vars{coord_field_2_value} = $self->{os_y};
+        } elsif ( $self->config->geo_handler eq 2 ) {
+            $tt_vars{coord_field_1_value} = $self->{osie_x};
+            $tt_vars{coord_field_2_value} = $self->{osie_y};
+        } elsif ( $self->config->geo_handler eq 3 ) {
+            $tt_vars{coord_field_1_value} = $self->{latitude};
+            $tt_vars{coord_field_2_value} = $self->{longitude};
+        }
         $self->run_distance_search;
     }
 
@@ -608,20 +608,20 @@ sub process_params {
     # OS co-ords or lat/long.  Only store parameters if they're complete,
     # and supported by our method of distance calculation.
     if ( defined $vars{os_x} && defined $vars{os_y} && defined $vars{os_dist}
-         && $self->config->{_}{geo_handler} eq 1 ) {
+         && $self->config->geo_handler eq 1 ) {
         $self->{x} = $vars{os_x};
         $self->{y} = $vars{os_y};
         $self->{distance_in_metres} = $vars{os_dist};
     } elsif ( defined $vars{osie_x} && defined $vars{osie_y}
          && defined $vars{osie_dist}
-         && $self->config->{_}{geo_handler} eq 2 ) {
+         && $self->config->geo_handler eq 2 ) {
         $self->{x} = $vars{osie_x};
         $self->{y} = $vars{osie_y};
         $self->{distance_in_metres} = $vars{osie_dist};
     } elsif ( defined $vars{latitude} && defined $vars{longitude}
               && defined $vars{latlong_dist} ) {
         # All handlers can do lat/long, but they all do it differently.
-        if ( $self->config->{_}{geo_handler} eq 1 ) {
+        if ( $self->config->geo_handler eq 1 ) {
 	    require Geography::NationalGrid::GB;
             my $point = Geography::NationalGrid::GB->new(
                 Latitude  => $vars{latitude},
@@ -629,7 +629,7 @@ sub process_params {
             );
             $self->{x} = $point->easting;
             $self->{y} = $point->northing;
-	} elsif ( $self->config->{_}{geo_handler} eq 2 ) {
+	} elsif ( $self->config->geo_handler eq 2 ) {
 	    require Geography::NationalGrid::IE;
             my $point = Geography::NationalGrid::IE->new(
                 Latitude  => $vars{latitude},
@@ -637,10 +637,10 @@ sub process_params {
             );
             $self->{x} = $point->easting;
             $self->{y} = $point->northing;
-        } elsif ( $self->config->{_}{geo_handler} eq 3 ) {
+        } elsif ( $self->config->geo_handler eq 3 ) {
 	    require Geo::Coordinates::UTM;
             my ($zone, $x, $y) = Geo::Coordinates::UTM::latlon_to_utm(
-                                                $self->config->{_}{ellipsoid},
+                                                $self->config->ellipsoid,
                                                 $vars{latitude},
                                                 $vars{longitude},
                                               );

@@ -1,6 +1,6 @@
 use strict;
 use CGI::Wiki::Setup::SQLite;
-use Config::Tiny;
+use OpenGuides::Config;
 use OpenGuides;
 use OpenGuides::CGI;
 use Time::Piece;
@@ -11,12 +11,9 @@ eval { OpenGuides::CGI->make_recent_changes_cookie; };
 ok( $@, "->make_recent_changes_cookie dies if no config object supplied" );
 
 eval { OpenGuides::CGI->make_recent_changes_cookie( config => "foo" ); };
-ok( $@, "...or if config isn't a Config::Tiny" );
+ok( $@, "...or if config isn't an OpenGuides::Config" );
 
-my $config = Config::Tiny->new;
-$config->{_} = {
-                 site_name => "Test Site",
-               };
+my $config = OpenGuides::Config->new( vars => { site_name => "Test Site" } );
 
 eval { OpenGuides::CGI->make_recent_changes_cookie( config => $config ); };
 is( $@, "", "...but not if it is" );
@@ -42,7 +39,7 @@ eval { OpenGuides::CGI->get_last_recent_changes_visit_from_cookie; };
 ok( $@, "->get_last_recent_changes_visit_from_cookie dies if no config object supplied" );
 
 eval { OpenGuides::CGI->get_last_recent_changes_visit_from_cookie( config => "foo" ); };
-ok( $@, "...or if config isn't a Config::Tiny" );
+ok( $@, "...or if config isn't an OpenGuides::Config" );
 
 eval { OpenGuides::CGI->get_last_recent_changes_visit_from_cookie( config => $config ); };
 is( $@, "", "...but not if it is" );
@@ -61,8 +58,8 @@ SKIP: {
       unless $have_sqlite;
 
     CGI::Wiki::Setup::SQLite::setup( { dbname => "t/node.db" } );
-    my $config = Config::Tiny->new;
-    $config->{_} = {
+    my $config = OpenGuides::Config->new(
+           vars => {
                      dbtype             => "sqlite",
                      dbname             => "t/node.db",
                      indexing_directory => "t/indexes",
@@ -71,7 +68,8 @@ SKIP: {
                      site_name          => "Test Site",
                      template_path      => "./templates",
                      home_name          => "Home",
-                   };
+                   }
+    );
     my $guide = OpenGuides->new( config => $config );
 
     my $prefs_cookie = OpenGuides::CGI->make_prefs_cookie(

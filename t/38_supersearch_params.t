@@ -1,7 +1,7 @@
 use strict;
 use CGI;
 use CGI::Wiki::Setup::SQLite;
-use Config::Tiny;
+use OpenGuides::Config;
 use OpenGuides::SuperSearch;
 use Test::More;
 
@@ -37,8 +37,8 @@ unlink "t/node.db";
 unlink <t/indexes/*>;
 
 CGI::Wiki::Setup::SQLite::setup( { dbname => "t/node.db" } );
-my $config = Config::Tiny->new;
-$config->{_} = {
+my $config = OpenGuides::Config->new(
+       vars => {
                  dbtype             => "sqlite",
                  dbname             => "t/node.db",
                  indexing_directory => "t/indexes",
@@ -48,7 +48,8 @@ $config->{_} = {
                  template_path      => "./templates",
                  use_plucene        => 1,
                  geo_handler        => 1, # British National Grid
-               };
+               }
+);
 
 # Check the British National Grid case.
 my $q = CGI->new( "" );
@@ -93,7 +94,7 @@ ok( defined $search->{y}, "...y set" );
 
 
 # Check the Irish National Grid case.
-$config->{_}{geo_handler} = 2; # Irish National Grid
+$config->geo_handler( 2 );
 
 $q = CGI->new( "" );
 $q->param( -name => "osie_x",       -value => 500000 );
@@ -137,8 +138,8 @@ ok( defined $search->{y}, "...y set" );
 
 
 # Check the UTM case.
-$config->{_}{geo_handler} = 3; # UTM
-$config->{_}{ellipsoid} = "Airy";
+$config->geo_handler( 3 );
+$config->ellipsoid( "Airy" );
 
 $q = CGI->new( "" );
 $q->param( -name => "os_x",         -value => 500000 );

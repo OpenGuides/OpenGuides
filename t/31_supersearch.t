@@ -16,13 +16,13 @@ if ( $@ ) {
 
     CGI::Wiki::Setup::SQLite::setup( { dbname => "t/node.db" } );
     my $config = OpenGuides::Test->make_basic_config;
-    $config->{_}{script_name} = "wiki.cgi";
-    $config->{_}{script_url} = "http://example.com/";
+    $config->script_name( "wiki.cgi" );
+    $config->script_url( "http://example.com/" );
 
     # Plucene is the recommended searcher now.
     eval { require CGI::Wiki::Search::Plucene; };
     unless ( $@ ) {
-        $config->{_}{use_plucene} = 1;
+        $config->use_plucene( 1 );
     }
 
     my $search = OpenGuides::SuperSearch->new( config => $config );

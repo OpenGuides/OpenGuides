@@ -4,12 +4,12 @@ use warnings;
 use strict;
 
 use CGI;
-use Config::Tiny;
+use OpenGuides::Config;
 use OpenGuides::CGI;
 use OpenGuides::Utils;
 use OpenGuides::Template;
 
-my $config = Config::Tiny->read("wiki.conf");
+my $config = OpenGuides::Config->new( file => "wiki.conf" );
 my $wiki = OpenGuides::Utils->make_wiki_object( config => $config );
 my $cgi = CGI->new();
 my $action = $cgi->param('action') || '';

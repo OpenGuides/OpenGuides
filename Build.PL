@@ -1,111 +1,11 @@
 use strict;
 use lib "lib";
 use OpenGuides::Build;
+use OpenGuides::Config;
 use Data::Dumper;
 
 eval "use Config::Tiny";
 die "Config::Tiny is required to configure this application.\n" if $@;
-
-##### Find out where to install, etc.
-
-# See if we already have some config variables set.
-my $read_config = Config::Tiny->read('wiki.conf');
-my %existing_config = $read_config ? %{ $read_config->{_} } : ();
-
-my @questions = (
-{ question =>
-        "What's the name of the database that this site runs on?",
-  variable => "dbname"
-},
-{ question => "...the database user that can access that database?",
-  variable => "dbuser"
-  },
-{ question => "...the password that they use to access the database?",
-  variable => "dbpass"
-  },
-{ question => "...the machine that the database is hosted on? (blank if local)",
-  variable => "dbhost"
-  },
-{ question => "What do you want the script to be called?",
-  variable => "script_name",
-  default  => "wiki.cgi"
-  },
-{ question => "What directory should I install it in?",
-  variable => "install_directory",
-  default  => "/usr/lib/cgi-bin/openguides/"
-  },
-{ question => "What URL does the install directory map to?",
-  variable => "script_url",
-  },
-{ question => "Do you want me to munge a custom lib path into the scripts? "
-             . "If so, enter it here.  Separate path entries with whitespace:",
-  variable => "custom_lib_path",
-  },
-{ question => "Do you want to use Plucene for searching? (recommended, but see Changes file before saying yes to this if you are upgrading)",
-  variable => "use_plucene",
-  default  => "y",
-  type     => "y_n"
-  },
-{ question => "What directory can I use to store indexes in for searching? "
-            . "***NOTE*** This directory must exist and be writeable by the "
-            . "user that your script will run as.  See README for more on this.",
-  variable => "indexing_directory",
-  default  => "/usr/lib/cgi-bin/openguides/indexes/"
-  },
-{ question => "Do you want to enable page deletion?",
-  variable => "enable_page_deletion",
-  default  => "n",
-  type     => "y_n"
-  },
-{ question => "Please specify a password for the site admin:",
-  variable => "admin_pass",
-  default  => "Change this!"
-  },
-{ question => "What's the URL of the site's stylesheet?",
-  variable => "stylesheet_url"
-  },
-{ question => "What's the site called? (should be unique)",
-  variable => "site_name",
-  default  => "My OpenGuides Site"
-  },
-{ question => "Do you want the navigation bar included on the home page?",
-  variable => "navbar_on_home_page",
-  default  => "y",
-  type     => "y_n"
-  },
-{ question => "What should the home page of the wiki be called?",
-  variable => "home_name",
-  default  => "Home"
-  },
-{ question => "How would you describe the site?",
-  variable => "site_desc",
-  default  => "A guide to [my city]"
-  },
-{ question => "What city is the site based in?",
-  variable => "default_city",
-  default  => "London"
-  },
-{ question => "What country is the site based in?",
-  variable => "default_country",
-  default  => "United Kingdom"
-  },
-{ question => "Contact email address for the site administrator?",
-  variable => "contact_email"
-  },
-{ question => "What language will the site be in? (Please give an ISO language code.)",
-  variable => "default_language",
-  default  => "en"
-  },
-{ question => "What's the name of the node to use for the text formatting rules link?",
-  variable => "formatting_rules_node",
-  default  => "Text Formatting Examples"
-  },
-{ question => "Make node titles link to node backlinks (C2 style)?",
-  variable => "backlinks_in_title",
-  default  => "n",
-  type     => "y_n"
-  },
-);
 
 print <<EOF;
 
@@ -118,6 +18,11 @@ EOF
 
 my $continue = Module::Build->y_n("Continue with install?", "y");
 exit 0 unless $continue;
+
+my $existing_config = OpenGuides::Config->new( file => "wiki.conf" );
+
+my %yn_vars = map { $_ => 1 }
+   qw(use_plucene enable_page_deletion navbar_on_home_page backlinks_in_title);
 
 my $skip_config = Module::Build->y_n("Skip OpenGuides configuration?", "n");
 if ( $skip_config ) {
@@ -134,12 +39,12 @@ my @answers;
 
 # It is an ancient Configurer, and he chooseth one of three. 
 my $dbtype;
-my $dbtype_qu = "what type of database do you want the site to run on?  postgres/mysql/sqlite";
+my $dbtype_qu = $existing_config->dbtype__qu;
 if ( $skip_config ) {
-    $dbtype = $existing_config{dbtype} || "postgres";
+    $dbtype = $existing_config->dbtype;
 } else {
     until ( $dbtype ) {
-        my $def = $existing_config{dbtype} || "postgres";
+        my $def = $existing_config->dbtype;
 	$dbtype = Module::Build->prompt("\n$dbtype_qu", $def);
 	$dbtype = lc($dbtype);
 	$dbtype =~ s/^\s*//;
@@ -163,14 +68,22 @@ push @answers, { question => $dbtype_qu,
                  variable => "dbtype",
                  value    => $dbtype };
 
-foreach my $qset (@questions) {
-    my $qu  = $qset->{question};
-    my $type = $qset->{type} || "";
-    my $var = $qset->{variable};
-    my $def = defined $existing_config{$var} ? $existing_config{$var}
-                                             : $qset->{default};
+my $install_directory; # used to suggest template paths
+foreach my $var ( qw(
+   dbname dbuser dbpass dbhost script_name
+   install_directory template_path custom_template_path script_url
+   custom_lib_path use_plucene indexing_directory enable_page_deletion
+   admin_pass stylesheet_url site_name navbar_on_home_page home_name
+   site_desc default_city default_country contact_email default_language
+   formatting_rules_node backlinks_in_title
+  ) ) {
+    my $q_method = $var . "__qu";
+    my $qu  = $existing_config->$q_method;
+    my $type = $yn_vars{$var} ? "y_n" : "";
+    my $def = $existing_config->$var;
     my $val = $def;
 
+    # Override dbname question for SQLite only.
     if ( $dbtype eq "sqlite" and $var eq "dbname" ) {
         $qu = "what's the full filename of the SQLite database this site runs on?";
     }
@@ -185,6 +98,20 @@ foreach my $qset (@questions) {
         next;
     }
 
+    # Make sensible suggestions for template paths if we don't already
+    # have them stored.  Not really a default, but a useful hint/shortcut.
+    if ( $var eq "template_path" && !defined $existing_config->$var ) {
+        $def = $install_directory;
+        $def .= "/" unless $def =~ m|/$|;
+        $def .= "templates";
+    }
+    if ( $var eq "custom_template_path" && !defined $existing_config->$var ) {
+        $def = $install_directory;
+        $def .= "/" unless $def =~ m|/$|;
+        $def .= "custom-templates";
+    }
+
+    # Here is where we actually ask the questions.
     unless ( $skip_config ) {
         if ( $type eq "y_n" ) {
             # may be stored as true/false integer value
@@ -197,6 +124,9 @@ foreach my $qset (@questions) {
 	}
     }
 
+    # Store install_directory so we can use it to suggest template paths.
+    $install_directory = $val if $var eq "install_directory";
+
     # Make sure that script_url ends in a /
     if ( $var eq "script_url" and $val !~ /\/$/ ) {
         $val .= "/";
@@ -205,17 +135,6 @@ foreach my $qset (@questions) {
     push @answers, { question => $qu,
 		     variable => $var,
 		     value    => $val };
-
-    if ( $var eq "install_directory" ) {
-        push @answers, {
-            question => "what directory should I install the templates in?",
-            variable => "template_path",
-            value    => $val . "/templates" };
-	push @answers, {
-	    question => "where should I look for custom templates?",
-	    variable => "custom_template_path",
-	    value    => $val . "/custom-templates" };
-    }
 }
 
 # Now deal with the geo stuff.
@@ -228,11 +147,11 @@ my $geo_handler_qu = "Distance calculation methods available are:"
 
 if ( $skip_config ) {
     # We default to GB National Grid for historical reasons.
-    $geo_handler = $existing_config{geo_handler} || 1;
+    $geo_handler = $existing_config->geo_handler;
 } else {
     my $choice;
     until ( $choice ) {
-        my $def = $existing_config{geo_handler} || 1;
+        my $def = $existing_config->geo_handler;
 	$choice = Module::Build->prompt("\n".$geo_handler_qu, $def);
 	$choice =~ s/^\s*//;
 	$choice =~ s/\s*$//;
@@ -251,12 +170,12 @@ push @answers, {
                };
 
 if ( $geo_handler eq "3" ) {
-    my $qu = "Which ellipsoid do you want to use? (eg 'Airy', 'WGS-84')";
+    my $qu = $existing_config->ellipsoid__qu;
     my $ellipsoid;
     if ( $skip_config ) {
-        $ellipsoid = $existing_config{ellipsoid} || "International";
+        $ellipsoid = $existing_config->ellipsoid;
     } else {
-        my $def = $existing_config{ellipsoid} || "International";
+        my $def = $existing_config->ellipsoid;
         $ellipsoid = Module::Build->prompt("\n".$qu, $def);
 	$ellipsoid =~ s/^\s*//;
 	$ellipsoid =~ s/\s*$//;
@@ -297,6 +216,7 @@ my $build = OpenGuides::Build->new(
 	'CGI::Wiki::Plugin::Locator::Grid'=> '0.02', # cope with sqlite 3
 	'CGI::Wiki::Plugin::RSS::ModWiki' => '0.06', # for fancy stuff
         'CGI::Wiki::Plugin::RSS::Reader'  => '1.3',  # earlier versions don't support RSS 2.0
+        'Class::Accessor'                 => 0,
 	'Config::Tiny'                    => 0,
 	'Data::Dumper'                    => 0,
         $drivers{$dbtype}                 => 0,

@@ -1,7 +1,7 @@
 use strict;
 use CGI;
 use CGI::Wiki::Setup::SQLite;
-use Config::Tiny;
+use OpenGuides::Config;
 use OpenGuides::CGI;
 use OpenGuides;
 use OpenGuides::Test;
@@ -24,8 +24,8 @@ unlink "t/node.db";
 unlink <t/indexes/*>;
 
 CGI::Wiki::Setup::SQLite::setup( { dbname => "t/node.db" } );
-my $config = Config::Tiny->new;
-$config->{_} = {
+my $config = OpenGuides::Config->new(
+       vars => {
                  dbtype             => "sqlite",
                  dbname             => "t/node.db",
                  indexing_directory => "t/indexes",
@@ -36,12 +36,13 @@ $config->{_} = {
                  home_name          => "Home",
                  geo_handler        => 3, # Test w/ UTM - nat grids use X/Y
                  ellipsoid          => "Airy",
-               };
+               }
+);
 
 # Plucene is the recommended searcher now.
 eval { require CGI::Wiki::Search::Plucene; };
 unless ( $@ ) {
-    $config->{_}{use_plucene} = 1;
+    $config->use_plucene( 1 );
 }
 
 my $guide = OpenGuides->new( config => $config );

@@ -1,6 +1,6 @@
 use strict;
 use CGI::Wiki::Setup::SQLite;
-use Config::Tiny;
+use OpenGuides::Config;
 use OpenGuides::SuperSearch;
 use Test::More tests => 10;
 
@@ -16,8 +16,8 @@ SKIP: {
     unlink <t/indexes/*>;
 
     CGI::Wiki::Setup::SQLite::setup( { dbname => "t/node.db" } );
-    my $config = Config::Tiny->new;
-    $config->{_} = {
+    my $config = OpenGuides::Config->new(
+           vars => {
                      dbtype             => "sqlite",
                      dbname             => "t/node.db",
                      indexing_directory => "t/indexes",
@@ -25,12 +25,13 @@ SKIP: {
                      script_url         => "http://example.com/",
                      site_name          => "Test Site",
                      template_path      => "./templates",
-                   };
+                   }
+    );
 
     # Plucene is the recommended searcher now.
     eval { require CGI::Wiki::Search::Plucene; };
     unless ( $@ ) {
-        $config->{_}{use_plucene} = 1;
+        $config->use_plucene( 1 );
     }
 
     my $search = OpenGuides::SuperSearch->new( config => $config );

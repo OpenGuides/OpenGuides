@@ -1,6 +1,6 @@
 use strict;
 use CGI::Wiki::Setup::SQLite;
-use Config::Tiny;
+use OpenGuides::Config;
 use OpenGuides;
 use OpenGuides::Test;
 use Test::More;
@@ -36,8 +36,8 @@ unlink "t/node.db";
 unlink <t/indexes/*>;
 
 CGI::Wiki::Setup::SQLite::setup( { dbname => "t/node.db" } );
-my $config = Config::Tiny->new;
-$config->{_} = {
+my $config = OpenGuides::Config->new(
+       vars => {
                  dbtype             => "sqlite",
                  dbname             => "t/node.db",
                  indexing_directory => "t/indexes",
@@ -47,7 +47,8 @@ $config->{_} = {
                  template_path      => "./templates",
                  use_plucene        => 1,
                  geo_handler        => 1,
-               };
+               }
+);
 
 # First check that British National Grid will accept both OS X/Y and lat/long,
 # and will store both however the data was given to it.
@@ -101,7 +102,7 @@ ok( !defined $data{metadata}{osie_x}[0],    "...nor osie_x" );
 ok( !defined $data{metadata}{osie_y}[0],    "...nor osie_y" );
 
 # Now check Irish National Grid.
-$config->{_}{geo_handler} = 2;
+$config->geo_handler( 2 );
 $guide = OpenGuides->new( config => $config );
 is( $guide->locator->x_field, "osie_x", "correct x field" );
 is( $guide->locator->y_field, "osie_y", "correct y field" );
@@ -150,8 +151,8 @@ ok( !defined $data{metadata}{osie_x}[0],    "...nor osie_x" );
 ok( !defined $data{metadata}{osie_y}[0],    "...nor osie_y" );
 
 # Finally check UTM.
-$config->{_}{geo_handler} = 3;
-$config->{_}{ellipsoid} = "Airy";
+$config->geo_handler( 3 );
+$config->ellipsoid( "Airy" );
 $guide = OpenGuides->new( config => $config );
 is( $guide->locator->x_field, "easting", "correct x field" );
 is( $guide->locator->y_field, "northing", "correct y field" );

@@ -1,6 +1,6 @@
 use strict;
 use CGI::Wiki::Setup::SQLite;
-use Config::Tiny;
+use OpenGuides::Config;
 use OpenGuides::SuperSearch;
 use OpenGuides::Test;
 use Test::More;
@@ -23,7 +23,7 @@ unlink <t/indexes/*>;
 CGI::Wiki::Setup::SQLite::setup( { dbname => "t/node.db" } );
 
 my $config = OpenGuides::Test->make_basic_config;
-$config->{_}{use_plucene} = 1;
+$config->use_plucene( 1 );
 my $search = OpenGuides::SuperSearch->new( config => $config );
 my $guide = OpenGuides->new( config => $config );
 
@@ -31,7 +31,7 @@ my $guide = OpenGuides->new( config => $config );
 eval { require Geography::NationalGrid::GB; };
 SKIP: {
     skip "Geography::NationalGrid::GB not installed", 1 if $@;
-    $config->{_}{geo_handler} = 1;
+    $config->geo_handler( 1 );
 
     foreach my $i ( 1 .. 30 ) {
         OpenGuides::Test->write_data(
@@ -66,7 +66,7 @@ SKIP: {
 
     # We must create a new search object after changing the geo_handler
     # in order to force it to create a fresh locator.
-    $config->{_}{geo_handler} = 2;
+    $config->geo_handler( 2 );
     my $search = OpenGuides::SuperSearch->new( config => $config );
 
     foreach my $i ( 1 .. 30 ) {
@@ -101,8 +101,7 @@ SKIP: {
 
     # We must create a new search object after changing the geo_handler
     # in order to force it to create a fresh locator.
-    $config->{_}{geo_handler} = 3;
-    $config->{_}{ellipsoid} = "International";
+    $config->geo_handler( 3 );
     my $search = OpenGuides::SuperSearch->new( config => $config );
 
     foreach my $i ( 1 .. 30 ) {

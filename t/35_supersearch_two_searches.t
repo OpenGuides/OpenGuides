@@ -1,6 +1,6 @@
 use strict;
 use CGI::Wiki::Setup::SQLite;
-use Config::Tiny;
+use OpenGuides::Config;
 use OpenGuides::SuperSearch;
 use Test::More;
 
@@ -30,8 +30,8 @@ unlink "t/node.db";
 unlink <t/indexes/*>;
 
 CGI::Wiki::Setup::SQLite::setup( { dbname => "t/node.db" } );
-my $config = Config::Tiny->new;
-$config->{_} = {
+my $config = OpenGuides::Config->new(
+       vars => {
                  dbtype             => "sqlite",
                  dbname             => "t/node.db",
                  indexing_directory => "t/indexes",
@@ -40,12 +40,13 @@ $config->{_} = {
                  site_name          => "Test Site",
                  template_path      => "./templates",
                  geo_handler        => 1,
-               };
+               }
+);
 
 # Plucene is the recommended searcher now.
 eval { require CGI::Wiki::Search::Plucene; };
 unless ( $@ ) {
-    $config->{_}{use_plucene} = 1;
+    $config->use_plucene( 1 );
 }
 
 my $search = OpenGuides::SuperSearch->new( config => $config );
@@ -100,7 +101,7 @@ $search->run(
 ok( !$search->{x}, "...and forgotten" );
 
 # Now with Irish National Grid.
-$config->{_}{geo_handler} = 2;
+$config->geo_handler( 2 );
 $search = OpenGuides::SuperSearch->new( config => $config );
 $search->run(
               return_output => 1,
@@ -114,8 +115,8 @@ $search->run(
 ok( !$search->{x}, "...and forgotten" );
 
 # Now with UTM.
-$config->{_}{geo_handler} = 3;
-$config->{_}{ellipsoid} = "Airy";
+$config->geo_handler( 3 );
+$config->ellipsoid( "Airy" );
 $search = OpenGuides::SuperSearch->new( config => $config );
 $search->run(
               return_output => 1,

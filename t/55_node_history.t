@@ -13,8 +13,8 @@ SKIP: {
     CGI::Wiki::Setup::SQLite::cleardb( { dbname => "t/node.db" } );
     CGI::Wiki::Setup::SQLite::setup( { dbname => "t/node.db" } );
     my $config = OpenGuides::Test->make_basic_config;
-    $config->{_}{script_name} = "mywiki.cgi";
-    $config->{_}{script_url} = "http://example.com/";
+    $config->script_name( "mywiki.cgi" );
+    $config->script_url( "http://example.com/" );
     my $guide = OpenGuides->new( config => $config );
 
     $guide->wiki->write_node( "South Croydon Station", "A sleepy main-line station in what is arguably the nicest part of Croydon.", undef, { comment => "<myfaketag>" } ) or die "Can't write node";

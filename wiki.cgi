@@ -9,27 +9,21 @@ $VERSION = '0.45';
 use CGI qw/:standard/;
 use CGI::Carp qw(croak);
 use CGI::Wiki;
-use Config::Tiny;
 use Geography::NationalGrid;
 use Geography::NationalGrid::GB;
 use OpenGuides;
 use OpenGuides::CGI;
+use OpenGuides::Config;
 use OpenGuides::RDF;
 use OpenGuides::Utils;
 use OpenGuides::Template;
 use Time::Piece;
 use URI::Escape;
 
-# config vars
-my $config = Config::Tiny->read('wiki.conf');
+my $config = OpenGuides::Config->new( file => "wiki.conf" );
 
-# Read in configuration values from config file.
-my $script_name = $config->{_}->{script_name};
-my $script_url  = $config->{_}->{script_url};
-
-# Ensure that script_url ends in a '/' - this is done in Build.PL but
-# we need to allow for people editing the config file by hand later.
-$script_url .= "/" unless $script_url =~ /\/$/;
+my $script_name = $config->script_name;
+my $script_url  = $config->script_url;
 
 my ($guide, $wiki, $formatter, $q);
 eval {
@@ -86,8 +80,8 @@ eval {
                                       metres => $q->param("distance_in_metres")
                                     );
     } elsif ( $action eq 'delete'
-              and ( lc($config->{_}->{enable_page_deletion}) eq "y"
-                    or $config->{_}->{enable_page_deletion} eq "1" )
+              and ( lc($config->enable_page_deletion) eq "y"
+                    or $config->enable_page_deletion eq "1" )
             ) {
         $guide->delete_node(
                              id       => $node,
@@ -136,7 +130,7 @@ if ($@) {
     my $error = $@;
     warn $error;
     print $q->header;
-    my $contact_email = $config->{_}->{contact_email};
+    my $contact_email = $config->contact_email;
     print qq(<html><head><title>ERROR</title></head><body>
              <p>Sorry!  Something went wrong.  Please contact the
              Wiki administrator at

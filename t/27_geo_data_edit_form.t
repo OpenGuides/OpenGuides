@@ -43,7 +43,7 @@ unlink <t/indexes/*>;
 
 CGI::Wiki::Setup::SQLite::setup( { dbname => "t/node.db" } );
 my $config = OpenGuides::Test->make_basic_config;
-$config->{_}{use_plucene} = 1;
+$config->use_plucene( 1 );
 
 # British National Grid guides should have os_x/os_y fields.
 my $guide = OpenGuides->new( config => $config );
@@ -88,7 +88,7 @@ like( $output, qr|OS\sY\scoordinate:|s,
       "...'OS Y coordinate:' label included" );
 
 # Irish National Grid guides should have osie_x/osie_y fields.
-$config->{_}{geo_handler} = 2;
+$config->geo_handler( 2 );
 $guide = OpenGuides->new( config => $config );
 $wiki = $guide->wiki;
 # Write some data.
@@ -128,8 +128,8 @@ like( $output, qr|Irish\sNational\sGrid\sY\scoordinate:|s,
       "...'Irish National Grid Y coordinate:' label included" );
 
 # UTM guides should have lat/long fields.
-$config->{_}{geo_handler} = 3;
-$config->{_}{ellipsoid} = "Airy";
+$config->geo_handler( 3 );
+$config->ellipsoid( "Airy" );
 $guide = OpenGuides->new( config => $config );
 $wiki = $guide->wiki;
 # Write some data.

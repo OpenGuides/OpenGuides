@@ -2,6 +2,7 @@ package OpenGuides::Build;
 
 use strict;
 use Module::Build;
+use OpenGuides::Config;
 use base 'Module::Build';
 
 sub ACTION_install {
@@ -12,14 +13,14 @@ sub ACTION_install {
     eval "use Config::Tiny";
     die "Config::Tiny is required to set up this application.\n" if $@;
 
-    my $config = Config::Tiny->read("wiki.conf");
+    my $config = OpenGuides::Config->new( file => "wiki.conf" );
 
     # Initialise the database if necessary.
-    my $dbname = $config->{_}->{dbname};
-    my $dbuser = $config->{_}->{dbuser};
-    my $dbpass = $config->{_}->{dbpass};
-    my $dbhost = $config->{_}->{dbhost};
-    my $dbtype = $config->{_}->{dbtype};
+    my $dbname = $config->dbname;
+    my $dbuser = $config->dbuser;
+    my $dbpass = $config->dbpass;
+    my $dbhost = $config->dbhost;
+    my $dbtype = $config->dbtype;
 
     my %cgi_wiki_exts = ( postgres => "Pg",
 			  mysql    => "MySQL",
@@ -50,14 +51,14 @@ sub ACTION_install_extras {
     eval "use Config::Tiny";
     die "Config::Tiny is required to set up this application.\n" if $@;
 
-    my $config = Config::Tiny->read("wiki.conf");
+    my $config = OpenGuides::Config->new( file => "wiki.conf" );
 
     # Install the scripts where we were told to.
-    my $install_directory    = $config->{_}->{install_directory};
-    my $script_name          = $config->{_}->{script_name};
-    my $template_path        = $config->{_}->{template_path};
-    my $custom_template_path = $config->{_}->{custom_template_path};
-    my $custom_lib_path      = $config->{_}->{custom_lib_path};
+    my $install_directory    = $config->install_directory;
+    my $script_name          = $config->script_name;
+    my $template_path        = $config->template_path;
+    my $custom_template_path = $config->custom_template_path;
+    my $custom_lib_path      = $config->custom_lib_path;
     my @extra_scripts        = @{ $self->{config}{__extra_scripts} };
     my @templates            = @{ $self->{config}{__templates} };
 

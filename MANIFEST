@@ -14,6 +14,7 @@ examples/reindex.pl
 examples/vegan-oxford.css
 lib/OpenGuides/Build.pm
 lib/OpenGuides/CGI.pm
+lib/OpenGuides/Config.pm
 lib/OpenGuides/RDF.pm
 lib/OpenGuides/SuperSearch.pm
 lib/OpenGuides/Template.pm

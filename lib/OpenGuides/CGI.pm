@@ -20,12 +20,12 @@ This documentation is probably only useful to OpenGuides developers.
 
 Saving preferences in a cookie:
 
-  use Config::Tiny;
   use OpenGuides::CGI;
+  use OpenGuides::Config;
   use OpenGuides::Template;
   use OpenGuides::Utils;
 
-  my $config = Config::Tiny->read( "wiki.conf" );
+  my $config = OpenGuides::Config->new( file => "wiki.conf" );
 
   my $cookie = OpenGuides::CGI->make_prefs_cookie(
       config                     => $config,
@@ -54,12 +54,12 @@ Saving preferences in a cookie:
 
 Tracking visits to Recent Changes:
 
-  use Config::Tiny;
   use OpenGuides::CGI;
+  use OpenGuides::Config;
   use OpenGuides::Template;
   use OpenGuides::Utils;
 
-  my $config = Config::Tiny->read( "wiki.conf" );
+  my $config = OpenGuides::Config->new( file => "wiki.conf" );
 
   my $cookie = OpenGuides::CGI->make_recent_changes_cookie(
       config => $config,
@@ -84,7 +84,7 @@ Tracking visits to Recent Changes:
       track_recent_changes_views => 1,
   );
 
-Croaks unless a L<Config::Tiny> object is supplied as C<config>.
+Croaks unless an L<OpenGuides::Config> object is supplied as C<config>.
 Acceptable values for C<cookie_expires> are C<never>, C<month>,
 C<year>; anything else will default to C<month>.
 
@@ -93,8 +93,8 @@ C<year>; anything else will default to C<month>.
 sub make_prefs_cookie {
     my ($class, %args) = @_;
     my $config = $args{config} or croak "No config object supplied";
-    croak "Config object not a Config::Tiny"
-        unless UNIVERSAL::isa( $config, "Config::Tiny" );
+    croak "Config object not an OpenGuides::Config"
+        unless UNIVERSAL::isa( $config, "OpenGuides::Config" );
     my $cookie_name = $class->_get_cookie_name( config => $config );
     my $expires;
     if ( $args{cookie_expires} and $args{cookie_expires} eq "never" ) {
@@ -136,7 +136,7 @@ sub make_prefs_cookie {
       config => $config
   );
 
-Croaks unless a L<Config::Tiny> object is supplied as C<config>.
+Croaks unless an L<OpenGuides::Config> object is supplied as C<config>.
 Returns default values for any parameter not specified in cookie.
 
 =cut
@@ -144,8 +144,8 @@ Returns default values for any parameter not specified in cookie.
 sub get_prefs_from_cookie {
     my ($class, %args) = @_;
     my $config = $args{config} or croak "No config object supplied";
-    croak "Config object not a Config::Tiny"
-        unless UNIVERSAL::isa( $config, "Config::Tiny" );
+    croak "Config object not an OpenGuides::Config"
+        unless UNIVERSAL::isa( $config, "OpenGuides::Config" );
     my %cookies = CGI::Cookie->fetch;
     my $cookie_name = $class->_get_cookie_name( config => $config );
     my %data;
@@ -185,8 +185,8 @@ true, makes a cookie with an expiration date in the past:
 sub make_recent_changes_cookie {
     my ($class, %args) = @_;
     my $config = $args{config} or croak "No config object supplied";
-    croak "Config object not a Config::Tiny"
-        unless UNIVERSAL::isa( $config, "Config::Tiny" );
+    croak "Config object not an OpenGuides::Config"
+        unless UNIVERSAL::isa( $config, "OpenGuides::Config" );
     my $cookie_name = $class->_get_rc_cookie_name( config => $config );
     # See explanation of expiry date hack above in make_prefs_cookie.
     my $expires;
@@ -212,7 +212,7 @@ sub make_recent_changes_cookie {
       config => $config
   );
 
-Croaks unless a L<Config::Tiny> object is supplied as C<config>.
+Croaks unless an L<OpenGuides::Config> object is supplied as C<config>.
 Returns the time (as seconds since epoch) of the user's last visit to
 Recent Changes.
 
@@ -221,8 +221,8 @@ Recent Changes.
 sub get_last_recent_changes_visit_from_cookie {
     my ($class, %args) = @_;
     my $config = $args{config} or croak "No config object supplied";
-    croak "Config object not a Config::Tiny"
-        unless UNIVERSAL::isa( $config, "Config::Tiny" );
+    croak "Config object not an OpenGuides::Config"
+        unless UNIVERSAL::isa( $config, "OpenGuides::Config" );
     my %cookies = CGI::Cookie->fetch;
     my $cookie_name = $class->_get_rc_cookie_name( config => $config );
     my %data;
@@ -235,14 +235,14 @@ sub get_last_recent_changes_visit_from_cookie {
 
 sub _get_cookie_name {
     my ($class, %args) = @_;
-    my $site_name = $args{config}->{_}->{site_name}
+    my $site_name = $args{config}->site_name
         or croak "No site name in config";
     return $site_name . "_userprefs";
 }
 
 sub _get_rc_cookie_name {
     my ($class, %args) = @_;
-    my $site_name = $args{config}->{_}->{site_name}
+    my $site_name = $args{config}->site_name
         or croak "No site name in config";
     return $site_name . "_last_rc_visit";
 }

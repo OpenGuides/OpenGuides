@@ -26,11 +26,11 @@ to OpenGuides developers.
 
 =head1 SYNOPSIS
 
-  use Config::Tiny;
+  use OpenGuides::Config;
   use OpenGuides::Utils;
   use OpenGuides::Template;
 
-  my $config = Config::Tiny->read('wiki.conf');
+  my $config = OpenGuides::Config->new( file => "wiki.conf" );
   my $wiki = OpenGuides::Utils->make_wiki_object( config => $config );
 
   print OpenGuides::Template->output( wiki     => $wiki,
@@ -107,20 +107,16 @@ sub output {
     my ($class, %args) = @_;
     croak "No template supplied" unless $args{template};
     my $config = $args{config} or croak "No config supplied";
-    my $template_path = $config->{_}->{template_path};
-    my $custom_template_path = $config->{_}->{custom_template_path} || "";
+    my $template_path = $config->template_path;
+    my $custom_template_path = $config->custom_template_path || "";
     my $tt = Template->new( { INCLUDE_PATH => "$custom_template_path:$template_path" } );
 
-    my $script_name = $config->{_}->{script_name};
-    my $script_url  = $config->{_}->{script_url};
-
-    # Ensure that script_url ends in a '/' - this is done in Build.PL but
-    # we need to allow for people editing the config file by hand later.
-    $script_url .= "/" unless $script_url =~ /\/$/;
+    my $script_name = $config->script_name;
+    my $script_url  = $config->script_url;
 
     # Check cookie to see if we need to set the formatting_rules_link.
     my ($formatting_rules_link, $omit_help_links);
-    my $formatting_rules_node = $config->{_}->{formatting_rules_node} ||"";
+    my $formatting_rules_node = $config->formatting_rules_node ||"";
     my %cookie_data = OpenGuides::CGI->get_prefs_from_cookie(config=>$config);
     if ( $cookie_data{omit_help_links} ) {
         $omit_help_links = 1;
@@ -132,27 +128,27 @@ sub output {
     }
 
     my $enable_page_deletion = 0;
-    if ( $config->{_}->{enable_page_deletion}
-         and ( lc($config->{_}->{enable_page_deletion}) eq "y"
-               or $config->{_}->{enable_page_deletion} eq "1" )
+    if ( $config->enable_page_deletion
+         and ( lc($config->enable_page_deletion) eq "y"
+               or $config->enable_page_deletion eq "1" )
        ) {
         $enable_page_deletion = 1;
     }
 
-    my $tt_vars = { site_name             => $config->{_}->{site_name},
+    my $tt_vars = { site_name             => $config->site_name,
 	   	    cgi_url               => $script_name,
 		    full_cgi_url          => $script_url . $script_name,
-		    contact_email         => $config->{_}->{contact_email},
-		    stylesheet            => $config->{_}->{stylesheet_url},
+		    contact_email         => $config->contact_email,
+		    stylesheet            => $config->stylesheet_url,
 		    home_link             => $script_url . $script_name,
-		    home_name             => $config->{_}->{home_name},
-                    navbar_on_home_page   => $config->{_}->{navbar_on_home_page},
+		    home_name             => $config->home_name,
+                    navbar_on_home_page   => $config->navbar_on_home_page,
                     omit_help_links       => $omit_help_links,
                     formatting_rules_link => $formatting_rules_link,
                     formatting_rules_node => $formatting_rules_node,
                     openguides_version    => $OpenGuides::VERSION,
                     enable_page_deletion  => $enable_page_deletion,
-                    language              => $config->{_}->{default_language},
+                    language              => $config->default_language,
     };
 
     if ($args{node}) {
@@ -236,7 +232,7 @@ sub extract_metadata_vars {
     my $q = $args{cgi_obj};
     my $formatter = $args{wiki}->formatter;
     my $config = $args{config};
-    my $script_name = $config->{_}->{script_name};
+    my $script_name = $config->script_name;
 
     # Categories and locales are displayed as links in the page footer.
     # We return these twice, as eg 'category' being a simple array of
@@ -289,7 +285,7 @@ sub extract_metadata_vars {
             $vars{$var} = $metadata{$var}[0];
         }
         # Data for the distance search forms on the node display.
-        my $geo_handler = $config->{_}{geo_handler} || 1;
+        my $geo_handler = $config->geo_handler;
         if ( $geo_handler == 1 ) {
             %vars = (
                       %vars,
@@ -329,7 +325,7 @@ sub extract_metadata_vars {
             $vars{$var} = $q->param($var);
         }
 
-        my $geo_handler = $config->{_}{geo_handler} || 1;
+        my $geo_handler = $config->geo_handler;
         if ( $geo_handler == 1 ) {
 	    require Geography::NationalGrid::GB;
    	    my $os_x   = $q->param("os_x");
@@ -428,7 +424,7 @@ sub extract_metadata_vars {
 	    my $long   = $q->param("longitude");
             if ( $lat && $long ) {
                 my ($zone, $easting, $northing) =
-                 Geo::Coordinates::UTM::latlon_to_utm( $config->{_}{ellipsoid},
+                 Geo::Coordinates::UTM::latlon_to_utm( $config->ellipsoid,
                                                        $lat, $long );
                 $easting  =~ s/\..*//; # chop off decimal places
                 $northing =~ s/\..*//; # - metre accuracy enough

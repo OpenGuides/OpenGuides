@@ -1,6 +1,6 @@
 use strict;
 use CGI::Wiki::Setup::SQLite;
-use Config::Tiny;
+use OpenGuides::Config;
 use OpenGuides;
 use Test::More tests => 5;
 
@@ -12,8 +12,8 @@ SKIP: {
       unless $have_sqlite;
 
     CGI::Wiki::Setup::SQLite::setup( { dbname => "t/node.db" } );
-    my $config = Config::Tiny->new;
-    $config->{_} = {
+    my $config = OpenGuides::Config->new(
+           vars => {
                      dbtype             => "sqlite",
                      dbname             => "t/node.db",
                      indexing_directory => "t/indexes",
@@ -22,7 +22,8 @@ SKIP: {
                      site_name          => "Test Site",
                      template_path      => "./templates",
                      home_name          => "Home",
-                   };
+                   }
+    );
     my $guide = OpenGuides->new( config => $config );
     isa_ok( $guide, "OpenGuides" );
     my $wiki = $guide->wiki;
@@ -33,7 +34,7 @@ SKIP: {
     };
     is( $@, "", "->display_node doesn't die" );
 
-    $config->{_}->{home_name} = "My Home Page";
+    $config->home_name( "My Home Page" );
     $output = $guide->display_node( return_output => 1 );
     like( $output, qr/My Home Page/, "...and defaults to the home node, and takes notice of what we want to call it" );
     my %tt_vars = $guide->display_node( return_tt_vars => 1 );

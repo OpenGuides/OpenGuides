@@ -1,14 +1,14 @@
 use strict;
-use Config::Tiny;
 use Cwd;
 use CGI::Cookie;
 use CGI::Wiki::Formatter::UseMod;
+use OpenGuides::Config;
 use OpenGuides::Template;
 use Test::MockObject;
 use Test::More tests => 27;
 
-my $config = Config::Tiny->new;
-$config->{_} = {
+my $config = OpenGuides::Config->new(
+       vars => {
                  template_path         => cwd . '/t/templates',
                  site_name             => 'CGI::Wiki Test Site',
                  script_url            => 'http://wiki.example.com/',
@@ -19,7 +19,8 @@ $config->{_} = {
                  stylesheet_url        => 'http://wiki.example.com/styles.css',
                  home_name             => 'Home Page',
                  formatting_rules_node => 'Rules',
-               };
+               }
+);
 
 # White box testing - we know that OpenGuides::Template only actually uses
 # the node_name_to_node_param method of the formatter component of the wiki
@@ -111,12 +112,14 @@ $output = OpenGuides::Template->output(
 like( $output, qr/Set-Cookie: $cookie/, "cookie in header" );
 
 # Test that home_link is set correctly when script_name is blank.
-$config->{_} = {
+$config = OpenGuides::Config->new(
+       vars => {
                  template_path         => cwd . '/t/templates',
                  site_name             => 'CGI::Wiki Test Site',
                  script_url            => 'http://wiki.example.com/',
                  script_name           => '',
-               };
+               }
+);
 $output = OpenGuides::Template->output(
     wiki     => $fake_wiki,
     config   => $config,
@@ -127,12 +130,14 @@ like( $output, qr/HOME LINK: http:\/\/wiki.example.com/,
 
 # Test that full_cgi_url comes out right if the trailing '/' is
 # missing from script_url in the config file.
-$config->{_} = {
+$config = OpenGuides::Config->new(
+       vars => {
                  template_path         => cwd . '/t/templates',
                  site_name             => 'CGI::Wiki Test Site',
                  script_url            => 'http://wiki.example.com',
                  script_name           => 'wiki.cgi',
-               };
+               }
+);
 $output = OpenGuides::Template->output(
     wiki     => $fake_wiki,
     config   => $config,
@@ -166,11 +171,14 @@ like( $output, qr/OMIT FORMATTING LINK: fish/,
       "explicitly supplied TT vars override cookie ones" );
 
 # Test that enable_page_deletion is set correctly in various circumstances.
-$config = Config::Tiny->new;
-$config->{_}->{template_path} = cwd . "/t/templates";
-$config->{_}->{site_name} = "Test Site";
-$config->{_}->{script_url} = "/";
-$config->{_}->{script_name} = "";
+$config = OpenGuides::Config->new(
+    vars => {
+              template_path => cwd . "/t/templates",
+              site_name     => "Test Site",
+              script_url    => "/",
+              script_name   => "",
+            },
+);
 
 $output = OpenGuides::Template->output(
     wiki     => $fake_wiki,
@@ -180,7 +188,7 @@ $output = OpenGuides::Template->output(
 like( $output, qr/ENABLE PAGE DELETION: 0/,
       "enable_page_deletion var set correctly when not specified in conf" );
 
-$config->{_}->{enable_page_deletion} = "n";
+$config->enable_page_deletion( "n" );
 $output = OpenGuides::Template->output(
     wiki     => $fake_wiki,
     config   => $config,
@@ -189,7 +197,7 @@ $output = OpenGuides::Template->output(
 like( $output, qr/ENABLE PAGE DELETION: 0/,
       "enable_page_deletion var set correctly when set to 'n' in conf" );
 
-$config->{_}->{enable_page_deletion} = "y";
+$config->enable_page_deletion( "y" );
 $output = OpenGuides::Template->output(
     wiki     => $fake_wiki,
     config   => $config,
@@ -198,7 +206,7 @@ $output = OpenGuides::Template->output(
 like( $output, qr/ENABLE PAGE DELETION: 1/,
       "enable_page_deletion var set correctly when set to 'y' in conf" );
 
-$config->{_}->{enable_page_deletion} = 0;
+$config->enable_page_deletion( 0 );
 $output = OpenGuides::Template->output(
     wiki     => $fake_wiki,
     config   => $config,
@@ -207,7 +215,7 @@ $output = OpenGuides::Template->output(
 like( $output, qr/ENABLE PAGE DELETION: 0/,
       "enable_page_deletion var set correctly when set to '0' in conf" );
 
-$config->{_}->{enable_page_deletion} = 1;
+$config->enable_page_deletion( 1 );
 $output = OpenGuides::Template->output(
     wiki     => $fake_wiki,
     config   => $config,

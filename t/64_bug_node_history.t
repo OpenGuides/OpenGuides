@@ -1,5 +1,5 @@
 use CGI::Wiki::Setup::SQLite;
-use Config::Tiny;
+use OpenGuides::Config;
 use Cwd;
 use OpenGuides;
 use Test::More tests => 1;
@@ -13,8 +13,8 @@ SKIP: {
 
     CGI::Wiki::Setup::SQLite::cleardb( { dbname => "t/node.db" } );
     CGI::Wiki::Setup::SQLite::setup( { dbname => "t/node.db" } );
-    my $config = Config::Tiny->new;
-    $config->{_} = {
+    my $config = OpenGuides::Config->new(
+           vars => {
                      dbtype             => "sqlite",
                      dbname             => "t/node.db",
                      indexing_directory => "t/indexes",
@@ -22,7 +22,8 @@ SKIP: {
                      script_name        => "mywiki.cgi",
                      site_name          => "CGI::Wiki Test Site",
                      template_path      => cwd . "/templates",
-                   };
+                   }
+    );
 
     my $guide = OpenGuides->new( config => $config );
 

@@ -23,11 +23,10 @@ to OpenGuides developers.
 
 =head1 SYNOPSIS
 
-  use CGI::Wiki;
-  use Config::Tiny;
+  use OpenGuide::Config;
   use OpenGuides::Utils;
 
-  my $config = Config::Tiny->read( "wiki.conf" );
+  my $config = OpenGuides::Config->new( file => "wiki.conf" );
   my $wiki = OpenGuides::Utils->make_wiki_object( config => $config );
 
 =head1 METHODS
@@ -36,10 +35,10 @@ to OpenGuides developers.
 
 =item B<make_wiki_object>
 
-  my $config = Config::Tiny->read( "wiki.conf" );
+  my $config = OpenGuides::Config->new( file => "wiki.conf" );
   my $wiki = OpenGuides::Utils->make_wiki_object( config => $config );
 
-Croaks unless a C<Config::Tiny> object is supplied.  Returns a
+Croaks unless an C<OpenGuides::Config> object is supplied.  Returns a
 C<CGI::Wiki> object made from the given config file on success,
 croaks if any other error occurs.
 
@@ -66,11 +65,11 @@ indexing_directory - for the L<Search::InvertedIndex> or L<Plucene> files to go
 sub make_wiki_object {
     my ($class, %args) = @_;
     my $config = $args{config} or croak "No config param supplied";
-    croak "config param isn't a Config::Tiny object"
-	unless UNIVERSAL::isa( $config, "Config::Tiny" );
+    croak "config param isn't an OpenGuides::Config object"
+	unless UNIVERSAL::isa( $config, "OpenGuides::Config" );
 
     # Require in the right database module.
-    my $dbtype = $config->{_}->{dbtype};
+    my $dbtype = $config->dbtype;
 
     my %cgi_wiki_exts = (
                           postgres => "Pg",
@@ -84,35 +83,35 @@ sub make_wiki_object {
 
     # Make store.
     my $store = $cgi_wiki_module->new(
-        dbname => $config->{_}{dbname},
-        dbuser => $config->{_}{dbuser},
-        dbpass => $config->{_}{dbpass},
-        dbhost => $config->{_}{dbhost},
+        dbname => $config->dbname,
+        dbuser => $config->dbuser,
+        dbpass => $config->dbpass,
+        dbhost => $config->dbhost,
     );
 
     # Make search.
     my $search;
-    if ( $config->{_}{use_plucene}
-         && ( lc($config->{_}{use_plucene}) eq "y"
-              || $config->{_}{use_plucene} == 1 )
+    if ( $config->use_plucene
+         && ( lc($config->use_plucene) eq "y"
+              || $config->use_plucene == 1 )
        ) {
         require CGI::Wiki::Search::Plucene;
         $search = CGI::Wiki::Search::Plucene->new(
-                                       path => $config->{_}{indexing_directory}
+                                       path => $config->indexing_directory,
                                                  );
     } else {
         require CGI::Wiki::Search::SII;
         require Search::InvertedIndex::DB::DB_File_SplitHash;
         my $indexdb = Search::InvertedIndex::DB::DB_File_SplitHash->new(
-            -map_name  => $config->{_}{indexing_directory},
+            -map_name  => $config->indexing_directory,
             -lock_mode => "EX"
         );
         $search = CGI::Wiki::Search::SII->new( indexdb => $indexdb );
     }
 
     # Make formatter.
-    my $script_name = $config->{_}->{script_name};
-    my $search_url = $config->{_}->{script_url} . "supersearch.cgi";
+    my $script_name = $config->script_name;
+    my $search_url = $config->script_url . "supersearch.cgi";
 
     my %macros = (
         '@SEARCHBOX' =>
