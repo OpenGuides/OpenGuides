@@ -1,6 +1,7 @@
 0.30    
         Fixed some HTML validation bugs.
 	Added multiple install and pretty URL notes to INSTALL.
+	Removed pubcrawl stuff from distro for now - it doesn't really work.
 
 0.29    8 November 2003
         Expanded section in TROUBLESHOOTING about permissions problems.
