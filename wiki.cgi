@@ -2,6 +2,7 @@
 
 use strict;
 use warnings;
+# use lib qw(/home/ivorw/public_html/cgi-bin/lib);
 
 use vars qw( $VERSION );
 $VERSION = '0.09';
@@ -19,6 +20,7 @@ use Geography::NationalGrid;
 use Geography::NationalGrid::GB;
 use OpenGuides::RDF;
 use OpenGuides::Utils;
+use OpenGuides::Diff qw(display_node_diff);
 use Template;
 use Time::Piece;
 use URI::Escape;
@@ -122,7 +124,12 @@ eval {
             display_node_rdf( node => $node );
         } else {
             my $version = $q->param("version");
-            display_node($node, $version);
+	    my $other_ver = $q->param("diffversion");
+	    if ( $other_ver ) {
+        	display_node_diff($wiki, $node, $version, $other_ver);
+	    } else {
+        	display_node($node, $version);
+	    }
         }
     }
 };

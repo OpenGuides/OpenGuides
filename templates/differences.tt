@@ -1,0 +1,74 @@
+[% USE CGI %]
+[% INCLUDE header.tt %]
+  <h1>
+  [% site_name %] - Differences between [% ver1 %] and [% ver2 %] of [% node_name %]
+  </h1>
+[% IF diff %]
+<table width=100%>
+  <tr>
+    <th width=50%> [% ver1 %] </th>
+    <th width=50%> [% ver2 %] </th>
+  </tr>
+[% FOREACH hunk = diff %]
+  <tr>
+    <td>[% hunk.left %]</td>
+    <td>[% hunk.right %]</td>
+  </tr>
+[% END %]
+</table><hr>
+[% ELSE %]
+  <h3>Contents are identical</h3>
+[% END %]
+
+[% INCLUDE display_metadata.tt %]
+
+[% content %]
+
+
+[% IF os_x AND os_y %]
+  <hr>
+<form action="wiki.cgi">
+Find all things within
+<select name="distance_in_metres">
+  <option value="200">200 metres</option>
+  <option value="500">500 metres</option>
+  <option value="1000">1 kilometre</option>
+  <option value="2000">2 kilometres</option>
+</select>
+of here.
+  <input type="hidden" name="id" value="[% node_name %]" />
+  <input type="hidden" name="action" value="find_within_distance" />
+  <input type="submit" name="Go" value="Go" />
+</form>
+[% END %]
+
+<br clear="all" />
+
+[% IF categories %]
+  <hr />
+  <small><b>Categories:</b>
+  [% FOREACH category = categories %]
+    <a href="[% category.url %]">[% category.name %]</a> /
+  [% END %]
+  </small>
+[% END %]
+
+[% IF locales %]
+  <hr />
+  <small><b>Locale:</b>
+    [% FOREACH locale = locales %]
+      <a href="[% locale.url %]">[% locale.name %]</a> /
+    [% END %]
+  </small>
+[% END %]
+
+<a href="wiki.cgi?action=list_all_versions;id=[% node_param %]">List all versions</a><br />
+
+<p>
+<form action="supersearch.cgi" method="get">
+  <input type="text" size="50" name="search" />
+  <input type="submit" name="Go" value="Search" />
+</form>
+</p>
+
+[% INCLUDE footer.tt %]

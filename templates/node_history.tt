@@ -6,7 +6,8 @@
 <ul>
 [% FOREACH revision = history %]
   <li>Version [% revision.version %]:
-      <a href="[% cgi_url %]?id=[% node_param %]&version=[% revision.version %]">View</a> .....
+      <a href="[% cgi_url %]?id=[% node_param %]&version=[% revision.version %]">View</a> |
+      <a href="[% cgi_url %]?id=[% node_param %]&version=[% revision.version %]&diffversion=[% version %]">Diff</a> .....
       [% revision.modified %]
       [% IF revision.username %]
         by <a href="[% cgi_url %]?username=[% revision.username %]&action=userstats">[% revision.username %]</a>
