@@ -52,6 +52,11 @@ my @questions = (
   variable => "site_name",
   default  => "OpenGuides Wiki"
   },
+{ question => "do you want the navigation bar included on the home page?",
+  variable => "navbar_on_home_page",
+  default  => "y",
+  type     => "y_n"
+  },
 { question => "what should the home page of the wiki be called?",
   variable => "home_name",
   default  => "Home"
@@ -121,11 +126,16 @@ push @answers, { question => $dbtype_qu,
 
 foreach my $qset (@questions) {
     my $qu  = $qset->{question};
+    my $type = $qset->{type} || "";
     my $var = $qset->{variable};
     my $def = $existing_config{$var} || $qset->{default};
     my $val = $def;
     unless ( $skip_config ) {
-        $val = Module::Build->prompt("\n$qu ", $def);
+        if ( $type eq "y_n" ) {
+            $val = Module::Build->y_n("\n$qu ", $def);
+	} else {
+            $val = Module::Build->prompt("\n$qu ", $def);
+	}
     }
 
     # Make sure that script_url ends in a /

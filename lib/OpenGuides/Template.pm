@@ -77,6 +77,8 @@ in the config object or the user cookies.
 
 =item * C<formatting_rules_link> (unless C<omit_formatting_link> is set in user cookie)
 
+=item * C<navbar_on_home_page>
+
 =item * C<home_name>
 
 =back
@@ -124,6 +126,7 @@ sub output {
 		    stylesheet            => $config->{_}->{stylesheet_url},
 		    home_link             => $script_url . $script_name,
 		    home_name             => $config->{_}->{home_name},
+                    navbar_on_home_page   => $config->{_}->{navbar_on_home_page},
                     formatting_rules_link => $formatting_rules_link,
                     formatting_rules_node => $formatting_rules_node,
     };

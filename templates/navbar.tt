@@ -1,4 +1,4 @@
-<div id="toolbar">
+<div class="toolbar">
 <ul>
     <li><a href="[% home_link %]">[% home_name %]</a></li>
     <li><a href="[% full_cgi_url %]?RecentChanges">RecentChanges</a></li>

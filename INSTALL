@@ -100,6 +100,11 @@ more than one OpenGuides installation at the same site then each should
 have a unique name, since this name is used to manage user preferences.
 
 
+  "Do you want the navigation bar included on the home page?"
+
+Answer "y" or "n".
+
+
   "What should the home page of the wiki be called?"
   "How would you describe the wiki?"
   "What city is the wiki based in?"
@@ -108,3 +113,11 @@ have a unique name, since this name is used to manage user preferences.
 
 Self explanatory.
 
+
+  "What's the name of the node to use for the text formatting rules link?"
+
+From 0.19, OpenGuides allows users to choose whether or not to have a
+permanent link to the text formatting rules node in their navbar.  You
+need to put the name of that node in here for it to work, though.  You
+might want to call the node "Text Formatting Examples", "Text
+Formatting Rules", "House Style" or whatever.
