@@ -6,6 +6,8 @@ $VERSION = '0.02';
 
 use Carp qw( croak );
 use CGI; # want to get rid of this and put the burden on the templates
+use Geography::NationalGrid;
+use Geography::NationalGrid::GB;
 use Template;
 use URI::Escape;
 
@@ -104,6 +106,15 @@ sub output {
                                         config   => $config,
                                         metadata => $node_data{metadata} );
 
+  # -- or --
+
+  my %metadata_vars = OpenGuides::Template->extract_tt_vars(
+                                        wiki     => $wiki,
+                                        config   => $config,
+					cgi_obj  => $q );
+
+  # -- then --
+
   print OpenGuides::Template->output( wiki     => $wiki,
                                       config   => $config,
                                       template => "node.tt",
@@ -111,51 +122,85 @@ sub output {
                                                     %metadata_vars }
 				     );
 
-Picks out things like categories, locales, phone number etc from the
-metadata hash returned by L<CGI::Wiki> and packages them nicely for
-templates.
+Picks out things like categories, locales, phone number etc from
+EITHER the metadata hash returned by L<CGI::Wiki> OR the query
+parameters in a L<CGI> object, and packages them nicely for templates.
+If you supply both C<metadata> and C<cgi_obj> then C<metadata will
+take precedence, but don't do that.
 
 =cut
 
 sub extract_tt_vars {
     my ($class, %args) = @_;
     my %metadata = %{$args{metadata} || {} };
+    my $q = $args{cgi_obj};
     my $formatter = $args{wiki}->formatter;
     my $config = $args{config};
+    my $script_name = $config->{_}->{script_name};
 
     # Categories and locales are displayed as links in the page footer.
-    my $catref      = $metadata{category};
-    my $locref      = $metadata{locale};
-    my $script_name = $config->{_}->{script_name};
+    my (@catlist, @loclist);
+    if ( $args{metadata} ) {
+        @catlist = @{ $metadata{category} || [] };
+        @loclist = @{ $metadata{locale}   || [] };
+    } else {
+	my $categories_text = $q->param('categories');
+	my $locales_text    = $q->param('locales');
+	@catlist = sort split("\r\n", $categories_text);
+	@loclist = sort split("\r\n", $locales_text);
+    }
 
     my @categories = map { { name => $_,
                              url  => "$script_name?Category_"
-            . uri_escape($formatter->node_name_to_node_param($_)) } } @$catref;
+            . uri_escape($formatter->node_name_to_node_param($_)) } } @catlist;
 
     my @locales    = map { { name => $_,
                              url  => "$script_name?Locale_"
-            . uri_escape($formatter->node_name_to_node_param($_)) } } @$locref;
+            . uri_escape($formatter->node_name_to_node_param($_)) } } @loclist;
 
     # The 'website' attribute might contain a URL so we wiki-format it here
     # rather than just CGI::escapeHTMLing it all in the template.
-    my $website = $metadata{website}[0];
+    my $website = $args{metadata} ? $metadata{website}[0]
+                                  : $q->param("website");
     my $formatted_website_text;
     if ( $website ) {
         $formatted_website_text = $class->format_website_text(
-            formatter => $args{wiki}->formatter,
+            formatter => $formatter,
             text      => $website );
     }
 
+    my $hours_text = $args{metadata} ? $metadata{opening_hours_text}[0]
+   	                             : $q->param("hours_text");
     my %tt_vars = (
         categories             => \@categories,
 	locales                => \@locales,
 	formatted_website_text => $formatted_website_text,
-	hours_text             => $metadata{opening_hours_text}[0],
+	hours_text             => $hours_text
     );
 
-    foreach my $var ( qw( phone fax address postcode os_x os_y latitude
+    if ( $args{metadata} ) {
+        foreach my $var ( qw( phone fax address postcode os_x os_y latitude
                                                                longitude ) ) {
-        $tt_vars{$var} = $metadata{$var}[0];
+            $tt_vars{$var} = $metadata{$var}[0];
+        }
+    } else {
+        foreach my $var ( qw( phone fax address postcode ) ) {
+            $tt_vars{$var} = $q->param($var);
+        }
+
+	my $os_x = $q->param("os_x");
+	my $os_y = $q->param("os_y");
+	# Work out latitude and longitude for the preview display.
+	if ($os_x and $os_y) {
+	    my $point = Geography::NationalGrid::GB->new( Easting  => $os_x,
+							  Northing => $os_y );
+	    %tt_vars = ( %tt_vars,
+			 latitude  => $point->latitude,
+			 longitude => $point->longitude,
+			 os_x      => $os_x,
+			 os_y      => $os_y
+	    );
+	}
     }
 
     return %tt_vars;

@@ -342,61 +342,15 @@ sub preview_node {
     $content     =~ s/\r\n/\n/gs;
     my $checksum = $q->param('checksum');
 
-    # Multiple categories and locales can be supplied, one per line.
-    my $categories_text = $q->param('categories');
-    my $locales_text    = $q->param('locales');
-    my @catlist = sort split("\r\n", $categories_text);
-    my @loclist = sort split("\r\n", $locales_text);
+    my %metadata_vars = OpenGuides::Template->extract_tt_vars(
+                                                   wiki    => $wiki,
+						   config  => $config,
+						   cgi_obj => $q );
 
-    my @categories = map { { name => $_,
-                             url  => "$script_name?Category_"
- 		          . uri_escape($formatter->node_name_to_node_param($_))
-			   }
-		         } @catlist;
-
-    my @locales    = map { { name => $_,
-                             url  => "$script_name?Locale_"
-			  . uri_escape($formatter->node_name_to_node_param($_))
-                           }
-                         } @loclist;
-
-    # The 'website' attribute might contain a URL so we wiki-format it here
-    # rather than just CGI::escapeHTMLing it all in the template.
-    my $website = $q->param('website');
-    my $formatted_website_text;
-    if ( $website ) {
-        $formatted_website_text = OpenGuides::Template->format_website_text(
-                                      formatter => $formatter,
-                                      text      => $website );
-    }
-
-    my %tt_metadata_vars = (
-			categories   => \@categories,
-			locales      => \@locales,
-  		        phone        => $q->param("phone"),
-			fax          => $q->param("fax"),
-                        website      => $website,
-		        formatted_website_text => $formatted_website_text,
-		        hours_text   => $q->param("hours_text"),
-			address      => $q->param("address"),
-                        postcode     => $q->param("postcode"),
-			username     => $q->param("username"),
-			comment      => $q->param("comment")
-     );
-
-    my $os_x = $q->param("os_x");
-    my $os_y = $q->param("os_y");
-    # Work out latitude and longitude for the preview display.
-    if ($os_x and $os_y) {
-        my $point = Geography::NationalGrid::GB->new( Easting  => $os_x,
-						      Northing => $os_y );
-        %tt_metadata_vars = ( %tt_metadata_vars,
-  		              latitude  => $point->latitude,
-			      longitude => $point->longitude,
-			      os_x      => $os_x,
-			      os_y      => $os_y
-	);
-    }
+    my %tt_metadata_vars = ( %metadata_vars,
+			     username => $q->param("username"),
+			     comment  => $q->param("comment")
+    );
 
     if ($wiki->verify_checksum($node, $checksum)) {
         my %tt_vars = ( content      => $q->escapeHTML($content),
