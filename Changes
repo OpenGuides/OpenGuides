@@ -1,21 +1,36 @@
 0.21    
         Added version number to CGI.pm prereq as Alex McLintock hit a
-          version that didn't have unescape.
+        version that didn't have unescape.
+
+        Added a link on RecentChanges to the RSS version, and put an
+        autodiscovery tag for the RSS in the head section.
+
+	Changed diff feature to hide checksums, which aren't necessary for 
+        the user to see. Fixed a minor bug in the node history template so
+        that the diff links compare the selected version against the previous
+        one, not the original one every time.
 
 0.20    10 July 2003
-        Fixed all the email addresses to openguides-dev@openguides.org
+        Fixed all the email addresses to openguides-dev@openguides.org.
 
 0.19    10 July 2003
         Extra checks that script_url ends in a '/'.
+
         Fixed small bug with edit conflict form - map link field was missing.
+
         Moved "content" div in a couple of templates to fix incorrect nesting. 
+
         @INDEX_LINK macros now have optional title text like so:
           @INDEX_LINK [[Category Pubs|Pubs]]
+
         Added preferences option for including or excluding text formatting
-          rules link in navbar.  Enable this by setting text_formatting_node
-          in your config file.
+        rules link in navbar.  Enable this by setting text_formatting_node
+        in your config file.
+
         Added config option for including the navbar on the home page.
+
         Implemented minor edits.
+
         Fixed cookie to persist beyond session.
 
 0.18    16 June 2003
@@ -23,7 +38,8 @@
 
 0.17    15 June 2003
         Fixed OpenGuides::Utils to take note of dbhost.
-        Added example stylesheet provided by the OxfordGuide team.
+ 
+       Added example stylesheet provided by the OxfordGuide team.
 
 0.16    26 May 2003
         Ivor fixed OpenGuides::Diff to diff by word instead of by character.
@@ -48,8 +64,11 @@
 
 0.13    17 May 2003
         Added some more stylesheet hooks.
+ 
         Tweaked OpenGuides::Diff to make it testable, added a start at tests.
+
         Lat and long now stored to only 6dp instead of millions.
+
         Added edit field for map link.
 
 0.12    14 May 2003
@@ -67,7 +86,7 @@
         node versions.
 
         Added OpenGuides::Template to handle Template Toolkit stuff in a
-        more testable and reusable way than just bunging it in wiki.cgi
+        more testable and reusable way than just bunging it in wiki.cgi.
 
 0.09    10 May 2003
         Added OpenGuides::UK::PubCrawl and pubcrawl.cgi as a start at a
@@ -79,9 +98,8 @@
         process, hurrah.
 
 0.08    3 May 2003
-
         Added fuzzy matching capability -
-            action=index;index_type=fuzzy_title_match;index_value=hollborne
+          action=index;index_type=fuzzy_title_match;index_value=hollborne
         Someone needs to write a nice search box interface for this.
 
         Fixed edit_conflict template and preview method to cope with stale
@@ -92,7 +110,6 @@
         hardcoded).  Also is now called as wiki.cgi?id=Node_Name;format=rdf
 
 0.07    3 May 2003
-
         Require CGI::Wiki 0.32 to avoid bug (again a Bob find!) where
         committing a node with metadata but no content would die.
 
@@ -106,12 +123,10 @@
         nonexistent node, now it returns stuff with a wiki:version of 0.
 
 0.06    2 May 2003
-
         Fixed supersearch.cgi so it works with MySQL as well as Postgres
         (thanks again to Bob for finding the bug).
 
 0.05    2 May 2003
-
         Redid the script and template installation so the script does
         actually get called what you said it should be (code copied
         somewhat from Siesta::Build).
