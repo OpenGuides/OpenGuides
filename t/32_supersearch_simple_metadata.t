@@ -77,7 +77,7 @@ if ( $@ ) {
     # Test AND search in various combinations.
     %tt_vars = $search->run(
                              return_tt_vars => 1,
-                             vars           => { search => "Holborn&Pubs" },
+                             vars           => { search => "Holborn Pubs" },
                            );
     @found = sort map { $_->{name} } @{ $tt_vars{results} || [] };
     is_deeply( \@found, [ "Calthorpe_Arms", "Calthorpe_Arms_2" ],
@@ -85,7 +85,7 @@ if ( $@ ) {
 
     %tt_vars = $search->run(
                              return_tt_vars => 1,
-                             vars         => { search => "Holborn&Calthorpe" },
+                             vars         => { search => "Holborn Calthorpe" },
                            );
     @found = sort map { $_->{name} } @{ $tt_vars{results} || [] };
     is_deeply( \@found, [ "Calthorpe_Arms", "Calthorpe_Arms_2" ],
@@ -93,7 +93,7 @@ if ( $@ ) {
 
     %tt_vars = $search->run(
                              return_tt_vars => 1,
-                             vars           => { search => "Pubs&Calthorpe" },
+                             vars           => { search => "Pubs Calthorpe" },
                            );
     @found = sort map { $_->{name} } @{ $tt_vars{results} || [] };
     is_deeply( \@found, [ "Calthorpe_Arms", "Calthorpe_Arms_2" ],
@@ -101,7 +101,7 @@ if ( $@ ) {
 
     %tt_vars = $search->run(
                              return_tt_vars => 1,
-                             vars           => { search => "Holborn&beer" },
+                             vars           => { search => "Holborn beer" },
                            );
     @found = sort map { $_->{name} } @{ $tt_vars{results} || [] };
     is_deeply( \@found, [ "Calthorpe_Arms", "Calthorpe_Arms_2" ],
@@ -109,7 +109,7 @@ if ( $@ ) {
 
     %tt_vars = $search->run(
                              return_tt_vars => 1,
-                             vars           => { search => "Pubs&beer" },
+                             vars           => { search => "Pubs beer" },
                            );
     @found = sort map { $_->{name} } @{ $tt_vars{results} || [] };
     is_deeply( \@found, [ "Calthorpe_Arms", "Calthorpe_Arms_2" ],
