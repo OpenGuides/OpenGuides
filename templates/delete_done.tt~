@@ -1,7 +1,0 @@
-[% INCLUDE header.tt %]
-[% INCLUDE navbar.tt %]
-<h1>Deleted</h1>
-<p>
-The node '[% name %]' was deleted.
-</p>
-[% INCLUDE footer.tt %]
