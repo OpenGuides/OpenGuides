@@ -1,4 +1,4 @@
-0.19    25 June 2003
+0.19    10 July 2003
         Extra checks that script_url ends in a '/'.
         Fixed small bug with edit conflict form - map link field was missing.
         Moved "content" div in a couple of templates to fix incorrect nesting. 
