@@ -2,13 +2,13 @@ use strict;
 use CGI::Wiki::Setup::SQLite;
 use Config::Tiny;
 use OpenGuides;
-use Test::More tests => 3;
+use Test::More tests => 4;
 
 eval { require DBD::SQLite; };
 my $have_sqlite = $@ ? 0 : 1;
 
 SKIP: {
-    skip "DBD::SQLite not installed - no database to test with", 3
+    skip "DBD::SQLite not installed - no database to test with", 4
       unless $have_sqlite;
 
     CGI::Wiki::Setup::SQLite::cleardb( { dbname => "t/node.db" } );
@@ -41,4 +41,12 @@ SKIP: {
                           );
     };
     is( $@, "", "->show_index doesn't die" );
+    $output = $guide->show_index(
+                                  type          => "category",
+                                  value         => "Alpha",
+                                  return_output => 1,
+                                  format        => "rdf"
+                                );
+    like( $output, qr|Content-Type: text/plain|,
+          "RDF output gets content-type of text/plain" );
 }

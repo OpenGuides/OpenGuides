@@ -453,8 +453,13 @@ sub process_template {
 			template => $args{template},
 			vars     => $args{tt_vars},
     );
-    $output_conf{content_type} = $args{content_type} if $args{content_type};
-    return OpenGuides::Template->output( %output_conf );
+    if ( $args{content_type} ) {
+        $output_conf{content_type} = "";
+        my $output = "Content-Type: $args{content_type}\n\n"
+                     . OpenGuides::Template->output( %output_conf );
+    } else {
+        return OpenGuides::Template->output( %output_conf );
+    }
 }
 
 sub get_cookie {
