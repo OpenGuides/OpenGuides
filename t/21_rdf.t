@@ -1,15 +1,17 @@
 use CGI::Wiki::Setup::SQLite;
+use OpenGuides;
 use OpenGuides::Config;
 use OpenGuides::RDF;
 use OpenGuides::Utils;
+use OpenGuides::Test;
 use URI::Escape;
-use Test::More tests => 22;
+use Test::More tests => 24;
 
 eval { require DBD::SQLite; };
 my $have_sqlite = $@ ? 0 : 1;
 
 SKIP: {
-    skip "DBD::SQLite not installed - no database to test with", 22
+    skip "DBD::SQLite not installed - no database to test with", 24
       unless $have_sqlite;
 
     CGI::Wiki::Setup::SQLite::setup( { dbname => "t/node.db" } );
@@ -99,6 +101,22 @@ SKIP: {
 
     like( $rdfxml, qr|<dc:date>|, "date element included" );
     unlike( $rdfxml, qr|<dc:date>1970|, "hasn't defaulted to the epoch" );
+
+    # Check that default city and country can be set to blank.
+    $config = OpenGuides::Test->make_basic_config;
+    $config->default_city( "" );
+    $config->default_country( "" );
+    my $guide = OpenGuides->new( config => $config );
+    OpenGuides::Test->write_data(
+                                  guide => $guide,
+                                  node  => "Star Tavern",
+                                  latitude => 51.498,
+                                  longitude => -0.154,
+                                );
+    $rdf_writer = OpenGuides::RDF->new( wiki => $guide->wiki, config => $config );
+    $rdfxml = $rdf_writer->emit_rdfxml( node => "Star Tavern" );
+    unlike( $rdfxml, qr|<city>|, "no city in RDF when no default city" );
+    unlike( $rdfxml, qr|<country>|, "...same for country" );
 
     # Now test that there's a nice failsafe where a node doesn't exist.
     $rdfxml = eval { $rdf_writer->emit_rdfxml( node => "I Do Not Exist" ); };

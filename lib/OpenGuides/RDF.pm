@@ -211,9 +211,9 @@ sub emit_rdfxml {
     $rdf .= "    <!-- categories -->\n";
     $rdf .= "    <dc:subject>$_</dc:subject>\n"             foreach @{$catrefs};
     $rdf .= "\n    <!-- address and geospatial data -->\n";
-    $rdf .= "    <city>$city</city>"                        if $is_geospatial;
+    $rdf .= "    <city>$city</city>" if $city && $is_geospatial;
     $rdf .= "    <postalCode>$postcode</postalCode>\n"      if $postcode;
-    $rdf .= "    <country>$country</country>\n"             if $is_geospatial;
+    $rdf .= "    <country>$country</country>\n" if $country && $is_geospatial;
     $rdf .= "    <foaf:based_near><wn:Neighborhood><foaf:name>$_</foaf:name></wn:Neighborhood></foaf:based_near>\n"   foreach @locales;
 
     if ($latitude && $longitude) {
