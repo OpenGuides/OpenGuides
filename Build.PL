@@ -180,7 +180,7 @@ print OUT Data::Dumper->new([ \%OpenGuides::Config::config ],
     "\n1;\n";
 
 #####
-##### When updating the prepreqs PLEASE REMEMBER to update PREREQUISITES.
+##### When updating the prereqs PLEASE REMEMBER to update PREREQUISITES.
 #####
 
 # Create the build object.
