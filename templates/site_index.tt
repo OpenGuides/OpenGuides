@@ -1,0 +1,20 @@
+[% INCLUDE header.tt %]
+
+<h1 align=center>
+  [% site_name %] - Node List
+  [%- IF category -%]
+    - <a href="[% category.url %]">Category [%- category.name -%]</a>
+  [%- END -%]
+  [%- IF origin -%]
+    - Things within [%- limit -%] of <a href="wiki.cgi?[%- origin_param -%]">[%- origin -%]</a>
+  [%- END -%]
+</h1>
+<ul>
+  [% FOREACH node = nodes %]
+     <li><a href="wiki.cgi?[% node.param %]">[% node.name %]</a>
+         [% IF node.distance %]([% node.distance %] metres away)[% END %]
+     </li>
+  [% END %]
+</ul>
+
+[% INCLUDE footer.tt %]

@@ -1,0 +1,13 @@
+[% INCLUDE header.tt %]
+
+<h1 align=center>[% site_name %] - Backlinks to [% node_name %]</h1>
+
+<p>Results found: [% num_results %]</p>
+
+<ul>
+  [% FOREACH hit = results %]
+    <li><a href="[% cgi_url %]?[% hit.url %]">[% hit.title %]</a></li>
+  [% END %]
+</ul>
+
+[% INCLUDE footer.tt %]

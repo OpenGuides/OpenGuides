@@ -1,0 +1,106 @@
+[% USE CGI %]
+[% INCLUDE header.tt %]
+
+[% IF current %]
+  [% IF is_category_node %]
+    <h1>[% site_name %] - <a href="[%cgi_url %]?action=catindex&category=[% CGI.escape(category_name) %]">[% node_name %]</a></h1>
+  [% ELSE %]
+    <h1>[% site_name %] - <a href="[%cgi_url %]?action=show_backlinks&id=[% CGI.escape(node_name) %]">[% node_name %]</a></h1>
+  [% END %]
+[% ELSE %]
+  <h1>
+    [% site_name %] - historical version [% version %] of [% node_name %]
+  </h1>
+[% END %]
+
+[% IF os_x %]
+  <small>OS X co-ord: [% CGI.escapeHTML(os_x) %]</small>
+  &nbsp;&nbsp;&nbsp;
+[% END %]
+[% IF os_y %]
+  <small>OS Y co-ord: [% CGI.escapeHTML(os_y) %]</small>
+  &nbsp;&nbsp;&nbsp;
+[% END %]
+[% IF postcode %]
+  <small>Postcode: [% CGI.escapeHTML(postcode) %]</small>
+  &nbsp;&nbsp;&nbsp;
+[% END %]
+<small><a href="wiki.cgi?action=rss&feed=chef_moz&id=[% node_param %]">ChefMoz RSS</a></small>
+&nbsp;&nbsp;&nbsp;
+<small><a href="wiki.cgi?action=rss&feed=chef_dan&id=[% node_param %]">ChefDan RDF/XML</a></small>
+<br />
+
+[% IF phone OR website OR hours_text %]
+  <ul>
+    [% IF phone %]
+      <li><b>Phone:</b> [% CGI.escapeHTML(phone) %]</li>
+    [% END %]
+    [% IF website %]
+      <li><b>Website:</b> <a href="[% CGI.escape(website) %]">[% CGI.escapeHTML(website) %]</a></li>
+    [% END %]
+    [% IF hours_text %]
+      <li><b>Opening Hours:</b> [% CGI.escapeHTML(hours_text) %]</li>
+    [% END %]
+  </ul>
+[% END %]
+
+[% content %]
+
+[% IF os_x AND os_y %]
+  <hr>
+  <form action="wiki.cgi">
+    Find all things within
+    <select name="distance_in_metres">
+      <option value="200">200 metres</option>
+      <option value="500">500 metres</option>
+      <option value="1000">1 kilometre</option>
+      <option value="2000">2 kilometres</option>
+    </select>
+    of here.
+    <input type="hidden" name="id" value="[% node_name %]">
+    <input type="hidden" name="action" value="find_within_distance">
+    <input type="submit" name="Go" value="Go">
+  </form>
+[% END %]
+
+[% IF categories %]
+  <hr>
+  <small><b>Categories:</b>
+  [% FOREACH category = categories %]
+    <a href="[% category.url %]">[% category.name %]</a> /
+  [% END %]
+  </small>
+[% END %]
+
+[% IF locales %]
+  <hr>
+  <small><b>Locale:</b>
+  [% FOREACH locale = locales %]
+    <a href="[% locale.url %]">[% locale.name %]</a> /
+  [% END %]
+  </small>
+[% END %]
+
+<hr>
+
+[% IF current %]
+  Last edited [% last_modified %] (this is version [% version %])<br />
+[% ELSE %]
+  This is version [% version %] (as of [% last_modified %])<br />
+  <a href="wiki.cgi?[% node_param %]">View current version</a><br />
+[% END %]
+
+[% IF version > 1 %]
+  <a href="wiki.cgi?action=list_all_versions&id=[% node_param %]">List all
+  versions</a><br />
+[% END %]
+
+<p>
+  <form action="wiki.cgi" method="get">
+    <input type="hidden" name="action" value="search">
+    <input type="text" size="50" name="terms">
+    <input type="submit" name="Search" value="Search">
+  </form>
+</p>
+
+[% INCLUDE footer.tt %]
