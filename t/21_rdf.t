@@ -41,38 +41,39 @@ while ( ($store_name, $store) = each %stores ) {
       like( $rdfxml, qr|<\?xml version="1.0"\?>|,
             "RDF is encoding-neutral" );
 
-      like( $rdfxml, qr|<chefmoz:Neighborhood>Bloomsbury</chefmoz:Neighborhood>|,
+      like( $rdfxml, qr|<wn:Neighborhood>Bloomsbury</wn:Neighborhood>|,
 	    "finds the first locale" );
-      like( $rdfxml, qr|<chefmoz:Neighborhood>St Pancras</chefmoz:Neighborhood>|,
+      like( $rdfxml, qr|<wn:Neighborhood>St Pancras</wn:Neighborhood>|,
 	    "finds the second locale" );
 
-      like( $rdfxml, qr|<chefmoz:Phone>test phone number</chefmoz:Phone>|,
+      like( $rdfxml, qr|<phone>test phone number</phone>|,
 	    "picks up phone number" );
 
       like( $rdfxml, qr|<chefmoz:Hours>test hours</chefmoz:Hours>|,
 	    "picks up opening hours text" );
 
-      like( $rdfxml, qr|<foaf:homepage>test website</foaf:homepage>|,
+      like( $rdfxml, qr|<homePage>test website</homePage>|,
 	    "picks up website" );
 
       like( $rdfxml,
-	   qr|<dc:title>CGI::Wiki Test Site review: Calthorpe Arms</dc:title>|,
+	   qr|<dc:title>CGI::Wiki Test Site: Calthorpe Arms</dc:title>|,
 	    "sets the title correctly" );
 
       like( $rdfxml, qr|<dc:contributor>Kake</dc:contributor>|,
 	    "last username to edit used as contributor" );
 
       like( $rdfxml, qr|<wiki:version>1</wiki:version>|, "version picked up" );
-      like( $rdfxml, qr|<rdf:Description rdf:about="http://wiki.example.com/mywiki.cgi\?id=Calthorpe_Arms;version=1">|,
-	    "sets the 'about' correctly" );
+
+      like( $rdfxml, qr|<rdf:Description rdf:about="">|, "sets the 'about' correctly" );
+
       like( $rdfxml, qr|<dc:source rdf:resource="http://wiki.example.com/mywiki.cgi\?id=Calthorpe_Arms" />|,
 	    "set the dc:source with the version-independent uri" );
 
-      like( $rdfxml, qr|<chefmoz:Country>United Kingdom</chefmoz:Country>|,
+      like( $rdfxml, qr|<country>United Kingdom</country>|,
 	    "default country picked up" ).
-      like( $rdfxml, qr|<chefmoz:City>London</chefmoz:City>|,
+      like( $rdfxml, qr|<city>London</city>|,
 	    "default city picked up" ).
-      like( $rdfxml, qr|<chefmoz:Zip>WC1X 8JR</chefmoz:Zip>|,
+      like( $rdfxml, qr|<postalCode>WC1X 8JR</postalCode>|,
 	    "postcode picked up" );
       like( $rdfxml, qr|<geo:lat>51.524193</geo:lat>|,
 	    "latitude picked up" );
