@@ -5,8 +5,14 @@
 <input type="submit" name="Go" value="Go" class="form_button" />
 </form>
 </div>
-<div id="footer">This wiki powered by <a
+<div id="footer">
+<p>
+<a href="[% full_cgi_url %]?id=[% node_param %];action=delete">Delete page</a> (admins only)
+</p>
+<p>
+This wiki powered by <a
 href="http://openguides.org/">OpenGuides</a> (version [% openguides_version %]).
+</p>
 </div>
 </div>
 </body>
