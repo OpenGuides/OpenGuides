@@ -1,6 +1,5 @@
 use strict;
 use CGI::Wiki::Setup::SQLite;
-use Config::Tiny;
 use OpenGuides;
 use OpenGuides::Test;
 use Test::More;
@@ -42,19 +41,8 @@ unlink "t/node.db";
 unlink <t/indexes/*>;
 
 CGI::Wiki::Setup::SQLite::setup( { dbname => "t/node.db" } );
-my $config = Config::Tiny->new;
-$config->{_} = {
-                 dbtype             => "sqlite",
-                 dbname             => "t/node.db",
-                 indexing_directory => "t/indexes",
-                 script_name        => "wiki.cgi",
-                 script_url         => "http://example.com/",
-                 site_name          => "Test Site",
-                 home_name          => "Home",
-                 template_path      => "./templates",
-                 use_plucene        => 1,
-                 geo_handler        => 1,
-               };
+my $config = OpenGuides::Test->make_basic_config;
+$config->{_}{use_plucene} = 1;
 
 # British National Grid guides should have os_x/os_y/os_dist search fields.
 my $guide = OpenGuides->new( config => $config );

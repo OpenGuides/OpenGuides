@@ -1,7 +1,7 @@
 use strict;
 use CGI::Wiki::Setup::SQLite;
-use Config::Tiny;
 use OpenGuides;
+use OpenGuides::Test;
 use Test::More tests => 6;
 
 eval { require DBD::SQLite; };
@@ -16,18 +16,7 @@ SKIP: {
     unlink <t/indexes/*>;
     CGI::Wiki::Setup::SQLite::setup( { dbname => "t/node.db" } );
 
-    my $config = Config::Tiny->new;
-    $config->{_} = {
-                     dbtype             => "sqlite",
-                     dbname             => "t/node.db",
-                     indexing_directory => "t/indexes",
-                     script_url         => "",
-                     script_name        => "",
-                     site_name          => "Test",
-                     template_path      => "./templates",
-                     home_name          => "Home",
-                   };
-
+    my $config = OpenGuides::Test->make_basic_config;
     my $guide = OpenGuides->new( config => $config );
     my $wiki = $guide->wiki;
 

@@ -1,16 +1,13 @@
 use strict;
-use Config::Tiny;
-use Cwd;
 use CGI::Wiki::Formatter::UseMod;
 use OpenGuides::Template;
+use OpenGuides::Test;
 use Test::MockObject;
 use Test::More tests => 3;
 
-my $config = Config::Tiny->new;
-$config->{_}->{template_path} = cwd . "/templates";
+my $config = OpenGuides::Test->make_basic_config;
 $config->{_}->{site_name} = "Test Site";
 $config->{_}->{script_url} = "/";
-$config->{_}->{script_name} = "";
 
 # White box testing - we know that OpenGuides::Template only actually uses
 # the node_name_to_node_param method of the formatter component of the wiki

@@ -27,18 +27,10 @@ unlink "t/node.db";
 unlink <t/indexes/*>;
 
 CGI::Wiki::Setup::SQLite::setup( { dbname => "t/node.db" } );
-my $config = Config::Tiny->new;
-$config->{_} = {
-                 dbtype             => "sqlite",
-                 dbname             => "t/node.db",
-                 indexing_directory => "t/indexes",
-                 script_name        => "wiki.cgi",
-                 script_url         => "http://example.com/",
-                 site_name          => "Test Site",
-                 template_path      => "./templates",
-                 use_plucene        => 1,
-                 geo_handler        => 1,
-               };
+my $config = OpenGuides::Test->make_basic_config;
+$config->{_}{use_plucene} = 1;
+$config->{_}{script_name} = "wiki.cgi";
+$config->{_}{script_url} = "http://example.com/";
 
 my $search = OpenGuides::SuperSearch->new( config => $config );
 my $guide = OpenGuides->new( config => $config );

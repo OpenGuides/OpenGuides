@@ -1,5 +1,7 @@
 package OpenGuides::Test;
 
+use Config::Tiny;
+
 use strict;
 use vars qw( $VERSION );
 $VERSION = '0.01';
@@ -19,11 +21,12 @@ only useful to OpenGuides developers.
 
 =head1 SYNOPSIS
 
-  use Config::Tiny;
   use OpenGuides;
   use OpenGuides::Test;
 
-  my $config = Config::Tiny->new( ... );
+  my $config = OpenGuides::Test->make_basic_config;
+  $config->{_}{default_language} = "nl";
+
   my $guide = OpenGuides->new( config => $config );
 
   OpenGuides::Test->write_data(
@@ -37,6 +40,33 @@ only useful to OpenGuides developers.
 =head1 METHODS
 
 =over 4
+
+=item B<make_basic_config>
+
+  my $config = OpenGuides::Test->make_basic_config;
+  $config->{_}{default_language} = "nl";
+
+Makes a L<Config::Tiny> object with needed fields pre-filled.  You can
+mess with it as you like then.
+
+=cut
+
+sub make_basic_config {
+    my $config = Config::Tiny->new;
+    $config->{_} = {
+                     dbtype               => "sqlite",
+                     dbname               => "t/node.db",
+                     indexing_directory   => "t/indexes",
+                     script_url           => "",
+                     script_name          => "",
+                     site_name            => "Test",
+                     template_path        => "./templates",
+                     custom_template_path => "./custom-templates",
+                     home_name            => "Home",
+                     geo_handler          => 1,
+                   };
+    return $config;
+}
 
 =item B<write_data>
 
@@ -58,7 +88,7 @@ sub write_data {
     # Set up CGI parameters ready for a node write.
     # Most of these are in here to avoid uninitialised value warnings.
     my $q = CGI->new( "" );
-    $q->param( -name => "content", -value => "foo" );
+    $q->param( -name => "content", -value => $args{content} || "foo" );
     $q->param( -name => "categories", -value => $args{categories} || "" );
     $q->param( -name => "locales", -value => "" );
     $q->param( -name => "phone", -value => "" );

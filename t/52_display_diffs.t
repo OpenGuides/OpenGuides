@@ -1,7 +1,7 @@
 use strict;
 use CGI::Wiki::Setup::SQLite;
-use Config::Tiny;
 use OpenGuides;
+use OpenGuides::Test;
 use Test::More tests => 4;
 
 eval { require DBD::SQLite; };
@@ -12,16 +12,7 @@ SKIP: {
       unless $have_sqlite;
 
     CGI::Wiki::Setup::SQLite::setup( { dbname => "t/node.db" } );
-    my $config = Config::Tiny->new;
-    $config->{_} = {
-                     dbtype             => "sqlite",
-                     dbname             => "t/node.db",
-                     indexing_directory => "t/indexes",
-                     script_name        => "wiki.cgi",
-                     script_url         => "http://example.com/",
-                     site_name          => "Test Site",
-                     template_path      => "./templates",
-                   };
+    my $config = OpenGuides::Test->make_basic_config;
     my $guide = OpenGuides->new( config => $config );
     my $wiki = $guide->wiki;
 
