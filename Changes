@@ -43,6 +43,8 @@
           node names in newpage.cgi (a restriction which dates from all the way
           back when we were using UseModWiki): " ! $ ^ ~ @ [ ] { }
 
+        Removed newlines from output of search box macro.
+
 0.30    29 December 2003
         Added method to allow admins to delete nodes.  You will need to
           explicitly enable this option in your wiki.conf, since it brings
