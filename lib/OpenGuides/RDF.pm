@@ -272,7 +272,8 @@ sub make_recentchanges_rss {
     my %criteria;
     $criteria{items} = $args{items} if $args{items};
     $criteria{days} = $args{days} if $args{days};
-    $criteria{ignore_minor_changes} if $args{ignore_minor_edits};
+    $criteria{ignore_minor_changes} = $args{ignore_minor_edits}
+                                                  if $args{ignore_minor_edits};
     return $rssmaker->recent_changes( %criteria );
 }
 
