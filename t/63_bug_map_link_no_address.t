@@ -22,6 +22,7 @@ SKIP: {
                      script_name        => "mywiki.cgi",
                      site_name          => "CGI::Wiki Test Site",
                      template_path      => cwd . "/templates",
+                     home_name          => "Home",
                    };
 
     my $guide = OpenGuides->new( config => $config );

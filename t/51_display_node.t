@@ -21,6 +21,7 @@ SKIP: {
                      script_url         => "http://example.com/",
                      site_name          => "Test Site",
                      template_path      => "./templates",
+                     home_name          => "Home",
                    };
     my $guide = OpenGuides->new( config => $config );
     isa_ok( $guide, "OpenGuides" );
