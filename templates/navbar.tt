@@ -14,6 +14,8 @@
     [% END %]
     [% IF not_editable %]
     </ul><br />
+    [% ELSIF (node_param == 'Category_Index') %]
+    </ul>
     [% ELSE %]
       <li><a href="[% full_cgi_url %]?id=[% node_param %];action=edit">Edit this page</a></li>
     </ul>
