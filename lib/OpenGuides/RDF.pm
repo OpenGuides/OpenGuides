@@ -309,8 +309,8 @@ under the same terms as Perl itself.
 =head1 CREDITS
 
 Code in this module written by Kake Pugh and Earle Martin.  Dan
-Brickley, Matt Biddulph and other inhabitants of #core gave useful
-feedback and advice.
+Brickley, Matt Biddulph and other inhabitants of #swig on irc.freenode.net
+gave useful feedback and advice.
 
 =cut
 
