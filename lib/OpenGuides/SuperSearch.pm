@@ -345,8 +345,7 @@ sub _matched_items {
 
 =item B<word>
 
-Unquoted single words will be matched as-is.  They are allowed to contain
-the wildcards C<*> and C<%>.  For example, a search on
+a single word will be matched as-is. For example, a search on
 
   escalator
 
@@ -365,9 +364,9 @@ sub matched_word {
 
 =item B<AND searches>
 
-Clauses joined with ampersands (C<&>), for example:
+A list of words with no punctuation will be ANDed, for example:
 
-  restaurant&vegetarian
+  restaurant vegetarian
 
 will return all pages containing both the word "restaurant" and the word
 "vegetarian".
@@ -402,9 +401,10 @@ sub matched_AND {
 
 =item B<OR searches>
 
-Clauses joined with pipes (C<|>), for example:
+A list of words separated by commas (and optional spaces) will be ORed, 
+for example:
 
-  restaurant|cafe
+  restaurant, cafe
 
 will return all pages containing either the word "restaurant" or the
 word "cafe".
