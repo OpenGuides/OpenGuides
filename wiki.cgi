@@ -4,7 +4,7 @@ use strict;
 use warnings;
 
 use vars qw( $VERSION );
-$VERSION = '0.06';
+$VERSION = '0.07';
 
 use lib "lib"; # for OpenGuides modules that are installed with this script
 
@@ -209,17 +209,20 @@ sub display_node {
     # If this is a Category or Locale node, check whether it exists
     # and write it a stub node if it doesn't.
     if ( $node =~ /^(Category|Locale) (.*)$/ ) {
+        my $type = $1;
         $tt_vars{is_indexable_node} = 1;
-        $tt_vars{index_type} = lc($1);
+        $tt_vars{index_type} = lc($type);
         $tt_vars{index_value} = $2;
 
         unless ( $wiki->node_exists($node) ) {
             warn "Creating default node $node";
+            my $category = $type eq "Category" ? "Category" : "Locales";
             $wiki->write_node( $node,
                                "\@INDEX_LINK [[$node]]",
                                undef,
 			       { username => "Auto Create",
-				 comment  => "Auto created $tt_vars{index_type} stub page"
+				 comment  => "Auto created $tt_vars{index_type} stub page",
+                                 category => $category
 			       }
 	    );
 	}
