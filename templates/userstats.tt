@@ -15,7 +15,7 @@
 [% content %]
 
 <h2>
-  Last five pages edited by
+  Last five edits made by
   [% IF username %]
     <a href="[% full_cgi_url %]?[% username_param %]">[% username %]</a>:
   [% ELSE %]
@@ -37,10 +37,10 @@
 [% IF username %]
   <h2>Personalised RSS feeds:</h2>
   <ul>
-    <li><a href="[% full_cgi_url %]?action=rss;username=[% CGI.escape(username) %];items=10">Last ten pages edited by [% username %]</a></li>
-    <li><a href="[% full_cgi_url %]?action=rss;username=[% CGI.escape(username) %];items=20">Last twenty pages edited by [% username %]</a></li>
-    <li><a href="[% full_cgi_url %]?action=rss;username=[% CGI.escape(username) %];items=10;ignore_minor_edits=1">Last ten pages edited by [% username %], ignoring minor edits</a></li>
-    <li><a href="[% full_cgi_url %]?action=rss;username=[% CGI.escape(username) %];items=20;ignore_minor_edits=1">Last twenty pages edited by [% username %], ignoring minor edits</a></li>
+    <li><a href="[% full_cgi_url %]?action=rss;username=[% CGI.escape(username) %];items=10">Last ten edits made by [% username %]</a></li>
+    <li><a href="[% full_cgi_url %]?action=rss;username=[% CGI.escape(username) %];items=20">Last twenty edits made by [% username %]</a></li>
+    <li><a href="[% full_cgi_url %]?action=rss;username=[% CGI.escape(username) %];items=10;ignore_minor_edits=1">Last ten edits made by [% username %], ignoring minor edits</a></li>
+    <li><a href="[% full_cgi_url %]?action=rss;username=[% CGI.escape(username) %];items=20;ignore_minor_edits=1">Last twenty edits made by [% username %], ignoring minor edits</a></li>
   </ul>
 [% END %]
 
