@@ -4,7 +4,9 @@
 <div id="content">
 [% INCLUDE navbar.tt %]
 
-<h1 align="center">[% site_name %] - History of [% node_name %]</h1>
+<h1 align="center">
+  [% site_name %] - History of <span class="node_name">[% node_name %]</span>
+</h1>
 <p>
 Note: only administrators can delete historical versions.
 </p>

@@ -11,11 +11,13 @@
 <p>
 [% IF delete_version %]
   Are you sure you want to delete version [% delete_version %] of
-  <em>[% node_name %]</em>?  This will completely erase this version
+  <span class="node_name">[% node_name %]</span>?  This will completely
+  erase this version
   and you will not be able to get it back.  If all versions are erased
   then the page will cease to exist.
 [% ELSE %]
-  Are you sure you want to delete <em>[% node_name %]</em>?  This will
+  Are you sure you want to delete
+  <span class="node_name">[% node_name %]</span>?  This will
   completely erase this page and all its history.
 [% END %]
 If so, please enter the admin

@@ -2,13 +2,13 @@ use strict;
 use CGI::Wiki::Setup::SQLite;
 use OpenGuides;
 use OpenGuides::Test;
-use Test::More tests => 4;
+use Test::More tests => 5;
 
 eval { require DBD::SQLite; };
 my $have_sqlite = $@ ? 0 : 1;
 
 SKIP: {
-    skip "DBD::SQLite not installed - no database to test with", 4
+    skip "DBD::SQLite not installed - no database to test with", 5
       unless $have_sqlite;
 
     CGI::Wiki::Setup::SQLite::setup( { dbname => "t/node.db" } );
@@ -43,8 +43,10 @@ SKIP: {
     };
     is( $@, "", "->display_diffs doesn't die" );
     like( $output,
-          qr/differences between version 2 and version 3 of I Like Pie/i,
+          qr/differences between version 2 and version 3/i,
           "...version numbers included in output" );
+    like( $output, qr|<span class="node_name">I Like Pie</span>|,
+          "...node name inlined in output" );
     unlike( $output, qr/contents are identical/i,
             "...'contents are identical' not printed when contents differ" );
     like( $output, qr/<th.*Version\s+2.*Version\s+3.*apple.*lentil/s,

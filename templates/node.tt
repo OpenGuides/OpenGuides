@@ -12,7 +12,10 @@
     <h2 class="node_name">[% node_name %]</h2>
   [% END %]
 [% ELSE %]
-  <h2><em>Historical version [% version %] of [% node_name %]</em></h2>
+  <h2>
+    <em>Historical version [% version %] of
+    <span class="node_name">[% node_name %]</span></em>
+  </h2>
 [% END %]
 [% INCLUDE display_metadata.tt %]
 

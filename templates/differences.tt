@@ -4,7 +4,7 @@
 <div id="content">
 [% INCLUDE navbar.tt %]
   <h1>
-  [% site_name %] - Differences between [% right_version %] and [% left_version %] of [% node_name %]
+  [% site_name %] - Differences between [% right_version %] and [% left_version %] of <span class="node_name">[% node_name %]</span>
   </h1>
 [% IF diff %]
 <table>

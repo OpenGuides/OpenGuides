@@ -58,6 +58,12 @@ span.hidden
     Purpose: Defines content that will be hidden for users with a
              CSS-conforming user agent
 
+span.node_name
+    Used in: backlink_results.tt delete_confirm.tt delete_done.tt
+             differences.tt node_history.tt
+    Purpose: Inlines a node name in a snippet of explanatory text,
+             without linking to it.
+
 td.label
     Used in: edit_conflict.tt, edit_form.tt
     Purpose: Defines a label for a field

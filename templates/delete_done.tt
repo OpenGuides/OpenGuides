@@ -13,7 +13,7 @@
 [% ELSE %]
   The
 [% END %]
-node '[% node_name %]' was deleted.
+node <span class="node_name">[% node_name %]</span> was deleted.
 [% IF other_versions_remain %]
   <a href="[% cgi_url %]?[% node_param %]">View current version</a>.
 [% ELSE %]
