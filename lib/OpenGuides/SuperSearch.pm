@@ -54,7 +54,7 @@ sub new {
     $self->{css}      = $config->{_}{stylesheet_url};
     $self->{head}     = $config->{_}{site_name} . " Search";
 
-    my $geo_handler = $config->{_}{geo_handler};
+    my $geo_handler = $config->{_}{geo_handler} || 1;
     my %locator_params;
     if ( $geo_handler == 1 ) {
         %locator_params = ( x => "os_x", y => "os_y" );
