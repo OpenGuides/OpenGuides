@@ -2,13 +2,13 @@ use strict;
 use CGI::Wiki::Setup::SQLite;
 use Config::Tiny;
 use OpenGuides::SuperSearch;
-use Test::More tests => 3;
+use Test::More tests => 4;
 
 eval { require DBD::SQLite; };
 my $have_sqlite = $@ ? 0 : 1;
 
 SKIP: {
-    skip "DBD::SQLite not installed - no database to test with", 3
+    skip "DBD::SQLite not installed - no database to test with", 4
       unless $have_sqlite;
 
     CGI::Wiki::Setup::SQLite::setup( { dbname => "t/node.db" } );
@@ -107,6 +107,21 @@ SKIP: {
     is_deeply( \@ordered,
                [ "Crabtree_Tavern", "Hammersmith_Bridge", "Blue_Anchor" ],
                "...and returns them in the right order" );
+
+    %tt_vars = $search->run(
+                             return_tt_vars => 1,
+                             vars => {
+                                       lat  => 51.484320,
+                                       long => -0.223484,
+                                       distance_in_metres => 1000,
+                                       search => " ",
+                                     },
+                           );
+    @ordered = map { $_->{name} } @{ $tt_vars{results} || [] };
+    @found = sort @ordered;
+    is_deeply( \@found,
+               [ "Blue_Anchor", "Crabtree_Tavern", "Hammersmith_Bridge" ],
+               "...still works if whitespace-only search text supplied" );
 
     %tt_vars = $search->run(
                              return_tt_vars => 1,

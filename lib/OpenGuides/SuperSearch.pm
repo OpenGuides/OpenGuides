@@ -101,6 +101,11 @@ sub run {
     $vars{long} =~ s/[^-\.0-9]//g;
     $vars{distance_in_metres} =~ s/[^0-9]//g;
 
+    # Strip leading and trailing whitespace from search text.
+    $vars{search} ||= ""; # avoid uninitialised value warning
+    $vars{search} =~ s/^\s*//;
+    $vars{search} =~ s/\s*$//;
+
     # Do we have an existing search? if so, do it.
     my $doing_search;
     if ( $vars{search}
