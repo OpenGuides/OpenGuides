@@ -257,13 +257,14 @@ sub _perform_search {
         return;
     }
 
-    # Build RecDescent grammar for search syntax.
+    $self->_build_parser && exists($self->{error}) && return;
+    $self->_apply_parser($srh);
+}
 
-    # Note: '&' and '|' can be replaced with other non-alpha. This may
-    # be needed if you need to call the script from METHOD=GET (as &
-    # is a separator) Also, word: pattern could be changed to include
-    # numbers and handle locales properly. However, quoted literals
-    # are usually good enough for most odd characters.
+sub _build_parser {
+    my $self = shift;
+
+    # Build RecDescent grammar for search syntax.
 
     my $parse = Parse::RecDescent->new(q{
 
@@ -295,9 +296,16 @@ sub _perform_search {
         $self->{error} = "can't create parse object";
         return;
     }
+    
+    $self->{parser} = $parse;
+    return $self;
+}
 
+sub _apply_parser {
+    my ($self,$search) = @_;
+	
     # Turn search string into parse tree
-    my $tree = $parse->search($srh);
+    my $tree = $self->{parser}->search($search);
     unless ( $tree ) {
         $self->{error} = "Search syntax error";
         return;
@@ -315,20 +323,9 @@ sub _matched_items {
     my $tree = $args{tree};
     my @tree_arr = @$tree;
     my $op = shift @tree_arr;
+    my $meth = 'matched_'.$op;
 
-    if ( $op eq 'word' ) {
-        return $self->matched_word( @tree_arr );
-    } elsif ( $op eq 'AND' ) {
-        return $self->matched_AND( @tree_arr );
-    } elsif ( $op eq 'OR' ) {
-        return $self->matched_OR( @tree_arr );
-    } elsif ( $op eq 'NOT' ) {
-        return $self->matched_NOT( @tree_arr );
-    } elsif ( $op eq 'literal' ) {
-        return $self->matched_literal( @tree_arr );
-    }
-
-    return;
+    return $self->can($meth) ? $self->$meth(@tree_arr) : undef;
 }
 
 
