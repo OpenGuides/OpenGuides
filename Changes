@@ -11,6 +11,9 @@
 
         Fixed CPAN bug #3085 - quotes in change summary box.
 
+        Added openguides_version template variable and added it to page
+        footer (CPAN request 3110).
+
 0.21    17 July 2003
         We no longer autogenerate a Makefile.PL, since it doesn't pick up
         all the questions that need to be asked.  Sorry.  Use Module::Build

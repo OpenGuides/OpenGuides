@@ -2,12 +2,13 @@ package OpenGuides::Template;
 
 use strict;
 use vars qw( $VERSION );
-$VERSION = '0.09';
+$VERSION = '0.10';
 
 use Carp qw( croak );
 use CGI; # want to get rid of this and put the burden on the templates
 use Geography::NationalGrid;
 use Geography::NationalGrid::GB;
+use OpenGuides; # for $VERSION for template variable
 use OpenGuides::CGI;
 use Template;
 use URI::Escape;
@@ -62,6 +63,8 @@ variables set in C<vars> will over-ride any variables of the same name
 in the config object or the user cookies.
 
 =over
+
+=item * C<openguides_version>
 
 =item * C<site_name>
 
@@ -130,6 +133,7 @@ sub output {
                     navbar_on_home_page   => $config->{_}->{navbar_on_home_page},
                     formatting_rules_link => $formatting_rules_link,
                     formatting_rules_node => $formatting_rules_node,
+                    openguides_version    => $OpenGuides::VERSION,
     };
 
     if ($args{node}) {

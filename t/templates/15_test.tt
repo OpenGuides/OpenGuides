@@ -8,6 +8,8 @@ STYLESHEET: [% stylesheet %]
 HOME LINK: [% home_link %]
 HOME NAME: [% home_name %]
 
+OPENGUIDES VERSION: [% openguides_version %]
+
 NODE NAME: [% node_name %]
 NODE PARAM: [% node_param %]
 
