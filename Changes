@@ -1,3 +1,6 @@
+0.17    13 June 2003
+        Fixed OpenGuides::Utils to take note of dbhost.
+
 0.16    26 May 2003
         Ivor fixed OpenGuides::Diff to diff by word instead of by character.
 

@@ -2,7 +2,7 @@ package OpenGuides::Utils;
 
 use strict;
 use vars qw( $VERSION );
-$VERSION = '0.02';
+$VERSION = '0.03';
 
 use Carp qw( croak );
 use CGI::Wiki;
@@ -67,6 +67,7 @@ sub make_wiki_object {
         dbname => $config->{_}{dbname},
         dbuser => $config->{_}{dbuser},
         dbpass => $config->{_}{dbpass},
+        dbhost => $config->{_}{dbhost},
     );
 
     # Make search.
