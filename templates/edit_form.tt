@@ -1,5 +1,5 @@
 [% INCLUDE header.tt %]
-
+<div id="content">
 <h1 align="center">Edit "[% node_name %]"</h1>
 
 [% IF preview_html AND preview_above_edit_box %]
