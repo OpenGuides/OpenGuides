@@ -5,7 +5,7 @@ Algorithm::Diff (version 0.13 or later)
 CGI
 CGI::Carp
 CGI::Cookie
-CGI::Wiki (version 0.38 or later)
+CGI::Wiki (version 0.44 or later)
 CGI::Wiki::Formatter::UseMod (version 0.04 or later)
 CGI::Wiki::Plugin::Categoriser
 CGI::Wiki::Plugin::GeoCache
