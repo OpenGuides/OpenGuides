@@ -251,21 +251,21 @@ push @answers, {
                };
 
 if ( $geo_handler eq "3" ) {
+    my $qu = "Which ellipsoid do you want to use? (eg 'Airy', 'WGS-84')";
     my $ellipsoid;
     if ( $skip_config ) {
         $ellipsoid = $existing_config{ellipsoid} || "International";
     } else {
-        my $qu = "Which ellipsoid do you want to use? (eg 'Airy', 'WGS-84')";
         my $def = $existing_config{ellipsoid} || "International";
-        my $choice = Module::Build->prompt("\n".$qu, $def);
-	$choice =~ s/^\s*//;
-	$choice =~ s/\s*$//;
-        push @answers, {
-                         question => $qu,
-                         variable => "ellipsoid",
-                         value    => $choice,
-                       };
+        $ellipsoid = Module::Build->prompt("\n".$qu, $def);
+	$ellipsoid =~ s/^\s*//;
+	$ellipsoid =~ s/\s*$//;
     }
+    push @answers, {
+                     question => $qu,
+                     variable => "ellipsoid",
+                     value    => $ellipsoid,
+                   };
 }
 
 # Create a user-friendly config file from answers to prompts.
