@@ -2,13 +2,13 @@ use strict;
 use CGI::Wiki::Setup::SQLite;
 use Config::Tiny;
 use OpenGuides::SuperSearch;
-use Test::More tests => 4;
+use Test::More tests => 8;
 
 eval { require DBD::SQLite; };
 my $have_sqlite = $@ ? 0 : 1;
 
 SKIP: {
-    skip "DBD::SQLite not installed - no database to test with", 4
+    skip "DBD::SQLite not installed - no database to test with", 8
       unless $have_sqlite;
 
     CGI::Wiki::Setup::SQLite::setup( { dbname => "t/node.db" } );
@@ -126,6 +126,41 @@ SKIP: {
     %tt_vars = $search->run(
                              return_tt_vars => 1,
                              vars => {
+                                       os_x => 523450,
+                                       os_y => 177650,
+                                       distance_in_metres => 1000,
+                                       search => " ",
+                                     },
+                           );
+    @ordered = map { $_->{name} } @{ $tt_vars{results} || [] };
+    @found = sort @ordered;
+    is_deeply( \@found,
+               [ "Blue_Anchor", "Crabtree_Tavern", "Hammersmith_Bridge" ],
+               "...works with OS co-ords" );
+
+    %tt_vars = eval {
+               $search->run(
+                             return_tt_vars => 1,
+                             vars => {
+                                       os_x => 523450,
+                                       os_y => 177650,
+                                       distance_in_metres => 1000,
+                                       search => " ",
+                                       lat => " ",
+                                       long => " ",
+                                     },
+                           );
+    };
+    is( $@, "", "...works with OS co-ords and whitespace-only lat/long" );
+    @ordered = map { $_->{name} } @{ $tt_vars{results} || [] };
+    @found = sort @ordered;
+    is_deeply( \@found,
+               [ "Blue_Anchor", "Crabtree_Tavern", "Hammersmith_Bridge" ],
+                 "...returns the right stuff" );
+
+    %tt_vars = $search->run(
+                             return_tt_vars => 1,
+                             vars => {
                                        lat  => 51.484320,
                                        long => -0.223484,
                                        distance_in_metres => 1000,
@@ -135,4 +170,17 @@ SKIP: {
     @found = sort map { $_->{name} } @{ $tt_vars{results} || [] };
     is_deeply( \@found, [ "Blue_Anchor", "Crabtree_Tavern", ],
                "distance search in combination with text search works" );
+
+    %tt_vars = $search->run(
+                             return_tt_vars => 1,
+                             vars => {
+                                       os_x => 523450,
+                                       os_y => 177650,
+                                       distance_in_metres => 1000,
+                                       search => "pubs",
+                                     },
+                           );
+    @found = sort map { $_->{name} } @{ $tt_vars{results} || [] };
+    is_deeply( \@found, [ "Blue_Anchor", "Crabtree_Tavern", ],
+               "...works with OS co-ords too" );
 }

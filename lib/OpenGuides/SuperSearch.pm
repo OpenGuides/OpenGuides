@@ -96,10 +96,22 @@ sub run {
     $tt_vars{ss_version}  = $VERSION;
     $tt_vars{ss_info_url} = 'http://london.openguides.org/?Search_Script';
 
-    # Strip out any non-digits from dist; lat and long also allowed '-' and '.'
-    $vars{lat} =~ s/[^-\.0-9]//g;
-    $vars{long} =~ s/[^-\.0-9]//g;
-    $vars{distance_in_metres} =~ s/[^0-9]//g;
+    # Strip out any non-digits from dist and OS co-ords; lat and long
+    # also allowed '-' and '.'
+    foreach my $param( qw( lat long ) ) {
+        if ( defined $vars{$param} ) {
+            $vars{$param} =~ s/[^-\.0-9]//g;
+            # will check for definedness later as can be 0.
+            delete $vars{$param} if $vars{$param} eq "";
+	}
+    }
+    foreach my $param ( qw( os_x os_y distance_in_metres ) ) {
+        if ( defined $vars{$param} ) {
+            $vars{$param} =~ s/[^0-9]//g;
+            # will check for definedness later as can be 0.
+            delete $vars{$param} if $vars{$param} eq "";
+	}
+    }
 
     # Strip leading and trailing whitespace from search text.
     $vars{search} ||= ""; # avoid uninitialised value warning
@@ -109,15 +121,16 @@ sub run {
     # Do we have an existing search? if so, do it.
     my $doing_search;
     if ( $vars{search}
-         or ( defined $vars{lat}
-              && defined $vars{long}
+         or ( ( (defined $vars{lat} && defined $vars{long})
+                or (defined $vars{os_x} && defined $vars{os_y}) )
               && defined $vars{distance_in_metres} )
     ) {
         $doing_search = 1;
         $tt_vars{search_terms} = $vars{search};
-        $tt_vars{lat} = $vars{lat};
-        $tt_vars{long} = $vars{long};
         $tt_vars{dist} = $vars{distance_in_metres};
+        foreach my $param ( qw( lat long os_x os_y ) ) {
+            $tt_vars{$param} = $vars{$param};
+	}
         $self->_perform_search( vars => \%vars );
     }
 
@@ -311,26 +324,48 @@ sub _perform_search {
     }
 
     # Now filter by distance if required.
-    my ($lat, $long, $dist) = @vars{ qw( lat long distance_in_metres ) };
-    if ( defined $lat && defined $long && $dist ) {
+    my ($os_x, $os_y, $lat, $long, $dist) =
+                         @vars{ qw( os_x os_y lat long distance_in_metres ) };
+    if ( ( (defined $lat && defined $long)
+           or (defined $os_x and defined $os_y)
+                                                ) && $dist ) {
         my %results = %{ $self->{results} || {} };
-        my @close = $self->{locator}->find_within_distance(
-                                                            lat    => $lat,
-                                                            long   => $long,
-                                                            metres => $dist,
-                                                          );
+        my @close;
+        if ( defined $lat && defined $long ) {
+            @close = $self->{locator}->find_within_distance(
+                                                             lat    => $lat,
+                                                             long   => $long,
+                                                             metres => $dist,
+                                                           );
+	} else {
+            @close = $self->{locator}->find_within_distance(
+                                                             os_x   => $os_x,
+                                                             os_y   => $os_y,
+                                                             metres => $dist,
+                                                           );
+	}
         my %close_hash = map { $_ => 1 } @close;
         my @nodes = keys %results;
         foreach my $node ( @nodes ) {
             my $unmunged = $node; # KLUDGE
             $unmunged =~ s/_/ /g;
             if ( exists $close_hash{$unmunged} ) {
-                my $distance = $self->{locator}->distance(
+                my $distance;
+	        if ( defined $lat && defined $long ) {
+                    $distance = $self->{locator}->distance(
                                                  from_lat  => $lat,
                                                  from_long => $long,
 					         to_node   => $unmunged,
                                                  unit      => "metres"
-                                                         );
+                                                          );
+		} else {
+                    $distance = $self->{locator}->distance(
+                                                 from_os_x => $os_x,
+                                                 from_os_y => $os_y,
+					         to_node   => $unmunged,
+                                                 unit      => "metres"
+                                                          );
+                }
                 $results{$node}{distance} = $distance;                
 	    } else {
                 delete $results{$node};
