@@ -355,38 +355,11 @@ sub find_within_distance {
     my ($self, %args) = @_;
     my $node = $args{id};
     my $metres = $args{metres};
-    my $formatter = $self->wiki->formatter;
-    my @finds = $self->locator->find_within_distance(
-                                                      node   => $node,
-			 		              metres => $metres,
-                                                    );
-    my @nodes;
-    foreach my $find ( @finds ) {
-        my $distance = $self->locator->distance(
-                                                 from_node => $node,
-					         to_node   => $find,
-                                                 unit      => "metres"
-                                               );
-        push @nodes, {
-                       name     => $find,
-	               param    => $formatter->node_name_to_node_param($find),
-                       distance => $distance,
-                     };
-    }
-    @nodes = sort { $a->{distance} <=> $b->{distance} } @nodes;
-
-    my %tt_vars = (
-                    nodes        => \@nodes,
-                    origin       => $node,
-                    origin_param => $formatter->node_name_to_node_param($node),
-                    limit        => "$metres metres",
-                  );
-
-    print $self->process_template(
-                                   id       => "index", # KLUDGE
-                                   template => "site_index.tt",
-                                   tt_vars  => \%tt_vars,
-                                 );
+    my %data = $self->wiki->retrieve_node( $node );
+    my $lat = $data{metadata}{latitude}[0];
+    my $long = $data{metadata}{longitude}[0];
+    my $script_url = $self->config->{_}{script_url};
+    print CGI->redirect( $script_url . "supersearch.cgi?lat=$lat;long=$long;distance_in_metres=$metres" );
 }
 
 =item B<show_index>

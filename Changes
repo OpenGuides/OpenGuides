@@ -1,3 +1,7 @@
+0.42    
+        Handle distance searching with OpenGuides::Supersearch instead of
+          find_within_distance action.
+
 0.41    21 September 2004
         Added backlinks link to navbar.
         Added some anti-robot tags to certain pages.
