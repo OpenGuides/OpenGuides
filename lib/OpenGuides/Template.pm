@@ -245,8 +245,10 @@ sub extract_metadata_vars {
     } else {
 	my $categories_text = $q->param('categories');
 	my $locales_text    = $q->param('locales');
-	@catlist = sort split("\r\n", $categories_text);
-	@loclist = sort split("\r\n", $locales_text);
+	@catlist = sort map { s/^\s+//; s/\s+$//; $_; } # trim lead/trail space
+                        split("\r\n", $categories_text);
+	@loclist = sort map { s/^\s+//; s/\s+$//; $_; } # trim lead/trail space
+                        split("\r\n", $locales_text);
     }
 
     my @categories = map { { name => $_,
@@ -336,8 +338,8 @@ sub extract_metadata_vars {
             # Trim whitespace - trailing whitespace buggers up the
             # integerification by postgres and it's an easy mistake to
             # make when typing into a form.
-            $os_x =~ s/\s+//;
-            $os_y =~ s/\s+//;
+            $os_x =~ s/\s+//g;
+            $os_y =~ s/\s+//g;
 
 	    # If we were sent x and y, work out lat/long; and vice versa.
   	    if ( $os_x && $os_y ) {
@@ -379,11 +381,9 @@ sub extract_metadata_vars {
 	    my $lat    = $q->param("latitude");
 	    my $long   = $q->param("longitude");
 
-            # Trim whitespace - trailing whitespace buggers up the
-            # integerification by postgres and it's an easy mistake to
-            # make when typing into a form.
-            $osie_x =~ s/\s+//;
-            $osie_y =~ s/\s+//;
+            # Trim whitespace.
+            $osie_x =~ s/\s+//g;
+            $osie_y =~ s/\s+//g;
 
 	    # If we were sent x and y, work out lat/long; and vice versa.
   	    if ( $osie_x && $osie_y ) {
@@ -423,6 +423,9 @@ sub extract_metadata_vars {
 	    my $lat    = $q->param("latitude");
 	    my $long   = $q->param("longitude");
             if ( $lat && $long ) {
+                # Trim whitespace.
+                $lat =~ s/\s+//g;
+                $long =~ s/\s+//g;
                 my ($zone, $easting, $northing) =
                  Geo::Coordinates::UTM::latlon_to_utm( $config->ellipsoid,
                                                        $lat, $long );

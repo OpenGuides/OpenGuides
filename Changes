@@ -6,6 +6,8 @@
          to node names - see README.CSS for details.
         Fix bug with diff display on nodes containing macros.
         Fixed distance search paging bug.
+        Fixed bug that allowed autocreation of locales and categories with
+          trailing spaces in the name.
 	
 0.45	1 December 2004
         Made the geolocation stuff work worldwide.  Squeeeeeee!
