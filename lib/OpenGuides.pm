@@ -12,7 +12,7 @@ use URI::Escape;
 
 use vars qw( $VERSION );
 
-$VERSION = '0.33_04';
+$VERSION = '0.33_05';
 
 =head1 NAME
 
@@ -154,7 +154,10 @@ sub display_node {
         $redirect =~ s/\]\]\s*$//;
         # See if this is a valid node, if not then just show the page as-is.
 	if ( $wiki->node_exists($redirect) ) {
-            redirect_to_node($redirect);
+            my $output = $self->redirect_to_node($redirect);
+            return $output if $return_output;
+            print $output;
+            exit 0;
 	}
     }
     my $content    = $wiki->format($raw);
@@ -471,6 +474,15 @@ sub process_template {
     } else {
         return OpenGuides::Template->output( %output_conf );
     }
+}
+
+sub redirect_to_node {
+    my ($self, $node) = @_;
+    my $script_url = $self->config->{_}->{script_url};
+    my $script_name = $self->config->{_}->{script_name};
+    my $formatter = $self->wiki->formatter;
+    my $param = $formatter->node_name_to_node_param( $node );
+    return CGI->redirect( "$script_url$script_name?$param" );
 }
 
 sub get_cookie {

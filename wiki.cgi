@@ -4,7 +4,7 @@ use strict;
 use warnings;
 
 use vars qw( $VERSION );
-$VERSION = '0.33_04';
+$VERSION = '0.33_05';
 
 use CGI qw/:standard/;
 use CGI::Carp qw(croak);
@@ -76,7 +76,7 @@ eval {
     } elsif ($action eq 'random') {
         my @nodes = $wiki->list_all_nodes();
         $node = $nodes[int(rand(scalar(@nodes) + 1)) + 1];
-        redirect_to_node($node);
+        $guide->redirect_to_node($node);
         exit 0;
     } elsif ($action eq 'find_within_distance') {
         $guide->find_within_distance(
@@ -139,12 +139,6 @@ if ($@) {
 exit 0;
 
 ############################ subroutines ###################################
-
-sub redirect_to_node {
-    my $node = shift;
-    print $q->redirect("$script_url$script_name?" . $q->escape($formatter->node_name_to_node_param($node)));
-    exit 0;
-}
 
 sub show_userstats {
     my $username = shift;
@@ -335,7 +329,7 @@ sub commit_node {
     my $written = $wiki->write_node($node, $content, $checksum, \%metadata );
 
     if ($written) {
-        redirect_to_node($node);
+        $guide->redirect_to_node($node);
     } else {
         my %node_data = $wiki->retrieve_node($node);
         my %tt_vars = ( checksum       => $node_data{checksum},
