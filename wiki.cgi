@@ -427,9 +427,15 @@ sub edit_node {
 }
 
 sub get_cookie {
-        my %cookies = fetch CGI::Cookie;
-        my $cookie = $cookies{'username'}->value;
-        return $cookie;
+    my %cookies = fetch CGI::Cookie;
+    my $cookie;
+    if ($cookies{'username'}) {
+	$cookie = $cookies{'username'}->value;
+    }
+    else {
+	$cookie = "Anonymous User";
+    }
+    return $cookie;
 }
 
 sub emit_recent_changes_rss {
