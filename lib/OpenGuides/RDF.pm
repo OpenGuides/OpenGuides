@@ -214,7 +214,7 @@ sub emit_rdfxml {
     $rdf .= "    <city>$city</city>"                        if $is_geospatial;
     $rdf .= "    <postalCode>$postcode</postalCode>\n"      if $postcode;
     $rdf .= "    <country>$country</country>\n"             if $is_geospatial;
-    $rdf .= "    <wn:Neighborhood>$_</wn:Neighborhood>\n"   foreach @locales;
+    $rdf .= "    <foaf:based_near><wn:Neighborhood><foaf:name>$_</foaf:name></wn:Neighborhood></foaf:based_near>\n"   foreach @locales;
 
     if ($latitude && $longitude) {
       $rdf .= qq{    <geo:lat>$latitude</geo:lat>
