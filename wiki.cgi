@@ -185,25 +185,11 @@ sub display_node {
 
     my %tt_vars;
 
-    # If this is a Category or Locale node, check whether it exists
-    # and write it a stub node if it doesn't.
     if ( $node =~ /^(Category|Locale) (.*)$/ ) {
         my $type = $1;
         $tt_vars{is_indexable_node} = 1;
         $tt_vars{index_type} = lc($type);
         $tt_vars{index_value} = $2;
-
-        unless ( $wiki->node_exists($node) ) {
-            my $category = $type eq "Category" ? "Category" : "Locales";
-            $wiki->write_node( $node,
-                               "\@INDEX_LINK [[$node]]",
-                               undef,
-			       { username => "Auto Create",
-				 comment  => "Auto created $tt_vars{index_type} stub page",
-                                 category => $category
-			       }
-	    );
-	}
     }
 
     my %current_data = $wiki->retrieve_node( $node );
@@ -550,6 +536,26 @@ sub commit_node {
 
     $metadata{opening_hours_text} = $q->param("hours_text") || "";
 
+    # Check to make sure all the indexable nodes are created
+    foreach my $type (qw(Category Locale)) {
+        my $lctype = lc($type);
+        foreach my $index (@{$metadata{$lctype}}) {
+	    $index =~ s/(.*)/\u$1/;
+	    my $node = $type . " " . $index;
+	    unless ( $wiki->node_exists($node) ) {
+	        my $category = $type eq "Category" ? "Category" : "Locales";
+		$wiki->write_node( $node,
+		                   "\@INDEX_LINK [[$node]]",
+				   undef,
+				   { username => "Auto Create",
+				     comment  => "Auto created $lctype stub page",
+				     category => $category
+				   }
+		);
+	    }
+	}
+    }
+	
     foreach my $var ( qw( username comment edit_type ) ) {
         $metadata{$var} = $q->param($var) || "";
     }
