@@ -1,4 +1,4 @@
-[% IF categories %]
+[% IF categories.size > 0 %]
   <hr />
   <small><b>Categories:</b>
   [% FOREACH category = categories %]
@@ -7,7 +7,7 @@
   </small>
 [% END %]
 
-[% IF locales %]
+[% IF locales.size > 0 %]
   <hr />
   <small><b>Locale:</b>
   [% FOREACH locale = locales %]
