@@ -371,6 +371,43 @@ sub find_within_distance {
     print CGI->redirect( $script_url . "supersearch.cgi?lat=$lat;long=$long;distance_in_metres=$metres" );
 }
 
+=item B<show_backlinks>
+
+  $guide->show_backlinks( id => "Calthorpe Arms" );
+
+As with other methods, parameters C<return_tt_vars> and
+C<return_output> can be used to return these things instead of
+printing the output to STDOUT.
+
+=cut
+
+sub show_backlinks {
+    my ($self, %args) = @_;
+    my $wiki = $self->wiki;
+    my $formatter = $wiki->formatter;
+
+    my @backlinks = $wiki->list_backlinks( node => $args{id} );
+    my @results = map {
+        { url   => CGI->escape($formatter->node_name_to_node_param($_)),
+	  title => CGI->escapeHTML($_)
+        }             } sort @backlinks;
+    my %tt_vars = ( results       => \@results,
+                    num_results   => scalar @results,
+                    not_deletable => 1,
+                    deter_robots  => 1,
+                    not_editable  => 1 );
+    return %tt_vars if $args{return_tt_vars};
+    my $output = OpenGuides::Template->output(
+                                               node    => $args{id},
+                                               wiki    => $wiki,
+                                               config  => $self->config,
+                                               template=>"backlink_results.tt",
+                                               vars    => \%tt_vars,
+                                             );
+    return $output if $args{return_output};
+    print $output;
+}
+
 =item B<show_index>
 
   $guide->show_index(

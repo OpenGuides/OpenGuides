@@ -66,7 +66,7 @@ eval {
     } elsif ($action eq 'search') {
         do_search($search_terms);
     } elsif ($action eq 'show_backlinks') {
-        show_backlinks($node);
+        $guide->show_backlinks( id => $node );
     } elsif ($action eq 'show_wanted_pages') {
         show_wanted_pages();
     } elsif ($action eq 'index') {
@@ -289,21 +289,6 @@ sub do_search {
                     not_editable => 1,
                     search_terms => $q->escapeHTML($terms) );
     process_template("search_results.tt", "", \%tt_vars);
-}
-
-sub show_backlinks {
-    my $node = shift;
-    my @backlinks = $wiki->list_backlinks( node => $node );
-    my @results = map {
-        { url   => $q->escape($formatter->node_name_to_node_param($_)),
-	  title => $q->escapeHTML($_)
-        }             } sort @backlinks;
-    my %tt_vars = ( results       => \@results,
-                    num_results   => scalar @results,
-                    not_deletable => 1,
-                    deter_robots  => 1,
-                    not_editable  => 1 );
-    process_template("backlink_results.tt", $node, \%tt_vars);
 }
 
 sub show_wanted_pages {
