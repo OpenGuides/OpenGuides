@@ -4,7 +4,7 @@ use strict;
 use warnings;
 
 use vars qw( $VERSION );
-$VERSION = '0.38';
+$VERSION = '0.39';
 
 use CGI qw/:standard/;
 use CGI::Carp qw(croak);
@@ -55,7 +55,10 @@ eval {
     $action = 'search' if $q->param("search");
 
     if ($commit) {
-        commit_node($node);
+        $guide->commit_node(
+                             id      => $node,
+                             cgi_obj => $q,
+                           );
     } elsif ($preview) {
         preview_node($node);
     } elsif ($action eq 'edit') {
@@ -274,76 +277,6 @@ sub process_template {
     );
     $output_conf{content_type} = "" if $omit_header; # defaults otherwise
     print OpenGuides::Template->output( %output_conf );
-}
-
-
-sub commit_node {
-    my $node = shift;
-    my $content  = $q->param('content');
-    $content =~ s/\r\n/\n/gs;
-    my $checksum = $q->param('checksum');
-
-    my %metadata = OpenGuides::Template->extract_metadata_vars(
-        wiki    => $wiki,
-        config  => $config,
-	cgi_obj => $q
-    );
-
-    $metadata{opening_hours_text} = $q->param("hours_text") || "";
-
-    # Check to make sure all the indexable nodes are created
-    foreach my $type (qw(Category Locale)) {
-        my $lctype = lc($type);
-        foreach my $index (@{$metadata{$lctype}}) {
-	    $index =~ s/(.*)/\u$1/;
-	    my $node = $type . " " . $index;
-	    # Uppercase the node name before checking for existence
-	    $node =~ s/ (\S+)/ \u$1/g;
-	    unless ( $wiki->node_exists($node) ) {
-	        my $category = $type eq "Category" ? "Category" : "Locales";
-		$wiki->write_node( $node,
-		                   "\@INDEX_LINK [[$node]]",
-				   undef,
-				   { username => "Auto Create",
-				     comment  => "Auto created $lctype stub page",
-				     category => $category
-				   }
-		);
-	    }
-	}
-    }
-	
-    foreach my $var ( qw( username comment edit_type ) ) {
-        $metadata{$var} = $q->param($var) || "";
-    }
-    $metadata{host} = $ENV{REMOTE_ADDR};
-
-    my $written = $wiki->write_node($node, $content, $checksum, \%metadata );
-
-    if ($written) {
-        print $guide->redirect_to_node($node);
-    } else {
-        my %node_data = $wiki->retrieve_node($node);
-        my %tt_vars = ( checksum       => $node_data{checksum},
-                        new_content    => $content,
-                        stored_content => $node_data{content} );
-        foreach my $mdvar ( keys %metadata ) {
-            if ($mdvar eq "locales") {
-                $tt_vars{"stored_$mdvar"} = $node_data{metadata}{locale};
-                $tt_vars{"new_$mdvar"}    = $metadata{locale};
-            } elsif ($mdvar eq "categories") {
-                $tt_vars{"stored_$mdvar"} = $node_data{metadata}{category};
-                $tt_vars{"new_$mdvar"}    = $metadata{category};
-            } elsif ($mdvar eq "username" or $mdvar eq "comment"
-                      or $mdvar eq "edit_type" ) {
-                $tt_vars{$mdvar} = $metadata{$mdvar};
-            } else {
-                $tt_vars{"stored_$mdvar"} = $node_data{metadata}{$mdvar}[0];
-                $tt_vars{"new_$mdvar"}    = $metadata{$mdvar};
-            }
-        }
-        process_template("edit_conflict.tt", $node, \%tt_vars);
-    }
 }
 
 

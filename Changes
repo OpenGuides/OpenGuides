@@ -1,3 +1,6 @@
+0.39    
+        Split commit_node out into OpenGuides.pm in preparation for spam filter
+
 0.38    26 July 2004
         Major improvements to the search result ordering (thanks to
           Steve Jolly, Bob Walker and Billy Abbott for test cases).
