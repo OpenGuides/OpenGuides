@@ -2,14 +2,13 @@ use CGI::Wiki::Setup::SQLite;
 use Config::Tiny;
 use Cwd;
 use OpenGuides;
-use Test::More tests => 1;
+use Test::More;
 
 eval { require DBD::SQLite; };
-my $have_sqlite = $@ ? 0 : 1;
-
-SKIP: {
-    skip "DBD::SQLite not installed - no database to test with", 1
-      unless $have_sqlite;
+if ( $@ ) {
+    plan skip_all => "DBD:SQLite not installed";
+} else {
+    plan tests => 1;
 
     CGI::Wiki::Setup::SQLite::cleardb( { dbname => "t/node.db" } );
     CGI::Wiki::Setup::SQLite::setup( { dbname => "t/node.db" } );
