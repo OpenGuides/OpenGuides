@@ -3,8 +3,9 @@ package OpenGuides::RDF;
 use strict;
 
 use vars qw( $VERSION );
-$VERSION = '0.03';
+$VERSION = '0.04';
 
+use CGI::Wiki::Plugin::RSS::ModWiki;
 use Time::Piece;
 use URI::Escape;
 use Carp qw( croak );
@@ -23,12 +24,16 @@ developers.
 =head1 SYNOPSIS
 
   use CGI::Wiki;
+  use Config::Tiny;
   use OpenGuides::RDF;
 
-  my $wiki = CGI::Wiki->new;
-  my $rdf_writer = OpenGuides::RDF->new( wiki => $wiki );
+  my $wiki = CGI::Wiki->new( ... );
+  my $config = Config::Tiny->read( "wiki.conf" );
+  my $rdf_writer = OpenGuides::RDF->new( wiki   => $wiki,
+                                         config => $config ); 
 
-  $rdf_writer->emit_rdfxml( node => "Masala Zone, N1 0NU" );
+  print "Content-type: text/plain\n\n";
+  print $rdf_writer->emit_rdfxml( node => "Masala Zone, N1 0NU" );
 
 =head1 METHODS
 
@@ -36,34 +41,11 @@ developers.
 
 =item B<new>
 
-  my $rdf_writer = OpenGuides::RDF->new(
-      wiki      => $wiki,
-      site_name => "grubstreet",
-      site_description => "The Open Community Guide To London", # optional
-      make_node_url        => sub {
-          my ($node_name, $version) = @_;
-          if ( defined $version ) {
-              return "http://wiki.example.com/?id="
-                   . uri_escape($node_name)
-                   . ";version=" . uri_escape($version);
-          } else {
-              return "http://wiki.example.com/?" . uri_escape($node_name);
-          }
-                                  },
-      default_city => "London", # optional
-      default_country => "United Kingdom" # optional
-  );
+  my $rdf_writer = OpenGuides::RDF->new( wiki   => $wiki,
+                                         config => $config ); 
 
-C<wiki> must be a L<CGI::Wiki> object. All arguments mandatory except
-C<site_description>, C<default_city>, C<default_country>.
-
-C<make_node_url> should be a sub taking either one or two arguments. 
-If a single argument is supplied, it will be the node name, and the
-return value should be the URL for the version-independent location of
-the node. If a second argument is supplied, it will be the node
-version. The return value should be either the same as in the
-single-argument case (for wikis that don't keep old versions) or
-should be the URL for I<this> version of this node.
+C<wiki> must be a L<CGI::Wiki> object and C<config> must be a
+L<Config::Tiny> object.  Both arguments mandatory.
 
 =cut
 
@@ -76,20 +58,32 @@ sub new {
 
 sub _init {
     my ($self, %args) = @_;
+
     my $wiki = $args{wiki};
     unless ( $wiki && UNIVERSAL::isa( $wiki, "CGI::Wiki" ) ) {
         croak "No CGI::Wiki object supplied.";
-      }
+    }
     $self->{wiki} = $wiki;
-    # Mandatory arguments.
-    foreach my $arg ( qw( site_name make_node_url ) ) {
-        croak "No $arg supplied" unless $args{$arg};
-        $self->{$arg} = $args{$arg};
+
+    my $config = $args{config};
+    unless ( $config && UNIVERSAL::isa( $config, "Config::Tiny" ) ) {
+        croak "No Config::Tiny object supplied.";
     }
-    # Optional arguments.
-    foreach my $arg ( qw( site_description default_city default_country ) ) {
-        $self->{$arg} = $args{$arg} || "";
-    }
+    $self->{config} = $config;
+
+    $self->{site_name} = $config->{_}->{site_name};
+    $self->{make_node_url} = sub {
+        my ($node_name, $version) = @_;
+	if ( defined $version ) {
+	    return $config->{_}->{script_url} . uri_escape($config->{_}->{script_name}) . "?id=" . uri_escape($wiki->formatter->node_name_to_node_param($node_name)) . ";version=" . uri_escape($version);
+	} else {
+	    return $config->{_}->{script_url} . uri_escape($config->{_}->{script_name}) . "?id=" . uri_escape($wiki->formatter->node_name_to_node_param($node_name));
+        }
+    };
+    $self->{default_city}     = $config->{_}->{default_city}     || "";
+    $self->{default_country}  = $config->{_}->{default_country}  || "";
+    $self->{site_description} = $config->{_}->{site_description} || "";
+
     return $self;
 }
 
@@ -120,9 +114,9 @@ all of the following metadata when calling C<write_node>:
 
 =item B<postcode> - The postcode or zip code of the place discussed by the node.  Defaults to the empty string.
 
-=item B<city> - The name of the city that the node is in.  If not supplied, then the value of C<default_city> as supplied to C<new> will be used, if available, otherwise the empty string.
+=item B<city> - The name of the city that the node is in.  If not supplied, then the value of C<default_city> in the config object supplied to C<new>, if available, otherwise the empty string.
 
-=item B<country> - The name of the country that the node is in.  If not supplied, then the value of C<default_country> as supplied to C<new> will be used, if available, otherwise the empty string.
+=item B<country> - The name of the country that the node is in.  If not supplied, then the value of C<default_country> in the config object supplied to C<new> will be used, if available, otherwise the empty string.
 
 =item B<username> - An identifier for the person who made the latest edit to the node.  This person will be listed as a contributor (Dublin Core).  Defaults to empty string.
 
@@ -213,6 +207,8 @@ sub emit_rdfxml {
 
     return $rdf;
 }
+
+=back
 
 =head1 SEE ALSO
 

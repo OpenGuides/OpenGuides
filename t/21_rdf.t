@@ -1,5 +1,7 @@
 use CGI::Wiki::TestConfig::Utilities;
 use CGI::Wiki;
+use CGI::Wiki::Formatter::UseMod;
+use Config::Tiny;
 use URI::Escape;
 
 use Test::More tests =>
@@ -17,29 +19,18 @@ while ( ($store_name, $store) = each %stores ) {
 
       print "#\n##### TEST CONFIG: Store: $store_name\n#\n";
 
-      my $wiki = CGI::Wiki->new( store => $store );
+      my $wiki = CGI::Wiki->new(
+          store     => $store,
+          formatter => CGI::Wiki::Formatter::UseMod->new );
+      my $config = Config::Tiny->read( "t/21_wiki.conf" );
 
       my $rdf_writer = eval {
-          OpenGuides::RDF->new(
-              wiki => $wiki,
-              site_name => "CGI::Wiki Test Site",
-              make_node_url => sub {
-                  my ($node_name, $version) = @_;
-		  if ( defined $version ) {
-		    return "http://wiki.example.com/?id="
-		      . uri_escape($node_name)
-			. ";version=" . uri_escape($version);
-		  } else {
-		    return "http://wiki.example.com/?"
-		      . uri_escape($node_name);
-		  }
-	      },
-	      default_city => "London",
-              default_country => "United Kingdom"
+          OpenGuides::RDF->new( wiki   => $wiki,
+                                config => $config
           );
       };
       is( $@, "",
-         "'new' doesn't croak if wiki object and mandatory parameters supplied"
+         "'new' doesn't croak if wiki and config objects supplied"
       );
       isa_ok( $rdf_writer, "OpenGuides::RDF" );
 
@@ -71,9 +62,9 @@ while ( ($store_name, $store) = each %stores ) {
 	    "last username to edit used as contributor" );
 
       like( $rdfxml, qr|<wiki:version>1</wiki:version>|, "version picked up" );
-      like( $rdfxml, qr|<rdf:Description rdf:about="http://wiki.example.com/\?id=Calthorpe%20Arms;version=1">|,
+      like( $rdfxml, qr|<rdf:Description rdf:about="http://wiki.example.com/mywiki.cgi\?id=Calthorpe_Arms;version=1">|,
 	    "sets the 'about' correctly" );
-      like( $rdfxml, qr|<dc:source rdf:resource="http://wiki.example.com/\?Calthorpe%20Arms" />|,
+      like( $rdfxml, qr|<dc:source rdf:resource="http://wiki.example.com/mywiki.cgi\?id=Calthorpe_Arms" />|,
 	    "set the dc:source with the version-independent uri" );
 
       like( $rdfxml, qr|<chefmoz:Country>United Kingdom</chefmoz:Country>|,

@@ -530,28 +530,8 @@ sub emit_recent_changes_rss {
 sub display_node_rdf {
     my %args = @_;
     my $node = $args{node};
-    my $rdf_writer = OpenGuides::RDF->new(
-        wiki      => $wiki,
-        site_name => $site_name,
-        site_description => $site_desc,
-        make_node_url => sub {
-            my ( $node_name, $version ) = @_;
-            if ( defined $version ) {
-               return "$script_url$script_name?id="
-                 . uri_escape(
-                        $wiki->formatter->node_name_to_node_param( $node_name )
-			     )
-                 . ";version=" . uri_escape($version);
-	     } else {
-                return "$script_url$script_name?"
-                 . uri_escape(
-                        $wiki->formatter->node_name_to_node_param( $node_name )			     );
-             }
-        },
-	default_city => $default_city,
-        default_country => $default_country
-     );
-
+    my $rdf_writer = OpenGuides::RDF->new( wiki      => $wiki,
+					   config => $config );
     print "Content-type: text/plain\n\n";
     print $rdf_writer->emit_rdfxml( node => $node );
     exit 0;
