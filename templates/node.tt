@@ -32,8 +32,8 @@
       <option value="2000">2 kilometres</option>
     </select>
     of here.
-    <input type="hidden" name="lat" value="[% latitude %]" />
-    <input type="hidden" name="long" value="[% longitude %]" />
+    <input type="hidden" name="lat" value="[% IF latitude_unmunged %][% latitude_unmunged %][% ELSE %][% latitude %][% END %]" />
+    <input type="hidden" name="long" value="[% IF longitude_unmunged %][% longitude_unmunged %][% ELSE %][% longitude %][% END %]" />
     <input type="submit" name="Go" value="Go" class="form_button" />
   </form>
 </div>

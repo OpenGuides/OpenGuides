@@ -74,5 +74,6 @@ t/61_bug_textareas.t
 t/62_bug_os_coords.t
 t/63_bug_map_link_no_address.t
 t/64_bug_node_history.t
+t/66_bug_latlong_representation.t
 t/templates/15_test.tt
 wiki.cgi

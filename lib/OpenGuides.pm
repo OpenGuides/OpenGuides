@@ -526,6 +526,7 @@ sub commit_node {
     my ($self, %args) = @_;
     my $node = $args{id};
     my $q = $args{cgi_obj};
+    my $return_output = $args{return_output};
     my $wiki = $self->wiki;
     my $config = $self->config;
 
@@ -540,6 +541,13 @@ sub commit_node {
     );
 
     $metadata{opening_hours_text} = $q->param("hours_text") || "";
+
+    # Pick out the unmunged versions of lat/long if they're set.
+    # (If they're not, it means they weren't munged in the first place.)
+    $metadata{latitude} = delete $metadata{latitude_unmunged}
+        if $metadata{latitude_unmunged};
+    $metadata{longitude} = delete $metadata{longitude_unmunged}
+        if $metadata{longitude_unmunged};
 
     # Check to make sure all the indexable nodes are created
     foreach my $type (qw(Category Locale)) {
@@ -576,7 +584,9 @@ sub commit_node {
     my $written = $wiki->write_node($node, $content, $checksum, \%metadata );
 
     if ($written) {
-        print $self->redirect_to_node($node);
+        my $output = $self->redirect_to_node($node);
+        return $output if $return_output;
+        print $output;
     } else {
         my %node_data = $wiki->retrieve_node($node);
         my %tt_vars = ( checksum       => $node_data{checksum},

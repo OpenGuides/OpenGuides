@@ -296,9 +296,11 @@ sub extract_metadata_vars {
     }
 
     # Check whether we need to munge lat and long.
+    # Store them unmunged as well so commit_node can get hold of them.
     my %prefs = OpenGuides::CGI->get_prefs_from_cookie( config => $config );
     if ( $prefs{latlong_traditional} ) {
         foreach my $var ( qw( latitude longitude ) ) {
+            $vars{$var."_unmunged"} = $vars{$var};
             $vars{$var} = Geography::NationalGrid->deg2string($vars{$var});
         }
     }
