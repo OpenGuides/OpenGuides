@@ -1,3 +1,11 @@
+0.33    
+        Test overhauls - you don't need to run the configuration step in
+          order to run the tests now, but you do need to have DBD::SQLite
+          for most of them.
+        Fixed template bug in display_metadata.tt that was stopping map
+          links being displayed for nodes with no address data (spotted
+          by Steve Jolly).
+
 0.32    7 June 2004
         Change auto-creating behaviour of index nodes (categories and
 	locales): instead of being created on access they are created when
