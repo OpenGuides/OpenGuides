@@ -2,7 +2,11 @@
 
 <html>
 <head>
+  [% IF (node_name == 'category index') %]
+  <title>Index of "[% criterion.name %]" - [% site_name %]</title>
+  [% ELSE %]
   <title>[% node_name %] - [% site_name %]</title>
+  [% END %]
   [% IF contact_email %]
     <link rev="made" href="mailto:[% contact_email %]">
   [% END %]
