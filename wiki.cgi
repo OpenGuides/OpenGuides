@@ -32,7 +32,6 @@ my $script_url = $config->{_}->{script_url};
 my $site_name = $config->{_}->{site_name};
 my $home_name = $config->{_}->{home_name};
 my $contact_email = $config->{_}->{contact_email};
-my $search_url = $config->{_}->{script_url} . "supersearch.cgi";
 my $template_path = $config->{_}->{template_path};
 
 my ($wiki, $formatter, $locator, $q);
