@@ -1,5 +1,8 @@
 [% USE CGI %]
 [% INCLUDE header.tt page_title = "History of $node_name - $site_name" %]
+[% INCLUDE banner.tt %]
+<div id="content">
+[% INCLUDE navbar.tt %]
 
 <h1 align="center">[% site_name %] - History of [% node_name %]</h1>
 <p>

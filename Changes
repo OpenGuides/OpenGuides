@@ -2,6 +2,7 @@
         Recent Changes now shows changes in the past 24 hours, past week,
           past fortnight, and past 30 days.
         Preferences now has an option for when your prefs expire.
+        Navbar added to diff and history pages.
 
 0.39    15 September 2004
         Split commit_node out into OpenGuides.pm in preparation for spam filter

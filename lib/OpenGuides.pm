@@ -326,6 +326,8 @@ sub display_diffs {
                                         left_version  => $args{version},
    		                        right_version => $args{other_version},
                                               );
+    $diff_vars{not_deletable} = 1;
+    $diff_vars{not_editable} = 1;
     return %diff_vars if $args{return_tt_vars};
     my $output = $self->process_template(
                                           id       => $args{id},
@@ -517,6 +519,7 @@ sub list_all_versions {
     my %tt_vars = ( node          => $node,
 		    version       => $curr_version,
                     not_deletable => 1,
+                    not_editable  => 1,
 		    history       => \@history );
     return %tt_vars if $args{return_tt_vars};
     my $output = $self->process_template(
