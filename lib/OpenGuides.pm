@@ -293,11 +293,11 @@ sub find_within_distance {
                     limit        => "$metres metres",
                   );
 
-    $self->process_template(
-                             id       => "index", # KLUDGE
-                             template => "site_index.tt",
-                             vars     => \%tt_vars,
-                           );
+    print $self->process_template(
+                                   id       => "index", # KLUDGE
+                                   template => "site_index.tt",
+                                   vars     => \%tt_vars,
+                                 );
 }
 
 =item B<show_index>
@@ -382,7 +382,37 @@ sub show_index {
     print $self->process_template( %conf );
 }
 
+=item B<list_all_versions>
 
+  $guide->list_all_versions ( id => "Home Page" );
+
+=cut
+
+sub list_all_versions {
+    my ($self, %args) = @_;
+    my $node = $args{id};
+    my %curr_data = $self->wiki->retrieve_node($node);
+    my $curr_version = $curr_data{version};
+    croak "This is the first version" unless $curr_version > 1;
+    my @history;
+    for my $version ( 1 .. $curr_version ) {
+        my %node_data = $self->wiki->retrieve_node( name    => $node,
+				  	            version => $version );
+	push @history, { version  => $version,
+			 modified => $node_data{last_modified},
+		         username => $node_data{metadata}{username}[0],
+		         comment  => $node_data{metadata}{comment}[0]   };
+    }
+    @history = reverse @history;
+    my %tt_vars = ( node    => $node,
+		    version => $curr_version,
+		    history => \@history );
+    print $self->process_template(
+                                   id       => $node,
+                                   template => "node_history.tt",
+                                   tt_vars  => \%tt_vars,
+                                 );
+}
 
 sub process_template {
     my ($self, %args) = @_;

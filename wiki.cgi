@@ -93,7 +93,7 @@ eval {
     } elsif ($action eq 'userstats') {
         show_userstats( $username );
     } elsif ($action eq 'list_all_versions') {
-        list_all_versions($node);
+        $guide->list_all_versions( id => $node );
     } elsif ($action eq 'rss') {
         my $feed = $q->param("feed");
         if ( !defined $feed or $feed eq "recent_changes" ) {
@@ -146,27 +146,6 @@ sub redirect_to_node {
     my $node = shift;
     print $q->redirect("$script_url$script_name?" . $q->escape($formatter->node_name_to_node_param($node)));
     exit 0;
-}
-
-sub list_all_versions {
-    my $node = shift;
-    my %curr_data = $wiki->retrieve_node($node);
-    my $curr_version = $curr_data{version};
-    croak "This is the first version" unless $curr_version > 1;
-    my @history;
-    for my $version ( 1 .. $curr_version ) {
-        my %node_data = $wiki->retrieve_node( name    => $node,
-					      version => $version );
-	push @history, { version  => $version,
-			 modified => $node_data{last_modified},
-		         username => $node_data{metadata}{username}[0],
-		         comment  => $node_data{metadata}{comment}[0]   };
-    }
-    @history = reverse @history;
-    my %tt_vars = ( node    => $node,
-		    version => $curr_version,
-		    history => \@history );
-    process_template("node_history.tt", $node, \%tt_vars );
 }
 
 sub show_userstats {
