@@ -137,20 +137,31 @@ sub emit_rdfxml {
     my $wiki = $self->{wiki};
 
     my %node_data          = $wiki->retrieve_node( $node_name );
-    my $phone              = $node_data{metadata}{phone}[0]                               || '';
-    my $fax                = $node_data{metadata}{fax}[0]                                 || '';
-    my $website            = $node_data{metadata}{website}[0]                             || '';
-    my $opening_hours_text = $node_data{metadata}{opening_hours_text}[0]                  || '';
-    my $postcode           = $node_data{metadata}{postcode}[0]                            || '';
-    my $city               = $node_data{metadata}{city}[0] || $self->{default_city}       || '';
-    my $country            = $node_data{metadata}{country}[0] || $self->{default_country} || '';
-    my $latitude           = $node_data{metadata}{latitude}[0]                            || '';
-    my $longitude          = $node_data{metadata}{longitude}[0]                           || '';
+    my $phone              = $node_data{metadata}{phone}[0]              || '';
+    my $fax                = $node_data{metadata}{fax}[0]                || '';
+    my $website            = $node_data{metadata}{website}[0]            || '';
+    my $opening_hours_text = $node_data{metadata}{opening_hours_text}[0] || '';
+    my $postcode           = $node_data{metadata}{postcode}[0]           || '';
+    my $city               = $node_data{metadata}{city}[0]               || '';
+    my $country            = $node_data{metadata}{country}[0]            || '';
+    my $latitude           = $node_data{metadata}{latitude}[0]           || '';
+    my $longitude          = $node_data{metadata}{longitude}[0]          || '';
     my $version            = $node_data{version};
-    my $username           = $node_data{metadata}{username}[0]                            || '';
+    my $username           = $node_data{metadata}{username}[0]           || '';
 
     my $catrefs            = $node_data{metadata}{category};
     my @locales            = @{ $node_data{metadata}{locale} || [] };
+
+    my $objType;
+
+    if ($latitude || $longitude || $postcode || $city || $country || @locales)
+    {
+      $objType = 'geo:SpatialThing';
+    }
+    else
+    {
+      $objType = 'rdf:Description';
+    }
 
     my $timestamp = $node_data{last_modified};
     # Make a Time::Piece object.
@@ -187,12 +198,12 @@ sub emit_rdfxml {
     <foaf:topic rdf:resource="#obj" />
   </rdf:Description>
 
-  <geo:SpatialThing rdf:ID="obj">
+  <$objType rdf:ID="obj">
     <dc:title>$node_name</dc:title>
-    <city>$city</city>
 };
+    $rdf .= "    <city>$city</city>" if $city;
     $rdf .= "    <postalCode>$postcode</postalCode>\n" if $postcode;
-    $rdf .= "    <country>$country</country>\n";
+    $rdf .= "    <country>$country</country>\n" if $country;
     $rdf .= "    <phone>$phone</phone>\n" if $phone;
     $rdf .= "    <fax>$fax</fax>\n" if $fax;
     $rdf .= "    <homePage>$website</homePage>\n" if $website;
@@ -208,7 +219,7 @@ sub emit_rdfxml {
 };
     }
 
-    $rdf .= qq{  </geo:SpatialThing>
+    $rdf .= qq{  </$objType>
 </rdf:RDF>
 
 };
