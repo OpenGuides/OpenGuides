@@ -2,7 +2,7 @@ use strict;
 use Config::Tiny;
 use OpenGuides::Utils;
 use Test::MockObject;
-use Test::More tests => 5;
+use Test::More tests => 6;
 
 use_ok( "OpenGuides::Diff" );
 
@@ -27,15 +27,15 @@ $wiki->mock( "retrieve_node",
                      }
                            },
             "I Like Pie" => {
-                1 => { content  => "Meat!",
+                1 => { content  => "Best pie is meat pie.",
                        version  => 1,
                        metadata => { }
                      },
-                2 => { content  => "Apple!",
+                2 => { content  => "Best pie is apple pie.",
                        version  => 2,
                        metadata => { }
                      },
-                3 => { content  => "Lentil!",
+                3 => { content  => "Best pie is lentil pie.",
                        version  => 3,
                        metadata => { }
                      },
@@ -55,7 +55,10 @@ my %diff_vars = OpenGuides::Diff->formatted_diff_vars(
 
 is( $diff_vars{ver1}, "Version 2", "ver1 set OK" );
 is( $diff_vars{ver2}, "Version 1", "ver2 set OK" );
-like( $diff_vars{content}, qr/^<p>Apple!<\/p>\s+$/,
+like( $diff_vars{content}, qr/^<p>Best pie is apple pie.<\/p>\s+$/,
       "formatted content as expected" );
 isa_ok( $diff_vars{diff}, "ARRAY", "diff returned as arrayref -" );
-
+my @diffs = @{$diff_vars{diff}};
+# Why is the first entry blank?
+like( $diffs[1]{right}, qr/<span class="diff2">meat<\/span>/,
+      "diffs done by word not by letter" );

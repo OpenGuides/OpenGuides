@@ -1,4 +1,6 @@
-0.16    
+0.16    26 May 2003
+        Ivor fixed OpenGuides::Diff to diff by word instead of by character.
+
         Fixed edit conflict up so it works nicely when you click the
         Save button as well as the Preview one.
 
