@@ -299,7 +299,7 @@ sub display_diffs {
 
 sub find_within_distance {
     my ($self, %args) = @_;
-    my $node = $args{node};
+    my $node = $args{id};
     my $metres = $args{metres};
     my $formatter = $self->wiki->formatter;
 
