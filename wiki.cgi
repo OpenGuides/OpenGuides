@@ -2,7 +2,6 @@
 
 use strict;
 use warnings;
-# use lib qw(/home/ivorw/public_html/cgi-bin/lib);
 
 use vars qw( $VERSION );
 $VERSION = '0.10';
