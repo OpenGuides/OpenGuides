@@ -1,4 +1,6 @@
 0.07    
+        Require CGI::Wiki 0.32 to avoid bug (again a Bob find!) where
+          committing a node with metadata but no content would die.
         Auto-created category/locale stub pages now added to Category Category
           or Category Locales as appropriate.
 
