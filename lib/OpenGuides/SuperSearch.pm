@@ -153,10 +153,18 @@ sub run {
     if ( defined $self->{distance_in_metres}
          && defined $self->{x} && defined $self->{y} ) {
         $doing_search = 1;
-        $tt_vars{dist} = $self->{distance_in_metres};
-        foreach my $param ( qw( os_x os_y osie_x osie_y latitude longitude )) {
-            $tt_vars{$param} = $self->{$param};
-	}
+        # Make sure to pass the criteria to the template.                   
+        $tt_vars{dist} = $self->{distance_in_metres}; 
+        if ( $self->config->{_}{geo_handler} eq 1 ) { 
+            $tt_vars{coord_field_1_value} = $self->{os_x}; 
+            $tt_vars{coord_field_2_value} = $self->{os_y}; 
+        } elsif ( $self->config->{_}{geo_handler} eq 2 ) { 
+            $tt_vars{coord_field_1_value} = $self->{osie_x}; 
+            $tt_vars{coord_field_2_value} = $self->{osie_y}; 
+        } elsif ( $self->config->{_}{geo_handler} eq 3 ) { 
+            $tt_vars{coord_field_1_value} = $self->{latitude}; 
+            $tt_vars{coord_field_2_value} = $self->{longitude}; 
+        }                                                
         $self->run_distance_search;
     }
 

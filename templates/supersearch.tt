@@ -91,7 +91,7 @@ summary="Results of search queries are displayed here, and new searches can also
       / 
       [% END %]
       [% IF next_page_startpos %]
-        <a href="supersearch.cgi?search=[% search_terms %];distance_in_metres=[% dist %];os_x=[% os_x %];os_y=[% os_y %];next=[% next_page_startpos %]">Next 
+        <a href="supersearch.cgi?search=[% search_terms %];[% dist_field %]=[% dist %];[% coord_field_1 %]=[% coord_field_1_value %];[% coord_field_2 %]=[% coord_field_2_value %];next=[% next_page_startpos %]">Next 
         [% IF ((total_num - last_num >= 20)) %]
           20
         [% ELSE %]
