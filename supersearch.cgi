@@ -20,7 +20,7 @@ my $wiki = OpenGuides::Utils->make_wiki_object( config => $config );
 
 use vars qw($wiki_dbpath $wikimain $css $head %wikitext);
 
-$wikimain = $config->{_}->{script_name};
+$wikimain = $config->{_}->{script_url} . $config->{_}->{script_name};
 $css = $config->{_}->{stylesheet_url};
 $head = $config->{_}->{site_name} . " Search";
 
