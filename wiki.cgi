@@ -290,8 +290,10 @@ sub show_index {
 	    };
         } else {
             @selnodes = $wiki->list_nodes_by_metadata(
-                metadata_type => $args{type},
-	        metadata_value => $args{value} );
+                metadata_type  => $args{type},
+	        metadata_value => $args{value},
+                ignore_case    => 1,
+            );
             $tt_vars{criterion} = {
                 type  => $args{type},
                 value => $args{value}, # for RDF version
