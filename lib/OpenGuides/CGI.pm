@@ -31,7 +31,7 @@ This documentation is probably only useful to OpenGuides developers.
       include_geocache_link  => 1,
       preview_above_edit_box => 1,
       latlong_traditional    => 1,
-      omit_formatting_link   => 1,
+      omit_help_links        => 1,
       show_minor_edits_in_rc => 1,
   );
 
@@ -59,7 +59,7 @@ This documentation is probably only useful to OpenGuides developers.
       include_geocache_link  => 1,
       preview_above_edit_box => 1,
       latlong_traditional    => 1,
-      omit_formatting_link   => 1,
+      omit_help_links        => 1,
       show_minor_edits_in_rc => 1,
   );
 
@@ -75,12 +75,12 @@ sub make_prefs_cookie {
     my $cookie_name = $class->_get_cookie_name( config => $config );
     my $cookie = CGI::Cookie->new(
         -name  => $cookie_name,
-	-value => { user      => $args{username},
-		    gclink    => $args{include_geocache_link},
-                    prevab    => $args{preview_above_edit_box},
-                    lltrad    => $args{latlong_traditional},
-                    omitfmtlk => $args{omit_formatting_link},
-                    rcmined   => $args{show_minor_edits_in_rc},
+	-value => { user       => $args{username},
+		    gclink     => $args{include_geocache_link},
+                    prevab     => $args{preview_above_edit_box},
+                    lltrad     => $args{latlong_traditional},
+                    omithlplks => $args{omit_help_links},
+                    rcmined    => $args{show_minor_edits_in_rc},
                   },
         -expires => "+1M",
     );
@@ -113,7 +113,7 @@ sub get_prefs_from_cookie {
              include_geocache_link  => $data{gclink}    || 0,
              preview_above_edit_box => $data{prevab}    || 0,
              latlong_traditional    => $data{lltrad}    || 0,
-             omit_formatting_link   => $data{omitfmtlk} || 0,
+             omit_help_links        => $data{omithlplks}|| 0,
              show_minor_edits_in_rc => $data{rcmined}   || 0,
            );
 }
