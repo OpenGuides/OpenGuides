@@ -19,7 +19,7 @@
   [% TRY %]
     <tr>
       <td colspan="2">
-        [% INCLUDE custom/licence.tt %]
+        [% INCLUDE custom_licence.tt %]
       </td>
     </tr>
   [% CATCH %]

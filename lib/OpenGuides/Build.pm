@@ -53,12 +53,13 @@ sub ACTION_install_extras {
     my $config = Config::Tiny->read("wiki.conf");
 
     # Install the scripts where we were told to.
-    my $install_directory = $config->{_}->{install_directory};
-    my $script_name       = $config->{_}->{script_name};
-    my $template_path     = $config->{_}->{template_path};
-    my $custom_lib_path   = $config->{_}->{custom_lib_path};
-    my @extra_scripts     = @{ $self->{config}{__extra_scripts} };
-    my @templates         = @{ $self->{config}{__templates} };
+    my $install_directory    = $config->{_}->{install_directory};
+    my $script_name          = $config->{_}->{script_name};
+    my $template_path        = $config->{_}->{template_path};
+    my $custom_template_path = $config->{_}->{custom_template_path};
+    my $custom_lib_path      = $config->{_}->{custom_lib_path};
+    my @extra_scripts        = @{ $self->{config}{__extra_scripts} };
+    my @templates            = @{ $self->{config}{__templates} };
 
     print "Installing scripts to $install_directory:\n";
     # Allow for blank script_name - assume "index.cgi".
@@ -102,15 +103,17 @@ sub ACTION_install_extras {
         }
     }
 
-    print "Installing templates to $install_directory/templates:\n";
+    print "Installing templates to $template_path:\n";
     foreach my $template ( @templates ) {
         if ( $FAKE ) {
-            print "templates/$template -> $install_directory/templates/$template (FAKE)\n";
+            print "templates/$template -> $template_path/$template (FAKE)\n";
 	} else {
-	    $self->copy_if_modified("templates/$template", $install_directory)
-                or print "Skipping $install_directory/templates/$template (unchanged)\n";
+	    $self->copy_if_modified(from => "templates/$template", to_dir => $template_path, flatten => 1)
+                or print "Skipping $template_path/$template (unchanged)\n";
         }
     }
+    print "Making sure that $custom_template_path exists.\n";
+    mkdir $custom_template_path or warn "Could not make $custom_template_path";
 }
 
 sub add_custom_lib_path {

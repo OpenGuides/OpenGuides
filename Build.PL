@@ -206,6 +206,10 @@ foreach my $qset (@questions) {
             question => "what directory should I install the templates in?",
             variable => "template_path",
             value    => $val . "/templates" };
+	push @answers, {
+	    question => "where should I look for custom templates?",
+	    variable => "custom_template_path",
+	    value    => $val . "/custom-templates" };
     }
 }
 

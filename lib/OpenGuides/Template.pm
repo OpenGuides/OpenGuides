@@ -108,7 +108,8 @@ sub output {
     croak "No template supplied" unless $args{template};
     my $config = $args{config} or croak "No config supplied";
     my $template_path = $config->{_}->{template_path};
-    my $tt = Template->new( { INCLUDE_PATH => $template_path } );
+    my $custom_template_path = $config->{_}->{custom_template_path} || "";
+    my $tt = Template->new( { INCLUDE_PATH => "$custom_template_path:$template_path" } );
 
     my $script_name = $config->{_}->{script_name};
     my $script_url  = $config->{_}->{script_url};

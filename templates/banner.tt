@@ -1,6 +1,6 @@
 <div id="banner">
   [% TRY %]
-    [% INCLUDE custom/banner.tt %]
+    [% INCLUDE custom_banner.tt %]
   [% CATCH %]
     <h1><a href="[% home_link %]">[% site_name %]</a></h1>
   [% END %]

@@ -15,7 +15,7 @@
   [% END %]
 
   [% TRY %]
-    [% INCLUDE custom/footer_credits.tt %]
+    [% INCLUDE custom_footer_credits.tt %]
   [% CATCH %]
     <p>
       [% INCLUDE delete_link %]

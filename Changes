@@ -3,6 +3,10 @@
           find_within_distance action.
         Fixed bug with paging on distance-only search (reported by Bob Walker).
         Improved encapsulation in OpenGuides::Supersearch - accessors.
+        *INCOMPATIBLE CHANGE* Custom templates are now stored in
+          user-definable path, and their names are prefixed with custom_.
+	  This only affects you if you have used the custom template support
+	  introduced in 0.41.
 
 0.41    21 September 2004
         Added backlinks link to navbar.

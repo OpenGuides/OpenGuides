@@ -3,16 +3,18 @@ contain logic and therefore can have bugs, they may have new features
 added in the future and so on.
 
 From OpenGuides 0.41, some of the supplied templates will optionally
-call out to other template fragments that you can put in
-templates/custom/.  If custom templates do not exist then sensible
-default wording will be used instead.
+call out to other template fragments that you can put in a custom template
+path (by default custom-templates/). If custom templates do not exist then
+sensible default wording will be used instead.
+
+The names of all custom templates will be prefixed with custom_.
 
 The custom templates currently supported are:
 
- - licence.tt
+ - custom_licence.tt
    Will be included at the top of the page editing form.
 
- - footer_credits.tt
+ - custom_footer_credits.tt
    Will be included in a <div id="footer"> at the base of every page.
    You may wish to take advantage of the supplied TT variables
      - [% delete_link %]
@@ -21,7 +23,7 @@ The custom templates currently supported are:
      - [% openguides_version %]
        Contains the version of OpenGuides that your site is running on.
 
- - banner.tt
+ - custom_banner.tt
    Will be included in a <div id="banner"> at the top of every page.
    You may wish to take advantage of the supplied TT variables
     - [% site_name %]
@@ -29,3 +31,6 @@ The custom templates currently supported are:
 
 Requests for further custom inserts are welcomed.
 
+You can also include your own versions of other templates in the
+custom-templates/ directory, and these will override the installed files,
+but this is not recommended for the reasons detailed above.
