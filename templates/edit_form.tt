@@ -30,7 +30,7 @@
 		<table>
 			<tr>
 				<td><strong>Content:</strong></td>
-				<td><textarea name="content" rows="21" cols="70">[% content %]</textarea></td>
+				<td><textarea name="content" rows="21" cols="70" wrap="virtual">[% content %]</textarea></td>
 			</tr>
 			<tr>
 				<td><strong>Locales:</strong><br />(one per line)</td>
