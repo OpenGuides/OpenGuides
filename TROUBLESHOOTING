@@ -8,6 +8,18 @@ the Module::Build incantation for this is
 
 ----------------------------------------------------------------------
 
+If any or all of the modules required by the OpenGuides scripts are in
+a private directory, then you'll need to tell the scripts where to find
+them.  The only way I can see to do this is to install everything and
+then manually edit the scripts wiki.cgi (or whatever you called it).
+supersearch.cgi and preferences.cgi to include a line something like
+
+  use lib qw( /path/to/my/modules/ );
+
+at the top of the scripts before any other modules are required.
+
+----------------------------------------------------------------------
+
 If you see the following message in your webserver error logs:
 
   "Unable to tie -map_name [...] datafiles directory [...] does not exist
