@@ -80,6 +80,25 @@
       </select>
     </p>
 
+    <p>
+      <label for="cookie_expires">Preferences expire:</label>
+      <select name="cookie_expires">
+        [% IF cookie_expires == 'never' %]
+          <option value="month">in one month</option>
+          <option value="year">in one year</option>
+          <option value="never" selected="1">never</option>
+        [% ELSIF cookie_expires == "year" %]
+          <option value="month">in one month</option>
+          <option value="year" selected="1">in one year</option>
+          <option value="never">never</option>
+        [% ELSE %]
+          <option value="month" selected="1">in one month</option>
+          <option value="year">in one year</option>
+          <option value="never">never</option>
+        [% END %]
+      </select>
+    </p>
+
     <input type="submit" value="Set it" class="form_button" />
     <input type="hidden" name="action" value="set_preferences">
   </form>
@@ -124,6 +143,16 @@
       &#8220;Normal edit&#8221;.
     [% ELSE %]
       &#8220;Minor tidying&#8221;.
+    [% END %]
+  </p>
+
+  <p>Your preferences will
+    [% IF cookie_expires == 'never' %]
+      never expire.
+    [% ELSIF cookie_expires == 'year' %]
+      expire in one year.
+    [% ELSE %]
+      expire in one month.
     [% END %]
   </p>
 

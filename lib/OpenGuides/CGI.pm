@@ -1,7 +1,7 @@
 package OpenGuides::CGI;
 use strict;
 use vars qw( $VERSION );
-$VERSION = '0.05';
+$VERSION = '0.06';
 
 use Carp qw( croak );
 use CGI::Cookie;
@@ -34,6 +34,7 @@ This documentation is probably only useful to OpenGuides developers.
       omit_help_links        => 1,
       show_minor_edits_in_rc => 1,
       default_edit_type      => "tidying",
+      cookie_expires         => "never",
   );
 
   my $wiki = OpenGuides::Utils->make_wiki_object( config => $config );
@@ -63,9 +64,12 @@ This documentation is probably only useful to OpenGuides developers.
       omit_help_links        => 1,
       show_minor_edits_in_rc => 1,
       default_edit_type      => "tidying",
+      cookie_expires         => "never",
   );
 
 Croaks unless a L<Config::Tiny> object is supplied as C<config>.
+Acceptable values for C<cookie_expires> are C<never>, C<month>,
+C<year>; anything else will default to C<month>.
 
 =cut
 
@@ -75,6 +79,20 @@ sub make_prefs_cookie {
     croak "Config object not a Config::Tiny"
         unless UNIVERSAL::isa( $config, "Config::Tiny" );
     my $cookie_name = $class->_get_cookie_name( config => $config );
+    my $expires;
+    if ( $args{cookie_expires} and $args{cookie_expires} eq "never" ) {
+        # Gosh, a hack.  YES I AM ASHAMED OF MYSELF.
+        # Putting no expiry date means cookie expires when browser closes.
+        # Putting a date later than 2037 makes it wrap round, at least on Linux
+        # I will only be 62 by the time I need to redo this hack, so I should
+        # still be alive to fix it.
+        $expires = "Thu, 31-Dec-2037 22:22:22 GMT";
+    } elsif ( $args{cookie_expires} and $args{cookie_expires} eq "year" ) {
+        $expires = "+1y";
+    } else {
+        $args{cookie_expires} = "month";
+        $expires = "+1M";
+    }
     # Supply 'default' values to stop CGI::Cookie complaining about
     # uninitialised values.  *Real* default should be applied before
     # calling this method.
@@ -87,8 +105,9 @@ sub make_prefs_cookie {
                     omithlplks => $args{omit_help_links} || 0,
                     rcmined    => $args{show_minor_edits_in_rc} || 0,
                     defedit    => $args{default_edit_type} || "normal",
+                    exp        => $args{cookie_expires},
                   },
-        -expires => "+1M",
+        -expires => $expires,
     );
     return $cookie;
 }
@@ -122,6 +141,7 @@ sub get_prefs_from_cookie {
              omit_help_links        => $data{omithlplks}|| 0,
              show_minor_edits_in_rc => $data{rcmined}   || 0,
              default_edit_type      => $data{defedit}   || "normal",
+             cookie_expires         => $data{exp}       || "month",
            );
 }
 
