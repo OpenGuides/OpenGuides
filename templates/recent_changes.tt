@@ -7,16 +7,19 @@
 <table id="recentchanges" cellpadding="0" cellspacing="0" border="0" summary="Table containing the list of recent changes to this site">
 [% FOREACH node = recent_changes %]
 	<tr>
-		<td class="recentchanges_meta"><em>[% node.last_modified %]
+		<td class="recentchanges_meta">[% node.last_modified %]
 		[% IF node.edit_type %]
 		([% node.edit_type %])
-		[% END %]</em></td>
-		<td class="recentchanges_user">[% IF node.username %]
-			<a href="[% cgi_url %]?username=[% node.username %];action=userstats">[% node.username %]</a>
 		[% END %]</td>
+		<td class="recentchanges_user">
+                [% IF (node.username != 'Anonymous') %]
+		<a href="[% cgi_url %]?username=[% node.username %];action=userstats">[% node.username %]</a>
+		[% ELSE %]
+		<a href="[% cgi_url %]?username=[% node.host %];action=userstats">[% node.host %]</a>
+                [% END %]</td>
 	</tr>
 	<tr>
-		<td class="recentchanges_node_name"><strong><a href="[% node.url %]">[% node.name %]</a></strong></td>
+		<td class="recentchanges_node_name"><a href="[% node.url %]">[% node.name %]</a></td>
 		<td class="recentchanges_comment">
 		[% IF node.comment %]
 			[% node.comment%]
