@@ -1,4 +1,7 @@
 [% INCLUDE header.tt %]
+[% INCLUDE banner.tt %]
+<div id="content">
+[% INCLUDE navbar.tt %]
 <h1>Deleted</h1>
 <p>
 The node '[% node_name %]' was deleted.

@@ -1,4 +1,8 @@
 [% INCLUDE header.tt %]
+[% INCLUDE banner.tt %]
+<div id="content">
+[% INCLUDE navbar.tt %]
+
 <h1>Confirm Deletion</h1>
 <p>
 Are you sure you want to delete <em>[% node_name %]</em>? If so, please enter the admin
@@ -10,4 +14,5 @@ page</a>.
 <input type="hidden" name="id" value="[% node_name %]">
 <strong>Password:</strong> <input type="password" name="password"> <input type="submit" value="Delete">
 </form>
+
 [% INCLUDE footer.tt %]
