@@ -1,4 +1,5 @@
 0.30    
+        Added method for adminds to delete nodes.
         Major overhaul of templates. Added numerous style hooks and replaced
           Oxford Guide stylesheet in examples/ with generic wiki.css that
           takes advantage of them. Added new banner template for page
