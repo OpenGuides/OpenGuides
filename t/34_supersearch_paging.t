@@ -52,7 +52,7 @@ if ( $@ ) {
     my $output = $search->run(
                                return_output => 1,
                                vars          => {
-                                                  distance_in_metres => 1500,
+                                                  os_dist => 1500,
                                                   os_x => 523500,
                                                   os_y => 177500,
                                                 },

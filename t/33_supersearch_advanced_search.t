@@ -102,7 +102,7 @@ SKIP: {
                                 vars => {
                                           lat  => 51.484320,
                                           long => -0.223484,
-                                          distance_in_metres => 1000,
+                                          latlong_dist => 1000,
                                         },
                               );
     my @ordered = map { $_->{name} } @{ $tt_vars{results} || [] };
@@ -119,7 +119,7 @@ SKIP: {
                              vars => {
                                        lat  => 51.484320,
                                        long => -0.223484,
-                                       distance_in_metres => 1000,
+                                       latlong_dist => 1000,
                                        search => " ",
                                      },
                            );
@@ -134,7 +134,7 @@ SKIP: {
                              vars => {
                                        os_x => 523450,
                                        os_y => 177650,
-                                       distance_in_metres => 1000,
+                                       latlong_dist => 1000,
                                        search => " ",
                                      },
                            );
@@ -150,7 +150,7 @@ SKIP: {
                              vars => {
                                        os_x => 523450,
                                        os_y => 177650,
-                                       distance_in_metres => 1000,
+                                       latlong_dist => 1000,
                                        search => " ",
                                        lat => " ",
                                        long => " ",
@@ -169,7 +169,7 @@ SKIP: {
                              vars => {
                                        lat  => 51.484320,
                                        long => -0.223484,
-                                       distance_in_metres => 1000,
+                                       latlong_dist => 1000,
                                        search => "pubs",
                                      },
                            );
@@ -182,7 +182,7 @@ SKIP: {
                              vars => {
                                        os_x => 523450,
                                        os_y => 177650,
-                                       distance_in_metres => 1000,
+                                       latlong_dist => 1000,
                                        search => "pubs",
                                      },
                            );

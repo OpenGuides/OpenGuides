@@ -556,7 +556,7 @@ sub process_params {
     my %vars = %{ $vars_hashref || {} };
 
     # Strip out any non-digits from distance and OS co-ords.
-    foreach my $param ( qw( os_x os_y distance_in_metres ) ) {
+    foreach my $param ( qw( os_x os_y os_dist latlong_dist ) ) {
         if ( defined $vars{$param} ) {
             $vars{$param} =~ s/[^0-9]//g;
             # 0 is an allowed value but the empty string isn't.
@@ -573,6 +573,16 @@ sub process_params {
             delete $vars{$param} if $vars{$param} eq "";
             $self->{$param} = $vars{$param} if defined $vars{$param};
 	}
+    }
+
+    # Set $self->{distance_in_metres} depending on whether we got
+    # OS co-ords or lat/long.
+    if ( defined $self->{os_x} && defined $self->{os_y}
+         && defined $self->{os_dist} ) {
+        $self->{distance_in_metres} = $self->{os_dist};
+    } elsif ( defined $self->{lat} && defined $self->{long}
+              && defined $self->{latlong_dist} ) {
+        $self->{distance_in_metres} = $self->{latlong_dist};
     }
 
     # Strip leading and trailing whitespace from search text.
