@@ -2,7 +2,7 @@
   <hr />
   <small><b>Categories:</b>
   [% FOREACH category = categories %]
-    <a href="[% category.url %]">[% category.name %]</a> /
+    <a href="[% category.url %]">[% category.name %]</a> [%- "/" UNLESS loop.last %]
   [% END %]
   </small>
 [% END %]
@@ -11,7 +11,7 @@
   <hr />
   <small><b>Locale:</b>
   [% FOREACH locale = locales %]
-    <a href="[% locale.url %]">[% locale.name %]</a> /
+    <a href="[% locale.url %]">[% locale.name %]</a> [%- "/" UNLESS loop.last %]
   [% END %]
   </small>
 [% END %]
