@@ -29,8 +29,6 @@
 
 <br clear="all" />
 
-[% INCLUDE display_categories.tt %]
-
 <a href="[% cgi_url %]?action=list_all_versions;id=[% node_param %]">List all versions</a><br />
 
 <p>
