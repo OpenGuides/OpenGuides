@@ -27,13 +27,9 @@ so the location features might not work so well outside the UK.
 
 =over 4
 
-=item * The OpenGuides development site, temporarily at L<http://un.earth.li/~kake/cgi-bin/wiki.cgi>
+=item * L<http://london.openguides.org/|The Open Guide to London>, the first and biggest OpenGuides site.
 
-=item * L<http://the.earth.li/~kake/cgi-bin/openguides/vegan-oxford.cgi>, an experimental OpenGuides install mirroring the Vegan Guide to Oxford at L<http://www.earth.li/~kake/vegan-oxford/>
-
-=item * L<http://www.ox.compsoc.net/oxfordguide/>, an Open Guide to Oxford run by Dominic Hargreaves (what a star)
-
-=item * grubstreet, the motivation behind OpenGuides; at L<http://grault.net/grubstreet/>
+=item * L<http://openguides.org/|OpenGuides.org>, the OpenGuides website with a list of all live OpenGuides installs.
 
 =item * L<CGI::Wiki>, the Wiki toolkit which does the heavy lifting for OpenGuides
 
