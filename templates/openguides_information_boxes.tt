@@ -1,26 +1,26 @@
 <fieldset>
-<legend>OpenGuides information</legend>
-<table summary="Fields for entering information about the changes being made to this page">
-  <tr>
-    <td>
-      <strong><label for="username">Your username</label> (<a href="preferences.cgi">set</a>)</strong>
-    </td>
-    <td>
-       <input type="text" size="30" name="username" id="username" value="[% username %]">
-    </td>
-  </tr>
-  <tr>
-    <td><strong><label for="comment">Comment about your changes:</label></strong></td>
-    <td><input type="text" size="30" name="comment" id="comment" value="[% comment %]"></td>
-  </tr>
-  <tr>
-    <td><strong><label for="edit_type">Type of edit:</label></strong></td>
-    <td>
-      <select name="edit_type" id="edit_type">
-        <option [% IF edit_type == "Normal edit" %] selected="1" [% END %] value="Normal edit">Normal edit</option>
-        <option [% IF edit_type == "Minor tidying" %] selected="1" [% END %] value="Minor tidying">Minor tidying</option>
-      </select>
-    </td>
-  </tr>
-</table>
+  <legend>OpenGuides information</legend>
+  <table summary="Fields for entering information about the changes being made to this page">
+    <tr>
+      <td>
+        <strong><label for="username">Your username</label> (<a href="preferences.cgi">set</a>)</strong>
+      </td>
+      <td>
+        <input type="text" size="30" name="username" id="username" value="[% username %]" />
+      </td>
+    </tr>
+    <tr>
+      <td><strong><label for="comment">Comment about your changes:</label></strong></td>
+      <td><input type="text" size="30" name="comment" id="comment" value="[% comment %]" /></td>
+    </tr>
+    <tr>
+      <td><strong><label for="edit_type">Type of edit:</label></strong></td>
+      <td>
+        <select name="edit_type" id="edit_type">
+          <option [% IF edit_type == "Normal edit" %] selected="1" [% END %] value="Normal edit">Normal edit</option>
+          <option [% IF edit_type == "Minor tidying" %] selected="1" [% END %] value="Minor tidying">Minor tidying</option>
+        </select>
+      </td>
+    </tr>
+  </table>
 </fieldset>
