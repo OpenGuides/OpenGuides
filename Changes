@@ -1,6 +1,9 @@
-0.03    23 April 2003
+0.03    24 April 2003
+        Added a start at a TROUBLESHOOTING guide.
+        Added MySQL support.
         Added PREREQUISITES file as requested by Cal.
         Fixed OpenGuides::Build to die if it can't find its prereqs.
+        Loads more shit I didn't write down.
 
 0.02    23 April 2003
         Fixed stray content-type header in RDF full index output.
