@@ -12,7 +12,7 @@ use URI::Escape;
 
 use vars qw( $VERSION );
 
-$VERSION = '0.35';
+$VERSION = '0.36';
 
 =head1 NAME
 
@@ -431,10 +431,24 @@ sub show_index {
 
   $guide->list_all_versions ( id => "Home Page" );
 
+  # Or return output as a string (useful for writing tests).
+  $guide->list_all_versions (
+                              id            => "Home Page",
+                              return_output => 1,
+                            );
+
+  # Or return the hash of variables that will be passed to the template
+  # (not including those set additionally by OpenGuides::Template).
+  $guide->list_all_versions (
+                              id             => "Home Page",
+                              return_tt_vars => 1,
+                            );
+
 =cut
 
 sub list_all_versions {
     my ($self, %args) = @_;
+    my $return_output = $args{return_output} || 0;
     my $node = $args{id};
     my %curr_data = $self->wiki->retrieve_node($node);
     my $curr_version = $curr_data{version};
@@ -444,10 +458,11 @@ sub list_all_versions {
         my %node_data = $self->wiki->retrieve_node( name    => $node,
 				  	            version => $version );
         # $node_data{version} will be zero if this version was deleted.
-	push @history, { version  => $version,
-			 modified => $node_data{last_modified},
-		         username => $node_data{metadata}{username}[0],
-		         comment  => $node_data{metadata}{comment}[0],
+	push @history, {
+            version  => CGI->escapeHTML( $version ),
+	    modified => CGI->escapeHTML( $node_data{last_modified} ),
+            username => CGI->escapeHTML( $node_data{metadata}{username}[0] ),
+            comment  => CGI->escapeHTML( $node_data{metadata}{comment}[0] ),
                        } if $node_data{version};
     }
     @history = reverse @history;
@@ -455,11 +470,14 @@ sub list_all_versions {
 		    version       => $curr_version,
                     not_deletable => 1,
 		    history       => \@history );
-    print $self->process_template(
-                                   id       => $node,
-                                   template => "node_history.tt",
-                                   tt_vars  => \%tt_vars,
-                                 );
+    return %tt_vars if $args{return_tt_vars};
+    my $output = $self->process_template(
+                                          id       => $node,
+                                          template => "node_history.tt",
+                                          tt_vars  => \%tt_vars,
+                                        );
+    return $output if $return_output;
+    print $output;
 }
 
 =item B<delete_node>
