@@ -62,7 +62,7 @@ my %drivers = ( postgres => "DBD::Pg",
                 sqlite   => "DBD::SQLite",
               );
 eval "require $drivers{$dbtype}";
-die "$drivers{$dbtype} is needed to run a $dbtype database" if $@;
+warn "$drivers{$dbtype} is needed to run a $dbtype database" if $@;
 
 push @answers, { question => $dbtype_qu,
                  variable => "dbtype",
