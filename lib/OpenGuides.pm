@@ -193,6 +193,7 @@ sub display_node {
         my @recent = $wiki->list_recent_changes( %criteria );
         @recent = map { {name          => CGI->escapeHTML($_->{name}),
                          last_modified => CGI->escapeHTML($_->{last_modified}),
+                         version       => CGI->escapeHTML($_->{version}),
                          comment       => CGI->escapeHTML($_->{metadata}{comment}[0]),
                          username      => CGI->escapeHTML($_->{metadata}{username}[0]),
                          host          => CGI->escapeHTML($_->{metadata}{host}[0]),
