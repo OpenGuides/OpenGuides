@@ -16,15 +16,7 @@ BUGS AND CAVEATS
     so the location features might not work so well outside the UK.
 
 SEE ALSO
-    * The OpenGuides development site, temporarily at
-    <http://un.earth.li/~kake/cgi-bin/wiki.cgi>
-    * <http://the.earth.li/~kake/cgi-bin/openguides/vegan-oxford.cgi>, an
-    experimental OpenGuides install mirroring the Vegan Guide to Oxford at
-    <http://www.earth.li/~kake/vegan-oxford/>
-    * <http://www.ox.compsoc.net/oxfordguide/>, an Open Guide to Oxford run
-    by Dominic Hargreaves (what a star)
-    * <http://london.openguides.org/>, the Open Guide to London, whose
-    predecessor was the motivation behind OpenGuides.
+    <http://openguides.org/>
 
 FEEDBACK
     If you have a question, a bug report, or a patch, or you're interested
@@ -45,9 +37,8 @@ COPYRIGHT
     and/or modify it under the same terms as Perl itself.
 
 CREDITS
-    Programming by Earle Martin, Kake Pugh, Ivor Williams. Testing and bug
-    reporting by Cal Henderson, Bob Walker, Kerry Bosworth, Dominic
-    Hargreaves, Simon Cozens, Jody Belka, among others. Much of the
-    Module::Build stuff copied from the Siesta project
-    <http://siesta.unixbeard.net/>
+    Programming by Dominic Hargreaves, Earle Martin, Kake Pugh, Ivor Williams.
+    Testing and bug reporting by Cal Henderson, Bob Walker, Kerry Bosworth,
+    Simon Cozens, Jody Belka, among others. Much of the Module::Build stuff
+    copied from the Siesta project <http://siesta.unixbeard.net/>
 
