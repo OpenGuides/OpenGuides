@@ -6,6 +6,10 @@ use Data::Dumper;
 eval "use Config::Tiny";
 die "Config::Tiny is required to configure this application.\n" if $@;
 
+#####
+##### When updating the prepreqs PLEASE REMEMBER to update PREREQUISITES.
+#####
+
 # Create the build object.
 my $build = OpenGuides::Build->new(
     dist_name => "OpenGuides",
@@ -44,6 +48,7 @@ my $build = OpenGuides::Build->new(
 	'File::Spec::Functions' => 0,
 	'Geography::NationalGrid' => 0,
 	'Parse::RecDescent' => 0,
+	'Search::InvertedIndex' => 0,
 	'Template' => 0,
 	'Time::Piece' => 0,
 	'URI::Escape' => 0

@@ -1,6 +1,10 @@
+0.03    23 April 2003
+        Added PREREQUISITES file as requested by Cal.
+        Fixed OpenGuides::Build to die if it can't find its prereqs.
+
 0.02    23 April 2003
         Fixed stray content-type header in RDF full index output.
-        Added stray files to MANIFEST (whoops, thanks cal).
+        Added stray files to MANIFEST (whoops, thanks Cal).
 
 0.01    22 April 2003
         Initial (private) release.

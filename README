@@ -1,9 +1,10 @@
-OpenGuides Version 0.01
+OpenGuides Version 0.03
 =======================
 
 This distribution contains the OpenGuides wiki software. It requires:
 
  - Module::Build for installation
+ - other prerequisite modules as detailed in PREREQUISITES
  - a webserver (such as Apache)
  - a Postgres database dedicated to the OpenGuides installation
 

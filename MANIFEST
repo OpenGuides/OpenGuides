@@ -4,6 +4,7 @@ lib/OpenGuides/Build.pm
 lib/OpenGuides/RDF.pm
 MANIFEST
 META.yml
+PREREQUISITES
 README
 preferences.cgi
 supersearch.cgi
