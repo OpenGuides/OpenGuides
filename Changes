@@ -1,3 +1,7 @@
+0.35    25 June 2004
+        Forgot to add version prerequisite on CGI::Wiki.  Don't use 0.34,
+          use this.
+
 0.34    25 June 2004
         Add facility to delete only certain revisions of a page - access
           this from the node history page.
