@@ -48,9 +48,13 @@ my @questions = (
   default  => "n",
   type     => "y_n"
   },
+{ question => "Please specify a password for the site admin:",
+  variable => "admin_pass",
+  default  => "Change this!"
+  },
 { question => "What's the URL of the site's stylesheet?",
   variable => "stylesheet_url"
-},
+  },
 { question => "What's the site called? (should be unique)",
   variable => "site_name",
   default  => "My OpenGuides Site"
