@@ -1,8 +1,9 @@
 [%- USE CGI -%]
 <?xml version="1.0"?>
 <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-	xmlns:dc="http://purl.org/dc/1.0/"
-	xmlns:gs="http://the.earth.li/~kake/xmlns/gs/0.1/"
+         xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+  	 xmlns:dc="http://purl.org/dc/1.0/"
+	 xmlns:gs="http://the.earth.li/~kake/xmlns/gs/0.1/"
 	>
 
 <gs:category rdf:about="[% full_cgi_url %]?action=catindex;category=[% CGI.escape(category.name) %];format=rdf">
@@ -13,6 +14,7 @@
     <gs:object>
       <rdf:Description rdf:about="[% full_cgi_url %]?[% node.param %]">
         <dc:title>[% node.name %]</dc:title>
+        <rdfs:seeAlso rdf:resource="[% full_cgi_url %]?action=rss;feed=chef_dan;id=[% node.param %]" />
       </rdf:Description>
     </gs:object>
   [% END %]
