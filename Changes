@@ -2,6 +2,9 @@
         Fixed edit conflict up so it works nicely when you click the
         Save button as well as the Preview one.
 
+        Added preferences option of displaying lat/long as deg-min-sec
+        instead of decimal (requested by James).
+
 0.15    18 May 2003
         Added Algorithm::Diff version dependency to prereqs, fixed bug
         with preferences.cgi and blank script_name, fixed REDIRECT bug.

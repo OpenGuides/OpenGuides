@@ -2,12 +2,13 @@ package OpenGuides::Template;
 
 use strict;
 use vars qw( $VERSION );
-$VERSION = '0.06';
+$VERSION = '0.07';
 
 use Carp qw( croak );
 use CGI; # want to get rid of this and put the burden on the templates
 use Geography::NationalGrid;
 use Geography::NationalGrid::GB;
+use OpenGuides::CGI;
 use Template;
 use URI::Escape;
 
@@ -209,6 +210,14 @@ sub extract_metadata_vars {
 		      os_y      => $os_y
 	    );
 	}
+    }
+
+    # Check whether we need to munge lat and long.
+    my %prefs = OpenGuides::CGI->get_prefs_from_cookie( config => $config );
+    if ( $prefs{latlong_traditional} ) {
+        foreach my $var ( qw( latitude longitude ) ) {
+            $vars{$var} = Geography::NationalGrid->deg2string($vars{$var});
+        }
     }
 
     return %vars;

@@ -20,22 +20,33 @@
 
     <h1>Preferences</h1>
 
-    <p>Check this to put the preview above the edit area when previewing
-    a page edit:</p>
+    <p>
     [% IF preview_above_edit_box %]
       <input type="checkbox" name="preview_above_edit_box" value="1" checked />
     [% ELSE %]
       <input type="checkbox" name="preview_above_edit_box" value="1" />
     [% END %]
-    <br />
+    Put the preview above the edit area when previewing
+    a page edit.
+    </p>
 
-    <p>Check this to include &#8220;Look for nearby geocaches&#8221; link in navbar:</p>
+    <p>
     [% IF include_geocache_link %]
       <input type="checkbox" name="include_geocache_link" value="1" checked />
     [% ELSE %]
       <input type="checkbox" name="include_geocache_link" value="1" />
     [% END %]
-    <br />
+    Include &#8220;Look for nearby geocaches&#8221; link in navbar.
+    </p>
+
+    <p>
+    [% IF latlong_traditional %]
+      <input type="checkbox" name="latlong_traditional" value="1" checked />
+    [% ELSE %]
+      <input type="checkbox" name="latlong_traditional" value="1" />
+    [% END %]
+    Display latitude and longitude as degrees and minutes instead of decimal.
+    </p>
 
     <input type="submit" value="Set it" class="form_button" />
     <input type="hidden" name="action" value="set_preferences">
@@ -58,6 +69,14 @@
   <p>&#8220;Look for nearby geocaches&#8221; link
     [% UNLESS include_geocache_link %] not [% END %]
   included in navbar</p>
+
+  <p>Latitude and longitude displayed as
+    [% IF latlong_traditional %]
+      degrees and minutes.
+    [% ELSE %]
+      decimal.
+    [% END %]
+  </p>
 
   <p><a href="[% full_cgi_url %]">Return to the wiki</a></p>
 
