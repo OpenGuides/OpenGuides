@@ -71,8 +71,8 @@ my $formatter = CGI::Wiki::Formatter::UseMod->new(
 			       br hr ul li center blockquote kbd div code
 			       strike)],
     macros              => \%macros,
-    node_prefix         => '$script_name?',
-    edit_prefix         => '$script_name?action=edit&id='
+    node_prefix         => "$script_name?",
+    edit_prefix         => "$script_name?action=edit&id="
 );
 
 my %conf = ( store     => $store,
@@ -442,7 +442,7 @@ sub get_cookie {
 	$cookie = $cookies{'username'}->value;
     }
     else {
-	$cookie = "Anonymous User";
+	$cookie = "Anonymous";
     }
     return $cookie;
 }
