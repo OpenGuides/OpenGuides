@@ -5,7 +5,8 @@
           - move homepage tag out of wiki metadata
           - remove nonexistent "gs:" namespace from category indices
           - logical structure improvements (subjects of pages are now
-            identified as spatial things instead of being anonymous 
+            identified as spatial things if they are, or are RDF
+            descriptions if they're not, instead of being anonymous 
             FOAF topics).
 
         Fixed bug that prevented automatic database initialization on
