@@ -24,7 +24,7 @@ summary="Results of search queries are displayed here, and new searches can also
 
   <form method="get" action="supersearch.cgi">
     <label for="search_upper">Search:</label> 
-    <input type="text" name="search" value="[% search_terms %]" size="50" maxlength="80" id="search_upper" value="Search text"/>
+    <input type="text" name="search" value="[% search_terms %]" size="50" maxlength="80" id="search_upper" value="Search text" onclick="this.value=''" />
     <input type="submit" name="go" class="form_button" value="Go" />
   </form>
 
@@ -69,7 +69,7 @@ summary="Results of search queries are displayed here, and new searches can also
 
   <form method="get" action="supersearch.cgi">
     <label for="search_lower">Search:</label> 
-    <input type="text" name="search" id="search_lower" value="[% search_terms %]" size="50" maxlength="80" value="Search text" />
+    <input type="text" name="search" id="search_lower" value="[% search_terms %]" size="50" maxlength="80" value="Search text" onclick="this.value=''" />
     <input type="submit" name="go" class="form_button" value="Go" />
   </form>
   [% END %]

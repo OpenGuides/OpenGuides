@@ -1,7 +1,7 @@
 <br clear="all" />
 <div id="search_form">
 <form action="supersearch.cgi" method="get">
-<strong><label for="search">Search [% site_name %]:</label></strong> <input type="text" size="50" name="search" id="search" value="Search text" /> 
+<strong><label for="search">Search [% site_name %]:</label></strong> <input type="text" size="50" name="search" id="search" value="Search text" onclick="this.value=''" /> 
 <input type="submit" name="Go" value="Go" id="go" class="form_button" />
 </form>
 </div>
