@@ -83,8 +83,7 @@ HTML
 sub set_cookie {
 	$cookie = CGI::Cookie->new(	-name    =>  'username',
 					-value   =>  $username,
-					-expires =>  '+12M',
-					-domain  =>  'downlode.org' );
+					-expires =>  '+12M' );
 	
 	print "Set-Cookie: $cookie\n";
 }
