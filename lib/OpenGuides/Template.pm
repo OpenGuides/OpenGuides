@@ -118,12 +118,16 @@ sub output {
     $script_url .= "/" unless $script_url =~ /\/$/;
 
     # Check cookie to see if we need to set the formatting_rules_link.
+    my ($formatting_rules_link, $omit_help_links);
+    my $formatting_rules_node = $config->{_}->{formatting_rules_node} ||"";
     my %cookie_data = OpenGuides::CGI->get_prefs_from_cookie(config=>$config);
-    my $formatting_rules_link = "";
-    my $formatting_rules_node = $config->{_}->{formatting_rules_node} || "";
-    if ( $formatting_rules_node and ! $cookie_data{omit_formatting_link} ) {
-        $formatting_rules_link = $script_url . $script_name . "?"
-                               . uri_escape($args{wiki}->formatter->node_name_to_node_param($formatting_rules_node));
+    if ( $cookie_data{omit_help_links} ) {
+        $omit_help_links = 1;
+    } else {
+        if ( $formatting_rules_node ) {
+            $formatting_rules_link = $script_url . $script_name . "?"
+                                   . uri_escape($args{wiki}->formatter->node_name_to_node_param($formatting_rules_node));
+	}
     }
 
     my $enable_page_deletion = 0;
@@ -142,6 +146,7 @@ sub output {
 		    home_link             => $script_url . $script_name,
 		    home_name             => $config->{_}->{home_name},
                     navbar_on_home_page   => $config->{_}->{navbar_on_home_page},
+                    omit_help_links       => $omit_help_links,
                     formatting_rules_link => $formatting_rules_link,
                     formatting_rules_node => $formatting_rules_node,
                     openguides_version    => $OpenGuides::VERSION,
