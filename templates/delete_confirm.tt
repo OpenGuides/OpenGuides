@@ -1,4 +1,4 @@
-[% INCLUDE header.tt %]
+[% INCLUDE header.tt modifier = 'Confirm delete for ' %]
 [% INCLUDE banner.tt %]
 <div id="content">
 [% INCLUDE navbar.tt %]
