@@ -37,9 +37,9 @@ my $contact_email = $config->{_}->{contact_email};
 
 # Make store.
 my $store = CGI::Wiki::Store::Pg->new(
-    dbname => "kake",
-    dbuser => "kake",
-    dbpass => "hackfest"
+    dbname => $config->{_}{dbname},
+    dbuser => $config->{_}{dbuser},
+    dbpass => $config->{_}{dbpass},
 );
 
 # Make search.
