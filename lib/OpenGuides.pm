@@ -2,6 +2,7 @@ package OpenGuides;
 use strict;
 
 use CGI;
+use CGI::Wiki::Plugin::Locator::UK;
 use OpenGuides::Template;
 use OpenGuides::Utils;
 
@@ -39,6 +40,8 @@ sub new {
     my $wiki = OpenGuides::Utils->make_wiki_object( config => $args{config} );
     $self->{wiki} = $wiki;
     $self->{config} = $args{config};
+    my $locator = CGI::Wiki::Plugin::Locator::UK->new;
+    $wiki->register_plugin( plugin => $locator );
     return $self;
 }
 
@@ -62,6 +65,17 @@ An accessor, returns the underlying L<Config::Tiny> object.
 sub config {
     my $self = shift;
     return $self->{config};
+}
+
+=item B<locator>
+
+An accessor, returns the underlying L<CGI::Wiki::Plugin::Locator::UK> object.
+
+=cut
+
+sub locator {
+    my $self = shift;
+    return $self->{locator};
 }
 
 =item B<display_node>

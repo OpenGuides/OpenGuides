@@ -11,7 +11,6 @@ use CGI::Carp qw(croak);
 use CGI::Wiki;
 use CGI::Wiki::Search::SII;
 use CGI::Wiki::Formatter::UseMod;
-use CGI::Wiki::Plugin::Locator::UK;
 use CGI::Wiki::Plugin::Diff;
 use Config::Tiny;
 use Geography::NationalGrid;
@@ -35,13 +34,11 @@ my $script_url  = $config->{_}->{script_url};
 # we need to allow for people editing the config file by hand later.
 $script_url .= "/" unless $script_url =~ /\/$/;
 
-my ($guide, $wiki, $formatter, $locator, $q, $differ);
+my ($guide, $wiki, $formatter, $q, $differ);
 eval {
     $guide = OpenGuides->new( config => $config );
     $wiki = $guide->wiki;
     $formatter = $wiki->formatter;
-    $locator = CGI::Wiki::Plugin::Locator::UK->new;
-    $wiki->register_plugin( plugin => $locator );
 
     $differ = CGI::Wiki::Plugin::Diff->new;
     $wiki->register_plugin( plugin => $differ );
@@ -92,13 +89,13 @@ eval {
         exit 0;
     } elsif ($action eq 'find_within_distance') {
         my $metres = $q->param("distance_in_metres");
-        my @finds = $locator->find_within_distance( node => $node,
-			 		            metres => $metres );
+        my @finds = $guide->locator->find_within_distance( node   => $node,
+			 		                   metres => $metres );
         my @nodes;
         foreach my $find ( @finds ) {
-            my $distance = $locator->distance( from_node => $node,
-					       to_node   => $find,
-                                               unit      => "metres" );
+            my $distance = $guide->locator->distance( from_node => $node,
+					              to_node   => $find,
+                                                      unit      => "metres" );
             push @nodes, { name => $find,
 			   param => $formatter->node_name_to_node_param($find),
                            distance => $distance };
