@@ -201,7 +201,8 @@ my $build = OpenGuides::Build->new(
     build_requires => {
         'Module::Build' => '0.18', # earlier doesn't install script files
         },
-    dynamic_config => 1
+    dynamic_config => 1,
+    create_makefile_pl => "traditional",
 );
 
 $build->add_to_cleanup( "wiki.conf" );
@@ -237,8 +238,3 @@ $build->{config}{__templates}         = [
 
 # Finally write the build script.
 $build->create_build_script;
-                    
-
-
-
-

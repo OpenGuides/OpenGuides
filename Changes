@@ -1,3 +1,6 @@
+0.18    16 June 2003
+        Added a Makefile.PL as well as a Build.PL, for CPAN.pm users.
+
 0.17    15 June 2003
         Fixed OpenGuides::Utils to take note of dbhost.
         Added example stylesheet provided by the OxfordGuide team.
