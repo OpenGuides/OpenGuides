@@ -17,12 +17,22 @@
   <foaf:topic rdf:resource="#listing" />
 </rdf:Description>
 
+[% USE Dumper %]
 <rdf:Bag rdf:ID="listing">
 [%- FOREACH node = nodes %]
+[% metadata = node.node_data.metadata %]
+
+  [%- IF metadata.os_x.list.first || metadata.os_y.list.first || metadata.latitude.list.first || metadata.longitude.list.first ||
+        metadata.locale.list.first || metadata.address.list.first || metadata.postcode.list.first || metadata.map_link.list.first -%]
+    [% nodeType = 'geo:SpatialThing' %]
+  [%- ELSE -%]
+    [% nodeType = 'rdf:Description' %]
+  [%- END -%]
+
   <rdf:li>
-    <geo:SpatialThing rdf:about="[% full_cgi_url %]?id=[% node.param %];format=rdf#obj">
+    <[% nodeType %] rdf:about="[% full_cgi_url %]?id=[% node.param %];format=rdf#obj">
       <dc:title>[% node.name %]</dc:title>
-    </geo:SpatialThing>
+    </[% nodeType %]>
   </rdf:li>
 [% END %]
 </rdf:Bag>
