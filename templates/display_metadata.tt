@@ -1,14 +1,12 @@
 [% USE CGI %]
 
-[% IF os_x %]
+[% IF os_x AND os_y %]
   <small>OS X co-ord: [% CGI.escapeHTML(os_x) %]</small>
   &nbsp;&nbsp;&nbsp;
-[% END %]
-[% IF os_y %]
   <small>OS Y co-ord: [% CGI.escapeHTML(os_y) %]</small>
   &nbsp;&nbsp;&nbsp;
 [% END %]
-[% IF os_x AND os_y %]
+[% IF latitude AND longitude %]
   <small>(Latitude: [% latitude %] Longitude: [% longitude %])</small>
   &nbsp;&nbsp;&nbsp;
 [% END %]
