@@ -59,7 +59,7 @@
     [% UNLESS include_geocache_link %] not [% END %]
   included in navbar</p>
 
-  <p><a href="[% cgi_url %]">Return to the wiki</a></p>
+  <p><a href="[% full_cgi_url %]">Return to the wiki</a></p>
 
 [% END %]
 

@@ -1,3 +1,7 @@
+0.15    
+        Added Algorithm::Diff version dependency to prereqs, fixed bug
+        with preferences.cgi and blank script_name.
+
 0.14    17 May 2003
         Added "Wanted Pages" link to navbar, thanks to Simon Cozens for
         the idea.
