@@ -1,3 +1,7 @@
+0.38    26 July 2004
+        Major improvements to the search result ordering (thanks to
+          Steve Jolly, Bob Walker and Billy Abbott for test cases).
+
 0.37    23 July 2004
         Fixed bug in diff view - the versions are the right way round now...
           Fixed bug with links in historic view.  Require CGI.pm 2.92 to

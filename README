@@ -37,8 +37,8 @@ COPYRIGHT
     and/or modify it under the same terms as Perl itself.
 
 CREDITS
-    Programming by Dominic Hargreaves, Earle Martin, Kake Pugh, Ivor Williams.
-    Testing and bug reporting by Cal Henderson, Bob Walker, Kerry Bosworth,
-    Simon Cozens, Jody Belka, among others. Much of the Module::Build stuff
-    copied from the Siesta project <http://siesta.unixbeard.net/>
-
+    Programming by Dominic Hargreaves, Earle Martin, Kake Pugh, and Ivor
+    Williams.  Testing and bug reporting by Billy Abbott, Jody Belka,
+    Kerry Bosworth, Simon Cozens, Cal Henderson, Steve Jolly, and Bob
+    Walker (among others).  Much of the Module::Build stuff copied from
+    the Siesta project L<http://siesta.unixbeard.net/>
