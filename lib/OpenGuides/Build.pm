@@ -60,22 +60,27 @@ sub ACTION_install_extras {
     my @templates         = @{ $self->{config}{__templates} };
 
     print "Installing scripts to $install_directory:\n";
+    # Allow for blank script_name - assume "index.cgi".
+        my $script_filename = $script_name || "index.cgi";
     if ( $FAKE ) {
-        print "wiki.cgi -> $install_directory/$script_name (FAKE)\n";
+        print "wiki.cgi -> $install_directory/$script_filename (FAKE)\n";
     } else {
-        if ( $script_name ne "wiki.cgi" ) {
-            File::Copy::copy("wiki.cgi", $script_name)
-	        or die "Can't copy('wiki.cgi', '$script_name'): $!";
+        if ( $script_filename ne "wiki.cgi" ) {
+            File::Copy::copy("wiki.cgi", $script_filename)
+	        or die "Can't copy('wiki.cgi', '$script_filename'): $!";
 	}
-        my $copy = $self->copy_if_modified( $script_name, $install_directory );
+        my $copy = $self->copy_if_modified(
+                                            $script_filename,
+                                            $install_directory
+                                          );
         if ( $copy ) {
             $self->fix_shebang_line($copy);
 	    $self->make_executable($copy);
         } else {
-            print "Skipping $install_directory/$script_name (unchanged)\n";
+            print "Skipping $install_directory/$script_filename (unchanged)\n";
         }
-        print "(Really: wiki.cgi -> $install_directory/$script_name)\n"
-            unless $script_name eq "wiki.cgi";
+        print "(Really: wiki.cgi -> $install_directory/$script_filename)\n"
+            unless $script_filename eq "wiki.cgi";
     }
 
     foreach my $script ( @extra_scripts ) {
