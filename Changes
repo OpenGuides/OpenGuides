@@ -1,3 +1,7 @@
+0.09    10 May 2003
+        Added OpenGuides::UK::PubCrawl and pubcrawl.cgi as a start at a
+        pub crawl generator.
+
 0.08    3 May 2003
 
         Added fuzzy matching capability -
