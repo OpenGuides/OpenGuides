@@ -252,6 +252,54 @@ sub display_diffs {
                                  );
 }
 
+=item B<find_within_distance>
+
+  $guide->find_within_distance(
+                                id => $node,
+                                metres => $q->param("distance_in_metres")
+                              );
+
+=cut
+
+sub find_within_distance {
+    my ($self, %args) = @_;
+    my $node = $args{node};
+    my $metres = $args{metres};
+    my $formatter = $self->wiki->formatter;
+
+    my @finds = $self->locator->find_within_distance(
+                                                      node   => $node,
+			 		              metres => $metres,
+                                                    );
+    my @nodes;
+    foreach my $find ( @finds ) {
+        my $distance = $self->locator->distance(
+                                                 from_node => $node,
+					         to_node   => $find,
+                                                 unit      => "metres"
+                                               );
+        push @nodes, {
+                       name     => $find,
+	               param    => $formatter->node_name_to_node_param($find),
+                       distance => $distance,
+                     };
+    }
+    @nodes = sort { $a->{distance} <=> $b->{distance} } @nodes;
+
+    my %tt_vars = (
+                    nodes        => \@nodes,
+                    origin       => $node,
+                    origin_param => $formatter->node_name_to_node_param($node),
+                    limit        => "$metres metres",
+                  );
+
+    $self->process_template(
+                             id       => "index", # KLUDGE
+                             template => "site_index.tt",
+                             vars     => \%tt_vars,
+                           );
+}
+
 sub process_template {
     my ($self, %args) = @_;
     my %output_conf = ( wiki     => $self->wiki,

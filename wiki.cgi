@@ -79,24 +79,10 @@ eval {
         redirect_to_node($node);
         exit 0;
     } elsif ($action eq 'find_within_distance') {
-        my $metres = $q->param("distance_in_metres");
-        my @finds = $guide->locator->find_within_distance( node   => $node,
-			 		                   metres => $metres );
-        my @nodes;
-        foreach my $find ( @finds ) {
-            my $distance = $guide->locator->distance( from_node => $node,
-					              to_node   => $find,
-                                                      unit      => "metres" );
-            push @nodes, { name => $find,
-			   param => $formatter->node_name_to_node_param($find),
-                           distance => $distance };
-	}
-        @nodes = sort { $a->{distance} <=> $b->{distance} } @nodes;
-        process_template("site_index.tt", "index",
-                         { nodes  => \@nodes,
-			   origin => $node,
-			   origin_param => $formatter->node_name_to_node_param($node),
-			   limit  => "$metres metres" } );
+        $guide->find_within_distance(
+                                      id => $node,
+                                      metres => $q->param("distance_in_metres")
+                                    );
     } elsif ( $action eq 'delete'
               and ( lc($config->{_}->{enable_page_deletion}) eq "y"
                     or $config->{_}->{enable_page_deletion} eq "1" )
