@@ -26,7 +26,9 @@ my @questions = (
 { question => "what URL does the install directory map to?",
   variable => "script_url",
   },
-{ question => "what directory can I use to store indexes in for searching?",
+{ question => "what directory can I use to store indexes in for searching? "
+            . "***NOTE*** this directory must exist and be writeable by the "
+            . "user that your script will run as.  See README for more ",
   variable => "indexing_directory",
   default  => "/usr/lib/cgi-bin/openguides/indexes/"
   },
