@@ -1,4 +1,6 @@
 0.26    9 October 2003
+        Modified TROUBLESHOOTING to reflect the correct invocation for
+          Module::Build to install into a private directory.
         Show IP address for anonymous edits.
         Changed CGI.pm version dependency for Dom (CPAN bug #3895).
 
