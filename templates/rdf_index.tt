@@ -18,7 +18,7 @@
     <gs:object>
       <rdf:Description rdf:about="[% full_cgi_url %]?[% node.param %]">
         <dc:title>[% node.name %]</dc:title>
-        <rdfs:seeAlso rdf:resource="[% full_cgi_url %]?action=rss;feed=chef_dan;id=[% node.param %]" />
+        <rdfs:seeAlso rdf:resource="[% full_cgi_url %]?id=[% node.param %];format=rdf" />
       </rdf:Description>
     </gs:object>
   [% END %]
