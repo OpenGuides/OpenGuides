@@ -205,7 +205,7 @@ Grid, and Geo::Coordinates::UTM to use a UTM ellipsoid.
 If, after you have answered these questions, the build script complains
 about missing dependencies, don't panic! Simply install them from CPAN and
 then try again. Note that a wiki.conf file will have been written out at
-this point, so of you retain it you won't have to answer all the questions
+this point, so if you retain it you won't have to answer all the questions
 again.
 
 * Custom templates and CSS
