@@ -165,13 +165,17 @@ eval {
         if ( !defined $feed or $feed eq "recent_changes" ) {
             emit_recent_changes_rss();
         } elsif ( $feed eq "chef_dan" ) {
-            emit_chef_dan_rss( node => $node );
+            display_node_rdf( node => $node );
         } else {
             croak "Unknown RSS feed type '$feed'";
         }
-    } else {
-        my $version = $q->param("version");
-        display_node($node, $version);
+    } else { # Default is to display a node.
+        if ( $format and $format eq "rdf" ) {
+            display_node_rdf( node => $node );
+        } else {
+            my $version = $q->param("version");
+            display_node($node, $version);
+        }
     }
 };
 
@@ -520,7 +524,7 @@ sub emit_recent_changes_rss {
     exit 0;
 }
 
-sub emit_chef_dan_rss {
+sub display_node_rdf {
     my %args = @_;
     my $node = $args{node};
     my $rdf_writer = OpenGuides::RDF->new(
