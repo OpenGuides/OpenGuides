@@ -15,6 +15,7 @@ use CGI::Wiki;
 use CGI::Wiki::Store::Pg;
 use CGI::Wiki::Search::SII;
 use CGI::Wiki::Formatter::UseMod;
+use CGI::Wiki::Plugin::GeoCache;
 use CGI::Wiki::Plugin::Locator::UK;
 use CGI::Wiki::Plugin::RSS::ModWiki;
 use Config::Tiny;
@@ -41,6 +42,7 @@ my $default_country = $config->{_}->{default_country};
 my $contact_email = $config->{_}->{contact_email};
 my $search_url = $config->{_}->{script_url} . "/supersearch.cgi";
 my $template_path = $config->{_}->{template_path};
+
 # Make store.
 my $store = CGI::Wiki::Store::Pg->new(
     dbname => $config->{_}{dbname},
@@ -268,6 +270,7 @@ sub display_node {
     my $os_y       = $metadata{os_y}[0];
     my $latitude   = $metadata{latitude}[0];
     my $longitude  = $metadata{longitude}[0];
+ my $geocache_link = &make_geocache_link;
 
     my @categories = map { { name => $_,
                              url  => "$script_name?Category_"
@@ -291,6 +294,7 @@ sub display_node {
 		    os_y          => $os_y,
 		    latitude      => $latitude,
 		    longitude     => $longitude,
+		    geocache_link => $geocache_link,
 		    last_modified => $modified,
 		    version       => $node_data{version},
 		    node_name     => $q->escapeHTML($node),
@@ -501,6 +505,29 @@ sub emit_chef_dan_rss {
     exit 0;
 }
 
+sub make_geocache_link {
+    my $node = shift || $home_name;
+    my %current_data = $wiki->retrieve_node( $node );
+    my %criteria     = ( name => $node );
+    my %node_data    = $wiki->retrieve_node( %criteria );
+    my %metadata     = %{$node_data{metadata}};
+    my $latitude     = $metadata{latitude}[0];
+    my $longitude    = $metadata{longitude}[0];
+    my $geocache     = CGI::Wiki::Plugin::GeoCache->new();
+    my $link_text    = "Look for nearby geocaches";
+
+    if ($latitude && $longitude) {
+        my $cache_url    = $geocache->make_link(
+					latitude  => $latitude,
+					longitude => $longitude,
+					link_text => $link_text
+				);
+        return $cache_url;
+    }
+    else {
+        return "";
+    }
+}
 
 sub process_template {
     my ($template, $node, $vars, $conf, $omit_header) = @_;
