@@ -181,12 +181,12 @@ sub extract_metadata_vars {
     );
 
     if ( $args{metadata} ) {
-        foreach my $var ( qw( phone fax address postcode os_x os_y latitude
-                                                               longitude ) ) {
+        foreach my $var ( qw( phone fax address postcode os_x os_y
+                              latitude longitude map_link ) ) {
             $vars{$var} = $metadata{$var}[0];
         }
     } else {
-        foreach my $var ( qw( phone fax address postcode ) ) {
+        foreach my $var ( qw( phone fax address postcode map_link ) ) {
             $vars{$var} = $q->param($var);
         }
 

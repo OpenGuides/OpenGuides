@@ -23,7 +23,15 @@
       <li><b>Fax:</b> [% CGI.escapeHTML(fax) %]</li>
     [% END %]
     [% IF address %]
-      <li><b>Address:</b> [% CGI.escapeHTML(address) %]</li>
+      <li><b>Address:</b>
+      [% IF map_link %]
+        [<a href="[% map_link %]">[% CGI.escapeHTML(address) %]</a>]</li>
+      [% ELSE %]
+        [% CGI.escapeHTML(address) %]</li>
+      [% END %]
+    [% ELSIF map_link %]
+      <li><b>Map:</b>
+        [<a href="[% map_link %]">[% CGI.escapeHTML(map_link) %]</a>]</li>
     [% END %]
     [% IF postcode %]
       <li><strong>Postcode:</strong> [% CGI.escapeHTML(postcode) %]</li>
