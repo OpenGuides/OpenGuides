@@ -1,5 +1,7 @@
 [% INCLUDE header.tt %]
+[% INCLUDE banner.tt %]
 <div id="content">
+[% INCLUDE navbar.tt %]
 <h1 align=center>[% site_name %] - Backlinks to [% node_name %]</h1>
 
 <p>Results found: [% num_results %]</p>

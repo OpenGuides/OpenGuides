@@ -303,9 +303,10 @@ sub show_backlinks {
         { url   => $q->escape($formatter->node_name_to_node_param($_)),
 	  title => $q->escapeHTML($_)
         }             } sort @backlinks;
-    my %tt_vars = ( results      => \@results,
-                    num_results  => scalar @results,
-                    not_editable => 1 );
+    my %tt_vars = ( results       => \@results,
+                    num_results   => scalar @results,
+                    not_deletable => 1,
+                    not_editable  => 1 );
     process_template("backlink_results.tt", $node, \%tt_vars);
 }
 
