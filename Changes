@@ -5,6 +5,10 @@
         Fixed template bug in display_metadata.tt that was stopping map
           links being displayed for nodes with no address data (spotted
           by Steve Jolly).
+	Remove inline style from recent_changes.tt. You will need to add
+	the styles table#recentchanges, td.recentchanges_meta,
+	td.recentchanges_user, td.recentchanges_node_name and
+	td.recentchanges_comment to your stylesheets.
 
 0.32    7 June 2004
         Change auto-creating behaviour of index nodes (categories and
