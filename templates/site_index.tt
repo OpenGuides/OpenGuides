@@ -3,7 +3,11 @@
 <h1 align=center>
   [% site_name %] - Node List
   [%- IF criterion -%]
-    - <a href="[% criterion.url %]">[%- criterion.name -%]</a>
+    [%- IF criterion.url -%]
+      - <a href="[% criterion.url %]">[%- criterion.name -%]</a>
+    [%- ELSE -%]
+      - [%- criterion.name -%]
+    [%- END -%]
   [%- END -%]
   [%- IF origin -%]
     - Things within [%- limit -%] of <a href="[% cgi_url %]?[%- origin_param -%]">[%- origin -%]</a>

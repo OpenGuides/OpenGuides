@@ -336,13 +336,26 @@ sub show_index {
     my %tt_vars;
     my @selnodes;
     if ( $args{type} and $args{value} ) {
-        @selnodes = $wiki->list_nodes_by_metadata(
-            metadata_type => $args{type},
-	    metadata_value => $args{value} );
-        $tt_vars{criterion} = {
-            type => $args{type},
-            name => $q->escapeHTML(ucfirst($args{type}) . " $args{value}"),
-	    url  => "$script_name?" . ucfirst($args{type}) . "_" . uri_escape($formatter->node_name_to_node_param($args{value})) };
+        if ( $args{type} eq "fuzzy_title_match" ) {
+            my %finds = $wiki->fuzzy_title_match( $args{value} );
+            @selnodes = sort { $finds{$a} <=> $finds{$b} } keys %finds;
+            $tt_vars{criterion} = {
+                type  => $args{type},  # for RDF version
+                value => $args{value}, # for RDF version
+                name  => $q->escapeHTML( "Fuzzy Title Match on '$args{value}'")
+	    };
+        } else {
+            @selnodes = $wiki->list_nodes_by_metadata(
+                metadata_type => $args{type},
+	        metadata_value => $args{value} );
+            $tt_vars{criterion} = {
+                type  => $args{type},
+                value => $args{value}, # for RDF version
+                name => $q->escapeHTML(ucfirst($args{type}) . " $args{value}"),
+	        url  => "$script_name?" . ucfirst($args{type}) . "_" .
+                  uri_escape($formatter->node_name_to_node_param($args{value}))
+            };
+        }
     } else {
         @selnodes = $wiki->list_all_nodes();
     }
