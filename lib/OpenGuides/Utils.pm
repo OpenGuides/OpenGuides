@@ -112,30 +112,30 @@ sub make_wiki_object {
                   my $link_title = $_[2] || "View all pages in $_[0] $_[1]";
                   return qq(<a href="$script_name?action=index;index_type=) . uri_escape(lc($_[0])) . qq(;index_value=) . uri_escape($_[1]) . qq(">$link_title</a>);
                 },
-	qr/\@RSS_FEED\s+\[(.*?)\]/ => sub { 
-                                            # Get the URL. It's already been formatted into a 
-                                            # hyperlink so we need to reverse that.
-	                                    my $url_raw = $_[0];
-	                                    $url_raw =~ />(.*?)</;
-	                                    my $url = $1;
+	qr/\@RSS\s+\[(.*?)\]/ => sub { 
+                                      # Get the URL. It's already been formatted into a 
+                                      # hyperlink so we need to reverse that.
+                                      my $url_raw = $_[0];
+                                      $url_raw =~ />(.*?)</;
+                                      my $url = $1;
 
-                                            # Retrieve the RSS from the given URL.
-                                            my $rss = CGI::Wiki::Plugin::RSS::Reader->new(url => $url);
-                                            my @items = $rss->retrieve;
+                                      # Retrieve the RSS from the given URL.
+                                      my $rss = CGI::Wiki::Plugin::RSS::Reader->new(url => $url);
+                                      my @items = $rss->retrieve;
 
-                                            # Ten items only at this till.
-                                            $#items = 10 if $#items > 10;
+                                      # Ten items only at this till.
+                                      $#items = 10 if $#items > 10;
 
-                                            # Make an HTML list with them.
-                                            my $list = "<ul>\n";
-                                            foreach (@items)
-                                            {
-                                              $list .= qq{\t<li><a href="} . $_->{link} . qq{">} . $_->{title} . "</a></li>\n";
-                                            }
-                                            $list .= "</ul>\n";
-
-                                            return $list;
-                                          }
+                                      # Make an HTML list with them.
+                                      my $list  = "<ul>\n";
+                                      foreach (@items)
+                                      {
+                                        my $link  = $_->{link};
+                                        my $title = $_->{title};
+                                        $list .= qq{\t<li><a href="$link">$title</a></li>\n};
+                                      }
+                                      $list .= "</ul>\n";
+                                    }
     );
 
     my $formatter = CGI::Wiki::Formatter::UseMod->new(
