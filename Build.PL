@@ -153,7 +153,8 @@ foreach my $qset (@questions) {
     my $qu  = $qset->{question};
     my $type = $qset->{type} || "";
     my $var = $qset->{variable};
-    my $def = $existing_config{$var} || $qset->{default};
+    my $def = defined $existing_config{$var} ? $existing_config{$var}
+                                             : $qset->{default};
     my $val = $def;
 
     if ( $dbtype eq "sqlite" and $var eq "dbname" ) {
