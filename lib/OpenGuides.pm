@@ -66,13 +66,19 @@ sub config {
 
 =item B<display_node>
 
+  # Print node to STDOUT.
   $guide->display_node(
                         id      => "Calthorpe Arms",
                         version => 2,
                       );
 
-Prints to STDOUT.  If C<version> is omitted then the latest version
-will be displayed.
+  # Or return output as a string (useful for writing tests).
+  $guide->display_node(
+                        id            => "Calthorpe Arms",
+                        return_output => 1,
+                      );
+
+If C<version> is omitted then the latest version will be displayed.
 
 =cut
 
