@@ -15,6 +15,16 @@ eval "use OpenGuides::Config";
 %existing_config = %OpenGuides::Config::config unless $@;
 
 my @questions = (
+{ question =>
+        "what's the name of the database that this site runs on?",
+  variable => "dbname"
+},
+{ question => "and the database user that can access that database?",
+  variable => "dbuser"
+  },
+{ question => "and the password that they use to access the database?",
+  variable => "dbpass"
+  },
 { question => "what do you want the script to be called?",
   variable => "script_name",
   default  => "wiki.cgi"
@@ -35,16 +45,6 @@ my @questions = (
 { question => "what's the URL of the wiki's stylesheet?",
   variable => "stylesheet_url"
 },
-{ question =>
-        "what's the name of the database that this site runs on?",
-  variable => "dbname"
-},
-{ question => "and the database user that can access that database?",
-  variable => "dbuser"
-  },
-{ question => "and the password that they use to access the database?",
-  variable => "dbpass"
-  },
 { question => "what's the wiki called?",
   variable => "site_name",
   default  => "OpenGuides Wiki"
