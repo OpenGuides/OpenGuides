@@ -110,6 +110,13 @@ sub differ {
                         return_output => 1,
                       );
 
+  # Or return the hash of variables that will be passed to the template
+  # (not including those set additionally by OpenGuides::Template).
+  $guide->display_node(
+                        id             => "Calthorpe Arms",
+                        return_tt_vars => 1,
+                      );
+
 If C<version> is omitted then the latest version will be displayed.
 
 =cut
@@ -118,7 +125,7 @@ sub display_node {
     my ($self, %args) = @_;
     my $return_output = $args{return_output} || 0;
     my $version = $args{version};
-    my $id = $args{id} || "Home";
+    my $id = $args{id} || $self->config->{_}->{home_name};
     my $wiki = $self->wiki;
     my $config = $self->config;
 
@@ -192,6 +199,7 @@ sub display_node {
                        } @recent;
         $tt_vars{recent_changes} = \@recent;
         $tt_vars{days} = 7;
+        return %tt_vars if $args{return_tt_vars};
         my $output = $self->process_template(
                                           id            => $id,
                                           template      => "recent_changes.tt",
@@ -199,7 +207,7 @@ sub display_node {
                                             );
         return $output if $return_output;
         print $output;
-    } elsif ($id eq "Home") {
+    } elsif ( $id eq $self->config->{_}->{home_name} ) {
         my @recent = $wiki->list_recent_changes(
             last_n_changes => 10,
             metadata_was   => { edit_type => "Normal edit" },
@@ -212,6 +220,7 @@ sub display_node {
           . CGI->escape($wiki->formatter->node_name_to_node_param($_->{name})) }
                        } @recent;
         $tt_vars{recent_changes} = \@recent;
+        return %tt_vars if $args{return_tt_vars};
         my $output = $self->process_template(
                                               id            => $id,
                                               template      => "home_node.tt",
@@ -220,6 +229,7 @@ sub display_node {
         return $output if $return_output;
         print $output;
     } else {
+        return %tt_vars if $args{return_tt_vars};
         my $output = $self->process_template(
                                               id            => $id,
                                               template      => "node.tt",
