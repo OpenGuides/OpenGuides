@@ -60,5 +60,5 @@ like( $diff_vars{content}, qr/^<p>Best pie is apple pie.<\/p>\s+$/,
 isa_ok( $diff_vars{diff}, "ARRAY", "diff returned as arrayref -" );
 my @diffs = @{$diff_vars{diff}};
 # Why is the first entry blank?
-like( $diffs[1]{right}, qr/<span class="diff2">meat<\/span>/,
+like( $diffs[1]{right}, qr/<span class="diff2">meat <\/span>/,
       "diffs done by word not by letter" );
