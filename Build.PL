@@ -175,6 +175,7 @@ my $build = OpenGuides::Build->new(
     dist_version_from => "wiki.cgi",
     license => "perl",
     requires => {
+        'Algorithm::Diff' => '0.13', # for sdiff 
 	'CGI' => 0,
 	'CGI::Carp' => 0,
 	'CGI::Cookie' => 0,
