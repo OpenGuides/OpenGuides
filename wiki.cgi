@@ -4,7 +4,7 @@ use strict;
 use warnings;
 
 use vars qw( $VERSION );
-$VERSION = '0.12';
+$VERSION = '0.13';
 
 use CGI qw/:standard/;
 use CGI::Carp qw(croak);
@@ -19,7 +19,7 @@ use Geography::NationalGrid::GB;
 use OpenGuides::CGI;
 use OpenGuides::RDF;
 use OpenGuides::Utils;
-use OpenGuides::Diff qw(display_node_diff);
+use OpenGuides::Diff;
 use OpenGuides::Template;
 use Time::Piece;
 use URI::Escape;
@@ -121,7 +121,18 @@ eval {
             my $version = $q->param("version");
 	    my $other_ver = $q->param("diffversion");
 	    if ( $other_ver ) {
-        	display_node_diff($wiki, $node, $version, $other_ver);
+                my %diff_vars = OpenGuides::Diff->formatted_diff_vars(
+                    wiki     => $wiki,
+                    node     => $node,
+                    versions => [ $version, $other_ver ]
+                );
+                print OpenGuides::Template->output(
+                    wiki     => $wiki,
+                    config   => $config,
+                    node     => $node,
+                    template => "differences.tt",
+                    vars     => \%diff_vars
+                );
 	    } else {
         	display_node($node, $version);
 	    }

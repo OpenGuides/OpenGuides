@@ -196,8 +196,8 @@ sub extract_tt_vars {
 	    my $point = Geography::NationalGrid::GB->new( Easting  => $os_x,
 							  Northing => $os_y );
 	    %tt_vars = ( %tt_vars,
-			 latitude  => $point->latitude,
-			 longitude => $point->longitude,
+			 latitude  => sprintf("%.6f", $point->latitude),
+			 longitude => sprintf("%.6f", $point->longitude),
 			 os_x      => $os_x,
 			 os_y      => $os_y
 	    );
