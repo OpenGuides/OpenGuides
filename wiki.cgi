@@ -39,7 +39,7 @@ my $site_desc = $config->{_}->{site_desc};
 my $default_city = $config->{_}->{default_city};
 my $default_country = $config->{_}->{default_country};
 my $contact_email = $config->{_}->{contact_email};
-my $search_url = $config->{_}->{search_url};
+my $search_url = $config->{_}->{script_url} . "/supersearch.cgi";
 my $template_path = $config->{_}->{template_path};
 # Make store.
 my $store = CGI::Wiki::Store::Pg->new(
