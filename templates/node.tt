@@ -56,7 +56,8 @@
 node</a></div>
 <div id="version">
 [% IF current %]
-Last edited [% last_modified %] (this is version [% version %]).
+Last edited [% last_modified %] (version [% version %]; <a href="[% cgi_url %]?id=[% node_param %]&version=[% version - 1 %]&diffvers
+ion=[% version %]">diff</a>).
 [% ELSE %]
 This is version [% version %] (as of [% last_modified %]). 
 <a href="[% cgi_url %]?[% node_param %]">View current version.</a> 
