@@ -69,10 +69,9 @@
 [% END %]
 
 <p>
-  <form action="wiki.cgi" method="get">
-    <input type="hidden" name="action" value="search" />
-    <input type="text" size="50" name="terms" />
-    <input type="submit" name="Search" value="Search" />
+  <form action="supersearch.cgi" method="get">
+    <input type="text" size="50" name="search" />
+    <input type="submit" name="Go" value="Search" />
   </form>
 </p>
 

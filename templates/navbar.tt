@@ -1,6 +1,5 @@
 <div id="toolbar">
 <!-- <div align="center"><a href="[% home_link %]"><img src="http://grault.net/grubstreet/grubstreet.gif" alt="" class="n"></a></div> -->
-<form method="post" action="[% cgi_url %]" enctype="application/x-www-form-urlencoded">
 <ul>
     <li><a href="[% home_link %]">[% home_name %]</a></li>
     <li><a href="[% cgi_url %]?RecentChanges">RecentChanges</a></li>
@@ -14,8 +13,9 @@
       <li><a href="[% cgi_url %]?id=[% node_param %];action=edit">Edit this page</a></li>
     </ul>
     [% END %]
+<form method="post" action="supersearch.cgi" enctype="application/x-www-form-urlencoded">
 <strong>Search:</strong><br>
 <input type="hidden" name="action" value="search" />
-<input type="text" size="15" name="terms" />
+<input type="text" size="15" name="search" />
 </form>
 </div>
