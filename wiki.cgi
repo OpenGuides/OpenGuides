@@ -93,7 +93,8 @@ my %conf = ( store     => $store,
 my ($wiki, $locator, $q);
 eval {
     $wiki = CGI::Wiki->new(%conf);
-    $locator = CGI::Wiki::Plugin::Locator::UK->new( wiki => $wiki );
+    $locator = CGI::Wiki::Plugin::Locator::UK->new;
+    $wiki->register_plugin( plugin => $locator );
 
     # Get CGI object, find out what to do.
     $q = CGI->new;
