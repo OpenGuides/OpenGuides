@@ -1,20 +1,23 @@
 <br clear="all" />
+
 <div id="search_form">
-<form action="supersearch.cgi" method="get">
-<strong><label for="search">Search [% site_name %]:</label></strong> <input type="text" size="50" name="search" id="search" value="Search text" onclick="this.value=''" /> 
-<input type="submit" name="Go" value="Go" id="go" class="form_button" />
-</form>
+  <form action="supersearch.cgi" method="get">
+    <strong><label for="search">Search [% site_name %]:</label></strong> <input type="text" size="50" name="search" id="search" value="Search text" onclick="this.value=''" /> 
+    <input type="submit" name="Go" value="Go" id="go" class="form_button" />
+  </form>
 </div>
+
 <div id="footer">
-[% IF enable_page_deletion %]
-  <p>
-  <a href="[% full_cgi_url %]?id=[% node_param %];action=delete">Delete page</a> (admins only)
-  </p>
-[% END %]
+  [% IF enable_page_deletion %]
+    <p>
+      <a href="[% full_cgi_url %]?id=[% node_param %];action=delete">Delete page</a> (admins only)
+    </p>
+  [% END %]
+
 <p>
-This wiki powered by <a
-href="http://openguides.org/">OpenGuides</a> (version [% openguides_version %]).
+  This wiki powered by <a href="http://openguides.org/">OpenGuides</a> (version [% openguides_version %]).
 </p>
+
 </div>
 </div>
 </body>

@@ -1,32 +1,37 @@
 [% INCLUDE header.tt %]
 [% INCLUDE banner.tt %]
+
 <div id="content">
-[% INCLUDE navbar.tt %]
-<h2>Site changes in the last [% days %] days</h2>
-[% content %]
-<table id="recentchanges" cellpadding="0" cellspacing="0" border="0" summary="Table containing the list of recent changes to this site">
-[% FOREACH node = recent_changes %]
-	<tr>
-		<td class="recentchanges_meta">[% node.last_modified %]
-		[% IF node.edit_type %]
-		([% node.edit_type %])
-		[% END %]</td>
-		<td class="recentchanges_user">
-                [% IF (node.username != 'Anonymous') %]
-		<a href="[% cgi_url %]?username=[% node.username %];action=userstats">[% node.username %]</a>
-		[% ELSE %]
-		<a href="[% cgi_url %]?username=[% node.host %];action=userstats">[% node.host %]</a>
-                [% END %]</td>
-	</tr>
-	<tr>
-		<td class="recentchanges_node_name"><a href="[% node.url %]">[% node.name %]</a></td>
-		<td class="recentchanges_comment">
-		[% IF node.comment %]
-			[% node.comment%]
-		[% ELSE %]
-			&nbsp;
-		[% END %]</td>
-	</tr>
-[% END %]
-</table>
+  [% INCLUDE navbar.tt %]
+  <h2>Site changes in the last [% days %] days</h2>
+  [% content %]
+  <table id="recentchanges" cellpadding="0" cellspacing="0" border="0" summary="Table containing the list of recent changes to this site">
+    [% FOREACH node = recent_changes %]
+      <tr>
+        <td class="recentchanges_meta">[% node.last_modified %]
+          [% IF node.edit_type %]
+            ([% node.edit_type %])
+          [% END %]
+        </td>
+        <td class="recentchanges_user">
+          [% IF (node.username != 'Anonymous') %]
+            <a href="[% cgi_url %]?username=[% node.username %];action=userstats">[% node.username %]</a>
+          [% ELSE %]
+            <a href="[% cgi_url %]?username=[% node.host %];action=userstats">[% node.host %]</a>
+          [% END %]
+        </td>
+      </tr>
+      <tr>
+        <td class="recentchanges_node_name"><a href="[% node.url %]">[% node.name %]</a></td>
+        <td class="recentchanges_comment">
+          [% IF node.comment %]
+            [% node.comment%]
+          [% ELSE %]
+            &nbsp;
+          [% END %]
+        </td>
+      </tr>
+    [% END %]
+  </table>
+
 [% INCLUDE footer.tt %]
