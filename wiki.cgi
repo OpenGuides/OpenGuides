@@ -167,8 +167,8 @@ sub show_userstats {
     croak "No username or host supplied to show_userstats"
         unless $username or $host;
     my %criteria = ( last_n_changes => 5 );
-    $criteria{metadata_is} = $username ? { username => $username }
-                                       : { host     => $host };
+    $criteria{metadata_was} = $username ? { username => $username }
+                                        : { host     => $host };
     my @nodes = $wiki->list_recent_changes( %criteria );
     @nodes = map { {name          => $q->escapeHTML($_->{name}),
 		    last_modified => $q->escapeHTML($_->{last_modified}),
