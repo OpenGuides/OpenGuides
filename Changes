@@ -1,4 +1,4 @@
-0.24    
+0.24    8 September 2003
         Fix to recent changes so minor changes don't mask major ones.
         Fixed supersearch.cgi to use a template instead of CGI.pm to avoid
           weird errors, also turned it into a module and added tests.
