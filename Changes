@@ -3,8 +3,14 @@
         Added MySQL support.
         Added PREREQUISITES file as requested by Cal.
         Fixed OpenGuides::Build to die if it can't find its prereqs.
-        Ivor did something to supersearch.cgi
-        Loads more shit I didn't write down.
+        Ivor did something to supersearch.cgi, not sure what.
+        Fixed bug noticed by Earle where website URLs were getting escaped
+          (added check with URI::Find before writing that we only allow
+           storage of an actual URL).
+        Fixed bug where nodes without location metadata were defaulting to
+          the origin of the British National Grid.
+        Improved docs.
+        Loads more stuff I didn't write down.
 
 0.02    23 April 2003
         Fixed stray content-type header in RDF full index output.

@@ -1,12 +1,13 @@
 Build.PL
 Changes
-lib/OpenGuides/Build.pm
-lib/OpenGuides/RDF.pm
+INSTALL
 MANIFEST
 META.yml
 PREREQUISITES
 README
 TROUBLESHOOTING
+lib/OpenGuides/Build.pm
+lib/OpenGuides/RDF.pm
 preferences.cgi
 supersearch.cgi
 templates/backlink_results.tt
