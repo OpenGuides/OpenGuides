@@ -1,7 +1,7 @@
 package OpenGuides::CGI;
 use strict;
 use vars qw( $VERSION );
-$VERSION = '0.04';
+$VERSION = '0.05';
 
 use Carp qw( croak );
 use CGI::Cookie;
@@ -33,6 +33,7 @@ This documentation is probably only useful to OpenGuides developers.
       latlong_traditional    => 1,
       omit_help_links        => 1,
       show_minor_edits_in_rc => 1,
+      default_edit_type      => "tidying",
   );
 
   my $wiki = OpenGuides::Utils->make_wiki_object( config => $config );
@@ -61,6 +62,7 @@ This documentation is probably only useful to OpenGuides developers.
       latlong_traditional    => 1,
       omit_help_links        => 1,
       show_minor_edits_in_rc => 1,
+      default_edit_type      => "tidying",
   );
 
 Croaks unless a L<Config::Tiny> object is supplied as C<config>.
@@ -84,6 +86,7 @@ sub make_prefs_cookie {
                     lltrad     => $args{latlong_traditional} || 0,
                     omithlplks => $args{omit_help_links} || 0,
                     rcmined    => $args{show_minor_edits_in_rc} || 0,
+                    defedit    => $args{default_edit_type} || "normal",
                   },
         -expires => "+1M",
     );
@@ -118,6 +121,7 @@ sub get_prefs_from_cookie {
              latlong_traditional    => $data{lltrad}    || 0,
              omit_help_links        => $data{omithlplks}|| 0,
              show_minor_edits_in_rc => $data{rcmined}   || 0,
+             default_edit_type      => $data{defedit}   || "normal",
            );
 }
 
@@ -136,7 +140,7 @@ The OpenGuides Project (openguides-dev@openguides.org)
 
 =head1 COPYRIGHT
 
-     Copyright (C) 2003 The OpenGuides Project.  All Rights Reserved.
+     Copyright (C) 2003-4 The OpenGuides Project.  All Rights Reserved.
 
 This module is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself.

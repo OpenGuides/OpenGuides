@@ -212,6 +212,8 @@ sub edit_node {
     my %node_data = $wiki->retrieve_node($node);
     my ($content, $checksum) = @node_data{ qw( content checksum ) };
     my $username = get_cookie( "username" );
+    my $edit_type = get_cookie( "default_edit_type" ) eq "normal" ?
+                        "Normal edit" : "Minor tidying";
 
     my %metadata_vars = OpenGuides::Template->extract_metadata_vars(
                              wiki     => $wiki,
@@ -221,7 +223,8 @@ sub edit_node {
     my %tt_vars = ( content    => $q->escapeHTML($content),
                     checksum   => $q->escapeHTML($checksum),
                     %metadata_vars,
-		    username   => $username
+		    username   => $username,
+                    edit_type  => $edit_type,
     );
 
     process_template("edit_form.tt", $node, \%tt_vars);

@@ -29,6 +29,7 @@ sub set_preferences {
     my $latlong_trad = $cgi->param("latlong_traditional")    || 0;
     my $omit_hlplnks = $cgi->param("omit_help_links")        || 0;
     my $rc_minor_eds = $cgi->param("show_minor_edits_in_rc") || 0;
+    my $edit_type    = $cgi->param("default_edit_type") || "normal";
     my $cookie = OpenGuides::CGI->make_prefs_cookie(
         config => $config,
         username => $username,
@@ -37,6 +38,7 @@ sub set_preferences {
         latlong_traditional    => $latlong_trad,
         omit_help_links        => $omit_hlplnks,
         show_minor_edits_in_rc => $rc_minor_eds,
+        default_edit_type      => $edit_type,
     );
     print OpenGuides::Template->output(
         wiki     => $wiki,
@@ -51,6 +53,7 @@ sub set_preferences {
                       latlong_traditional    => $latlong_trad,
                       omit_help_links        => $omit_hlplnks,
                       show_minor_edits_in_rc => $rc_minor_eds,
+                      default_edit_type      => $edit_type,
                     }
     );
 }

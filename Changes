@@ -16,6 +16,7 @@
           Advanced Search).
         Internal rejigging - extracted some methods from wiki.cgi to
           OpenGuides.pm.
+        Added new preference for default edit type.
 
 0.32    7 June 2004
         Change auto-creating behaviour of index nodes (categories and
