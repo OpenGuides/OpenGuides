@@ -14,7 +14,6 @@ use CGI::Wiki::Search::SII;
 use CGI::Wiki::Formatter::UseMod;
 use CGI::Wiki::Plugin::GeoCache;
 use CGI::Wiki::Plugin::Locator::UK;
-use CGI::Wiki::Plugin::RSS::ModWiki;
 use Config::Tiny;
 use Geography::NationalGrid;
 use Geography::NationalGrid::GB;
