@@ -4,9 +4,8 @@
     <li><a href="[% home_link %]">[% home_name %]</a></li>
     <li><a href="[% cgi_url %]?RecentChanges">RecentChanges</a></li>
     <li><a href="[% cgi_url %]?action=random">Random Page</a></li>
-    <li><a href="username.cgi">Preferences</a></li>
-    <li>Utilities</li>
-    <li>Add a page</li>
+    <li>[% geocache_link %]</li>
+    <li><a href="username.cgi">Set username</a></li>
     [% IF not_editable %]
     </ul><br />
     [% ELSE %]
