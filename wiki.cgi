@@ -29,7 +29,6 @@ my $config = Config::Tiny->read('wiki.conf');
 # Read in configuration values from config file.
 my $script_name = $config->{_}->{script_name};
 my $script_url = $config->{_}->{script_url};
-my $stylesheet_url = $config->{_}->{stylesheet_url};
 my $site_name = $config->{_}->{site_name};
 my $home_name = $config->{_}->{home_name};
 my $contact_email = $config->{_}->{contact_email};
@@ -550,7 +549,7 @@ sub process_template {
                     contact_email => $contact_email,
                     description   => "",
                     keywords      => "",
-                    stylesheet    => $stylesheet_url,
+                    stylesheet    => $config->{_}->{stylesheet_url},
                     home_link     => $script_name,
                     home_name     => $home_name );
 
