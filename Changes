@@ -1,6 +1,7 @@
-0.19    
-        Extra checks that script_url ends in a '/'
+0.19    25 June 2003
+        Extra checks that script_url ends in a '/'.
         Fixed small bug with edit conflict form - map link field was missing.
+        Moved "content" div in a couple of templates to fix incorrect nesting. 
         @INDEX_LINK macros now have optional title text like so:
           @INDEX_LINK [[Category Pubs|Pubs]]
 
