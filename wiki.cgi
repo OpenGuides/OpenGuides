@@ -1,4 +1,4 @@
-#!/usr/local/bin/perl -w
+#!/usr/local/bin/perl
 
 use strict;
 use warnings;
@@ -29,7 +29,8 @@ my $config = Config::Tiny->read('wiki.conf');
 
 # Read in configuration values from config file.
 my $script_name = $config->{_}->{script_name};
-my $script_url = $config->{_}->{script_url};
+my $script_url  = $config->{_}->{script_url};
+my $language    = $config->{_}->{default_language};
 
 # Ensure that script_url ends in a '/' - this is done in Build.PL but
 # we need to allow for people editing the config file by hand later.
@@ -46,7 +47,7 @@ eval {
     $q = CGI->new;
 
     # Note $q->param('keywords') gives you the entire param string.
-    # We need this because usemod has URLs like foo.com/wiki.pl?This_Page
+    # We need this to do URLs like foo.com/wiki.cgi?This_Page
     my $node = $q->param('id') || $q->param('title') || $q->param('keywords') || "";
     $node = $formatter->node_param_to_node_name( $node );
 
@@ -229,14 +230,17 @@ sub display_node {
 			    config   => $config,
                             metadata => $node_data{metadata} );
 
-    %tt_vars = ( %tt_vars,
+    %tt_vars = (
+                 %tt_vars,
 		 %metadata_vars,
 		 content       => $content,
 		 geocache_link => make_geocache_link($node),
 		 last_modified => $modified,
 		 version       => $node_data{version},
 		 node_name     => $q->escapeHTML($node),
-		 node_param    => $q->escape($node) );
+		 node_param    => $q->escape($node),
+                 language      => $language, );
+
 
     # We've undef'ed $version above if this is the current version.
     $tt_vars{current} = 1 unless $version;

@@ -48,12 +48,12 @@ my @questions = (
   default  => "n",
   type     => "y_n"
   },
-{ question => "What's the URL of the wiki's stylesheet?",
+{ question => "What's the URL of the site's stylesheet?",
   variable => "stylesheet_url"
 },
-{ question => "What's the wiki called? (should be unique)",
+{ question => "What's the site called? (should be unique)",
   variable => "site_name",
-  default  => "OpenGuides Wiki"
+  default  => "My OpenGuides Site"
   },
 { question => "Do you want the navigation bar included on the home page?",
   variable => "navbar_on_home_page",
@@ -64,19 +64,23 @@ my @questions = (
   variable => "home_name",
   default  => "Home"
   },
-{ question => "How would you describe the wiki?",
+{ question => "How would you describe the site?",
   variable => "site_desc",
-  default  => "Development site for openguides.org's software"
+  default  => "A guide to [my city]"
   },
-{ question => "What city is the wiki based in?",
+{ question => "What city is the site based in?",
   variable => "default_city",
   default  => "London"
   },
-{ question => "What country is the wiki based in?",
+{ question => "What country is the site based in?",
   variable => "default_country",
   default  => "United Kingdom"
   },
-{ question => "Contact email address for the wiki admin?",
+{ question => "What language will the site be in? (Please give an ISO language code.)",
+  variable => "default_language",
+  default  => "en"
+  },
+{ question => "Contact email address for the site administrator?",
   variable => "contact_email"
   },
 { question => "What's the name of the node to use for the text formatting rules link?",
@@ -110,7 +114,7 @@ EOF
 
 my @answers;
 
-# Database type is speshull - can be one of three.
+# It is an ancient Configurer, and he chooseth one of three. 
 my $dbtype;
 my $dbtype_qu = "what type of database do you want the site to run on?  postgres/mysql/sqlite";
 if ( $skip_config ) {

@@ -1,8 +1,8 @@
-#!/usr/bin/perl -w
+#!/usr/local/bin/perl -w
 
 use strict;
 use CGI;
-
+use lib '/home/earle/lib';
 use Config::Tiny;
 use OpenGuides::CGI;
 use OpenGuides::Utils;
@@ -12,6 +12,7 @@ my $config = Config::Tiny->read("wiki.conf");
 my $wiki = OpenGuides::Utils->make_wiki_object( config => $config );
 my $cgi = CGI->new();
 my $action = $cgi->param('action') || '';
+my $language = $config->{_}->{default_language};
 
 if ( $action eq "set_preferences" ) {
     set_preferences();
@@ -42,7 +43,9 @@ sub set_preferences {
         config   => $config,
         template => "preferences.tt",
         cookies  => $cookie,
-	vars     => { not_editable           => 1,
+	vars     => {
+                      language               => $language,
+                      not_editable           => 1,
                       username               => $username,
                       include_geocache_link  => $gc_link,
                       preview_above_edit_box => $pre_above,
@@ -62,6 +65,7 @@ sub show_form {
         config   => $config,
         template => "preferences.tt",
 	vars     => { %prefs,
+                      language     => $language,
                       not_editable => 1,
                       show_form    => 1
                     }
