@@ -4,7 +4,6 @@ use strict;
 use vars qw( $VERSION );
 $VERSION = '0.06';
 
-use lib '/home/earle/lib';
 use Carp qw( croak );
 use CGI::Wiki;
 use CGI::Wiki::Formatter::UseMod;
