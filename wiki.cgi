@@ -19,13 +19,13 @@ use Config::Tiny;
 use Geography::NationalGrid;
 use Geography::NationalGrid::GB;
 use OpenGuides::RDF;
+use OpenGuides::Utils;
 use Template;
 use Time::Piece;
 use URI::Escape;
 
 # config vars
-my $config = Config::Tiny->new;
-$config = Config::Tiny->read('wiki.conf');
+my $config = Config::Tiny->read('wiki.conf');
 
 # Read in configuration values from config file.
 my $script_name = $config->{_}->{script_name};
@@ -40,59 +40,10 @@ my $contact_email = $config->{_}->{contact_email};
 my $search_url = $config->{_}->{script_url} . "supersearch.cgi";
 my $template_path = $config->{_}->{template_path};
 
-# Require in the right database module.
-my $dbtype = $config->{_}->{dbtype};
-
-my %cgi_wiki_exts = ( postgres => "Pg",
-		      mysql    => "MySQL" );
-
-my $cgi_wiki_module = "CGI::Wiki::Store::" . $cgi_wiki_exts{$dbtype};
-eval "require $cgi_wiki_module";
-die "Can't 'require' $cgi_wiki_module.\n" if $@;
-
-# Make store.
-my $store = $cgi_wiki_module->new(
-    dbname => $config->{_}{dbname},
-    dbuser => $config->{_}{dbuser},
-    dbpass => $config->{_}{dbpass},
-);
-
-# Make search.
-my $indexdb = Search::InvertedIndex::DB::DB_File_SplitHash->new(
-    -map_name  => $config->{_}{indexing_directory},
-    -lock_mode => "EX"
-);
-my $search  = CGI::Wiki::Search::SII->new( indexdb => $indexdb );
-
-# Make formatter.
-my %macros = (
-    '@SEARCHBOX' =>
-        qq(<form action="$search_url" method="get">
-	   <input type="text" size="20" name="search">
-	   <input type="submit" name="Go" value="Search"></form>),
-    qr/\@INDEX_LINK\s+\[\[(Category|Locale)\s+([^\]]+)\]\]/ =>
-        sub { return qq(<a href="$script_name?action=index;index_type=) . uri_escape(lc($_[0])) . qq(;index_value=) . uri_escape($_[1]) . qq(">View all pages in $_[0] $_[1]</a>)
-            }
-);
-
-my $formatter = CGI::Wiki::Formatter::UseMod->new(
-    extended_links      => 1,
-    implicit_links      => 0,
-    allowed_tags        => [qw(a p b strong i em pre small img table td tr th
-			       br hr ul li center blockquote kbd div code
-			       strike sub sup font)],
-    macros              => \%macros,
-    node_prefix         => "$script_name?",
-    edit_prefix         => "$script_name?action=edit&id="
-);
-
-my %conf = ( store     => $store,
-             search    => $search,
-             formatter => $formatter );
-
-my ($wiki, $locator, $q);
+my ($wiki, $formatter, $locator, $q);
 eval {
-    $wiki = CGI::Wiki->new(%conf);
+    $wiki = OpenGuides::Utils->make_wiki_object( config => $config );
+    $formatter = $wiki->formatter;
     $locator = CGI::Wiki::Plugin::Locator::UK->new;
     $wiki->register_plugin( plugin => $locator );
 
