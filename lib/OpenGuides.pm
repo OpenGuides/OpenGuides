@@ -29,6 +29,8 @@ so the location features might not work so well outside the UK.
 
 =item * The OpenGuides development site, temporarily at L<http://un.earth.li/~kake/cgi-bin/wiki.cgi>
 
+=item * L<http://the.earth.li/~kake/cgi-bin/openguides/vegan-oxford.cgi>, an experimental OpenGuides install mirroring the Vegan Guide to Oxford at L<http://www.earth.li/~kake/vegan-oxford/>
+
 =item * grubstreet, the motivation behind OpenGuides; at L<http://grault.net/grubstreet/>
 
 =back
