@@ -14,7 +14,7 @@ use URI::Escape;
 
 use vars qw( $VERSION );
 
-$VERSION = '0.40';
+$VERSION = '0.41';
 
 =head1 NAME
 
@@ -330,6 +330,7 @@ sub display_diffs {
                                               );
     $diff_vars{not_deletable} = 1;
     $diff_vars{not_editable} = 1;
+    $diff_vars{deter_robots} = 1;
     return %diff_vars if $args{return_tt_vars};
     my $output = $self->process_template(
                                           id       => $args{id},
@@ -522,6 +523,7 @@ sub list_all_versions {
 		    version       => $curr_version,
                     not_deletable => 1,
                     not_editable  => 1,
+                    deter_robots  => 1,
 		    history       => \@history );
     return %tt_vars if $args{return_tt_vars};
     my $output = $self->process_template(
@@ -657,6 +659,7 @@ sub delete_node {
     my %tt_vars = (
                     not_editable  => 1,
                     not_deletable => 1,
+                    deter_robots  => 1,
                   );
     $tt_vars{delete_version} = $args{version} || "";
 

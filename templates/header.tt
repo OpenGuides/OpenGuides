@@ -29,5 +29,8 @@
   [% IF rss_link %]
     <link rel="alternate" type="application/rss+xml" title="RSS feed for this page" href="[% rss_link %]">
   [% END %]
+  [% IF deter_robots %]
+    <meta robots="noindex" />
+  [% END %]
 </head>
 <body>

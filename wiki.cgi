@@ -4,7 +4,7 @@ use strict;
 use warnings;
 
 use vars qw( $VERSION );
-$VERSION = '0.40';
+$VERSION = '0.41';
 
 use CGI qw/:standard/;
 use CGI::Carp qw(croak);
@@ -248,11 +248,12 @@ sub edit_node {
                              config   => $config,
 			     metadata => $node_data{metadata} );
 
-    my %tt_vars = ( content    => $q->escapeHTML($content),
-                    checksum   => $q->escapeHTML($checksum),
+    my %tt_vars = ( content         => $q->escapeHTML($content),
+                    checksum        => $q->escapeHTML($checksum),
                     %metadata_vars,
-		    username   => $username,
-                    edit_type  => $edit_type,
+		    username        => $username,
+                    edit_type       => $edit_type,
+                    deter_robots    => 1,
     );
 
     process_template("edit_form.tt", $node, \%tt_vars);
@@ -322,6 +323,7 @@ sub show_backlinks {
     my %tt_vars = ( results       => \@results,
                     num_results   => scalar @results,
                     not_deletable => 1,
+                    deter_robots  => 1,
                     not_editable  => 1 );
     process_template("backlink_results.tt", $node, \%tt_vars);
 }
@@ -345,6 +347,7 @@ sub show_wanted_pages {
                       "",
                       { not_editable  => 1,
                         not_deletable => 1,
+                        deter_robots  => 1,
                         wanted        => \@wanted } );
 }
 
