@@ -1,0 +1,246 @@
+This document specifies all the classes and IDs you can use to create a
+stylesheet for OpenGuides.
+
+Classes
+-------
+
+a.home_link
+    Used in: search_results.tt
+    Purpose: Link to the home page of the site, in the search results page
+
+div.edit_page_link
+    Used in: navbar.tt
+    Purpose: Link to the edit page function, in the navbar
+
+div.navbar_group
+    Used in: navbar.tt
+    Purpose: Defines a related set of navigation bar functions
+
+div.navbar_group_title
+    Used in: navbar.tt
+    Purpose: Titles a related set of navigation bar functions
+
+div.navbar_item
+    Used in: navbar.tt
+    Purpose: Defines an item in the navigation bar
+
+div.warning_text
+    Used in: edit_conflict.tt
+    Purpose: Warns the user that there is an edit conflict
+
+input.form_button
+    Used in: differences.tt, edit_form.tt, footer.tt, navbar.tt, newpage.tt,
+	     node.tt, preferences.tt, supersearch.tt
+    Purpose: A standard form button
+
+label.hidden
+    Used in: navbar.tt
+    Purpose: A label for the search box that will be hidden for users with
+             a CSS-conforming user agent
+
+h2.nodename
+    Used in: node.tt
+    Purpose: Displays the node name
+
+span.hidden
+    Used in: navbar.tt
+    Purpose: Defines content that will be hidden for users with a
+             CSS-conforming user agent
+
+td.label
+    Used in: edit_conflict.tt, edit_form.tt
+    Purpose: Defines a label for a field
+
+td.recentchanges_comment
+    Used in: recent_changes.tt
+    Purpose: The user's comment on a change
+
+td.recentchanges_meta
+    Used in: recent_changes.tt
+    Purpose: Miscellaneous information about a change
+
+td.recentchanges_node_name
+    Used in: recent_changes.tt
+    Purpose: Name of a node that was changed
+
+td.recentchanges_user
+    Used in: recent_changes.tt
+    Purpose: User who made a change
+
+IDs
+---
+	
+div#banner
+    Used in: banner.tt
+    Purpose: The site banner/title
+
+div#categories_and_locales
+    Used in: display_categories.tt
+    Purpose: Displays the index a node belongs to
+
+div#content
+    Used in: backlink_results.tt, delete_confirm.tt, delete_done.tt,
+	     delete_password_wrong.tt, edit_conflict.tt, edit_form.tt,
+	     home_node.tt, newpage.tt, node.tt, preferences.tt,
+	     recent_changes.tt, search_results.tt, site_index.tt,
+	     supersearch.tt, userstats.tt, wanted_pages.tt
+    Purpose: Defines the main textual content of the page
+
+div#coordinates
+    Used in: node.tt
+    Purpose: The physical coordinates of the node
+
+div#find_within_distance
+    Used in: node.tt
+    Purpose: A section of the node display that allows the user to search
+             for other nodes close by
+
+div#footer
+    Used in: footer.tt
+    Purpose: The bottom portion of the page
+
+div#header
+    Used in: search_results.tt
+    Purpose: The first part of the page, containing the site name
+
+div#metadata
+    Used in: display_metadata.tt
+    Purpose: The section of the node display with a list of metadata
+
+div#navbar
+    Used in: navbar.tt
+    Purpose: The navigation bar
+
+div#rdf_link
+    Used in: node.tt
+    Purpose: Link to an RDF version of the node
+
+div#recent
+    Used in: home_node.tt
+    Purpose: Recent changes summary box on the home node
+
+div#search_form
+    Used in: footer.tt
+    Purpose: The search form at the bottom of the page
+
+div#version
+    Used it: node.tt
+    Purpose: Text describing the version of the node being displayed
+
+input#address
+    Used in: edit_conflict.tt, edit_form.tt
+    Purpose: An input field for the address of the node
+
+input#comment
+    Used in: openguides_information_boxes.tt
+    Purpose: An input field for the comment about the change made
+
+input#fax
+    Used in: edit_conflict.tt, edit_form.tt
+    Purpose: An input field for the fax number of the node
+
+input#geocache
+    Used in: preferences.tt
+    Purpose: An input field for the preference of whether to display
+             geocache links
+
+input#go
+    Used in: footer.tt, newpage.tt
+    Purpose: A standard button
+
+input#hours
+    Used in: edit_conflit.tt, edit_form.tt
+    Purpose: An input field for the opening hours of a node
+    
+input#latlong
+    Used in: preferences.tt
+    Purpose: An input field for the display preferences of latitude and
+             longitude
+
+input#map_link
+    Used in: edit_conflict.tt, edit_form.tt
+    Purpose: An input field for the map link of the node
+
+input#nav_search
+    Used in: navbar.tt
+    Purpose: The search input portion of the navigation bar
+
+input#omit_help
+    Used in: preferences.tt
+    Purpose: An input field for the preference of whether to include
+             help links
+
+input#os_x
+    Used in: edit_conflict.tt, edit_form.tt
+    Purpose: An input field for the OS X coordinate of the node
+
+input#os_y
+    Used in: edit_conflict.tt, edit_form.tt
+    Purpose: An input field for the OS Y coordinate of the node
+
+input#pagename
+    Used in: newpage.tt
+    Purpose: An input field for choosing the name of a new page
+
+input#phone
+    Used in: edit_conflict.tt, edit_form.tt
+    Purpose: An input field for the telephone number of the node
+
+input#postcode
+    Used in: edit_conflict.tt, edit_form.tt
+    Purpose: An input field for the postcode of the node
+	
+input#preview_above
+    Used in: preferences.tt
+    Purpose: An input field for the preference of where to display
+             node previews
+
+input#search
+    Used in: footer.tt
+    Purpose: An input field for the search at the bottom of the page
+
+input#search_lower
+    Used in: supersearch.tt
+    Purpose: An iput field for the lower search in the main search page
+
+input#search_upper
+    Used in: supersearch.tt
+    Purpose: An input field for the upper search in the main search page
+
+input#show_minor
+    Used in: preferences.tt
+    Purpose: An input field for the preference of whether to display
+             minor changes
+
+input#username
+    Used in: openguides_information_boxes.tt, preferences.tt
+    Purpose: An input field for entering the username making changes
+
+input#website
+    Used in: edit_conflict.tt, edit_form.tt
+    Purpose: An input field for the web site of the node
+
+select#distance
+    Used in: node.tt
+    Purpose: A selection of how far to search in the "find nearby nodes"
+             function
+
+select#edit_type
+    Used in: openguides_information_boxes.tt
+    Purpose: A selection of whether the change is minor or major
+
+table#recentchanges
+    Used in: recent_changes.tt
+    Purpose: The main display table of the recent changes page
+
+textarea#categories
+    Used in: edit_conflict.tt, edit_form.tt
+    Purpose: An box to enter the categories of the node
+
+textarea#content
+    Used in: edit_conflict.tt, edit_form.tt
+    Purpose: A box to enter the main conent of the node
+
+textarea#locales
+    Used in: edit_conflict.tt, edit_form.tt
+    Purpose: A box to enter the locales of the node
