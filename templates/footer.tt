@@ -1,5 +1,5 @@
 <div align="right">
-<p>Powered by <a href="http://search.cpan.org/author/KAKE/OpenGuides/">OpenGuides</a> (version [% openguides_version %]).</p>
+<p>Powered by <a href="http://openguides.org/">OpenGuides</a> (version [% openguides_version %]).</p>
 </div>
 </body>
 </html>
