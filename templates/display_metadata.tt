@@ -12,7 +12,7 @@
         <label>Categories:</label>
         [% FOREACH category = categories %]
           <a href="[% category.url %]">[% category.name %]</a>
-          [%- "/" UNLESS loop.last %]
+          [% "/" UNLESS loop.last %]
         [% END %]
       </li>
     [% END %]
@@ -22,7 +22,7 @@
         <label>Locale:</label>
         [% FOREACH locale = locales %]
           <a href="[% locale.url %]">[% locale.name %]</a>
-          [%- "/" UNLESS loop.last %]
+          [% "/" UNLESS loop.last %]
         [% END %]
       </li>
     [% END %]
