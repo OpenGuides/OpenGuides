@@ -6,6 +6,7 @@ META.yml
 PREREQUISITES
 README
 TROUBLESHOOTING
+examples/oxfordguide.css
 lib/OpenGuides/Build.pm
 lib/OpenGuides/CGI.pm
 lib/OpenGuides/Diff.pm

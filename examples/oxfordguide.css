@@ -1,0 +1,38 @@
+/* This CSS was contributed by James Davis.
+   Modified by the Oxford Guides team. */
+
+body {
+	color : #000000;
+	background-color : #ffffff ;
+	font-family: verdana, arial, helvetica, sans-serif
+}
+#toolbar {
+	border-bottom: 1px dotted;
+	padding:5px;
+	background-color : #eee;
+	color : #000000;
+}
+
+#content {
+	border-top: 1px solid;
+	border-left: 1px solid ;
+	border-right: 1px solid ;
+	border-bottom: 1px solid;
+	padding:5px;
+}
+
+SPAN.navtool{
+	font-family: verdana, arial, helvetica, sans-serif;
+}
+
+SPAN.searchtool{
+	font-family: verdana, arial, helvetica, sans-serif;
+}
+
+small { font-family: verdana, arial, helvetica, sans-serif; }
+H1 { font-family: verdana, arial, helvetica, sans-serif; font-weight: bold;}
+HR {
+	height: 2px;
+	color : #FFFFFF;
+	background-color:#FFFFFF;
+}
