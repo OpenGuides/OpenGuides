@@ -70,6 +70,17 @@ a:hover
   margin-bottom: 0em
 }
 
+/* The "Search" label, text field and "Go" button in the navbar */
+.search_group
+{
+}
+ 
+/* The "Search" label itself */
+.search_label
+{
+  font-weight: bold
+}
+
 /* The link on all nodes saying "edit this page" */
 .edit_page_link
 {
