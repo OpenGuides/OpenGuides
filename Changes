@@ -1,6 +1,9 @@
         Fixed bug that prevented automatic database initialization on
 	  SQLite databases.
 	Doc fix for private installations.
+	Removed the following characters from the list of forbidden ones in 
+        node names in newpage.cgi (a restriction which dates from all the way
+        back when we were using UseModWiki): " ! $ ^ ~ @ [ ] { }
 
 0.30    2 January 2003
         Added method to allow admins to delete nodes.  You will need to
