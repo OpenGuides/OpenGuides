@@ -1,3 +1,6 @@
+0.13    
+        Added some more stylesheet hooks.
+
 0.12    14 May 2003
         Added OpenGuides::CGI to manage cookies and things, used this to
         do more code tidying.  Added edit box position option to preferences.
