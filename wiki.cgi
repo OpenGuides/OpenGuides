@@ -202,54 +202,20 @@ sub display_node {
     my $content    = $wiki->format($raw);
     my $modified   = $node_data{last_modified};
     my %metadata   = %{$node_data{metadata}};
-    my $catref     = $metadata{category};
-    my $locref     = $metadata{locale};
-    my $phone      = $metadata{phone}[0];
-    my $fax        = $metadata{fax}[0];
-    my $website    = $metadata{website}[0];
-    my $address    = $metadata{address}[0];
-    my $hours_text = $metadata{opening_hours_text}[0];
-    my $postcode   = $metadata{postcode}[0];
-    my $os_x       = $metadata{os_x}[0];
-    my $os_y       = $metadata{os_y}[0];
-    my $latitude   = $metadata{latitude}[0];
-    my $longitude  = $metadata{longitude}[0];
-    my $geocache_link = make_geocache_link($node);
 
-    # The 'website' attribute might contain a URL so we wiki-format it here
-    # rather than just CGI::escapeHTMLing it all in the template.
-    my $formatted_website_text;
-    if ( $website ) {
-        $formatted_website_text = _format_website($website);
-    }
+    my %metadata_vars = OpenGuides::Template->extract_tt_vars(
+                            wiki     => $wiki,
+			    config   => $config,
+                            metadata => $node_data{metadata} );
 
-    my @categories = map { { name => $_,
-                             url  => "$script_name?Category_"
-            . uri_escape($formatter->node_name_to_node_param($_)) } } @$catref;
-
-    my @locales    = map { { name => $_,
-                             url  => "$script_name?Locale_"
-            . uri_escape($formatter->node_name_to_node_param($_)) } } @$locref;
-
-    %tt_vars = (    %tt_vars,
-		    content       => $content,
-                    categories    => \@categories,
-		    locales       => \@locales,
-		    phone         => $phone,
-                    fax           => $fax,
-		    formatted_website_text => $formatted_website_text,
-		    hours_text    => $hours_text,
-		    address       => $address,
-		    postcode      => $postcode,
-		    os_x          => $os_x,
-		    os_y          => $os_y,
-		    latitude      => $latitude,
-		    longitude     => $longitude,
-		    geocache_link => $geocache_link,
-		    last_modified => $modified,
-		    version       => $node_data{version},
-		    node_name     => $q->escapeHTML($node),
-		    node_param    => $q->escape($node) );
+    %tt_vars = ( %tt_vars,
+		 %metadata_vars,
+		 content       => $content,
+		 geocache_link => make_geocache_link($node),
+		 last_modified => $modified,
+		 version       => $node_data{version},
+		 node_name     => $q->escapeHTML($node),
+		 node_param    => $q->escape($node) );
 
     # We've undef'ed $version above if this is the current version.
     $tt_vars{current} = 1 unless $version;
@@ -399,7 +365,9 @@ sub preview_node {
     my $website = $q->param('website');
     my $formatted_website_text;
     if ( $website ) {
-        $formatted_website_text = _format_website($website);
+        $formatted_website_text = OpenGuides::Template->format_website_text(
+                                      formatter => $formatter,
+                                      text      => $website );
     }
 
     my %tt_metadata_vars = (
@@ -648,17 +616,4 @@ sub show_backlinks {
                     num_results  => scalar @results,
                     not_editable => 1 );
     process_template("backlink_results.tt", $node, \%tt_vars);
-}
-
-
-sub _format_website {
-    my $text = shift;
-    my $formatted = $wiki->format($text);
-
-    # Strip out paragraph markers put in by formatter since we want this
-    # to be a single string to put in a <ul>.
-    $formatted =~ s/<p>//g;
-    $formatted =~ s/<\/p>//g;
-
-    return $formatted;
 }
