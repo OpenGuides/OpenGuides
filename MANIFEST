@@ -62,6 +62,7 @@ t/33_supersearch_advanced_search.t
 t/34_supersearch_paging.t
 t/35_supersearch_two_searches.t
 t/36_supersearch_order.t
+t/37_supersearch_summaries.t
 t/41_deletion.t
 t/51_display_node.t
 t/52_display_diffs.t

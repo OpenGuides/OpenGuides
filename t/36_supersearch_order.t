@@ -8,7 +8,7 @@ eval { require DBD::SQLite; };
 if ( $@ ) {
     plan skip_all => "DBD::SQLite not installed";
 } else {
-    plan tests => 7;
+    plan tests => 9;
 
     # Clear out the database from any previous runs.
     unlink "t/node.db";
@@ -115,5 +115,19 @@ if ( $@ ) {
     %scores = map { $_->{name} => $_->{score} } @{$tt_vars{results} || []};
     ok( $scores{Borough_Market} < $scores{Spitalfields_Market},
         "words closer together gives higher score" );
+
+    # Check that the number of occurrences of the search term is significant.
+
+    $wiki->write_node( "Pub Crawls", "The basic premise of the pub crawl is to visit a succession of pubs, rather than spending the entire evening or day in a single establishment. London offers an excellent choice of themes for your pub crawl.", undef, { category => "Pubs" } ) or die "Can't write node";
+    $wiki->write_node( "The Pub", "A pub.", undef, { category => "Pubs" } ) or die "Can't write node";
+
+    %tt_vars = $search->run(
+                             return_tt_vars => 1,
+                             vars           => { search => "pub" }
+                           );
+    is( $tt_vars{results}[0]{name}, "Pub_Crawls",
+        "node with two mentions of search term comes top" );
+    ok( $tt_vars{results}[0]{score} > $tt_vars{results}[1]{score},
+        "...with a score strictly greater than node with one mention" );
 
 }
