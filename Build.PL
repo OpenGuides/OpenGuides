@@ -282,7 +282,6 @@ $build->{config}{__templates}         = [
                       "delete_done.tt",
                       "delete_password_wrong.tt",
                       "differences.tt",
-		      "display_categories.tt",
 		      "display_metadata.tt",
                       "edit_conflict.tt",
                       "edit_form.tt",

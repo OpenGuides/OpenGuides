@@ -1,3 +1,6 @@
+        Remove all traces of display_categories, which was obsoleted but
+	not completely removed before.
+
 0.43    21 October 2004
         Fix broken navbar changes that crept into last release.
 

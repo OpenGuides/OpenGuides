@@ -10,8 +10,6 @@
 
   <br clear="all" />
 
-  [% INCLUDE display_categories.tt %]
-
 [% END %]
 
 <form action="[% cgi_url %]" method="POST" enctype="application/x-www-form-urlencoded">
@@ -120,8 +118,6 @@
   [% preview_html %]
 
   <br clear="all" />
-
-  [% INCLUDE display_categories.tt %]
 
 [% END %]
 
