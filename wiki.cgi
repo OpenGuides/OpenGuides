@@ -401,9 +401,7 @@ sub edit_node {
 
 sub get_cookie {
     my $pref_name = shift or return "";
-warn "[$pref_name]";
     my %cookie_data = OpenGuides::CGI->get_prefs_from_cookie(config=>$config);
-warn "[$cookie_data{$pref_name}]";
     return $cookie_data{$pref_name};
 }
 

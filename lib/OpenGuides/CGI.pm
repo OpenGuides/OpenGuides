@@ -67,7 +67,6 @@ sub make_prefs_cookie {
     croak "Config object not a Config::Tiny"
         unless UNIVERSAL::isa( $config, "Config::Tiny" );
     my $cookie_name = $class->_get_cookie_name( config => $config );
-warn "[$cookie_name]";
     my $cookie = CGI::Cookie->new(
         -name  => $cookie_name,
 	-value => { user   => $args{username},
@@ -96,11 +95,9 @@ sub get_prefs_from_cookie {
     my %cookies = CGI::Cookie->fetch;
     my $cookie_name = $class->_get_cookie_name( config => $config );
     my %data;
-warn "[$cookie_name]";
     if ( $cookies{$cookie_name} ) {
         %data = $cookies{$cookie_name}->value; # call ->value in list context
     }
-use Data::Dumper; warn Dumper %data;
     return ( username               => $data{user} || "Anonymous",
              include_geocache_link  => $data{gclink} || 0,
              preview_above_edit_box => $data{prevab} || 0  );
