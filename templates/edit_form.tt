@@ -1,41 +1,100 @@
 [% INCLUDE header.tt %]
 
-<h1 align=center>[% site_name %] - Editing [% node_name %]</h1>
+<h1 align="center">Edit "[% node_name %]"</h1>
 
 <form action="[% cgi_url %]" method="POST" enctype="application/x-www-form-urlencoded">
-<b>Content:</b><br />
-<textarea name="content" rows="10" cols="70">[% content %]</textarea>
-<br />
-<b>Locales (newline-separated):</b><br />
-<textarea name="locales" rows="5" cols="70">
-[%- FOREACH locale = locales %]
-[%- locale %]
-[% END %]
-</textarea><br />
-<b>Categories (newline-separated):</b><br />
-<textarea name="categories" rows="5" cols="70">
-[%- FOREACH category = categories %]
-[%- category %]
-[% END %]
-</textarea><br />
-<b>Phone:</b> <input type="text" name="phone" value="[% phone %]"><br />
-<b>Fax:</b> <input type="text" name="fax" value="[% fax %]"><br />
-<b>Website:</b> <input type="text" size="70" name="website" value="[% website %]"><br />
-<b>Opening hours:</b> <input type="text" size="70" name="hours_text" value="[% hours_text %]"><br />
-<b>Postcode:</b> <input type="text" name="postcode" value="[% postcode %]"><br />
-<b>Address:</b> <input type="text" name="address" value="[% address %]"><br />
-<b>OS X co-ord:</b> <input type="text" name="os_x" value="[% os_x %]">
-<b>OS Y co-ord:</b> <input type="text" name="os_y" value="[% os_y %]"><br />
-<br />
-<b>Your username:</b> <input type="text" name="username" value="[% username %]"><br />
-<b>Comment:</b> <input type="text" size="70"name="comment" value="[% comment %]"><br />
+<table>
+	<tr>
+		<td colspan="2">
+		<fieldset>
+		<legend>Main information</legend>
+		<table>
+			<tr>
+				<td><strong>Content:</strong></td>
+				<td><textarea name="content" rows="21" cols="70">[% content %]</textarea></td>
+			</tr>
+			<tr>
+				<td><strong>Locales:</strong><br />(one per line)</td>
+				<td><textarea name="locales" rows="5" cols="70">
+				[%- FOREACH locale = locales %]
+				[%- locale %]
+				[% END %]
+				</textarea></td>
+			</tr>
+			<tr>
+				<td><strong>Categories:</strong><br />(one per line)</td>
+				<td><textarea name="categories" rows="5" cols="70">
+				[%- FOREACH category = categories %]
+				[%- category %]
+				[% END %]
+				</textarea></td>
+			</tr>
+		</table>
+		</fieldset>
+		&nbsp;
+		<fieldset>
+		<legend>Metadata</legend>
+		<table>
+			<tr>
+				<td><strong>Phone:</strong></td>
+				<td><input type="text" size="50" name="phone" value="[% phone %]"></td>
+			</tr>
+			<tr>
+				<td><strong>Fax:</strong></td>
+				<td><input type="text" size="50" name="fax" value="[% fax %]"></td>
+			</tr>
+        		<tr>
+				<td><strong>Website:</strong></td>
+				<td><input type="text" size="50" name="website" value="[% website %]"></td>
+			</tr>
+        		<tr>
+				<td><strong>Opening hours:</strong></td>
+				<td><input type="text" size="50" name="hours_text" value="[% hours_text %]"></td>
+			</tr>
+        		<tr>
+				<td><strong>Postcode:</strong></td>
+				<td><input type="text" size="50" name="postcode" value="[% postcode %]"></td>
+			</tr>
+        		<tr>
+				<td><strong>Address:</strong></td>
+				<td><input type="text" size="50" name="address" value="[% address %]"></td>
+			</tr>
+		        <tr>
+				<td><strong>OS X coordinate:</strong></td>
+				<td><input type="text" size="50" name="os_x" value="[% os_x %]">
+			</tr>
+		        <tr>
+				<td><strong>OS Y coordinate:</strong></td>
+				<td><input type="text" size="50" name="os_y" value="[% os_y %]"></td>
+			</tr>
+		</table>
+		</fieldset>
+		&nbsp;
+		<fieldset>
+		<legend>OpenGuides information</legend>
+		<table>
+		        <tr>
+				<td><strong>Your username (<a href="preferences.cgi">set</a>):</strong></td>
+				<td><input type="text" size="30" name="username" value="[% username %]"></td>
+			</tr>
+		        <tr>
+				<td><strong>Comment about your changes:</strong></td>
+				<td><input type="text" size="30" name="comment" value="[% comment %]"></td>
+			</tr>
+		</table>
+		</fieldset></td>
+	</tr>
+	<tr>
+		<td align="center"><input type="submit" name="preview" value="Preview changes" /></td>
+		<td align="center"><input type="submit" name="Save" value="Save changes" /></td>
+	</tr>
+	<tr>
+		<td colspan="2" align="center"><a href="[% cgi_url %]?[% node_param %]">(cancel edit)</a></td>
+	</tr>
+</table>
 <input type="hidden" name="title" value="[% node_name %]">
 <input type="hidden" name="checksum" value="[% checksum %]" />
-<input type="submit" name="preview" value="preview" />
-<input type="submit" name="Save" value="Save" />
 </form>
-
-<p><a href="[% cgi_url %]?[% node_param %]">Cancel edit</a></p>
 
 [% IF preview_html %]
   <h2>Preview</h2>
