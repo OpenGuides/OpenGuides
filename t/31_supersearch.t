@@ -65,6 +65,7 @@ SKIP: {
     $wiki->write_node( "Monkey Brains", "BRANES" );
     $wiki->write_node( "Want Pie Now", "weebl" );
     $wiki->write_node( "Punctuation", "*" );
+    $wiki->write_node( "Choice", "Eenie meenie minie mo");
 
     # Test with two hits first - simpler.
     %tt_vars = $search->run(
@@ -97,7 +98,7 @@ SKIP: {
     # Test the AND search
     $output = $search->run(
                             return_output => 1,
-                            vars          => { search => "monkey&banana" },
+                            vars          => { search => "monkey banana" },
                            );
     like( $output, qr/Location: http:\/\/example.com\/wiki.cgi\?Monkey/,
           "AND search returns right results" );
@@ -105,7 +106,7 @@ SKIP: {
     # Test the OR search
     %tt_vars = $search->run(
                              return_tt_vars => 1,
-                             vars           => { search => "brains|pie" },
+                             vars           => { search => "brains, pie" },
                            );
     @found = sort map { $_->{name} } @{ $tt_vars{results} || [] };
     is_deeply( \@found, [ "Monkey", "Monkey_Brains", "Want_Pie_Now" ],
@@ -117,17 +118,15 @@ SKIP: {
     skip "NOT search doesn't work yet", 1;
     %tt_vars = $search->run(
                              return_tt_vars => 1,
-                             vars           => { search => "!monkey" },
+                             vars           => { search => "banana !monkey" },
                            );
     @found = sort map { $_->{name} } @{ $tt_vars{results} || [] };
-    is_deeply( \@found, [ "Banana", "Want_Pie_Now" ],
+    is_deeply( \@found, [ "Banana" ],
                "NOT search returns right results" );
     print "# Found in $_\n" foreach @found;
 }
 
     # Test the phrase search
-SKIP: {
-    skip "phrase search doesn't work yet", 1;
     $output = $search->run(
                             return_output => 1,
                             vars          => { search => '"monkey brains"' },
@@ -136,7 +135,6 @@ SKIP: {
           qr/Location: http:\/\/example.com\/wiki.cgi\?Monkey_Brains/,    
           "phrase search returns right results"
         );
-}
 
     #####
     ##### Test numbering when we have more than a page of results.
@@ -155,3 +153,4 @@ SKIP: {
     like( $output, qr/ol start="21"/,
           "second page of results starts with right numbering" );
 }
+
