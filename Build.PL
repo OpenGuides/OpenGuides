@@ -120,6 +120,12 @@ foreach my $qset (@questions) {
     unless ( $skip_config ) {
         $val = Module::Build->prompt("\n$qu ", $def);
     }
+
+    # Make sure that script_url ends in a /
+    if ( $var eq "script_url" and $val !~ /\/$/ ) {
+        $val .= "/";
+    }
+
     push @answers, { question => $qu,
 		     variable => $var,
 		     value    => $val };
