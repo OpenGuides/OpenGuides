@@ -31,10 +31,7 @@ my $config = Config::Tiny->read('wiki.conf');
 # Read in configuration values from config file.
 my $script_name = $config->{_}->{script_name};
 my $script_url = $config->{_}->{script_url};
-my $site_name = $config->{_}->{site_name};
-my $home_name = $config->{_}->{home_name};
 my $contact_email = $config->{_}->{contact_email};
-my $template_path = $config->{_}->{template_path};
 
 my ($wiki, $formatter, $locator, $q);
 eval {
@@ -526,7 +523,7 @@ sub display_node_rdf {
 
 sub make_geocache_link {
     return "" unless get_cookie( "include_geocache_link" );
-    my $node = shift || $home_name;
+    my $node = shift || $config->{_}->{home_name};
     my %current_data = $wiki->retrieve_node( $node );
     my %criteria     = ( name => $node );
     my %node_data    = $wiki->retrieve_node( %criteria );
@@ -556,7 +553,7 @@ sub process_template {
     $conf ||= {};
 
     my %tt_vars = ( %$vars,
-                    site_name     => $site_name,
+                    site_name     => $config->{_}->{site_name},
                     cgi_url       => $script_name,
                     full_cgi_url  => $script_url . $script_name,
                     contact_email => $contact_email,
@@ -564,7 +561,7 @@ sub process_template {
                     keywords      => "",
                     stylesheet    => $config->{_}->{stylesheet_url},
                     home_link     => $script_name,
-                    home_name     => $home_name );
+                    home_name     => $config->{_}->{home_name} );
 
     if ($node) {
         $tt_vars{node_name} = $q->escapeHTML($node);
@@ -572,7 +569,7 @@ sub process_template {
     }
 
     my %tt_conf = ( %$conf,
-                INCLUDE_PATH => $template_path );
+                INCLUDE_PATH => $config->{_}->{template_path} );
 
     # Create Template object, print CGI header, process template.
     my $tt = Template->new(\%tt_conf);
