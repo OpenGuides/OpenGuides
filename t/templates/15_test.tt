@@ -15,3 +15,5 @@ NODE PARAM: [% node_param %]
 
 FORMATTING RULES LINK: [% formatting_rules_link %]
 OMIT FORMATTING LINK: [% omit_formatting_link %]
+
+ENABLE PAGE DELETION: [% enable_page_deletion %]

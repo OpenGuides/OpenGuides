@@ -72,6 +72,8 @@ in the config object or the user cookies.
 
 =item * C<full_cgi_url>
 
+=item * C<enable_page_deletion> (gets set to true or false - defaults to false)
+
 =item * C<contact_email>
 
 =item * C<stylesheet>
@@ -124,6 +126,14 @@ sub output {
                                . uri_escape($args{wiki}->formatter->node_name_to_node_param($formatting_rules_node));
     }
 
+    my $enable_page_deletion = 0;
+    if ( $config->{_}->{enable_page_deletion}
+         and ( lc($config->{_}->{enable_page_deletion}) eq "y"
+               or $config->{_}->{enable_page_deletion} eq "1" )
+       ) {
+        $enable_page_deletion = 1;
+    }
+
     my $tt_vars = { site_name             => $config->{_}->{site_name},
 	   	    cgi_url               => $script_name,
 		    full_cgi_url          => $script_url . $script_name,
@@ -135,6 +145,7 @@ sub output {
                     formatting_rules_link => $formatting_rules_link,
                     formatting_rules_node => $formatting_rules_node,
                     openguides_version    => $OpenGuides::VERSION,
+                    enable_page_deletion  => $enable_page_deletion,
     };
 
     if ($args{node}) {

@@ -91,10 +91,21 @@ dedicated user - 'nobody' or 'www-data' for example, but for many
 multi-user systems this will just be yourself.
 
 
+  "Do you want to enable page deletion?"
+
+The default is to disable page deletion.  If you choose to enable the
+page deletion mechanism then you will need to add a password to your
+wiki.conf using a line such as
+  admin_pass = putyourpasswordhere
+Users who know this password will be able to delete unwanted pages -
+along with all their history - from your wiki.
+*** USE WITH CAUTION.  DELETED PAGES CANNOT BE RECOVERED. ***
+
+
   "What's the URL of the wiki's stylesheet?"
 
-Supplying an answer to this question is optional.  There is an example
-stylesheet in the examples/ directory - note that this will not be 
+Supplying an answer to this question is optional.  There are example
+stylesheets in the examples/ directory - note that these will not be 
 automatically installed.
 
 

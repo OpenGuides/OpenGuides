@@ -8,6 +8,7 @@ CGI::Cookie
 CGI::Wiki (version 0.49 or later)
 CGI::Wiki::Formatter::UseMod (version 0.09 or later)
 CGI::Wiki::Plugin::Categoriser
+CGI::Wiki::Plugin::Diff
 CGI::Wiki::Plugin::GeoCache
 CGI::Wiki::Plugin::Locator::UK (version 0.06 or later)
 CGI::Wiki::Plugin::RSS::ModWiki (version 0.02 or later)
@@ -29,4 +30,3 @@ Template
 Test::MockObject (version 0.07 or later)
 Time::Piece
 URI::Escape
-VCS::Lite (version 0.04 or later)

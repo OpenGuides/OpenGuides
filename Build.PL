@@ -43,6 +43,11 @@ my @questions = (
   variable => "indexing_directory",
   default  => "/usr/lib/cgi-bin/openguides/indexes/"
   },
+{ question => "Do you want to enable page deletion?",
+  variable => "enable_page_deletion",
+  default  => "n",
+  type     => "y_n"
+  },
 { question => "What's the URL of the wiki's stylesheet?",
   variable => "stylesheet_url"
 },
@@ -159,7 +164,10 @@ foreach my $qset (@questions) {
 
     unless ( $skip_config ) {
         if ( $type eq "y_n" ) {
-            $def = $def ? "y" : "n";
+            # may be stored as true/false integer value
+            if ( $def =~ /^\d+$/ ) {
+                $def = $def ? "y" : "n";
+            }
             $val = Module::Build->y_n("\n$qu ", $def);
 	} else {
             $val = Module::Build->prompt("\n$qu ", $def);
@@ -193,6 +201,7 @@ close FILE or die "Can't close wiki.conf: $!";
 
 #####
 ##### When updating the prereqs PLEASE REMEMBER to update PREREQUISITES.
+##### Ivor, this means you too.
 #####
 
 # Create the build object.

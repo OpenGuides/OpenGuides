@@ -4,7 +4,7 @@ use strict;
 use warnings;
 
 use vars qw( $VERSION );
-$VERSION = '0.30_02';
+$VERSION = '0.30';
 
 use CGI qw/:standard/;
 use CGI::Carp qw(croak);
@@ -105,7 +105,10 @@ eval {
 			   origin => $node,
 			   origin_param => $formatter->node_name_to_node_param($node),
 			   limit  => "$metres metres" } );
-    } elsif ($action eq 'delete') {
+    } elsif ( $action eq 'delete'
+              and ( lc($config->{_}->{enable_page_deletion}) eq "y"
+                    or $config->{_}->{enable_page_deletion} eq "1" )
+            ) {
         delete_node($node);
     } elsif ($action eq 'userstats') {
         show_userstats( $username );

@@ -6,9 +6,11 @@
 </form>
 </div>
 <div id="footer">
-<p>
-<a href="[% full_cgi_url %]?id=[% node_param %];action=delete">Delete page</a> (admins only)
-</p>
+[% IF enable_page_deletion %]
+  <p>
+  <a href="[% full_cgi_url %]?id=[% node_param %];action=delete">Delete page</a> (admins only)
+  </p>
+[% END %]
 <p>
 This wiki powered by <a
 href="http://openguides.org/">OpenGuides</a> (version [% openguides_version %]).

@@ -1,15 +1,17 @@
-0.30    
-        Added method for adminds to delete nodes.
-        Major overhaul of templates. Added numerous style hooks and replaced
-          Oxford Guide stylesheet in examples/ with generic wiki.css that
-          takes advantage of them. Added new banner template for page
-          headers. Also ensured presence of navigation bar is consistent.
+0.30    29 December 2003
+        Added method to allow admins to delete nodes.  You will need to
+          explicitly enable this option in your wiki.conf, since it brings
+          with it the risk of accidental data loss.
+        Major overhaul of templates - added numerous style hooks.  See
+          examples/ for two stylesheet designs that take advantage of these.
+          Added new banner template for page headers. Also ensured presence
+          of navigation bar is consistent.
           *** INCOMPATIBLE CHANGE: *** The navbar class in the stylesheet
           has been renamed to, unsurprisingly, "navbar", for consistency 
-          (from "toolbar"). You are advised to create a duplicate wiki.cgi
-          that reads its data from your database but its stylesheet and 
-          templates from the new ones in order to test them *before* 
-          deploying them.
+          (from "toolbar"). *** YOU WILL NEED TO REWRITE YOUR STYLESHEET. ***
+          You are advised to create a duplicate wiki.cgi that reads its data
+          from your database but its stylesheet and templates from the new
+          ones in order to test them *before* deploying them.
         Added "FAQ", "How To Get Started" and "Wiki Etiquette" to the
           navigation, under "Help" - these won't exist unless you create them 
           on your site, so at first the links serve as examples of 

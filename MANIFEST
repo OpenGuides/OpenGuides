@@ -56,6 +56,7 @@ t/21_wiki.conf
 t/22_rss_modwiki.t
 t/31_supersearch.t
 t/32_supersearch_simple_metadata.t
+t/41_deletion.t
 t/51_diff.t
 t/61_bug_textareas.t
 t/62_bug_os_coords.t

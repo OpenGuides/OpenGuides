@@ -1,5 +1,5 @@
 use strict;
-use Test::More tests => 23;
+use Test::More tests => 28;
 use Config::Tiny;
 use Cwd;
 use CGI::Cookie;
@@ -149,3 +149,52 @@ $output = OpenGuides::Template->output(
 );
 like( $output, qr/OMIT FORMATTING LINK: fish/,
       "explicitly supplied TT vars override cookie ones" );
+
+# Test that enable_page_deletion is set correctly in various circumstances.
+$config = Config::Tiny->new;
+$config->{_}->{template_path} = cwd . "/t/templates";
+$config->{_}->{site_name} = "Test Site";
+
+$output = OpenGuides::Template->output(
+    wiki     => $fake_wiki,
+    config   => $config,
+    template => "15_test.tt",
+);
+like( $output, qr/ENABLE PAGE DELETION: 0/,
+      "enable_page_deletion var set correctly when not specified in conf" );
+
+$config->{_}->{enable_page_deletion} = "n";
+$output = OpenGuides::Template->output(
+    wiki     => $fake_wiki,
+    config   => $config,
+    template => "15_test.tt",
+);
+like( $output, qr/ENABLE PAGE DELETION: 0/,
+      "enable_page_deletion var set correctly when set to 'n' in conf" );
+
+$config->{_}->{enable_page_deletion} = "y";
+$output = OpenGuides::Template->output(
+    wiki     => $fake_wiki,
+    config   => $config,
+    template => "15_test.tt",
+);
+like( $output, qr/ENABLE PAGE DELETION: 1/,
+      "enable_page_deletion var set correctly when set to 'y' in conf" );
+
+$config->{_}->{enable_page_deletion} = 0;
+$output = OpenGuides::Template->output(
+    wiki     => $fake_wiki,
+    config   => $config,
+    template => "15_test.tt",
+);
+like( $output, qr/ENABLE PAGE DELETION: 0/,
+      "enable_page_deletion var set correctly when set to '0' in conf" );
+
+$config->{_}->{enable_page_deletion} = 1;
+$output = OpenGuides::Template->output(
+    wiki     => $fake_wiki,
+    config   => $config,
+    template => "15_test.tt",
+);
+like( $output, qr/ENABLE PAGE DELETION: 1/,
+      "enable_page_deletion var set correctly when set to '1' in conf" );
