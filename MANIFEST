@@ -12,6 +12,7 @@ lib/OpenGuides/Build.pm
 lib/OpenGuides/CGI.pm
 lib/OpenGuides/Diff.pm
 lib/OpenGuides/RDF.pm
+lib/OpenGuides/SuperSearch.pm
 lib/OpenGuides/Template.pm
 lib/OpenGuides/UK/PubCrawl.pm
 lib/OpenGuides/Utils.pm
