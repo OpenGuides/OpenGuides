@@ -6,6 +6,7 @@
 [% INCLUDE banner.tt %]
 <div id="content">
 [% INCLUDE navbar.tt %]
+<div id="maincontent">
 <h1>Deleted</h1>
 <p>
 [% IF delete_version %]
@@ -20,4 +21,5 @@ node <span class="node_name">[% node_name %]</span> was deleted.
   No other versions are stored, so this node is now completely erased.
 [% END %]
 </p>
+</div>
 [% INCLUDE footer.tt %]

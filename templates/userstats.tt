@@ -3,6 +3,7 @@
 [% INCLUDE banner.tt %]
 <div id="content">
 [% INCLUDE navbar.tt %]
+<div id="maincontent">
 <h2>
   User Stats for
     [% IF username %]
@@ -44,4 +45,5 @@
   </ul>
 [% END %]
 
+</div>
 [% INCLUDE footer.tt %]

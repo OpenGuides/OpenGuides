@@ -10,9 +10,8 @@
 <body>
 [% INCLUDE banner.tt %]
 <div id="content">
-<table border="0" cellpadding="0" cellspacing="0" width="100%" summary="Controls for setting your preferences on how this site functions">
-<tr>
-<td valign="top">
+[% INCLUDE navbar.tt %]
+<div id="maincontent">
 [% IF show_form %]
 
   <form action="preferences.cgi" method="post">
@@ -175,10 +174,5 @@
 </ul>
 
 [% END %]
-</td>
-<td valign="top">[% INCLUDE navbar.tt %]</td>
-</tr>
-</table>
 </div>
-</body>
-</html>
+[% INCLUDE footer.tt %]

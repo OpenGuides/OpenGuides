@@ -3,6 +3,7 @@
 [% INCLUDE banner.tt %]
 <div id="content">
 [% INCLUDE navbar.tt %]
+<div id="maincontent">
 [% IF current %]
   [% IF backlinks_in_title AND is_indexable_node %]
     <h2 class="node_name"><a href="[% cgi_url %]?action=index;index_type=[% CGI.escape(index_type) %];index_value=[% CGI.escape(index_value) %]">[% node_name %]</a></h2>
@@ -85,4 +86,5 @@ versions.</a>
 [% END %]
 </div>
 
+</div>
 [% INCLUDE footer.tt %]

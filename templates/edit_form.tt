@@ -1,6 +1,7 @@
 [% INCLUDE header.tt page_title = "Edit $node_name - $site_name" %]
 <div id="content">
 
+<div id="maincontent">
 <h1 align="center">Edit &quot;[% node_name %]&quot;</h1>
 
 [% IF preview_html AND preview_above_edit_box %]
@@ -120,4 +121,5 @@
   <br clear="all" />
 [% END %]
 
+</div>
 [% INCLUDE footer.tt %]

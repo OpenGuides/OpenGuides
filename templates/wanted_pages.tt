@@ -2,6 +2,7 @@
 [% INCLUDE banner.tt %]
 <div id="content">
 [% INCLUDE navbar.tt %]
+<div id="maincontent">
 <h2>Wanted Pages</h2>
 <p>
 These are nodes which have been linked to but do not yet exist.
@@ -16,4 +17,5 @@ These are nodes which have been linked to but do not yet exist.
   [% END %]
 </ul>
 
+</div>
 [% INCLUDE footer.tt %]

@@ -6,6 +6,7 @@
 [% INCLUDE banner.tt %]
 <div id="content">
 [% INCLUDE navbar.tt %]
+<div id="maincontent">
 
 <h1>Confirm Deletion</h1>
 <p>
@@ -33,4 +34,5 @@ page</a>.
   <input type="submit" value="Delete" />
 </form>
 
+</div>
 [% INCLUDE footer.tt %]

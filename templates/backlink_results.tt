@@ -2,6 +2,7 @@
 [% INCLUDE banner.tt %]
 <div id="content">
 [% INCLUDE navbar.tt %]
+<div id="maincontent">
 <h1 align=center>
   [% site_name %] - Backlinks to <span class="node_name">[% node_name %]</span>
 </h1>
@@ -14,4 +15,5 @@
   [% END %]
 </ul>
 
+</div>
 [% INCLUDE footer.tt %]

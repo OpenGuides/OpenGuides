@@ -1,11 +1,9 @@
 [% INCLUDE header.tt %]
-<div id="header">
-<h1><a href="?Home" class="home_link">[% site_name %]</a></h1>
-</div>
+[% INCLUDE banner.tt %]
 <div id="content">
-<table border="0" cellpadding="0" cellspacing="0" summary="Results of search queries are displayed here">
-	<tr>
-		<td><h2>Search Results for [% search_terms %]</h2>
+[% INCLUDE navbar.tt %]
+<div id="maincontent">
+<h2>Search Results for [% search_terms %]</h2>
 		<p>
 		[% num_results %] pages found:
 		</p>
@@ -14,8 +12,5 @@
 			<li><a href="[% cgi_url %]?[% hit.url %]">[% hit.title %]</a></li>
 		[% END %]
 		</ul></td>
-		<td valign="top">[% INCLUDE navbar.tt %]</td>
-	</tr>
-</table>
-
+</div>
 [% INCLUDE footer.tt %]

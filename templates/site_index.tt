@@ -6,6 +6,7 @@
 [% INCLUDE banner.tt %]
 <div id="content">
 [% INCLUDE navbar.tt %]
+<div id="maincontent">
 <h2>Node List
   [%- IF criterion -%]
     [%- IF criterion.url -%]
@@ -25,4 +26,5 @@
      </li>
   [% END %]
 </ol>
+</div>
 [% INCLUDE footer.tt %]

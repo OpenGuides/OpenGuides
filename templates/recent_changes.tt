@@ -2,7 +2,8 @@
 [% INCLUDE banner.tt %]
 
 <div id="content">
-  [% INCLUDE navbar.tt %]
+[% INCLUDE navbar.tt %]
+<div id="maincontent">
   <h2>Recent site changes</h2>
   [% UNLESS since %]
     [% content %]
@@ -78,4 +79,5 @@
 
 [% END %]
 
+</div>
 [% INCLUDE footer.tt %]

@@ -6,10 +6,8 @@
 [% INCLUDE header.tt %]
 [% INCLUDE banner.tt %]
 <div id="content">
-<table border="0" cellpadding="0" cellspacing="0" width="100%" 
-summary="Results of search queries are displayed here, and new searches can also be entered.">
-  <tr>
-    <td valign="top">
+[% INCLUDE navbar.tt %]
+<div id="maincontent">
   [% IF search_terms %]
   <h2>Search Results for <em>[% search_terms %]</em></h2>
     [% IF results.size %]
@@ -112,9 +110,5 @@ summary="Results of search queries are displayed here, and new searches can also
   </form>
   [% END %]
 
-    </td>
-    <td valign="top">[% INCLUDE navbar.tt %]</td>
-  </tr>
-</table>
-
+</div>
 [% INCLUDE footer.tt %]

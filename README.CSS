@@ -92,12 +92,14 @@ div#banner
     Purpose: The site banner/title
 
 div#content
+div#maincontent
     Used in: backlink_results.tt, delete_confirm.tt, delete_done.tt,
 	     delete_password_wrong.tt, edit_conflict.tt, edit_form.tt,
 	     home_node.tt, newpage.tt, node.tt, preferences.tt,
 	     recent_changes.tt, search_results.tt, site_index.tt,
 	     supersearch.tt, userstats.tt, wanted_pages.tt
     Purpose: Defines the main textual content of the page
+             content includes the navbar and footer; maincontent does not
 
 div#coordinates
     Used in: node.tt
