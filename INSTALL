@@ -162,6 +162,12 @@ need to put the name of that node in here for it to work, though.  You
 might want to call the node "Text Formatting Examples", "Text
 Formatting Rules", "House Style" or whatever.
 
+* Custom templates and CSS
+
+Once you have installed OpenGuides you may wish to edit templates that
+provide site-specific design. These templates are stored in the directory
+templates/custom and are described in the file CUSTOMISATION. The id and
+class tags used for the CSS in OpenGuides are specified in README.CSS.
 
 * Web server configuration
 
