@@ -17,6 +17,7 @@ templates/home_node.tt
 templates/navbar.tt
 templates/node.tt
 templates/node_history.tt
+templates/preferences.tt
 templates/rdf_index.tt
 templates/recent_changes.tt
 templates/search_results.tt
