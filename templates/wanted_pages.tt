@@ -1,4 +1,4 @@
-[% INCLUDE header.tt %]
+[% INCLUDE header.tt page_title = "Wanted Pages - $site_name" %]
 [% INCLUDE banner.tt %]
 <div id="content">
 [% INCLUDE navbar.tt %]
