@@ -33,7 +33,11 @@
 
 <dl>
   [% FOREACH node = recent_changes %]
-  <dt><a href="[% node.url %]">[% node.name %]</a></dt>
+  <dt><a href="[% node.url %]">[% node.name %]</a>
+  [% IF node.version == "1" %]
+    [new]
+  [% END %]
+  </dt>
   [% IF node.comment or node.username %]
     <dd>
       [% node.comment %]

@@ -278,6 +278,7 @@ sub display_node {
         );
         @recent = map { {name          => CGI->escapeHTML($_->{name}),
                          last_modified => CGI->escapeHTML($_->{last_modified}),
+                         version       => CGI->escapeHTML($_->{version}),
                          comment       => CGI->escapeHTML($_->{metadata}{comment}[0]),
                          username      => CGI->escapeHTML($_->{metadata}{username}[0]),
                          url           => $config->script_name . "?"
