@@ -457,7 +457,7 @@ sub matched_NOT {
 
 =head1 NAME
 
-search.pl - Enhancement to Usemod Wiki for searches
+supersearch.cgi - Search script for OpenGuides.
 
 =head1 SYNOPSIS
 
@@ -473,18 +473,29 @@ category restaurants&!expensive
 
 =head1 DESCRIPTION
 
-This script presents a single search form when called. The search string is parsed with a full
-RecDescent grammar, and the wiki pages are searched for matches.
+This script presents a single search form when called. The search
+string is parsed with a full RecDescent grammar, and the wiki pages
+are searched for matches.
 
-Borrowing from Perl (or C) & represents AND, | represents OR, and ! represents NOT.
-
-For notes about how to tailor this script, please read the script comments.
+Borrowing from Perl (or C) & represents AND, | represents OR, and !
+represents NOT.
 
 =head1 AUTHOR
 
+The OpenGuides Project (grubstreet@hummous.earth.li)
+
+=head1 COPYRIGHT
+
+     Copyright (C) 2003 The OpenGuides Project.  All Rights Reserved.
+
+The OpenGuides distribution is free software; you can redistribute it
+and/or modify it under the same terms as Perl itself.
+
+=head1 CREDITS
+
+Most of the work in this script done by
 I. Williams, E<lt>ivor.williams@tiscali.co.ukE<gt>
 
 =head1 SEE ALSO
 
-L<usemod>.
-
+L<OpenGuides>
