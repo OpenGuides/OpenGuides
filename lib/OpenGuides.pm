@@ -12,7 +12,7 @@ use URI::Escape;
 
 use vars qw( $VERSION );
 
-$VERSION = '0.33';
+$VERSION = '0.34';
 
 =head1 NAME
 
@@ -443,20 +443,82 @@ sub list_all_versions {
     for my $version ( 1 .. $curr_version ) {
         my %node_data = $self->wiki->retrieve_node( name    => $node,
 				  	            version => $version );
+        # $node_data{version} will be zero if this version was deleted.
 	push @history, { version  => $version,
 			 modified => $node_data{last_modified},
 		         username => $node_data{metadata}{username}[0],
-		         comment  => $node_data{metadata}{comment}[0]   };
+		         comment  => $node_data{metadata}{comment}[0],
+                       } if $node_data{version};
     }
     @history = reverse @history;
-    my %tt_vars = ( node    => $node,
-		    version => $curr_version,
-		    history => \@history );
+    my %tt_vars = ( node          => $node,
+		    version       => $curr_version,
+                    not_deletable => 1,
+		    history       => \@history );
     print $self->process_template(
                                    id       => $node,
                                    template => "node_history.tt",
                                    tt_vars  => \%tt_vars,
                                  );
+}
+
+=item B<delete_node>
+
+  $guide->delete_node(
+                       id       => "FAQ",
+                       version  => 15,
+                       password => "beer",
+                     );
+
+C<version> is optional - if it isn't supplied then all versions of the
+node will be deleted; in other words the node will be entirely
+removed.
+
+If C<password> is not supplied then a form for entering the password
+will be displayed.
+
+=cut
+
+sub delete_node {
+    my ($self, %args) = @_;
+    my $node = $args{id} or croak "No node ID supplied for deletion";
+
+    my %tt_vars = (
+                    not_editable  => 1,
+                    not_deletable => 1,
+                  );
+    $tt_vars{delete_version} = $args{version} || "";
+
+    my $password = $args{password};
+
+    if ($password) {
+        if ($password ne $self->config->{_}->{admin_pass}) {
+            print $self->process_template(
+                                     id       => $node,
+                                     template => "delete_password_wrong.tt",
+                                     tt_vars  => \%tt_vars,
+                                   );
+        } else {
+            $self->wiki->delete_node(
+                                      name    => $node,
+                                      version => $args{version},
+                                    );
+            # Check whether any versions of this node remain.
+            my %check = $self->wiki->retrieve_node( name => $node );
+            $tt_vars{other_versions_remain} = 1 if $check{version};
+            print $self->process_template(
+                                     id       => $node,
+                                     template => "delete_done.tt",
+                                     tt_vars  => \%tt_vars,
+                                   );
+        }
+    } else {
+        print $self->process_template(
+                                 id       => $node,
+                                 template => "delete_confirm.tt",
+                                 tt_vars  => \%tt_vars,
+                               );
+    }
 }
 
 sub process_template {

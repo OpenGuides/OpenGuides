@@ -1,9 +1,23 @@
-[% INCLUDE header.tt page_title = "Successfully deleted $node_name - $site_name " %]
+[% IF delete_version %]
+  [% INCLUDE header.tt page_title = "Successfully deleted version $delete_version of $node_name - $site_name " %]
+[% ELSE %]
+  [% INCLUDE header.tt page_title = "Successfully deleted $node_name - $site_name " %]
+[% END %]
 [% INCLUDE banner.tt %]
 <div id="content">
 [% INCLUDE navbar.tt %]
 <h1>Deleted</h1>
 <p>
-The node '[% node_name %]' was deleted.
+[% IF delete_version %]
+  Version [% delete_version %] of the
+[% ELSE %]
+  The
+[% END %]
+node '[% node_name %]' was deleted.
+[% IF other_versions_remain %]
+  <a href="[% cgi_url %]?[% node_param %]">View current version</a>.
+[% ELSE %]
+  No other versions are stored, so this node is now completely erased.
+[% END %]
 </p>
 [% INCLUDE footer.tt %]

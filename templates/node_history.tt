@@ -20,6 +20,9 @@
       [% IF revision.comment %]
         <b>[[% revision.comment %]]</b>
       [% END %]
+      [% IF enable_page_deletion %]
+        [admin: <a href="[% full_cgi_url %]?id=[% node_param %];version=[% revision.version %];action=delete">Delete version [% revision.version %]</a>]
+      [% END %]
   </li>
 [% END %]
 </ul>
