@@ -193,7 +193,7 @@ if ($@) {
     print qq(<html><head><title>ERROR</title></head><body>
              <p>Sorry!  Something went wrong.  Please contact the
              Wiki administrator at
-             <a href="mailto:kake\@earth.li">kake\@earth.li</a> and quote
+             <a href="mailto:$contact_email">$contact_email</a> and quote
              the following error message:</p><blockquote>)
       . $q->escapeHTML($error)
       . qq(</blockquote><p><a href="$script_name">Return to the Wiki home page</a>
