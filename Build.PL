@@ -69,6 +69,7 @@ push @answers, { question => $dbtype_qu,
                  value    => $dbtype };
 
 my $install_directory; # used to suggest template paths
+my $use_plucene; # keep track of this so we know what to put in prereqs
 foreach my $var ( qw(
    dbname dbuser dbpass dbhost script_name
    install_directory template_path custom_template_path script_url
@@ -126,6 +127,10 @@ foreach my $var ( qw(
 
     # Store install_directory so we can use it to suggest template paths.
     $install_directory = $val if $var eq "install_directory";
+
+    # Keep track of chosen search method so we know what to put in prereqs.
+    # From Module::Build docs: ->y_n returns a Perl boolean true or false.
+    $use_plucene = 1 if $var eq "use_plucene" and $val;
 
     # Make sure that script_url ends in a /
     if ( $var eq "script_url" and $val !~ /\/$/ ) {
@@ -199,6 +204,8 @@ close FILE or die "Can't close wiki.conf: $!";
 ##### When updating the prereqs PLEASE REMEMBER to update PREREQUISITES.
 #####
 
+my $search_module = $use_plucene ? "Plucene" : "Search::InvertedIndex";
+
 # Create the build object.
 my $build = OpenGuides::Build->new(
     dist_name => "OpenGuides",
@@ -225,7 +232,7 @@ my $build = OpenGuides::Build->new(
 	'Geography::NationalGrid'         => 0,
         'LWP::Simple'                     => 0,
 	'Parse::RecDescent'               => 0,
-	'Search::InvertedIndex'           => 0,
+	$search_module                    => 0,
 	'Template'                        => 0,
         'Test::MockObject'                => '0.07', # earlier doesn't use 'mock'
 	'Time::Piece'                     => 0,
