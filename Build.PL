@@ -237,7 +237,7 @@ $build->add_to_cleanup( "configlib" );
 # Tell OpenGuides::Build which additional scripts and templates to install.
 $build->{config}{__extra_scripts}     = 
                       [ "wiki.conf", "preferences.cgi", "supersearch.cgi",
-                        "newpage.cgi", "pubcrawl.cgi", "wiki.css" ];
+                        "newpage.cgi", "pubcrawl.cgi" ];
 $build->{config}{__templates}         = [
 		      "backlink_results.tt",
                       "differences.tt",

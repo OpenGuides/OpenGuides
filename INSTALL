@@ -94,8 +94,8 @@ multi-user systems this will just be yourself.
   "What's the URL of the wiki's stylesheet?"
 
 Supplying an answer to this question is optional.  There is an example
-stylesheet supplied by the Oxford OpenGuides team in the examples/
-directory - note that this will not be automatically installed.
+stylesheet in the examples/ directory - note that this will not be 
+automatically installed.
 
 
   "What's the wiki called?"
