@@ -509,6 +509,59 @@ sub list_all_versions {
     print $output;
 }
 
+=item B<display_rss>
+
+  # Last ten non-minor edits to Hammersmith pages.
+  $guide->display_rss(
+                       items              => 10,
+                       ignore_minor_edits => 1,
+                       locale             => "Hammersmith",
+                     );
+
+  # All edits bob has made to pub pages in the last week.
+  $guide->display_rss(
+                       days     => 7,
+                       username => "bob",
+                       category => "Pubs",
+                     );
+
+As with other methods, the C<return_output> parameter can be used to
+return the output instead of printing it to STDOUT.
+
+=cut
+
+sub display_rss {
+    my ($self, %args) = @_;
+    use Data::Dumper;warn Dumper \%args;
+    my $return_output = $args{return_output} ? 1 : 0;
+
+    my $items = $args{items} || "";
+    my $days  = $args{days}  || "";
+    my $ignore_minor_edits = $args{ignore_minor_edits} ? 1 : 0;
+    my $username = $args{username} || "";
+    my $category = $args{category} || "";
+    my $locale   = $args{locale}   || "";
+    my %criteria = (
+                     items              => $items,
+                     days               => $days,
+                     ignore_minor_edits => $ignore_minor_edits,
+                   );
+    my %filter;
+    $filter{username} = $username if $username;
+    $filter{category} = $category if $category;
+    $filter{locale}   = $locale   if $locale;
+    if ( scalar keys %filter ) {
+        $criteria{filter_on_metadata} = \%filter;
+    }
+
+    my $rdf_writer = OpenGuides::RDF->new( wiki   => $self->wiki,
+					   config => $self->config );
+    my $output = "Content-type: text/plain\n\n";
+    $output .= $rdf_writer->make_recentchanges_rss( %criteria );
+    return $output if $return_output;
+    print $output;
+}
+
 =item B<commit_node>
 
   $guide->commit_node(

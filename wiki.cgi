@@ -104,25 +104,10 @@ eval {
     } elsif ($action eq 'rss') {
         my $feed = $q->param("feed");
         if ( !defined $feed or $feed eq "recent_changes" ) {
-            my $items = $q->param("items") || "";
-            my $days  = $q->param("days")  || "";
-            my $ignore_minor_edits = $q->param("ignore_minor_edits") ? 1 : 0;
-            my $username = $q->param("username") || "";
-            my $category = $q->param("category") || "";
-            my $locale   = $q->param("locale")   || "";
-            my %criteria = (
-                             items              => $items,
-                             days               => $days,
-                             ignore_minor_edits => $ignore_minor_edits,
-                           );
-            my %filter;
-            $filter{username} = $username if $username;
-            $filter{category} = $category if $category;
-            $filter{locale}   = $locale   if $locale;
-            if ( scalar keys %filter ) {
-                $criteria{filter_on_metadata} = \%filter;
-            }
-            emit_recent_changes_rss( %criteria );
+            my %args = map { $_ => ( $q->param($_) || "" ) }
+                       qw( feed items days ignore_minor_edits username
+                           category locale );
+            $guide->display_rss( %args );
         } elsif ( $feed eq "chef_dan" ) {
             display_node_rdf( node => $node );
         } else {
@@ -263,15 +248,6 @@ sub get_cookie {
     my $pref_name = shift or return "";
     my %cookie_data = OpenGuides::CGI->get_prefs_from_cookie(config=>$config);
     return $cookie_data{$pref_name};
-}
-
-sub emit_recent_changes_rss {
-    my %args = @_;
-    my $rdf_writer = OpenGuides::RDF->new( wiki      => $wiki,
-					   config => $config );
-    print "Content-type: text/plain\n\n";
-    print $rdf_writer->make_recentchanges_rss( %args );
-    exit 0;
 }
 
 sub display_node_rdf {

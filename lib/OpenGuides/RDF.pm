@@ -262,6 +262,7 @@ sub emit_rdfxml {
 
 sub make_recentchanges_rss {
     my ($self, %args) = @_;
+
     my $rssmaker = CGI::Wiki::Plugin::RSS::ModWiki->new(
         wiki      => $self->{wiki},
         site_name => $self->{site_name},
