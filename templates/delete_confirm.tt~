@@ -1,0 +1,15 @@
+[% INCLUDE header.tt %]
+<h1>Confirm Deletion</h1>
+<p>
+Are you sure you want to delete [% name %]? If so, please enter the admin
+password.
+</p>
+<form action="[% cgi_url %]" method="post">
+<input type="hidden" name="action" value="delete">
+<input type="hidden" name="id" value="[% name %]">
+<strong>Password:</strong> <input type="password" name="password"> <input type="submit" value="Delete">
+</form>
+<p>
+<a href="[% cgi_url %]?[% name %]">Cancel and return to page</a>
+</p>
+[% INCLUDE footer.tt %]
