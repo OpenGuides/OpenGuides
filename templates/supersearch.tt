@@ -24,7 +24,7 @@ summary="Results of search queries are displayed here, and new searches can also
 
   <form method="get" action="supersearch.cgi">
     <label for="search_upper">Search text:</label> 
-    <input type="text" name="search" value="[% search_terms %]" size="50" maxlength="80" id="search_upper" value="Search text" onclick="this.value=''" />
+    <input type="text" name="search" value="[% IF search_terms %][% search_terms %][% ELSE %]Search text[% END %]" size="50" maxlength="80" id="search_upper" onclick="this.value=''" />
     <br />
     Located within
     <input type="text" name="distance_in_metres" value="[% dist %]" size="5" maxlength="5" />
