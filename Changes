@@ -1,4 +1,4 @@
-0.32
+0.32    7 June 2004
         Change auto-creating behaviour of index nodes (categories and
 	locales): instead of being created on access they are created when
 	the referring node is committed. This fixes compliance with RFC 2616
