@@ -1,6 +1,7 @@
 package OpenGuides;
 use strict;
 
+use Carp "croak";
 use CGI;
 use CGI::Wiki::Plugin::Diff;
 use CGI::Wiki::Plugin::Locator::UK;
@@ -330,7 +331,7 @@ sub show_index {
             $tt_vars{criterion} = {
                 type  => $args{type},  # for RDF version
                 value => $args{value}, # for RDF version
-                name  => $CGI->escapeHTML("Fuzzy Title Match on '$args{value}')
+                name  => CGI->escapeHTML("Fuzzy Title Match on '$args{value}'")
 	    };
         } else {
             @selnodes = $wiki->list_nodes_by_metadata(
@@ -348,7 +349,7 @@ sub show_index {
             $tt_vars{criterion} = {
                 type  => $args{type},
                 value => $args{value}, # for RDF version
-                name  => $CGI->escapeHTML( $name ),
+                name  => CGI->escapeHTML( $name ),
 	        url   => $url,
             };
         }
