@@ -1,3 +1,7 @@
+0.26    9 October 2003
+        Show IP address for anonymous edits.
+        Changed CGI.pm version dependency for Dom (CPAN bug #3895).
+
 0.25    23 September 2003
         Applied recent changes fix to front page feed as well.
         Search box now searches categories and locales as well as title and

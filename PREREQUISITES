@@ -1,8 +1,8 @@
-Modules required by OpenGuides 0.25
+Modules required by OpenGuides 0.26
 ===================================
 
 Algorithm::Diff (version 0.13 or later)
-CGI (version 2.76 or later)
+CGI (version 2.42 or later)
 CGI::Carp
 CGI::Cookie
 CGI::Wiki (version 0.49 or later)

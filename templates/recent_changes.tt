@@ -21,7 +21,14 @@
         <b>[[% node.comment %]]</b>
       [% END %]
       [% IF node.username %]
-        ..... <a href="[% cgi_url %]?username=[% node.username_param %];action=userstats">[% node.username %]</a>
+        [% IF node.username == "Anonymous" %]
+          ..... Anonymous
+          [% IF node.host %]
+            ([% node.host %])
+          [% END %]
+        [% ELSE %]
+          ..... <a href="[% cgi_url %]?username=[% node.username_param %];action=userstats">[% node.username %]</a>
+        [% END %]
       [% END %]
   </li>
 [% END %]

@@ -4,7 +4,7 @@ use strict;
 use warnings;
 
 use vars qw( $VERSION );
-$VERSION = '0.25';
+$VERSION = '0.26';
 
 use CGI qw/:standard/;
 use CGI::Carp qw(croak);
@@ -247,6 +247,7 @@ sub display_node {
                          last_modified => $q->escapeHTML($_->{last_modified}),
                          comment       => $q->escapeHTML($_->{metadata}{comment}[0]),
                          username      => $q->escapeHTML($_->{metadata}{username}[0]),
+                         host          => $q->escapeHTML($_->{metadata}{host}[0]),
                          username_param => $q->escape($_->{metadata}{username}[0]),
                          edit_type     => $q->escapeHTML($_->{metadata}{edit_type}[0]),
                          url           => "$script_name?"
@@ -511,6 +512,7 @@ sub commit_node {
     foreach my $var ( qw( username comment edit_type ) ) {
         $metadata{$var} = $q->param($var) || "";
     }
+    $metadata{host} = $ENV{REMOTE_ADDR};
 
     my $written = $wiki->write_node($node, $content, $checksum, \%metadata );
 
