@@ -9,6 +9,7 @@
 	  the styles table#recentchanges, td.recentchanges_meta,
 	  td.recentchanges_user, td.recentchanges_node_name and
 	  td.recentchanges_comment to your stylesheets.
+	  td#map changed to td#map_link in edit_conflict.tt.
         Added searching by distance from an arbitrary point (click on
           Advanced Search).
         Internal rejigging - extracted some methods from wiki.cgi to
