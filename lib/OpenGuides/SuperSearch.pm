@@ -214,14 +214,15 @@ sub process_template {
 # method to populate $self with text of nodes potentially matching a query
 # This could contain many more nodes than actually match the query
 sub _prime_wikitext {
-    my ($self, $op, @leaves) = @_;
+    my ($self, %args) = @_;
+    my ($op, @leaves) = @{ $args{tree} };
     my $wiki = $self->{wiki};
 
     if ($op =~ /AND|OR/) {
 	# Recurse into parse tree for boolean op nodes
-	$self->_prime_wikitext(@$_) for @leaves;
+	$self->_prime_wikitext( tree => $_ ) for @leaves;
     } elsif ($op eq 'NOT') {
-	$self->_prime_wikitext(@leaves);
+	$self->_prime_wikitext( tree => \@leaves );
     } elsif ($op eq 'word') {
 	foreach (@leaves) {
 	    # Search title and body.
@@ -435,7 +436,7 @@ sub _apply_parser {
     }
 
     #Prime the search
-    $self->_prime_wikitext(@$tree);
+    $self->_prime_wikitext( tree => $tree);
 
     # Apply search and return results
     my %results = $self->_matched_items( tree => $tree );
