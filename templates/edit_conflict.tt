@@ -66,15 +66,15 @@ You will need to manually merge your changes into the new version.
         <td>[% CGI.escapeHTML(new_hours_text) %]</td>
       </tr>
             <tr>
-        <td class="label"><label for="postcode">Postcode:</label></td>
-        <td><input type="text" size="50" id="postcode" name="postcode" value="[% stored_postcode %]"></td>
-        <td>[% CGI.escapeHTML(new_postcode) %]</td>
-      </tr>
-            <tr>
         <td class="label"><label for="address">Address:</label></td>
         <td><input type="text" size="50" id="address" name="address" value="[% stored_address %]"></td>
         <td>[% CGI.escapeHTML(new_address) %]</td>
       </tr>
+            <tr>
+        <td class="label"><label for="postcode">Postcode:</label></td>
+        <td><input type="text" size="50" id="postcode" name="postcode" value="[% stored_postcode %]"></td>
+        <td>[% CGI.escapeHTML(new_postcode) %]</td>
+      </tr> 
             <tr>
         <td class="label"><label for="os_x">OS X coordinate:</label></td>
         <td><input type="text" size="50" id="os_x" name="os_x" value="[% stored_os_x %]">
@@ -86,8 +86,8 @@ You will need to manually merge your changes into the new version.
         <td>[% CGI.escapeHTML(new_os_y) %]</td>
       </tr>
       <tr>
-	<td class="label"><label for="map">Map link:</label></td>
-	<td><input type="text" size="70" id="map" name="map_link" value="[% map_link %]"></td>
+	<td class="label"><label for="map_link">Map link:</label></td>
+	<td><input type="text" size="70" id="map_link" name="map_link" value="[% map_link %]"></td>
       </tr>
     </table>
     </fieldset>
