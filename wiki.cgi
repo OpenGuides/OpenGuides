@@ -82,7 +82,7 @@ my $formatter = CGI::Wiki::Formatter::UseMod->new(
     implicit_links      => 0,
     allowed_tags        => [qw(a p b strong i em pre small img table td tr th
 			       br hr ul li center blockquote kbd div code
-			       strike sub)],
+			       strike sub sup font)],
     macros              => \%macros,
     node_prefix         => "$script_name?",
     edit_prefix         => "$script_name?action=edit&id="
