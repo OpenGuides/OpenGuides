@@ -42,7 +42,7 @@
     </div>
   </div>
 
-  [% UNLESS (node_param == 'Category_Index') or not_editable %]
+  [% UNLESS not_editable %]
     <div class="navbar_group">
       <div class="navbar_group_title">This page:</div>
         <div class="edit_page_link"><a href="[% full_cgi_url %]?id=[% node_param %];action=edit">Edit this page</a></div>

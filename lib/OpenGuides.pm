@@ -397,7 +397,8 @@ sub show_index {
             $tt_vars{criterion} = {
                 type  => $args{type},  # for RDF version
                 value => $args{value}, # for RDF version
-                name  => CGI->escapeHTML("Fuzzy Title Match on '$args{value}'")
+                name  => CGI->escapeHTML("Fuzzy Title Match on '$args{value}'"),
+		not_editable => 1
 	    };
         } else {
             @selnodes = $wiki->list_nodes_by_metadata(
@@ -417,7 +418,8 @@ sub show_index {
                 type  => $args{type},
                 value => $args{value}, # for RDF version
                 name  => CGI->escapeHTML( $name ),
-	        url   => $url,
+	        url   => $url
+		not_editable => 1
             };
         }
     } else {
