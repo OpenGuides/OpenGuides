@@ -19,6 +19,8 @@
         Added new preference for default edit type.
         Reinstate apparently lost change from 0.26 to show IP rather than 
           "Anonymous" in RecentChanges.
+        More informative <title> tags for non-node (e.g. node version
+          history) pages.
 
 0.32    7 June 2004
         Change auto-creating behaviour of index nodes (categories and
