@@ -1,4 +1,9 @@
-0.21    
+0.21    17 July 2003
+        We no longer autogenerate a Makefile.PL, since it doesn't pick up
+        all the questions that need to be asked.  Sorry.  Use Module::Build
+        as detailed in INSTALL, since you won't be able to get the right
+        version of Text::WikiFormat installed without it in any case.
+
         Added version number to CGI.pm prereq as Alex McLintock hit a
         version that didn't have unescape.
 

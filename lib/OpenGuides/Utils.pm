@@ -2,7 +2,7 @@ package OpenGuides::Utils;
 
 use strict;
 use vars qw( $VERSION );
-$VERSION = '0.04';
+$VERSION = '0.05';
 
 use Carp qw( croak );
 use CGI::Wiki;
@@ -99,7 +99,8 @@ sub make_wiki_object {
                                    div code strike sub sup font)],
         macros              => \%macros,
         node_prefix         => "$script_name?",
-        edit_prefix         => "$script_name?action=edit&id="
+        edit_prefix         => "$script_name?action=edit&id=",
+        munge_urls          => 1,
     );
 
     my %conf = ( store     => $store,
