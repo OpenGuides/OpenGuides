@@ -73,11 +73,6 @@ eval {
         show_index( type   => $q->param("index_type") || "Full",
                     value  => $q->param("index_value") || "",
                     format => $format );
-    } elsif ($action eq "catindex") {
-        # This is for backwards compatibility with pre-0.04 versions.
-        show_index( type   => "category",
-                    value  => $q->param("category") || "",
-                    format => $format );
     } elsif ($action eq 'random') {
         my @nodes = $wiki->list_all_nodes();
         $node = $nodes[int(rand(scalar(@nodes) + 1)) + 1];
