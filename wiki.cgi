@@ -270,7 +270,7 @@ sub display_node {
     my $os_y       = $metadata{os_y}[0];
     my $latitude   = $metadata{latitude}[0];
     my $longitude  = $metadata{longitude}[0];
- my $geocache_link = &make_geocache_link;
+    my $geocache_link = make_geocache_link($node);
 
     my @categories = map { { name => $_,
                              url  => "$script_name?Category_"
