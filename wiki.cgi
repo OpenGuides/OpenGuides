@@ -50,7 +50,7 @@ my $indexdb = Search::InvertedIndex::DB::DB_File_SplitHash->new(
     -map_name  => "/home/kake/public_html/wiki-index.db",
     -lock_mode => "EX"
 );
-my $search  = CGI::Wiki::Search::SII->new( indexdb => $indexdb );
+#my $search  = CGI::Wiki::Search::SII->new( indexdb => $indexdb );
 
 # Make formatter.
 my %macros = (
@@ -415,7 +415,8 @@ sub edit_node {
     my $node = shift;
     my %node_data = $wiki->retrieve_node($node);
     my ($content, $checksum) = @node_data{ qw( content checksum ) };
-    my %metadata   = %{$node_data{metadata}};
+    my %metadata  = %{$node_data{metadata}};
+    my $username  = &get_cookie;
     my %tt_vars = ( content    => $q->escapeHTML($content),
                     checksum   => $q->escapeHTML($checksum),
                     categories => $metadata{category},
@@ -427,7 +428,8 @@ sub edit_node {
                     postcode   => $metadata{postcode}[0],
                     address    => $metadata{address}[0],
 		    os_x       => $metadata{os_x}[0],
-		    os_y       => $metadata{os_y}[0]
+		    os_y       => $metadata{os_y}[0],
+		    username   => $username
     );
 
     process_template("edit_form.tt", $node, \%tt_vars);
