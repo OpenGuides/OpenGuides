@@ -590,6 +590,11 @@ sub commit_node {
     }
     $metadata{host} = $ENV{REMOTE_ADDR};
 
+    # CGI::Wiki::Plugin::RSS::ModWiki wants "major_change" to be set.
+    $metadata{major_change} = ( $metadata{edit_type} eq "Normal edit" )
+                            ? 1
+                            : 0;
+
     my $written = $wiki->write_node($node, $content, $checksum, \%metadata );
 
     if ($written) {
