@@ -648,7 +648,7 @@ sub _do_search {
     while (my ($k,$v) = each %wikitext) {
         my @out;
         for ($v->{text} =~ /$wexp/g) {
-            my $match .= "...$_...";
+            my $match = "...$_...";
             $match =~ s/<[^>]+>//gs;
             $match =~ s!\b($wmatch)\b!<b>$&</b>!i;
             push @out,$match;
