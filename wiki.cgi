@@ -243,6 +243,7 @@ sub display_node {
                          last_modified => $q->escapeHTML($_->{last_modified}),
                          comment       => $q->escapeHTML($_->{metadata}{comment}[0]),
                          username      => $q->escapeHTML($_->{metadata}{username}[0]),
+                         edit_type     => $q->escapeHTML($_->{metadata}{edit_type}[0]),
                          url           => "$script_name?"
           . $q->escape($formatter->node_name_to_node_param($_->{name})) }
                        } @recent;
@@ -250,7 +251,10 @@ sub display_node {
         $tt_vars{days} = 7;
         process_template("recent_changes.tt", $node, \%tt_vars);
     } elsif ($node eq "Home") {
-        my @recent = $wiki->list_recent_changes( last_n_changes => 10);
+        my @recent = $wiki->list_recent_changes(
+            last_n_changes => 10,
+            metadata_isnt  => { edit_type => "Minor tidying" },
+        );
         @recent = map { {name          => $q->escapeHTML($_->{name}),
                          last_modified => $q->escapeHTML($_->{last_modified}),
                          comment       => $q->escapeHTML($_->{metadata}{comment}[0]),
