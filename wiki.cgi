@@ -375,7 +375,7 @@ sub preview_node {
 						   config  => $config,
 						   cgi_obj => $q );
     foreach my $var ( qw( username comment edit_type ) ) {
-        $tt_metadata_vars{$var} = $q->param($var);
+        $tt_metadata_vars{$var} = $q->escapeHTML($q->param($var));
     }
 
     if ($wiki->verify_checksum($node, $checksum)) {
