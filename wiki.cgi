@@ -6,6 +6,8 @@ use warnings;
 use vars qw( $VERSION );
 $VERSION = '0.01';
 
+use lib "lib"; # for OpenGuides modules that are installed with this script
+
 use CGI qw/:standard/;
 use CGI::Carp qw(croak);
 use CGI::Cookie;
@@ -14,11 +16,11 @@ use CGI::Wiki::Store::Pg;
 use CGI::Wiki::Search::SII;
 use CGI::Wiki::Formatter::UseMod;
 use CGI::Wiki::Plugin::Locator::UK;
-use CGI::Wiki::Plugin::ChefMoz;
 use CGI::Wiki::Plugin::RSS::ModWiki;
 use Config::Tiny;
 use Geography::NationalGrid;
 use Geography::NationalGrid::GB;
+use OpenGuides::RDF;
 use Template;
 use Time::Piece;
 use URI::Escape;
@@ -472,7 +474,7 @@ sub emit_recent_changes_rss {
 sub emit_chef_dan_rss {
     my %args = @_;
     my $node = $args{node};
-    my $rss = CGI::Wiki::Plugin::ChefMoz->new(
+    my $rdf_writer = OpenGuides::RDF->new(
         wiki      => $wiki,
         site_name => $site_name,
         site_description => $site_desc,
@@ -490,13 +492,12 @@ sub emit_chef_dan_rss {
                         $wiki->formatter->node_name_to_node_param( $node_name )			     );
              }
         },
-	full_node_prefix => "REMOVE - not used",
 	default_city => $default_city,
         default_country => $default_country
      );
 
     print "Content-type: text/plain\n\n";
-    print $rss->chef_dan( node => $node );
+    print $rdf_writer->emit_rdfxml( node => $node );
     exit 0;
 }
 
