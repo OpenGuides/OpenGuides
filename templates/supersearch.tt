@@ -27,7 +27,7 @@ summary="Results of search queries are displayed here, and new searches can also
     <input type="text" name="search" value="[% search_terms %]" size="50" maxlength="80" id="search_upper" value="Search text" onclick="this.value=''" />
     <br />
     Located within
-    <input type="text" name="distance_in_metres" value="[% dist %]" size="4" maxlength="4" />
+    <input type="text" name="distance_in_metres" value="[% dist %]" size="5" maxlength="5" />
     metres of
     latitude <input type="text" name="lat" value="[% lat %]" size="10" maxlength="10" />
     longitude <input type="text" name="long" value="[% long %]" size="10" maxlength="10" />
