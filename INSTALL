@@ -82,6 +82,15 @@ Give the full address needed to access the installation directory with
 a web browser - for example http://london.openguides.org/cgi-bin/
 
 
+  "Do you want me to munge a custom lib path into the scripts?"
+
+If you have installed some or all of the required Perl modules (or indeed
+the OpenGuides modules themselves) into a private directory, you will
+need to tell the scripts where to find these modules.  Enter the paths
+to search here just as you would enter them in a 'use lib qw( ... );'
+in a Perl script.
+
+
   "What directory can I use to store indexes in for searching?"
 
 You need a directory to store files used as indexes for the site. The

@@ -56,6 +56,7 @@ sub ACTION_install_extras {
     my $install_directory = $config->{_}->{install_directory};
     my $script_name       = $config->{_}->{script_name};
     my $template_path     = $config->{_}->{template_path};
+    my $custom_lib_path   = $config->{_}->{custom_lib_path};
     my @extra_scripts     = @{ $self->{config}{__extra_scripts} };
     my @templates         = @{ $self->{config}{__templates} };
 
@@ -76,6 +77,8 @@ sub ACTION_install_extras {
         if ( $copy ) {
             $self->fix_shebang_line($copy);
 	    $self->make_executable($copy);
+            $self->add_custom_lib_path( $copy, $custom_lib_path )
+              if $custom_lib_path;
         } else {
             print "Skipping $install_directory/$script_filename (unchanged)\n";
         }
@@ -91,6 +94,8 @@ sub ACTION_install_extras {
 	    if ( $copy ) {
 		$self->fix_shebang_line($copy);
 		$self->make_executable($copy) unless $script eq "wiki.conf";
+                $self->add_custom_lib_path( $copy, $custom_lib_path )
+                  if $custom_lib_path;
 	    } else {
 		print "Skipping $install_directory/$script (unchanged)\n";
 	    }
@@ -106,6 +111,19 @@ sub ACTION_install_extras {
                 or print "Skipping $install_directory/templates/$template (unchanged)\n";
         }
     }
+}
+
+sub add_custom_lib_path {
+    my ($self, $copy, $lib_path) = @_;
+    local $/ = undef;
+    open my $fh, $copy or die $!;
+    my $content = <$fh>;
+    close $fh or die $!;
+    $content =~ s|use strict;|use strict\;\nuse lib qw( $lib_path )\;|s;
+    open $fh, ">$copy" or die $!;
+    print $fh $content;
+    close $fh or die $!;
+    return 1;
 }
 
 1;

@@ -3,6 +3,7 @@
         Added some anti-robot tags to certain pages.
         Fixed bug in install procedure - blank script_name should now get
           installed as index.cgi
+        Added option of munging in custom lib paths on install.
 
 0.40    18 September 2004
         Recent Changes now shows changes in the past 24 hours, past week,

@@ -20,13 +20,8 @@ Or for earlier versions of Module::Build, do:
 
 If any or all of the modules required by the OpenGuides scripts are in
 a private directory, then you'll need to tell the scripts where to find
-them. At present the only way to do this is to install everything and
-then manually edit wiki.cgi (or whatever you called it),
-supersearch.cgi and preferences.cgi to include a line like
-
-  use lib qw( /path/to/my/modules/ );
-
-at the top before any other modules are required.
+them. From version 0.41 of OpenGuides, you can do this at 'perl Build.PL'
+time - see the INSTALL file included in this distribution.
 
 ----------------------------------------------------------------------
 
