@@ -1,9 +1,10 @@
-#!/usr/local/stow/perl-5.8.0/bin/perl 
+#!/usr/local/bin/perl -w
 
 use strict;
 use warnings;
 
-our $VERSION = '1.05';
+use vars qw( $VERSION );
+$VERSION = '1.05';
 
 use CGI qw(:standard *ol *div);
 use CGI::Carp qw(fatalsToBrowser);	#Remove fatalsToBrowser if paranoid
