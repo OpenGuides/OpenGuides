@@ -4,7 +4,7 @@ use strict;
 use warnings;
 
 use CGI qw/:standard/;
-use CGI::Carp qw(fatalsToBrowser);
+use CGI::Carp qw(croak);
 use CGI::Cookie;
 use CGI::Wiki;
 use CGI::Wiki::Store::Pg;
@@ -14,14 +14,24 @@ use CGI::Wiki::Plugin::Locator::UK;
 use CGI::Wiki::Plugin::RSS::ChefMoz;
 use CGI::Wiki::Plugin::RSS::ModWiki;
 use Config::Tiny;
-use Geography::NationalGrid;
-use Geography::NationalGrid::GB;
 use Template;
 use Time::Piece;
 use URI::Escape;
 
 # config vars
-my $FULL_CGI_URL = "http://un.earth.li/~kake/cgi-bin/wiki.cgi?";
+my $config = Config::Tiny->new;
+$config = Config::Tiny->read('wiki.conf');
+
+# Read in configuration values from config file.
+my $script_name = $config->{_}->{script_name};
+my $script_url = $config->{_}->{script_url};
+my $stylesheet_url = $config->{_}->{stylesheet_url};
+my $site_name = $config->{_}->{site_name};
+my $home_name = $config->{_}->{home_name};
+my $site_desc = $config->{_}->{site_desc};
+my $default_city = $config->{_}->{default_city};
+my $default_country = $config->{_}->{default_country};
+my $contact_email = $config->{_}->{contact_email};
 
 # Make store.
 my $store = CGI::Wiki::Store::Pg->new(
@@ -40,12 +50,12 @@ my $search  = CGI::Wiki::Search::SII->new( indexdb => $indexdb );
 # Make formatter.
 my %macros = (
     '@SEARCHBOX' =>
-        qq(<form action="wiki.cgi" method="get">
+        qq(<form action="$script_name" method="get">
 	   <input type="hidden" name="action" value="search">
 	   <input type="text" size="20" name="terms">
 	   <input type="submit" name="Search" value="Search"></form>),
     qr/\@INDEX_LINK\s+\[\[Category\s+([^\]]+)\]\]/ =>
-        sub { return qq(<a href="wiki.cgi?action=catindex&category=) . uri_escape($_[0]) . qq(">View all pages in Category $_[0]</a>)
+        sub { return qq(<a href="$script_name?action=catindex&category=) . uri_escape($_[0]) . qq(">View all pages in Category $_[0]</a>)
             }
 );
 
@@ -56,8 +66,8 @@ my $formatter = CGI::Wiki::Formatter::UseMod->new(
 			       br hr ul li center blockquote kbd div code
 			       strike)],
     macros              => \%macros,
-    node_prefix         => 'wiki.cgi?',
-    edit_prefix         => 'wiki.cgi?action=edit&id='
+    node_prefix         => '$script_name?',
+    edit_prefix         => '$script_name?action=edit&id='
 );
 
 my %conf = ( store     => $store,
@@ -127,7 +137,7 @@ eval {
         process_template($template, "Category Index",
                          { nodes    => \@nodes,
 			   category => { name => $q->escapeHTML($cat),
-					 url  => "wiki.cgi?Category_"
+					 url  => "$script_name?Category_"
                         . uri_escape($formatter->node_name_to_node_param($cat))
 			                }
 			  },
@@ -183,7 +193,7 @@ if ($@) {
              <a href="mailto:kake\@earth.li">kake\@earth.li</a> and quote
              the following error message:</p><blockquote>)
       . $q->escapeHTML($error)
-      . qq(</blockquote><p><a href="wiki.cgi">Return to the Wiki home page</a>
+      . qq(</blockquote><p><a href="$script_name">Return to the Wiki home page</a>
            </body></html>);
 }
 exit 0;
@@ -192,7 +202,7 @@ exit 0;
 
 sub redirect_to_node {
     my $node = shift;
-    print $q->redirect($FULL_CGI_URL . $q->escape($formatter->node_name_to_node_param($node)));
+    print $q->redirect("$script_url$script_name?" . $q->escape($formatter->node_name_to_node_param($node)));
     exit 0;
 }
 
@@ -243,41 +253,35 @@ sub display_node {
     my %metadata   = %{$node_data{metadata}};
     my $catref     = $metadata{category};
     my $locref     = $metadata{locale};
-    my $os_x       = $metadata{os_x}[0];
-    my $os_y       = $metadata{os_y}[0];
     my $phone      = $metadata{phone}[0];
+    my $fax        = $metadata{fax}[0];
     my $website    = $metadata{website}[0];
+    my $address    = $metadata{address}[0];
     my $hours_text = $metadata{opening_hours_text}[0];
     my $postcode   = $metadata{postcode}[0];
-
-    my ($lat, $long);
-    if ( $os_x && $os_y ) {
-        my $point = Geography::NationalGrid::GB->new( Easting  => $os_x,
-						      Northing => $os_y );
-        $lat  = $point->latitude;
-	$long = $point->longitude;
-    }
+    my $latitude   = $metadata{latitude}[0];
+    my $longitude  = $metadata{longitude}[0];
 
     my @categories = map { { name => $_,
-                             url  => "wiki.cgi?Category_"
+                             url  => "$script_name?Category_"
             . uri_escape($formatter->node_name_to_node_param($_)) } } @$catref;
 
     my @locales    = map { { name => $_,
-                             url  => "wiki.cgi?Category_"
+                             url  => "$script_name?Category_"
             . uri_escape($formatter->node_name_to_node_param($_)) } } @$locref;
 
     %tt_vars = (    %tt_vars,
 		    content       => $content,
                     categories    => \@categories,
 		    locales       => \@locales,
-		    os_x          => $os_x,
-		    os_y          => $os_y,
 		    phone         => $phone,
+                    fax           => $fax,
 		    website       => $website,
 		    hours_text    => $hours_text,
+		    address       => $address,
 		    postcode      => $postcode,
-		    latitude      => $lat,
-		    longitude     => $long,
+		    latitude      => $latitude,
+		    longitude     => $longitude,
 		    last_modified => $modified,
 		    version       => $node_data{version},
 		    node_name     => $q->escapeHTML($node),
@@ -292,7 +296,7 @@ sub display_node {
                          last_modified => $q->escapeHTML($_->{last_modified}),
                          comment       => $q->escapeHTML($_->{metadata}{comment}[0]),
                          username      => $q->escapeHTML($_->{metadata}{username}[0]),
-                         url           => "wiki.cgi?"
+                         url           => "$script_name?"
           . $q->escape($formatter->node_name_to_node_param($_->{name})) }
                        } @recent;
         $tt_vars{recent_changes} = \@recent;
@@ -304,7 +308,7 @@ sub display_node {
                          last_modified => $q->escapeHTML($_->{last_modified}),
                          comment       => $q->escapeHTML($_->{metadata}{comment}[0]),
                          username      => $q->escapeHTML($_->{metadata}{username}[0]),
-                         url           => "wiki.cgi?"
+                         url           => "$script_name?"
           . $q->escape($formatter->node_name_to_node_param($_->{name})) }
                        } @recent;
         $tt_vars{recent_changes} = \@recent;
@@ -345,7 +349,7 @@ sub show_userstats {
     @nodes = map { {name          => $q->escapeHTML($_->{name}),
 		    last_modified => $q->escapeHTML($_->{last_modified}),
 		    comment       => $q->escapeHTML($_->{metadata}{comment}[0]),
-		    url           => "wiki.cgi?"
+		    url           => "$script_name?"
           . $q->escape($formatter->node_name_to_node_param($_->{name})) }
                        } @nodes;
     my %tt_vars = ( last_five_nodes => \@nodes,
@@ -359,12 +363,14 @@ sub preview_node {
     $content =~ s/\r\n/\n/gs;
     my $checksum        = $q->param('checksum');
     my $categories_text = $q->param('categories');
-    my $os_x            = $q->param('os_x');
-    my $os_y            = $q->param('os_y');
     my $phone           = $q->param('phone');
+    my $fax             = $q->param('fax');
     my $website         = $q->param('website');
     my $hours_text      = $q->param('hours_text');
+    my $address         = $q->param('address');
     my $postcode        = $q->param('postcode');
+    my $latitude        = $q->param('latitude');
+    my $longitude       = $q->param('longitude');
     my $username        = $q->param('username');
     my $comment         = $q->param('comment');
 
@@ -373,12 +379,14 @@ sub preview_node {
     if ($wiki->verify_checksum($node, $checksum)) {
         my %tt_vars = ( content      => $q->escapeHTML($content),
 			categories   => \@categories,
-			os_x         => $os_x,
-			os_y         => $os_y,
-  		        phone         => $phone,
-		        website       => $website,
-		        hours_text    => $hours_text,
+  		        phone        => $phone,
+			fax          => $fax,
+		        website      => $website,
+		        hours_text   => $hours_text,
+			address      => $address,
                         postcode     => $postcode,
+			latitude     => $latitude,
+			longitude    => $longitude,
 			username     => $username,
 			comment      => $comment,
                         preview_html => $wiki->format($content),
@@ -401,45 +409,44 @@ sub edit_node {
     my %node_data = $wiki->retrieve_node($node);
     my ($content, $checksum) = @node_data{ qw( content checksum ) };
     my %metadata   = %{$node_data{metadata}};
-    my $catref     = $metadata{category};
-    my $locref     = $metadata{locale};
-    my $os_x       = $metadata{os_x}[0];
-    my $os_y       = $metadata{os_y}[0];
-    my $phone      = $metadata{phone}[0];
-    my $website    = $metadata{website}[0];
-    my $hours_text = $metadata{opening_hours_text}[0];
-    my $postcode   = $metadata{postcode}[0];
     my %tt_vars = ( content    => $q->escapeHTML($content),
                     checksum   => $q->escapeHTML($checksum),
-                    categories => $catref,
-		    locales    => $locref,
-		    os_x       => $os_x,
-		    os_y       => $os_y,
-		    phone      => $phone,
-		    website    => $website,
-		    hours_text => $hours_text,
-                    postcode   => $postcode
+                    categories => $metadata{category},
+		    locales    => $metadata{locale},
+		    phone      => $metadata{phone}[0],
+		    fax        => $metadata{fax}[0],
+		    website    => $metadata{website}[0],
+		    hours_text => $metadata{opening_hours_text}[0],
+                    postcode   => $metadata{postcode}[0],
+                    address    => $metadata{address}[0],
+		    latitude   => $metadata{latitude}[0],
+		    longitude  => $metadata{longitude}[0]
     );
 
     process_template("edit_form.tt", $node, \%tt_vars);
 }
 
+sub get_cookie {
+        my %cookies = fetch CGI::Cookie;
+        my $cookie = $cookies{'username'}->value;
+        return $cookie;
+}
 
 sub emit_recent_changes_rss {
     my $rss = CGI::Wiki::Plugin::RSS::ModWiki->new(
         wiki      => $wiki,
-        site_name => "CGI::Wiki Test Site",
-        site_description => "A clone of the Open Community Guide To London",
+        site_name => $site_name,
+        site_description => $site_desc,
         make_node_url => sub {
             my ( $node_name, $version ) = @_;
-            return "http://the.earth.li/~kake/cgi-bin/cgi-wiki/wiki.cgi?id="
+            return "$script_url$script_name?id="
                  . uri_escape(
                         $wiki->formatter->node_name_to_node_param( $node_name )
 			     )
                  . ";version=" . uri_escape($version);
 	  },
         recent_changes_link =>
-            "http://the.earth.li/~kake/cgi-bin/cgi-wiki/wiki.cgi?RecentChanges"
+            "$script_url$script_name?RecentChanges"
      );
 
     print "Content-type: text/plain\n\n";
@@ -452,20 +459,19 @@ sub emit_chef_moz_rss {
     my $node = $args{node};
     my $rss = CGI::Wiki::Plugin::RSS::ChefMoz->new(
         wiki      => $wiki,
-        site_name => "CGI::Wiki Test Site",
-        site_description => "A clone of the Open Community Guide To London",
+        site_name => $site_name,
+        site_description => $site_desc,
         make_node_url => sub {
             my ( $node_name, $version ) = @_;
-            return "http://the.earth.li/~kake/cgi-bin/cgi-wiki/wiki.cgi?id="
+            return "$script_url$script_name?id="
                  . uri_escape(
                         $wiki->formatter->node_name_to_node_param( $node_name )
 			     )
                  . ";version=" . uri_escape($version);
         },
-        full_node_prefix =>
-            "http://the.earth.li/~kake/cgi-bin/cgi-wiki/wiki.cgi?",
-	default_city => "London",
-        default_country => "United Kingdom"
+        full_node_prefix => "$script_url$script_name",
+	default_city => $default_city,
+        default_country => $default_country
      );
 
     print "Content-type: text/plain\n\n";
@@ -478,26 +484,25 @@ sub emit_chef_dan_rss {
     my $node = $args{node};
     my $rss = CGI::Wiki::Plugin::RSS::ChefMoz->new(
         wiki      => $wiki,
-        site_name => "CGI::Wiki Test Site",
-        site_description => "A clone of the Open Community Guide To London",
+        site_name => $site_name,
+        site_description => $site_desc,
         make_node_url => sub {
             my ( $node_name, $version ) = @_;
             if ( defined $version ) {
-               return "http://the.earth.li/~kake/cgi-bin/cgi-wiki/wiki.cgi?id="
+               return "$script_url$script_name?id="
                  . uri_escape(
                         $wiki->formatter->node_name_to_node_param( $node_name )
 			     )
                  . ";version=" . uri_escape($version);
 	     } else {
-                return "http://the.earth.li/~kake/cgi-bin/cgi-wiki/wiki.cgi?"
+                return "$script_url$script_name?"
                  . uri_escape(
-                        $wiki->formatter->node_name_to_node_param( $node_name )
-			     );
+                        $wiki->formatter->node_name_to_node_param( $node_name )			     );
              }
         },
 	full_node_prefix => "REMOVE - not used",
-	default_city => "London",
-        default_country => "United Kingdom"
+	default_city => $default_city,
+        default_country => $default_country
      );
 
     print "Content-type: text/plain\n\n";
@@ -513,15 +518,15 @@ sub process_template {
     $conf ||= {};
 
     my %tt_vars = ( %$vars,
-                    site_name     => "CGI::Wiki Test Site",
-                    cgi_url       => "wiki.cgi",
-                    full_cgi_url  => $FULL_CGI_URL,
-                    contact_email => "kake\@earth.li",
+                    site_name     => $site_name,
+                    cgi_url       => $script_name,
+                    full_cgi_url  => $script_url . $script_name,
+                    contact_email => $contact_email,
                     description   => "",
                     keywords      => "",
-                    stylesheet    => "http://grault.net/grubstreet/grubstreet.css",
-                    home_link     => "wiki.cgi",
-                    home_name     => "Home" );
+                    stylesheet    => $stylesheet_url,
+                    home_link     => $script_name,
+                    home_name     => $home_name );
 
     if ($node) {
         $tt_vars{node_name} = $q->escapeHTML($node);
@@ -550,12 +555,14 @@ sub commit_node {
     my $checksum = $q->param('checksum');
     my $categories_text = $q->param('categories');
     my $locales_text    = $q->param('locales');
-    my $os_x            = $q->param('os_x');
-    my $os_y            = $q->param('os_y');
     my $phone           = $q->param('phone');
+    my $fax             = $q->param('fax');
     my $website         = $q->param('website');
+    my $address         = $q->param('address');
     my $hours_text      = $q->param('hours_text');
     my $postcode        = $q->param('postcode');
+    my $latitude        = $q->param('latitude');
+    my $longitude       = $q->param('longitude');
     my $username        = $q->param('username');
     my $comment         = $q->param('comment');
 
@@ -565,12 +572,14 @@ sub commit_node {
     my $written = $wiki->write_node($node, $content, $checksum,
                                     { category   => \@categories,
 				      locale     => \@locales,
-				      os_x       => $os_x,
-				      os_y       => $os_y,
 				      phone      => $phone,
+				      fax        => $fax,
 				      website    => $website,
+				      address    => $address,
 			      opening_hours_text => $hours_text,
 				      postcode   => $postcode,
+				      latitude   => $latitude,
+				      longitude   => $longitude,
 				      username   => $username,
 				      comment    => $comment      } );
     if ($written) {

@@ -13,12 +13,11 @@
   </h1>
 [% END %]
 
-[% IF os_x %]
-  <small>OS X co-ord: [% CGI.escapeHTML(os_x) %]</small>
-  &nbsp;&nbsp;&nbsp;
-[% END %]
-[% IF os_y %]
-  <small>OS Y co-ord: [% CGI.escapeHTML(os_y) %]</small>
+[% IF latitude %]
+  <small>Latitude: [% CGI.escapeHTML(latitude) %]</small>
+  &nbsp;&nbsp;&nbsp;[% END %]
+[% IF longitude %]
+  <small>Longitude: [% CGI.escapeHTML(longitude) %]</small>
   &nbsp;&nbsp;&nbsp;
 [% END %]
 [% IF postcode %]
@@ -46,7 +45,7 @@
 
 [% content %]
 
-[% IF os_x AND os_y %]
+[% IF latitude AND longitude %]
   <hr>
   <form action="wiki.cgi">
     Find all things within
