@@ -82,6 +82,9 @@ sub make_basic_config {
                                 categories => "Pubs",
                               );
 
+You can supply values for the following keys: C<content>, C<categories>,
+C<locales>, C<os_x>, C<os_y>, C<osie_x>, C<osie_y>, C<latitude>, C<longitude>.
+
 =cut
 
 sub write_data {
@@ -92,7 +95,7 @@ sub write_data {
     my $q = CGI->new( "" );
     $q->param( -name => "content", -value => $args{content} || "foo" );
     $q->param( -name => "categories", -value => $args{categories} || "" );
-    $q->param( -name => "locales", -value => "" );
+    $q->param( -name => "locales", -value => $args{locales} || "" );
     $q->param( -name => "phone", -value => "" );
     $q->param( -name => "fax", -value => "" );
     $q->param( -name => "website", -value => "" );
