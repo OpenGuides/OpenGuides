@@ -12,7 +12,7 @@ use URI::Escape;
 
 use vars qw( $VERSION );
 
-$VERSION = '0.39';
+$VERSION = '0.40';
 
 =head1 NAME
 
@@ -186,23 +186,32 @@ sub display_node {
 
     if ($id eq "RecentChanges") {
         my $minor_edits = $self->get_cookie( "show_minor_edits_in_rc" );
-        my %criteria = ( days => 7 );
-        $criteria{metadata_was} = { edit_type => "Normal edit" }
-          unless $minor_edits;
-        my @recent = $wiki->list_recent_changes( %criteria );
-        @recent = map { {name          => CGI->escapeHTML($_->{name}),
-                         last_modified => CGI->escapeHTML($_->{last_modified}),
-                         version       => CGI->escapeHTML($_->{version}),
-                         comment       => CGI->escapeHTML($_->{metadata}{comment}[0]),
-                         username      => CGI->escapeHTML($_->{metadata}{username}[0]),
-                         host          => CGI->escapeHTML($_->{metadata}{host}[0]),
-                         username_param => CGI->escape($_->{metadata}{username}[0]),
-                         edit_type     => CGI->escapeHTML($_->{metadata}{edit_type}[0]),
-                         url           => "$config->{_}->{script_name}?"
-          . CGI->escape($wiki->formatter->node_name_to_node_param($_->{name})) }
-                       } @recent;
-        $tt_vars{recent_changes} = \@recent;
-        $tt_vars{days} = 7;
+        my %recent_changes;
+        for my $days ( [0, 1], [1, 7], [7, 14], [14, 30] ) {
+            my %criteria = ( between_days => $days );
+            $criteria{metadata_was} = { edit_type => "Normal edit" }
+              unless $minor_edits;
+            my @rc = $self->{wiki}->list_recent_changes( %criteria );
+
+            @rc = map {
+                {
+                  name        => CGI->escapeHTML($_->{name}),
+                  last_modified => CGI->escapeHTML($_->{last_modified}),
+                  version     => CGI->escapeHTML($_->{version}),
+                  comment     => CGI->escapeHTML($_->{metadata}{comment}[0]),
+                  username    => CGI->escapeHTML($_->{metadata}{username}[0]),
+                  host        => CGI->escapeHTML($_->{metadata}{host}[0]),
+                  username_param => CGI->escape($_->{metadata}{username}[0]),
+                  edit_type   => CGI->escapeHTML($_->{metadata}{edit_type}[0]),
+                  url         => "$config->{_}->{script_name}?"
+          . CGI->escape($wiki->formatter->node_name_to_node_param($_->{name})),
+	        }
+                       } @rc;
+            if ( scalar @rc ) {
+                $recent_changes{$days->[1]} = \@rc;
+	    }
+	}
+        $tt_vars{recent_changes} = \%recent_changes;
         return %tt_vars if $args{return_tt_vars};
         my $output = $self->process_template(
                                           id            => $id,
