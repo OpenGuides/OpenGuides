@@ -21,5 +21,11 @@ The custom templates currently supported are:
      - [% openguides_version %]
        Contains the version of OpenGuides that your site is running on.
 
+ - banner.tt
+   Will be included in a <div id="banner"> at the top of every page.
+   You may wish to take advantage of the supplied TT variables
+    - [% site_name %]
+      Contains the value supplied in wiki.conf as the name of the site.
+
 Requests for further custom inserts are welcomed.
 
