@@ -2,7 +2,7 @@ package OpenGuides::Utils;
 
 use strict;
 use vars qw( $VERSION );
-$VERSION = '0.05';
+$VERSION = '0.06';
 
 use Carp qw( croak );
 use CGI::Wiki;
@@ -55,8 +55,11 @@ sub make_wiki_object {
     # Require in the right database module.
     my $dbtype = $config->{_}->{dbtype};
 
-    my %cgi_wiki_exts = ( postgres => "Pg",
-		          mysql    => "MySQL" );
+    my %cgi_wiki_exts = (
+                          postgres => "Pg",
+		          mysql    => "MySQL",
+                          sqlite   => "SQLite", # used for testing
+                        );
 
     my $cgi_wiki_module = "CGI::Wiki::Store::" . $cgi_wiki_exts{$dbtype};
     eval "require $cgi_wiki_module";

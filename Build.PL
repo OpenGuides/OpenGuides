@@ -193,7 +193,7 @@ my $build = OpenGuides::Build->new(
 	'CGI' => '2.76', # unescape not in early versions, picked random
 	'CGI::Carp' => 0,
 	'CGI::Cookie' => 0,
-	'CGI::Wiki' => '0.44',
+	'CGI::Wiki' => '0.47',
 	'CGI::Wiki::Formatter::UseMod' => '0.07', # for nested lists and bugfix
         'CGI::Wiki::Plugin::Categoriser' => 0,
 	'CGI::Wiki::Plugin::GeoCache' => 0,
@@ -247,6 +247,7 @@ $build->{config}{__templates}         = [
                       "recent_changes.tt",
                       "search_results.tt",
                       "site_index.tt",
+                      "supersearch.tt",
                       "userstats.tt",
                       "wanted_pages.tt"
     ];

@@ -1,0 +1,52 @@
+[% node_name = "Search" %]
+[% INCLUDE header.tt %]
+
+<div id="content">
+
+  <p><small>
+    Version [% ss_version %].  See the
+    <a href="[% ss_info_url %]">information page</a> for help and more details.
+  </small></p>
+
+  <form method="get" action="supersearch.cgi">
+    <input type="text" name="search" value="[% search_terms %]" size="50"
+      maxlength="80" />
+    <input type="submit" name="go" value="Go" />
+  </form>
+
+  [% IF search_terms %]
+
+    <hr />
+
+    [% IF results.size %]
+
+      <h2>Search Results</h2>
+      <ol start="[% first_num %]">
+        [% FOREACH result = results %]
+          <li>
+            <a href="[% result.url %]"><b>[% result.name %]</b></a>
+            <br />
+            [% result.summary %]
+          </li>
+        [% END %]
+      </ol>
+
+      <p>Matches [% first_num %] - [% last_num %] of [% total_num %]</p>
+
+      [% IF next_page_startpos %]
+        <form method="get" action="supersearch.cgi">
+          <input type="hidden" name="search" value="[% search_terms %]" />
+          <input type="hidden" name="next" value="[% next_page_startpos %]" />
+          <input type="submit" name="More" value="More" />
+        </form>
+      [% END %]
+
+    [% ELSE %]
+      <h2>No Items Matched</h2>
+    [% END %]  
+
+  [% END %]
+
+</div>
+
+[% INCLUDE footer.tt %]

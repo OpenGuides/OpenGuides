@@ -4,7 +4,7 @@ use strict;
 use warnings;
 
 use vars qw( $VERSION );
-$VERSION = '0.23';
+$VERSION = '0.24';
 
 use CGI qw/:standard/;
 use CGI::Carp qw(croak);
@@ -240,7 +240,7 @@ sub display_node {
     if ($node eq "RecentChanges") {
         my $minor_edits = get_cookie( "show_minor_edits_in_rc" );
         my %criteria = ( days => 7 );
-        $criteria{metadata_isnt} = { edit_type => "Minor tidying" }
+        $criteria{metadata_wasnt} = { edit_type => "Minor tidying" }
           unless $minor_edits;
         my @recent = $wiki->list_recent_changes( %criteria );
         @recent = map { {name          => $q->escapeHTML($_->{name}),
