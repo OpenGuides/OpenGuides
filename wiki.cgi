@@ -429,28 +429,16 @@ sub edit_node {
     my $node = shift;
     my %node_data = $wiki->retrieve_node($node);
     my ($content, $checksum) = @node_data{ qw( content checksum ) };
-    my %metadata   = %{$node_data{metadata}};
-    my $username   = get_cookie( "username" );
+    my $username = get_cookie( "username" );
 
-    # We turn the categories and locales into arrays of hashrefs rather than
-    # simple arrays of strings, because the edit_form.tt template is also
-    # used for preview_node, which makes use of display_categories.tt to
-    # display the categories as links, and hence addresses as category.name
-    my @categories = map { { name => $_ } } @{$metadata{category} || []};
-    my @locales    = map { { name => $_ } } @{$metadata{locale}   || []};
+    my %metadata_vars = OpenGuides::Template->extract_tt_vars(
+                             wiki     => $wiki,
+                             config   => $config,
+			     metadata => $node_data{metadata} );
 
     my %tt_vars = ( content    => $q->escapeHTML($content),
                     checksum   => $q->escapeHTML($checksum),
-                    categories => \@categories,
-		    locales    => \@locales,
-		    phone      => $metadata{phone}[0],
-		    fax        => $metadata{fax}[0],
-		    website    => $metadata{website}[0],
-		    hours_text => $metadata{opening_hours_text}[0],
-                    postcode   => $metadata{postcode}[0],
-                    address    => $metadata{address}[0],
-		    os_x       => $metadata{os_x}[0],
-		    os_y       => $metadata{os_y}[0],
+                    %metadata_vars,
 		    username   => $username
     );
 
