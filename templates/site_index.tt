@@ -6,12 +6,12 @@
     - <a href="[% criterion.url %]">[%- criterion.name -%]</a>
   [%- END -%]
   [%- IF origin -%]
-    - Things within [%- limit -%] of <a href="wiki.cgi?[%- origin_param -%]">[%- origin -%]</a>
+    - Things within [%- limit -%] of <a href="[% cgi_url %]?[%- origin_param -%]">[%- origin -%]</a>
   [%- END -%]
 </h1>
 <ul>
   [% FOREACH node = nodes %]
-     <li><a href="wiki.cgi?[% node.param %]">[% node.name %]</a>
+     <li><a href="[% cgi_url %]?[% node.param %]">[% node.name %]</a>
          [% IF node.distance %]([% node.distance %] metres away)[% END %]
      </li>
   [% END %]

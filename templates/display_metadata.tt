@@ -10,7 +10,7 @@
   <small>(Latitude: [% latitude %] Longitude: [% longitude %])</small>
   &nbsp;&nbsp;&nbsp;
 [% END %]
-<small><a href="wiki.cgi?action=rss&feed=chef_dan&id=[% node_param %]">ChefDan RDF/XML</a></small>
+<small><a href="[% cgi_url %]?action=rss&feed=chef_dan&id=[% node_param %]">ChefDan RDF/XML</a></small>
 <br />
 
 [% IF phone OR fax OR address OR postcode OR formatted_website_text

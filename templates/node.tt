@@ -19,7 +19,7 @@
 
 [% IF os_x AND os_y %]
   <hr>
-  <form action="wiki.cgi">
+  <form action="[% cgi_url %]">
     Find all things within
     <select name="distance_in_metres">
       <option value="200">200 metres</option>
@@ -60,11 +60,11 @@
   Last edited [% last_modified %] (this is version [% version %])<br />
 [% ELSE %]
   This is version [% version %] (as of [% last_modified %])<br />
-  <a href="wiki.cgi?[% node_param %]">View current version</a><br />
+  <a href="[% cgi_url %]?[% node_param %]">View current version</a><br />
 [% END %]
 
 [% IF version > 1 %]
-  <a href="wiki.cgi?action=list_all_versions;id=[% node_param %]">List all
+  <a href="[% cgi_url %]?action=list_all_versions;id=[% node_param %]">List all
   versions</a><br />
 [% END %]
 
