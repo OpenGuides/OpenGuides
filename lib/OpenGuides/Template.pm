@@ -86,6 +86,8 @@ in the config object or the user cookies.
 
 =back
 
+=over
+
 If C<node> is supplied:
 
 =item * C<node_name>

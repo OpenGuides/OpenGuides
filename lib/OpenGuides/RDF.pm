@@ -87,8 +87,6 @@ sub _init {
     return $self;
 }
 
-=back
-
 =cut
 
 =item B<emit_rdfxml>
