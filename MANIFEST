@@ -12,6 +12,7 @@ lib/OpenGuides/UK/PubCrawl.pm
 lib/OpenGuides/Utils.pm
 lib/OpenGuides.pm
 preferences.cgi
+pubcrawl.cgi
 supersearch.cgi
 templates/backlink_results.tt
 templates/display_metadata.tt
