@@ -9,7 +9,7 @@
       <a href="[% cgi_url %]?id=[% node_param %]&version=[% revision.version %]">Version [% revision.version %]</a>
       [% IF revision.version != version %]
       (diff:
-      <a href="[% cgi_url %]?id=[% node_param %]&version=[% revision.version - 1 %]&diffversion=[% revision.version %]">previous</a> /  
+      [% UNLESS revision.version == 1 %]<a href="[% cgi_url %]?id=[% node_param %]&version=[% revision.version - 1 %]&diffversion=[% revision.version %]">previous</a> / [% END %] 
       <a href="[% cgi_url %]?id=[% node_param %]&version=[% revision.version %]&diffversion=[% version %]">current</a>)
       [% END %] 
       .....
