@@ -45,6 +45,9 @@ my $build = Module::Build->new(
 	'Time::Piece' => 0,
 	'URI::Escape' => 0
 	},
+    build_requires => {
+        'Module::Build' => '0.18', # earlier doesn't install script files
+        },
     dynamic_config => 1
 );
 
