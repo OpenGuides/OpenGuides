@@ -1,7 +1,7 @@
-0.22    
+0.22    4 August 2003
         Fixed bug with usernames containing spaces in recent changes/userstats.
 
-        Also try out create_makefile_pl => "passthrough" in Build.PL
+        Try out create_makefile_pl => "passthrough" in Build.PL
 
         Minor fixes to tests to make them work with newest UseMod formatter.
 
