@@ -112,8 +112,10 @@ sub ACTION_install_extras {
                 or print "Skipping $template_path/$template (unchanged)\n";
         }
     }
-    print "Making sure that $custom_template_path exists.\n";
-    mkdir $custom_template_path or warn "Could not make $custom_template_path";
+    unless (-d $custom_template_path) {
+        print "Creating directory $custom_template_path.\n";
+        mkdir $custom_template_path or warn "Could not make $custom_template_path";
+    }
 }
 
 sub add_custom_lib_path {
