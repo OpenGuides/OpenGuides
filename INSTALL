@@ -215,6 +215,19 @@ provide site-specific design. These templates are stored in the directory
 custom-templates/ and are described in the file CUSTOMISATION. The id and
 class tags used for the CSS in OpenGuides are specified in README.CSS.
 
+* Security
+
+The installer will try to create (or modify an existing) a .htaccess file
+to protect wiki.conf, which contains sensitive data (ie passwords).
+However we cannot tell whether apache (or any other web server you may be
+using) is using this file, so you should check that it functioning and that
+you cannot access wiki.conf over HTTP.
+
+You should also configure wiki.conf with the minimum permissions required
+so that local users cannot read the file. This is difficult to automate,
+but the file should be probably be mode 0640, owned by root or an admin
+user, and set to the group the web server runs with.
+
 * Web server configuration
 
 In order to let your web server serve up OpenGuides correctly, you will

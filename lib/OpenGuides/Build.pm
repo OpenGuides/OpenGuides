@@ -88,6 +88,37 @@ sub ACTION_install_extras {
             unless $script_filename eq "wiki.cgi";
     }
 
+    if ( $FAKE ) {
+        print "Trying to ensure that wiki.conf is protected.\n";
+    } else {
+        my $mentionswikidotconf = 0;
+        print "Trying to ensure that wiki.conf is protected by .htaccess.. ";
+        if (-f "$install_directory/.htaccess") {
+	    if (open HTACCESS, "$install_directory/.htaccess") {
+                while (<HTACCESS>) {
+                    if (/wiki\.conf/) {
+                        $mentionswikidotconf = 1;
+                    }
+                }
+	        close HTACCESS;
+            } else {
+                warn "Could not open $install_directory/.htaccess for reading: $!";
+            }
+        }
+        if ($mentionswikidotconf == 0) {
+            if (open HTACCESS, ">>$install_directory/.htaccess") {
+                print HTACCESS "# Added by OpenGuides installer\n";
+                print HTACCESS "<Files wiki.conf>\ndeny from all\n</Files>";
+                close HTACCESS;
+                print "apparent success. You should check that this is working!\n";
+            } else {
+                warn "Could not open $install_directory/.htaccess for writing: $!";
+            }
+        } else {
+            print ".htaccess appears to already mention wiki.conf.\n";
+        }
+    }
+
     foreach my $script ( @extra_scripts ) {
         if ( $FAKE ) {
 	    print "$script -> $install_directory/$script (FAKE)\n";
@@ -113,9 +144,13 @@ sub ACTION_install_extras {
                 or print "Skipping $template_path/$template (unchanged)\n";
         }
     }
-    unless (-d $custom_template_path) {
-        print "Creating directory $custom_template_path.\n";
-        mkdir $custom_template_path or warn "Could not make $custom_template_path";
+    if ( $FAKE ) {
+        print "Making $custom_template_path.\n";
+    } else {
+        unless (-d $custom_template_path) {
+            print "Creating directory $custom_template_path.\n";
+            mkdir $custom_template_path or warn "Could not make $custom_template_path";
+        }
     }
 }
 
