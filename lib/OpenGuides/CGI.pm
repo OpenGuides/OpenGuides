@@ -18,6 +18,8 @@ This documentation is probably only useful to OpenGuides developers.
 
 =head1 SYNOPSIS
 
+Saving preferences in a cookie:
+
   use Config::Tiny;
   use OpenGuides::CGI;
   use OpenGuides::Template;
@@ -26,15 +28,16 @@ This documentation is probably only useful to OpenGuides developers.
   my $config = Config::Tiny->read( "wiki.conf" );
 
   my $cookie = OpenGuides::CGI->make_prefs_cookie(
-      config                 => $config,
-      username               => "Kake",
-      include_geocache_link  => 1,
-      preview_above_edit_box => 1,
-      latlong_traditional    => 1,
-      omit_help_links        => 1,
-      show_minor_edits_in_rc => 1,
-      default_edit_type      => "tidying",
-      cookie_expires         => "never",
+      config                     => $config,
+      username                   => "Kake",
+      include_geocache_link      => 1,
+      preview_above_edit_box     => 1,
+      latlong_traditional        => 1,
+      omit_help_links            => 1,
+      show_minor_edits_in_rc     => 1,
+      default_edit_type          => "tidying",
+      cookie_expires             => "never",
+      track_recent_changes_views => 1,
   );
 
   my $wiki = OpenGuides::Utils->make_wiki_object( config => $config );
@@ -49,6 +52,19 @@ This documentation is probably only useful to OpenGuides developers.
       config => $config
   );
 
+Tracking visits to Recent Changes:
+
+  use Config::Tiny;
+  use OpenGuides::CGI;
+  use OpenGuides::Template;
+  use OpenGuides::Utils;
+
+  my $config = Config::Tiny->read( "wiki.conf" );
+
+  my $cookie = OpenGuides::CGI->make_recent_changes_cookie(
+      config => $config,
+  );
+
 =head1 METHODS
 
 =over 4
@@ -56,15 +72,16 @@ This documentation is probably only useful to OpenGuides developers.
 =item B<make_prefs_cookie>
 
   my $cookie = OpenGuides::CGI->make_prefs_cookie(
-      config                 => $config,
-      username               => "Kake",
-      include_geocache_link  => 1,
-      preview_above_edit_box => 1,
-      latlong_traditional    => 1,
-      omit_help_links        => 1,
-      show_minor_edits_in_rc => 1,
-      default_edit_type      => "tidying",
-      cookie_expires         => "never",
+      config                     => $config,
+      username                   => "Kake",
+      include_geocache_link      => 1,
+      preview_above_edit_box     => 1,
+      latlong_traditional        => 1,
+      omit_help_links            => 1,
+      show_minor_edits_in_rc     => 1,
+      default_edit_type          => "tidying",
+      cookie_expires             => "never",
+      track_recent_changes_views => 1,
   );
 
 Croaks unless a L<Config::Tiny> object is supplied as C<config>.
@@ -106,6 +123,7 @@ sub make_prefs_cookie {
                     rcmined    => $args{show_minor_edits_in_rc} || 0,
                     defedit    => $args{default_edit_type} || "normal",
                     exp        => $args{cookie_expires},
+                    trackrc    => $args{track_recent_changes_views} || 0,
                   },
         -expires => $expires,
     );
@@ -134,22 +152,99 @@ sub get_prefs_from_cookie {
     if ( $cookies{$cookie_name} ) {
         %data = $cookies{$cookie_name}->value; # call ->value in list context
     }
-    return ( username               => $data{user}      || "Anonymous",
-             include_geocache_link  => $data{gclink}    || 0,
-             preview_above_edit_box => $data{prevab}    || 0,
-             latlong_traditional    => $data{lltrad}    || 0,
-             omit_help_links        => $data{omithlplks}|| 0,
-             show_minor_edits_in_rc => $data{rcmined}   || 0,
-             default_edit_type      => $data{defedit}   || "normal",
-             cookie_expires         => $data{exp}       || "month",
+    return ( username                   => $data{user}       || "Anonymous",
+             include_geocache_link      => $data{gclink}     || 0,
+             preview_above_edit_box     => $data{prevab}     || 0,
+             latlong_traditional        => $data{lltrad}     || 0,
+             omit_help_links            => $data{omithlplks} || 0,
+             show_minor_edits_in_rc     => $data{rcmined}    || 0,
+             default_edit_type          => $data{defedit}    || "normal",
+             cookie_expires             => $data{exp}        || "month",
+             track_recent_changes_views => $data{trackrc}    || 0,
            );
 }
+
+
+=item B<make_recent_changes_cookie>
+
+  my $cookie = OpenGuides::CGI->make_recent_changes_cookie(
+      config => $config,
+  );
+
+Makes a cookie that stores the time now as the time of the latest
+visit to Recent Changes.  Or, if C<clear_cookie> is specified and
+true, makes a cookie with an expiration date in the past:
+
+  my $cookie = OpenGuides::CGI->make_recent_changes_cookie(
+      config       => $config,
+      clear_cookie => 1,
+  );
+
+=cut
+
+sub make_recent_changes_cookie {
+    my ($class, %args) = @_;
+    my $config = $args{config} or croak "No config object supplied";
+    croak "Config object not a Config::Tiny"
+        unless UNIVERSAL::isa( $config, "Config::Tiny" );
+    my $cookie_name = $class->_get_rc_cookie_name( config => $config );
+    # See explanation of expiry date hack above in make_prefs_cookie.
+    my $expires;
+    if ( $args{clear_cookie} ) {
+        $expires = "-1M";
+    } else {
+        $expires = "Thu, 31-Dec-2037 22:22:22 GMT";
+    }
+    my $cookie = CGI::Cookie->new(
+        -name  => $cookie_name,
+	-value => {
+                    time => time,
+                  },
+        -expires => $expires,
+    );
+    return $cookie;
+}
+
+
+=item B<get_last_recent_changes_visit_from_cookie>
+
+  my %prefs = OpenGuides::CGI->get_last_recent_changes_visit_from_cookie(
+      config => $config
+  );
+
+Croaks unless a L<Config::Tiny> object is supplied as C<config>.
+Returns the time (as seconds since epoch) of the user's last visit to
+Recent Changes.
+
+=cut
+
+sub get_last_recent_changes_visit_from_cookie {
+    my ($class, %args) = @_;
+    my $config = $args{config} or croak "No config object supplied";
+    croak "Config object not a Config::Tiny"
+        unless UNIVERSAL::isa( $config, "Config::Tiny" );
+    my %cookies = CGI::Cookie->fetch;
+    my $cookie_name = $class->_get_rc_cookie_name( config => $config );
+    my %data;
+    if ( $cookies{$cookie_name} ) {
+        %data = $cookies{$cookie_name}->value; # call ->value in list context
+    }
+    return $data{time};
+}
+
 
 sub _get_cookie_name {
     my ($class, %args) = @_;
     my $site_name = $args{config}->{_}->{site_name}
         or croak "No site name in config";
     return $site_name . "_userprefs";
+}
+
+sub _get_rc_cookie_name {
+    my ($class, %args) = @_;
+    my $site_name = $args{config}->{_}->{site_name}
+        or croak "No site name in config";
+    return $site_name . "_last_rc_visit";
 }
 
 =back

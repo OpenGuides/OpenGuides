@@ -4,7 +4,15 @@
 <div id="content">
   [% INCLUDE navbar.tt %]
   <h2>Recent site changes</h2>
-  [% content %]
+  [% UNLESS since %]
+    [% content %]
+  [% END %]
+
+  [% IF last_viewed %]
+    <p><a href="[% full_cgi_url %]?id=RecentChanges;since=[% last_viewed %]">View changes since your last visit to Recent Changes</a>.</p>
+  [% ELSIF since %]
+    <p><a href="[% full_cgi_url %]?id=RecentChanges">View the regular Recent Changes page</a>.</p>
+  [% END %]
 
   [% BLOCK changes %]
     <table id="recentchanges_[% days %]" cellpadding="0" cellspacing="0"
@@ -39,24 +47,35 @@
     </table>
   [% END %]
 
-[% IF recent_changes.1 %]
-  <h2>Pages changed in the last 24 hours:</h2>
-  [% INCLUDE changes nodes = recent_changes.1 days = 1 %]
-[% END %]
+[% IF since %]
+  <h2>Pages changed since [% since_string %]:</h2>
+  [% IF recent_changes.since %]
+    [% INCLUDE changes nodes = recent_changes.since days = 'since' %]
+  [% ELSE %]
+    <p>No changes made since [% since_string %].</p>
+  [% END %]
+[% ELSE %]
 
-[% IF recent_changes.7 %]
-  <h2>Pages changed in the last week:</h2>
-  [% INCLUDE changes nodes = recent_changes.7 days = 7 %]
-[% END %]
+  [% IF recent_changes.1 %]
+    <h2>Pages changed in the last 24 hours:</h2>
+    [% INCLUDE changes nodes = recent_changes.1 days = 1 %]
+  [% END %]
 
-[% IF recent_changes.14 %]
-  <h2>Pages changed in the last fortnight:</h2>
-  [% INCLUDE changes nodes = recent_changes.14 days = 14 %]
-[% END %]
+  [% IF recent_changes.7 %]
+    <h2>Pages changed in the last week:</h2>
+    [% INCLUDE changes nodes = recent_changes.7 days = 7 %]
+  [% END %]
 
-[% IF recent_changes.30 %]
-  <h2>Pages changed in the last 30 days:</h2>
-  [% INCLUDE changes nodes = recent_changes.30 days = 30 %]
+  [% IF recent_changes.14 %]
+    <h2>Pages changed in the last fortnight:</h2>
+    [% INCLUDE changes nodes = recent_changes.14 days = 14 %]
+  [% END %]
+
+  [% IF recent_changes.30 %]
+    <h2>Pages changed in the last 30 days:</h2>
+    [% INCLUDE changes nodes = recent_changes.30 days = 30 %]
+  [% END %]
+
 [% END %]
 
 [% INCLUDE footer.tt %]

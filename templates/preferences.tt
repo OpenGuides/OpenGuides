@@ -68,6 +68,15 @@
     </p>
 
     <p>
+      [% IF track_recent_changes_views %]
+        <input type="checkbox" id="track_recent_changes_views" name="track_recent_changes_views" value="1" checked="1" />
+      [% ELSE %]
+        <input type="checkbox" id="track_recent_changes_views" name="track_recent_changes_views" value="1" />
+      [% END %]
+      <label for="track_recent_changes_views">Track my visits to Recent Changes and offer me a link for &#8220;changes since I last viewed Recent Changes&#8221;.</label>
+    </p>
+
+    <p>
       <label for="default_edit_type">Default edit type:</label>
       <select name="default_edit_type">
         [% IF default_edit_type == 'normal' %]
@@ -137,6 +146,10 @@
   <p>Minor edits
     [% UNLESS show_minor_edits_in_rc %] not [% END %]
   included in Recent Changes.</p>
+
+  <p>Your visits to Recent Changes will
+    [% UNLESS track_recent_changes_views %] not [% END %]
+  be tracked.</p>
 
   <p>Default edit type set to
     [% IF default_edit_type == 'normal' %]

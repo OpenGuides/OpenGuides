@@ -51,6 +51,7 @@ t/01_load.t
 t/11_utils.t
 t/12_macros.t
 t/13_cookies.t
+t/14_recent_changes_cookies.t
 t/15_template.t
 t/21_rdf.t
 t/22_rss_modwiki.t

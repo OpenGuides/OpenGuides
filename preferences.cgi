@@ -23,15 +23,16 @@ if ( $action eq "set_preferences" ) {
 exit 0;
 
 sub set_preferences {
-    my $username     = $cgi->param("username") || "";
-    my $gc_link      = $cgi->param("include_geocache_link")  || 0;
-    my $pre_above    = $cgi->param("preview_above_edit_box") || 0;
-    my $latlong_trad = $cgi->param("latlong_traditional")    || 0;
-    my $omit_hlplnks = $cgi->param("omit_help_links")        || 0;
-    my $rc_minor_eds = $cgi->param("show_minor_edits_in_rc") || 0;
-    my $edit_type    = $cgi->param("default_edit_type") || "normal";
-    my $expires      = $cgi->param("cookie_expires") || "month";
-    my $cookie = OpenGuides::CGI->make_prefs_cookie(
+    my $username     = $cgi->param("username")                   || "";
+    my $gc_link      = $cgi->param("include_geocache_link")      || 0;
+    my $pre_above    = $cgi->param("preview_above_edit_box")     || 0;
+    my $latlong_trad = $cgi->param("latlong_traditional")        || 0;
+    my $omit_hlplnks = $cgi->param("omit_help_links")            || 0;
+    my $rc_minor_eds = $cgi->param("show_minor_edits_in_rc")     || 0;
+    my $edit_type    = $cgi->param("default_edit_type")          || "normal";
+    my $expires      = $cgi->param("cookie_expires")             || "month";
+    my $track_rc     = $cgi->param("track_recent_changes_views") || 0;
+    my $prefs_cookie = OpenGuides::CGI->make_prefs_cookie(
         config => $config,
         username => $username,
         include_geocache_link  => $gc_link,
@@ -41,22 +42,34 @@ sub set_preferences {
         show_minor_edits_in_rc => $rc_minor_eds,
         default_edit_type      => $edit_type,
         cookie_expires         => $expires,
+        track_recent_changes_views => $track_rc,
     );
+    my @cookies = ( $prefs_cookie );
+    # If they've asked not to have their recent changes visits tracked,
+    # clear any existing recentchanges cookie.
+    if ( ! $track_rc ) {
+        my $rc_cookie = OpenGuides::CGI->make_recent_changes_cookie(
+            config       => $config,
+            clear_cookie => 1,
+        );
+        push @cookies, $rc_cookie;
+    }
     print OpenGuides::Template->output(
         wiki     => $wiki,
         config   => $config,
         template => "preferences.tt",
-        cookies  => $cookie,
+        cookies  => \@cookies,
 	vars     => {
-                      not_editable           => 1,
-                      username               => $username,
-                      include_geocache_link  => $gc_link,
-                      preview_above_edit_box => $pre_above,
-                      latlong_traditional    => $latlong_trad,
-                      omit_help_links        => $omit_hlplnks,
-                      show_minor_edits_in_rc => $rc_minor_eds,
-                      default_edit_type      => $edit_type,
-                      cookie_expires         => $expires,
+                      not_editable               => 1,
+                      username                   => $username,
+                      include_geocache_link      => $gc_link,
+                      preview_above_edit_box     => $pre_above,
+                      latlong_traditional        => $latlong_trad,
+                      omit_help_links            => $omit_hlplnks,
+                      show_minor_edits_in_rc     => $rc_minor_eds,
+                      default_edit_type          => $edit_type,
+                      cookie_expires             => $expires,
+                      track_recent_changes_views => $track_rc,
                     }
     );
 }

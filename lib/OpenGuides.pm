@@ -6,8 +6,10 @@ use CGI;
 use CGI::Wiki::Plugin::Diff;
 use CGI::Wiki::Plugin::GeoCache;
 use CGI::Wiki::Plugin::Locator::UK;
+use OpenGuides::CGI;
 use OpenGuides::Template;
 use OpenGuides::Utils;
+use Time::Piece;
 use URI::Escape;
 
 use vars qw( $VERSION );
@@ -187,8 +189,13 @@ sub display_node {
     if ($id eq "RecentChanges") {
         my $minor_edits = $self->get_cookie( "show_minor_edits_in_rc" );
         my %recent_changes;
-        for my $days ( [0, 1], [1, 7], [7, 14], [14, 30] ) {
-            my %criteria = ( between_days => $days );
+        my $q = CGI->new;
+        my $since = $q->param("since");
+        if ( $since ) {
+            $tt_vars{since} = $since;
+            my $t = localtime($since); # overloaded by Time::Piece
+            $tt_vars{since_string} = $t->strftime;
+            my %criteria = ( since => $since );
             $criteria{metadata_was} = { edit_type => "Normal edit" }
               unless $minor_edits;
             my @rc = $self->{wiki}->list_recent_changes( %criteria );
@@ -208,16 +215,48 @@ sub display_node {
 	        }
                        } @rc;
             if ( scalar @rc ) {
-                $recent_changes{$days->[1]} = \@rc;
-	    }
-	}
+                $recent_changes{since} = \@rc;
+    	    }
+        } else {
+            for my $days ( [0, 1], [1, 7], [7, 14], [14, 30] ) {
+                my %criteria = ( between_days => $days );
+                $criteria{metadata_was} = { edit_type => "Normal edit" }
+                  unless $minor_edits;
+                my @rc = $self->{wiki}->list_recent_changes( %criteria );
+
+                @rc = map {
+                {
+                  name        => CGI->escapeHTML($_->{name}),
+                  last_modified => CGI->escapeHTML($_->{last_modified}),
+                  version     => CGI->escapeHTML($_->{version}),
+                  comment     => CGI->escapeHTML($_->{metadata}{comment}[0]),
+                  username    => CGI->escapeHTML($_->{metadata}{username}[0]),
+                  host        => CGI->escapeHTML($_->{metadata}{host}[0]),
+                  username_param => CGI->escape($_->{metadata}{username}[0]),
+                  edit_type   => CGI->escapeHTML($_->{metadata}{edit_type}[0]),
+                  url         => "$config->{_}->{script_name}?"
+          . CGI->escape($wiki->formatter->node_name_to_node_param($_->{name})),
+	        }
+                           } @rc;
+                if ( scalar @rc ) {
+                    $recent_changes{$days->[1]} = \@rc;
+	        }
+    	    }
+        }
         $tt_vars{recent_changes} = \%recent_changes;
+        my %processing_args = (
+                                id            => $id,
+                                template      => "recent_changes.tt",
+                                tt_vars       => \%tt_vars,
+                               );
+        if ( !$since && $self->get_cookie("track_recent_changes_views") ) {
+	    my $cookie =
+               OpenGuides::CGI->make_recent_changes_cookie(config => $config );
+            $processing_args{cookies} = $cookie;
+            $tt_vars{last_viewed} = OpenGuides::CGI->get_last_recent_changes_visit_from_cookie( config => $config );
+        }
         return %tt_vars if $args{return_tt_vars};
-        my $output = $self->process_template(
-                                          id            => $id,
-                                          template      => "recent_changes.tt",
-                                          tt_vars       => \%tt_vars,
-                                            );
+        my $output = $self->process_template( %processing_args );
         return $output if $return_output;
         print $output;
     } elsif ( $id eq $self->config->{_}->{home_name} ) {
@@ -650,6 +689,7 @@ sub process_template {
                         node     => $args{id},
 			template => $args{template},
 			vars     => $args{tt_vars},
+                        cookies  => $args{cookies},
     );
     if ( $args{content_type} ) {
         $output_conf{content_type} = "";
