@@ -1,5 +1,4 @@
 <div id="toolbar">
-<!-- <div align="center"><a href="[% home_link %]"><img src="http://grault.net/grubstreet/grubstreet.gif" alt="" class="n"></a></div> -->
 <ul>
     <li><a href="[% home_link %]">[% home_name %]</a></li>
     <li><a href="[% full_cgi_url %]?RecentChanges">RecentChanges</a></li>
