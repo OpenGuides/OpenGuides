@@ -49,6 +49,10 @@
 
         Removed newlines from output of search box macro.
 
+	Implemented the diffing using CGI::Wiki::Plugin::Diff. (seems change
+	in 0.30 was lost). Removed OpenGuides::Diff.pm as we should not be
+	distributing it.
+
 0.30    29 December 2003
         Added method to allow admins to delete nodes.  You will need to
           explicitly enable this option in your wiki.conf, since it brings

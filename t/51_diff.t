@@ -2,8 +2,8 @@ use strict;
 use Config::Tiny;
 use OpenGuides::Utils;
 use Test::MockObject;
-use Test::More tests => 6;
-
+#use Test::More tests => 6;
+use Test::More skip_all => "Tests for diff are in CGI::Wiki::Plugin::Diff";
 use_ok( "OpenGuides::Diff" );
 
 # Set up mock wiki object.
