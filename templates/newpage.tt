@@ -17,5 +17,6 @@ Enter the name of the page to make:<br />
   [% END %]
 </strong>
 </form>
+</div>
 
 [% INCLUDE footer.tt %]

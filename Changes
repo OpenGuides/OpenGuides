@@ -1,3 +1,7 @@
+0.30    
+        Fixed some HTML validation bugs.
+	Added multiple install and pretty URL notes to INSTALL.
+
 0.29    8 November 2003
         Expanded section in TROUBLESHOOTING about permissions problems.
         Diff.pm now absorbs trailing punctuation and spaces into words

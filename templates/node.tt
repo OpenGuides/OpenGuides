@@ -7,7 +7,7 @@
   [% IF is_indexable_node %]
     <h1>[% site_name %] - <a href="[%cgi_url %]?action=index;index_type=[% CGI.escape(index_type) %];index_value=[% CGI.escape(index_value) %]">[% node_name %]</a></h1>
   [% ELSE %]
-    <h1>[% site_name %] - <a href="[%cgi_url %]?action=show_backlinks&id=[% CGI.escape(node_name) %]">[% node_name %]</a></h1>
+    <h1>[% site_name %] - <a href="[%cgi_url %]?action=show_backlinks&amp;id=[% CGI.escape(node_name) %]">[% node_name %]</a></h1>
   [% END %]
 [% ELSE %]
   <h1>
@@ -54,11 +54,15 @@
   versions</a><br />
 [% END %]
 
-<p>
+</div>
+
+<br />
+
+<div class="search">
   <form action="supersearch.cgi" method="get">
     <input type="text" size="50" name="search" />
     <input type="submit" name="Go" value="Search" class="form_button" />
   </form>
-</p>
+</div>
 
 [% INCLUDE footer.tt %]
