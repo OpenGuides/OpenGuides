@@ -1,4 +1,7 @@
-#!/usr/local/bin/perl
+#!/usr/local/stow/perl-5.8.0/bin/perl 
+
+eval 'exec /usr/local/stow/perl-5.8.0/bin/perl  -S $0 ${1+"$@"}'
+    if 0; # not running under some shell
 #
 # Usemod Wiki search facility
 #
@@ -53,13 +56,10 @@ sub matched_items {
 
 my $fs = '\xb3';
 
-# sub readpage is used to read in a Usemod Wiki page, and interpret the delimiters. This forms
-# a hash. The output goes into the global hash %wikitext, as this is what is used for searching 
-# on. The page title is prepended, enabling the title to be included in matches.
+# sub mungepage is used to filter out undesirable markup from the raw wiki text
 
-sub readpage {			#!!! UseMod specific
-	my ($term,$file) = @_;
-	my $text = do { local (@ARGV, $/) = $file; <> }; # slurp entire file
+sub mungepage {
+	my $text = shift;
 
 # Remove HTML tags (sort of)
 
@@ -89,42 +89,7 @@ sub readpage {			#!!! UseMod specific
 
 	$text =~ s/\#REDIRECT/\(redirect\)/g;
 
-# Escape out any single quotes
-
-	$text =~ s/'/\\'/g;
-
-# Add single quotes around text strings
-
-	$text =~ s/($fs\d|^)([^$fs]*?[^$fs\d].*?)(?=($fs\d|$))/$1'$2'/gs;
-	$text =~ /$fs\d/ or return;
-
-# Replace separators with ',' and add braces to surround string. This is to prepare
-# the string for an eval as an anonymous hash
-
-	my $strung = &replace_separators($text,$&,'{','}');
-
-	my $out = eval($strung);	# constructs nested hash of different data items.
-	my $title = $term;
-	$title =~ s/_/ /g;
-	$wikitext{$term} = ' ' . $title . ': ' . $out->{text_default}{data}{text} 
-			if !$@;
-}
-
-# sub replace_separators - recursive proc to munge separators into commas, and resolve
-# nesting.
-
-sub replace_separators {	#!!! UseMod specific
-	my ($text,$delim,$opening,$closing) = @_;
-	
-	my @chunx = split /$delim/,$text;
-	
-	for (@chunx) {
-		$_ = 'undef' if $_ eq '';
-		$_ = replace_separators($_,$&,'{','}') if /$fs\d/;
-		$_ = /^(\'([^']|\\')*[^\\]\'|[\[\]\{\},\d]|undef)+$/ ? $& : '';
-	}
-	
-	$opening . (join ',',@chunx) . $closing;
+	$text;
 }
 
 ###!!!!! load_wiki_text -UseMod version commented out.
@@ -193,7 +158,7 @@ sub prime_wikitext {
 
 	for (keys %res) {
 		$wikitext{$wiki_formatter->node_name_to_node_param($_)} 
-			||= $_ . ' ' . $wikistore->retrieve_node($_);
+			||= mungepage($_ . ' ' . $wikistore->retrieve_node($_));
 	}
 }
 	
