@@ -261,6 +261,8 @@ sub display_node {
     my $postcode   = $metadata{postcode}[0];
     my $os_x       = $metadata{os_x}[0];
     my $os_y       = $metadata{os_y}[0];
+    my $latitude   = $metadata{latitude}[0];
+    my $longitude  = $metadata{longitude}[0];
 
     my @categories = map { { name => $_,
                              url  => "$script_name?Category_"
@@ -282,6 +284,8 @@ sub display_node {
 		    postcode      => $postcode,
 		    os_x          => $os_x,
 		    os_y          => $os_y,
+		    latitude      => $latitude,
+		    longitude     => $longitude,
 		    last_modified => $modified,
 		    version       => $node_data{version},
 		    node_name     => $q->escapeHTML($node),
@@ -572,6 +576,12 @@ sub commit_node {
     my $username        = $q->param('username');
     my $comment         = $q->param('comment');
 
+    # We store latitude and longitude as well for the ICBM meta stuff.
+    my $point = Geography::NationalGrid::GB->new( Easting  => $os_x,
+						  Northing => $os_y );
+    my $latitude  = $point->latitude;
+    my $longitude = $point->longitude;
+
     my @categories = sort split("\r\n", $categories_text);
     my @locales    = sort split("\r\n", $locales_text);
 
@@ -586,6 +596,8 @@ sub commit_node {
 				      postcode   => $postcode,
 				      os_x       => $os_x,
 				      os_y       => $os_y,
+				      latitude   => $latitude,
+				      longitude  => $longitude,
 				      username   => $username,
 				      comment    => $comment      } );
     if ($written) {
