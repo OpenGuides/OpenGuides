@@ -1,3 +1,5 @@
+        Fix broken navbar changes that crept into last release.
+
 0.42    
         Handle distance searching with OpenGuides::Supersearch instead of
           find_within_distance action.

@@ -1,11 +1,11 @@
 <div id="navbar">
 
   <div class="navbar_group">
-    <div class="navbar_group_title">[% labels.navbar.tools %]</div>
-    <div class="navbar_item"><a href="[% full_cgi_url %]?RecentChanges">[% labels.navbar.recent_changes %]</a> <span class="hidden">/</span></div>
-    <div class="navbar_item"><a href="newpage.cgi">[% labels.navbar.new_page %]</a> <span class="hidden">/</span></div>
-    <div class="navbar_item"><a href="[% full_cgi_url %]?action=random">[% labels.navbar.random_page %]</a> <span class="hidden">/</span></div>
-    <div class="navbar_item"><a href="[% full_cgi_url %]?action=show_wanted_pages">[% labels.navbar.wanted_pages %]</a> <span class="hidden">/</span></div>
+    <div class="navbar_group_title">Tools:</div>
+    <div class="navbar_item"><a href="[% full_cgi_url %]?RecentChanges">Recent Changes</a> <span class="hidden">/</span></div>
+    <div class="navbar_item"><a href="newpage.cgi">Create a new page</a> <span class="hidden">/</span></div>
+    <div class="navbar_item"><a href="[% full_cgi_url %]?action=random">Random Page</a> <span class="hidden">/</span></div>
+    <div class="navbar_item"><a href="[% full_cgi_url %]?action=show_wanted_pages">Wanted Pages</a> <span class="hidden">/</span></div>
     [% IF geocache_link AND latitude AND longitude %]
       <div class="navbar_item"><a href="http://www.geocaching.com/seek/nearest_cache.asp?origin_lat=[% latitude %]&origin_long=[% longitude %]">Look for nearby geocaches</a></div>
     [% END %]
@@ -13,32 +13,32 @@
 
   [% UNLESS omit_help_links %]
     <div class="navbar_group">
-      <div class="navbar_group_title">[% labels.navbar.help %] <span class="hidden">/</span></div>
-      <div class="navbar_item"><a href="[% full_cgi_url %]?FAQ">[% labels.navbar.faq %]</a> <span class="hidden">/</span></div>
-      <div class="navbar_item"><a href="[% full_cgi_url %]?How_To_Get_Started">[% labels.navbar.get_started %]</a> <span class="hidden">/</span></div>
+      <div class="navbar_group_title">Help: <span class="hidden">/</span></div>
+      <div class="navbar_item"><a href="[% full_cgi_url %]?FAQ">FAQ</a> <span class="hidden">/</span></div>
+      <div class="navbar_item"><a href="[% full_cgi_url %]?How_To_Get_Started">How To Get Started</a> <span class="hidden">/</span></div>
       [% IF formatting_rules_link %]
         <div class="navbar_item"><a href="[% formatting_rules_link %]">[% formatting_rules_node %]</a> <span class="hidden">/</span></div>
       [% END %]
-      <div class="navbar_item"><a href="[% full_cgi_url %]?Wiki_Etiquette">[% labels.navbar.etiquette %]</a> <span class="hidden">/</span></div>
+      <div class="navbar_item"><a href="[% full_cgi_url %]?Wiki_Etiquette">Wiki Etiquette</a> <span class="hidden">/</span></div>
     </div>
   [% END %]
 
   <div class="navbar_group">
-    <div class="navbar_group_title">[% labels.navbar.options %]</div>
-    <div class="navbar_item"><a href="preferences.cgi">[% labels.navbar.user_prefs %]</a></div>
+    <div class="navbar_group_title">Options:</div>
+    <div class="navbar_item"><a href="preferences.cgi">Set username/prefs</a></div>
   </div>
 
   <div class="navbar_group">
-    <div class="navbar_group_title">[% labels.navbar.search %]</div>
+    <div class="navbar_group_title">Search:</div>
     <div class="navbar_item">
       <form method="post" action="supersearch.cgi" enctype="application/x-www-form-urlencoded">
         <input type="hidden" name="action" value="search" />
-        <input type="text" size="15" name="search" id="nav_search" value="[% labels.general.search_text %]" onfocus="this.value=''" /> <label for="nav_search" class="hidden">[% labels.general.search_text %]</label>
-        <input type="submit" value="[% labels.general.go %]" class="form_button" />
+        <input type="text" size="15" name="search" id="nav_search" value="Search text" onfocus="this.value=''" /> <label for="nav_search" class="hidden">Search text</label>
+        <input type="submit" value="Go" class="form_button" />
       </form>
     </div>
     <div class="navbar_item">
-      <a href="supersearch.cgi">[% labels.navbar.advanced_search %]</a>
+      <a href="supersearch.cgi">Advanced Search</a>
     </div>
   </div>
 
