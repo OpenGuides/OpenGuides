@@ -137,7 +137,7 @@ sub run {
 
     my %tt_vars = (
                    ss_version  => $VERSION,
-                   ss_info_url => 'http://london.openguides.org/?Search_Script'
+                   ss_info_url => 'http://openguides.org/page/search_help'
                   );
 
     my $doing_search;
