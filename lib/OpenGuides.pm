@@ -2,6 +2,7 @@ package OpenGuides;
 use strict;
 
 use CGI;
+use CGI::Wiki::Plugin::Diff;
 use CGI::Wiki::Plugin::Locator::UK;
 use OpenGuides::Template;
 use OpenGuides::Utils;
@@ -42,6 +43,10 @@ sub new {
     $self->{config} = $args{config};
     my $locator = CGI::Wiki::Plugin::Locator::UK->new;
     $wiki->register_plugin( plugin => $locator );
+    $self->{locator} = $locator;
+    my $differ = CGI::Wiki::Plugin::Diff->new;
+    $wiki->register_plugin( plugin => $differ );
+    $self->{differ} = $differ;
     return $self;
 }
 
@@ -76,6 +81,17 @@ An accessor, returns the underlying L<CGI::Wiki::Plugin::Locator::UK> object.
 sub locator {
     my $self = shift;
     return $self->{locator};
+}
+
+=item B<differ>
+
+An accessor, returns the underlying L<CGI::Wiki::Plugin::Diff> object.
+
+=cut
+
+sub differ {
+    my $self = shift;
+    return $self->{differ};
 }
 
 =item B<display_node>
@@ -210,6 +226,30 @@ sub display_node {
         return $output if $return_output;
         print $output;
     }
+}
+
+=item B<display_diffs>
+
+  $guide->display_diffs(
+                         id            => "Home Page",
+                         version       => 6,
+                         other_version => 5,
+                       );
+
+=cut
+
+sub display_diffs {
+    my ($self, %args) = @_;
+    my %diff_vars = $self->differ->differences(
+                                        node          => $args{id},
+                                        left_version  => $args{version},
+   		                        right_version => $args{other_version},
+                                              );
+    print $self->process_template(
+                                   id       => $args{id},
+                                   template => "differences.tt",
+                                   vars     => \%diff_vars
+                                 );
 }
 
 sub process_template {

@@ -11,7 +11,6 @@ use CGI::Carp qw(croak);
 use CGI::Wiki;
 use CGI::Wiki::Search::SII;
 use CGI::Wiki::Formatter::UseMod;
-use CGI::Wiki::Plugin::Diff;
 use Config::Tiny;
 use Geography::NationalGrid;
 use Geography::NationalGrid::GB;
@@ -34,14 +33,11 @@ my $script_url  = $config->{_}->{script_url};
 # we need to allow for people editing the config file by hand later.
 $script_url .= "/" unless $script_url =~ /\/$/;
 
-my ($guide, $wiki, $formatter, $q, $differ);
+my ($guide, $wiki, $formatter, $q);
 eval {
     $guide = OpenGuides->new( config => $config );
     $wiki = $guide->wiki;
     $formatter = $wiki->formatter;
-
-    $differ = CGI::Wiki::Plugin::Diff->new;
-    $wiki->register_plugin( plugin => $differ );
 
     # Get CGI object, find out what to do.
     $q = CGI->new;
@@ -132,21 +128,14 @@ eval {
         } else {
             my $version = $q->param("version");
 	    my $other_ver = $q->param("diffversion");
-	    if ( $other_ver ) {
-                my %diff_vars = $differ->differences(
-                    node          => $node,
-                    left_version  => $version, 
-		    right_version => $other_ver 
-                );
-                print OpenGuides::Template->output(
-                    wiki     => $wiki,
-                    config   => $config,
-                    node     => $node,
-                    template => "differences.tt",
-                    vars     => \%diff_vars
-                );
-	    } else {
-        	$guide->display_node( id => $node, version => $version);
+            if ( $other_ver ) {
+                $guide->display_diffs(
+                                       id            => $node,
+                                       version       => $version,
+                                       other_version => $other_ver,
+                                     );
+            } else {
+                $guide->display_node( id => $node, version => $version );
 	    }
         }
     }
