@@ -251,8 +251,8 @@ my $build = OpenGuides::Build->new(
     create_makefile_pl => "passthrough"
 );
 
-$build->add_to_cleanup( "wiki.conf" );
-$build->add_to_cleanup( "configlib" );
+$build->add_to_cleanup( "t/indexes/" );
+$build->add_to_cleanup( "t/node.db" );
 
 # Tell OpenGuides::Build which additional scripts and templates to install.
 $build->{config}{__extra_scripts}     = 
