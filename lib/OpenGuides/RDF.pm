@@ -142,8 +142,8 @@ sub emit_rdfxml {
     my $website            = $node_data{metadata}{website}[0]            || '';
     my $opening_hours_text = $node_data{metadata}{opening_hours_text}[0] || '';
     my $postcode           = $node_data{metadata}{postcode}[0]           || '';
-    my $city               = $node_data{metadata}{city}[0]               || '';
-    my $country            = $node_data{metadata}{country}[0]            || '';
+    my $city               = $node_data{metadata}{city}[0]               || $self->{default_city};
+    my $country            = $node_data{metadata}{country}[0]            || $self->{default_country};
     my $latitude           = $node_data{metadata}{latitude}[0]           || '';
     my $longitude          = $node_data{metadata}{longitude}[0]          || '';
     my $version            = $node_data{version};
@@ -153,11 +153,12 @@ sub emit_rdfxml {
     my $catrefs            = $node_data{metadata}{category};
     my @locales            = @{ $node_data{metadata}{locale} || [] };
 
-    my $objType;
+    my ($is_geospatial, $objType);
 
     if ($latitude || $longitude || $postcode || $city || $country || @locales)
     {
-      $objType = 'geo:SpatialThing';
+      $is_geospatial = 1;
+      $objType    = 'geo:SpatialThing';
     }
     else
     {
@@ -202,14 +203,13 @@ sub emit_rdfxml {
 
   <$objType rdf:ID="obj" dc:title="$node_name">
 };
-
     $rdf .= "    <!-- categories -->\n";
-    $rdf .= "    <dc:subject>$_</dc:subject>\n" foreach @{$catrefs};
+    $rdf .= "    <dc:subject>$_</dc:subject>\n"             foreach @{$catrefs};
     $rdf .= "\n    <!-- address and geospatial data -->\n";
-    $rdf .= "    <city>$city</city>" if $city;
-    $rdf .= "    <postalCode>$postcode</postalCode>\n" if $postcode;
-    $rdf .= "    <country>$country</country>\n" if $country;
-    $rdf .= "    <wn:Neighborhood>$_</wn:Neighborhood>\n" foreach @locales;
+    $rdf .= "    <city>$city</city>"                        if $is_geospatial;
+    $rdf .= "    <postalCode>$postcode</postalCode>\n"      if $postcode;
+    $rdf .= "    <country>$country</country>\n"             if $is_geospatial;
+    $rdf .= "    <wn:Neighborhood>$_</wn:Neighborhood>\n"   foreach @locales;
 
     if ($latitude && $longitude) {
       $rdf .= qq{    <geo:lat>$latitude</geo:lat>
@@ -223,9 +223,9 @@ sub emit_rdfxml {
     }
 
     $rdf .= "\n    <!-- contact information -->\n";
-    $rdf .= "    <phone>$phone</phone>\n" if $phone;
-    $rdf .= "    <fax>$fax</fax>\n" if $fax;
-    $rdf .= "    <homePage>$website</homePage>\n" if $website;
+    $rdf .= "    <phone>$phone</phone>\n"                              if $phone;
+    $rdf .= "    <fax>$fax</fax>\n"                                    if $fax;
+    $rdf .= "    <homePage>$website</homePage>\n"                      if $website;
     $rdf .= "    <chefmoz:Hours>$opening_hours_text</chefmoz:Hours>\n" if $opening_hours_text;
 
     $rdf .= qq{

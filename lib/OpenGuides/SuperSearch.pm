@@ -43,13 +43,17 @@ This documentation is probably only useful to OpenGuides developers.
 sub new {
     my ($class, %args) = @_;
     my $config = $args{config};
-    my $self = { config => $config };
+    my $self   = { config => $config };
     bless $self, $class;
+
     my $wiki = OpenGuides::Utils->make_wiki_object( config => $config );
-    $self->{wiki} = $wiki;
+
+    $self->{wiki}     = $wiki;
     $self->{wikimain} = $config->{_}{script_url} . $config->{_}{script_name};
-    $self->{css} = $config->{_}{stylesheet_url};
-    $self->{head} = $config->{_}{site_name} . " Search";
+    $self->{css}      = $config->{_}{stylesheet_url};
+    $self->{head}     = $config->{_}{site_name} . " Search";
+    $self->{language} = $config->{_}{default_language}; 
+
     return $self;
 }
 
@@ -86,7 +90,7 @@ sub run {
     my %tt_vars;
 
     $tt_vars{ss_version}  = $VERSION;
-    $tt_vars{ss_info_url} = 'http://openguides.org/london?Search_Script';
+    $tt_vars{ss_info_url} = 'http://london.openguides.org/?Search_Script';
 
     # Do we have an existing search? if so, do it.
     if ( $vars{search} ) {
@@ -155,6 +159,8 @@ sub run {
 sub process_template {
     my ($self, %args) = @_;
     my $tt_vars = $args{tt_vars} || {};
+    $tt_vars->{language} = $self->{language};
+
     $tt_vars->{not_editable} = 1;
 
     return %$tt_vars if $self->{return_tt_vars};
