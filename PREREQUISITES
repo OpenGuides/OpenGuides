@@ -1,4 +1,4 @@
-Modules required by OpenGuides 0.27
+Modules required by OpenGuides 0.28
 ===================================
 
 Algorithm::Diff (version 0.13 or later)
@@ -17,6 +17,8 @@ Data::Dumper
   DBD::Pg
     -- or --
   DBD::mysql
+    -- or --
+  DBD::SQLite
 )
 File::Spec::Functions
 Geography::NationalGrid

@@ -1,6 +1,8 @@
-0.28    
+0.28    1 November 2003
         Allow running sites on SQLite databases.
         Fixed bug with navbar prompt in Build.PL (CPAN RT #3894).
+        Junked OpenGuides::Config completely to avoid database password
+          leakage, and easier install (CPAN RT 3916).
 
 0.27    1 November 2003
         Fixed bug with category/locale indexing - no longer case-sensitive.

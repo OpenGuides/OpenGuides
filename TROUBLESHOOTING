@@ -44,3 +44,10 @@ or a combination of both.  Your ISP or sysadmin might be able to help you
 further with this problem if you can't figure it out yourself.
 
 ----------------------------------------------------------------------
+
+Again relating to permissions - if you are using SQLite then note that
+the user your CGI is running as must have write access to not only the
+database file itself, but the directory that the file is in (in order
+that it can write a lockfile).
+
+----------------------------------------------------------------------

@@ -9,10 +9,8 @@ die "Config::Tiny is required to configure this application.\n" if $@;
 ##### Find out where to install, etc.
 
 # See if we already have some config variables set.
-use lib "lib";
-my %existing_config;
-eval "use OpenGuides::Config";
-%existing_config = %OpenGuides::Config::config unless $@;
+my $read_config = Config::Tiny->read('wiki.conf');
+my %existing_config = $read_config ? %{ $read_config->{_} } : ();
 
 my @questions = (
 { question =>
@@ -82,14 +80,25 @@ my @questions = (
   },
 );
 
+print <<EOF;
+
+Beginning install process... if you already have an OpenGuides
+configuration file and you don't want to have to type in all your config
+parameters over again, abort this process now, copy that file to this
+directory, and start again.
+
+EOF
+
+my $continue = Module::Build->y_n("Continue with install?", "y");
+exit 0 unless $continue;
+
 my $skip_config = Module::Build->y_n("Skip OpenGuides configuration?", "n");
 if ( $skip_config ) {
     print <<EOF;
 ===========================================================================
 Skipping OpenGuides configuration - any configuration options previously
 saved will be used instead.  You may tweak your configuration now by
-editing the 'wiki.conf' file produced by this script, but changes made to
-that file will *not* stick around for the next time you install OpenGuides.
+editing the 'wiki.conf' file produced by this script.
 ===========================================================================
 EOF
 }
@@ -182,22 +191,6 @@ foreach my $ans (@answers) {
 }
 close FILE or die "Can't close wiki.conf: $!";
 
-# Now use Config::Tiny to read it all back in - bit convoluted I know.
-my $read_config = Config::Tiny->read('wiki.conf');
-%existing_config = %{ $read_config->{_} };
-
-# And pop it in OpenGuides::Config
-%OpenGuides::Config::config = %existing_config;
-open OUT, ">lib/OpenGuides/Config.pm"
-    or die "Can't open lib/OpenGuides/Config.pm for writing: $!";
-
-# Sigh, I am still cargo culting this line; one day I will figure out
-# how it works (Kake).
-print OUT Data::Dumper->new([ \%OpenGuides::Config::config ],
-                            [ '*OpenGuides::Config::config' ]
-                           )->Dump,
-    "\n1;\n";
-
 #####
 ##### When updating the prereqs PLEASE REMEMBER to update PREREQUISITES.
 #####
@@ -239,6 +232,7 @@ my $build = OpenGuides::Build->new(
 );
 
 $build->add_to_cleanup( "wiki.conf" );
+$build->add_to_cleanup( "configlib" );
 
 # Tell OpenGuides::Build which additional scripts and templates to install.
 $build->{config}{__extra_scripts}     = 

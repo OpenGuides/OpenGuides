@@ -9,8 +9,12 @@ consult the TROUBLESHOOTING file.
 
 
 Unpack the distribution (using for example 'tar' or 'WinZip'), and set
-your working directory to be the top level of the distribution, then
-execute the following commands:
+your working directory to be the top level of the distribution.
+
+If you have an existing "wiki.conf" configuration file and you wish
+to keep using the values in that, copy it to this directory.
+
+Now execute the following commands:
 
 perl Build.PL
 perl Build
@@ -27,21 +31,19 @@ Answer "n" to this question unless you really know what you're doing.
 It's mainly there for developers.
 
 
-  "what type of database do you want the site to run on?  postgres/mysql"
+  "what type of database do you want the site to run on?"
 
-Answer either "postgres" or "mysql".
+Answer "postgres", "mysql", or "sqlite".
 
 
   "What's the name of the database that this site runs on?"
   "And the database user that can access that database?"
   "And the password that they use to access the database?"
 
-You should create (or ask your ISP/sysadmin to create) a Postgres or
-MySQL database specifically for the use of OpenGuides.  If you have
-more than one OpenGuides installation, for example if you run guides
-for more than one city, each installation will need its own database.
-(TODO - support SQLite as well (requires faffing with install scripts,
-bit messy but CGI::Wiki already supports this so won't be hard))
+You should create (or ask your ISP/sysadmin to create) a database
+specifically for the use of OpenGuides.  If you have more than one
+OpenGuides installation, for example if you run guides for more than
+one city, each installation will need its own database.
 
 
   "And the machine that the database is hosted on? (blank if local)",
