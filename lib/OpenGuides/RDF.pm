@@ -136,22 +136,21 @@ sub emit_rdfxml {
     my $node_name = $args{node};
     my $wiki = $self->{wiki};
 
-   my %node_data = $wiki->retrieve_node( $node_name );
-    my $phone     = $node_data{metadata}{phone}[0] || "";
-    my $website   = $node_data{metadata}{website}[0] || "";
-    my $opening_hours_text = $node_data{metadata}{opening_hours_text}[0] || "";
-    my $postcode  = $node_data{metadata}{postcode}[0] || "";
-    my $city      = $node_data{metadata}{city}[0]
-                     || $self->{default_city} || "";
-    my $country   = $node_data{metadata}{country}[0]
-                     || $self->{default_country} || "";
-    my $latitude  = $node_data{metadata}{latitude}[0] || "";
-    my $longitude = $node_data{metadata}{longitude}[0] || "";
-    my $version   = $node_data{version};
-    my $username  = $node_data{metadata}{username}[0] || "";
+    my %node_data          = $wiki->retrieve_node( $node_name );
+    my $phone              = $node_data{metadata}{phone}[0]                               || '';
+    my $fax                = $node_data{metadata}{fax}[0]                                 || '';
+    my $website            = $node_data{metadata}{website}[0]                             || '';
+    my $opening_hours_text = $node_data{metadata}{opening_hours_text}[0]                  || '';
+    my $postcode           = $node_data{metadata}{postcode}[0]                            || '';
+    my $city               = $node_data{metadata}{city}[0] || $self->{default_city}       || '';
+    my $country            = $node_data{metadata}{country}[0] || $self->{default_country} || '';
+    my $latitude           = $node_data{metadata}{latitude}[0]                            || '';
+    my $longitude          = $node_data{metadata}{longitude}[0]                           || '';
+    my $version            = $node_data{version};
+    my $username           = $node_data{metadata}{username}[0]                            || '';
 
-    my $catrefs  = $node_data{metadata}{category};
-    my @locales  = @{ $node_data{metadata}{locale} || [] };
+    my $catrefs            = $node_data{metadata}{category};
+    my @locales            = @{ $node_data{metadata}{locale} || [] };
 
     my $timestamp = $node_data{last_modified};
     # Make a Time::Piece object.
@@ -167,38 +166,49 @@ sub emit_rdfxml {
 
     my $rdf = qq{<?xml version="1.0"?>
   <rdf:RDF
-  xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-  xmlns:dc="http://purl.org/dc/elements/1.1/"
-  xmlns:dcterms="http://purl.org/dc/terms/"
-  xmlns:foaf="http://xmlns.com/foaf/0.1/"
-  xmlns:wiki="http://purl.org/rss/1.0/modules/wiki/"
-  xmlns:chefmoz="http://chefmoz.org/rdf/elements/1.0/"
-  xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#" >
-  <rdf:Description rdf:about="$url">
-    <dc:title>} . $self->{site_name} . qq{ review: $node_name</dc:title>
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:dc="http://purl.org/dc/elements/1.1/"
+    xmlns:dcterms="http://purl.org/dc/terms/"
+    xmlns:foaf="http://xmlns.com/foaf/0.1/"
+    xmlns:wiki="http://purl.org/rss/1.0/modules/wiki/"
+    xmlns:chefmoz="http://chefmoz.org/rdf/elements/1.0/"
+    xmlns:wn="http://xmlns.com/wordnet/1.6/"
+    xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#"
+    xmlns="http://www.w3.org/2000/10/swap/pim/contact#"
+  >
+
+  <rdf:Description rdf:about="">
+    <dc:title>} . $self->{site_name} . qq{: $node_name</dc:title>
     <dc:date>$timestamp</dc:date>
     <dcterms:modified>$timestamp</dcterms:modified>
     <dc:contributor>$username</dc:contributor>
     <dc:source rdf:resource="$version_indpt_uri" />
     <wiki:version>$version</wiki:version>
-    <foaf:homepage>$website</foaf:homepage>
-    <foaf:topic>
-      <chefmoz:Restaurant>
-	<dc:title>$node_name</dc:title>
-	<chefmoz:Country>$country</chefmoz:Country>
-        <chefmoz:City>$city</chefmoz:City>
-	<chefmoz:Zip>$postcode</chefmoz:Zip>
-	<chefmoz:Phone>$phone</chefmoz:Phone>
-	<chefmoz:Hours>$opening_hours_text</chefmoz:Hours>
-};
-    foreach my $locale (@locales) {
-        $rdf .= "        <chefmoz:Neighborhood>$locale</chefmoz:Neighborhood>\n";
-    }
-    $rdf .= qq{        <geo:lat>$latitude</geo:lat>
-        <geo:long>$longitude</geo:long>
-      </chefmoz:Restaurant>
-    </foaf:topic>
+    <foaf:topic rdf:resource="#obj" />
   </rdf:Description>
+
+  <geo:SpatialThing rdf:ID="obj">
+    <dc:title>$node_name</dc:title>
+    <city>$city</city>
+};
+    $rdf .= "    <postalCode>$postcode</postalCode>\n" if $postcode;
+    $rdf .= "    <country>$country</country>\n";
+    $rdf .= "    <phone>$phone</phone>\n" if $phone;
+    $rdf .= "    <fax>$fax</fax>\n" if $fax;
+    $rdf .= "    <homePage>$website</homePage>\n" if $website;
+    $rdf .= "    <chefmoz:Hours>$opening_hours_text</chefmoz:Hours>\n" if $opening_hours_text;
+
+    foreach my $locale (@locales) {
+      $rdf .= "    <wn:Neighborhood>$locale</wn:Neighborhood>\n";
+    }
+
+    if ($latitude && $longitude) {
+      $rdf .= qq{    <geo:lat>$latitude</geo:lat>
+    <geo:long>$longitude</geo:long>
+};
+    }
+
+    $rdf .= qq{  </geo:SpatialThing>
 </rdf:RDF>
 
 };
