@@ -1,5 +1,5 @@
 [% INCLUDE header.tt %]
-
+<div id="content">
 <h1 align=center>[% site_name %] - [% node_name %]</h1>
 
 [% content %]

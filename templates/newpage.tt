@@ -1,6 +1,6 @@
 [%- USE CGI -%]
 [% INCLUDE header.tt %]
-
+<div id="content">
 <h1>[% site_name %] - Create a new page</h1>
 
 <form action="newpage.cgi" method="POST">
