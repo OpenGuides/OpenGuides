@@ -56,7 +56,7 @@
   <a href="[% cgi_url %]?id=[% node_param %];format=rdf">RDF/XML for this
   node</a>
   [% IF rss_link %]
-    <a href="[% rss_link %]">RSS feed for this node</a>
+    / <a href="[% rss_link %]">RSS feed for this node</a>
   [% END %]
 </div>
 <div id="version">
