@@ -23,10 +23,12 @@ password. If not, you can <a href="[% cgi_url %]?[% node_param %]">go back to th
 page</a>.
 </p>
 <form action="[% cgi_url %]" method="post">
-<input type="hidden" name="action" value="delete">
-<input type="hidden" name="id" value="[% node_name %]">
-<input type="hidden" name="version" value="[% delete_version %]" />
-<strong>Password:</strong> <input type="password" name="password"> <input type="submit" value="Delete">
+  <input type="hidden" name="action" value="delete" />
+  <input type="hidden" name="id" value="[% node_name %]" />
+  <input type="hidden" name="version" value="[% delete_version %]" />
+  <strong>Password:</strong>
+  <input type="password" name="password" />
+  <input type="submit" value="Delete" />
 </form>
 
 [% INCLUDE footer.tt %]
