@@ -101,7 +101,7 @@ sub run {
         my $numres = scalar keys %results;
 
         # For 0 or many we display results, for 1 we redirect to that page.
-        if ( $numres == 1 ) {
+        if ( $numres == 1 && !$self->{return_tt_vars}) {
             my ($node) = each %results;
             my $output = CGI::redirect( $self->{wikimain} . "?"
                                         . CGI::escape($node) );
@@ -192,36 +192,39 @@ sub _prime_wikitext {
 		my $text = $node . " " . $wiki->retrieve_node( $node );
 		$self->{wikitext}{$key} ||= $self->_mungepage( $text );
 	    }
+	}
 
-	    # Search categories.
-	    my @catmatches = $wiki->list_nodes_by_metadata(
+	my $meta_title = join '_',@leaves;
+	my $matchstr = join ' ',@leaves;
+
+	# Search categories.
+	my @catmatches = $wiki->list_nodes_by_metadata(
 				 metadata_type  => "category",
-				 metadata_value => $_,
+				 metadata_value => $meta_title,
 				 ignore_case    => 1,
-	    );
+	);
 
-	    foreach my $node ( @catmatches ) {
+	foreach my $node ( @catmatches ) {
 		my $key = $wiki->formatter->node_name_to_node_param( $node );
 		my $text = $node. " " . $wiki->retrieve_node( $node );
 		$self->{wikitext}{$key} ||= $self->_mungepage( $text );
 		# Append this category so the regex finds it later.
-		$self->{wikitext}{$key} .= " [$_]";
-	    }
+		$self->{wikitext}{$key} .= " [$matchstr]";
+	}
 
-	    # Search locales.
-	    my @locmatches = $wiki->list_nodes_by_metadata(
+	# Search locales.
+	my @locmatches = $wiki->list_nodes_by_metadata(
 				 metadata_type  => "locale",
-				 metadata_value => $_,
+				 metadata_value => $meta_title,
 				 ignore_case    => 1,
-	    );
-	    foreach my $node ( @locmatches ) {
+	);
+	foreach my $node ( @locmatches ) {
 		my $key = $wiki->formatter->node_name_to_node_param( $node );
 		my $text = $node. " " . $wiki->retrieve_node( $node );
 		$self->{wikitext}{$key} ||= $self->_mungepage( $text );
 		# Append this locale so the regex finds it later.
-		$self->{wikitext}{$key} .= " [$_]";
-	    }
-	} # foreach (@leaves)
+		$self->{wikitext}{$key} .= " [$matchstr]";
+	}
     } # $op eq 'word'
 } # sub _prime_wikitext
     
