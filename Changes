@@ -1,4 +1,8 @@
 0.31    
+        Created a new macro to allow the embedding of RSS feeds into
+          pages, using CGI::Wiki::Plugin::RSS::Reader. This allows you
+          to do this to produce a list of up to ten hyperlinks:
+            @RSS_FEED [http://example.com/example.rss]
        
         Numerous template tweaks to comply with the W3C's Web Content 
           Accessibility Guidelines (http://www.w3.org/TR/WAI-WEBCONTENT/):
