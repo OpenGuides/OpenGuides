@@ -18,11 +18,11 @@
     - Things within [%- limit -%] of <a href="[% cgi_url %]?[%- origin_param -%]">[%- origin -%]</a>
   [%- END -%]
 </h2>
-<ul>
+<ol>
   [% FOREACH node = nodes %]
      <li><a href="[% cgi_url %]?[% node.param %]">[% node.name %]</a>
          [% IF node.distance %]([% node.distance %] metres away)[% END %]
      </li>
   [% END %]
-</ul>
+</ol>
 [% INCLUDE footer.tt %]
