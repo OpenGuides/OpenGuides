@@ -32,8 +32,13 @@ developers.
   my $rdf_writer = OpenGuides::RDF->new( wiki   => $wiki,
                                          config => $config ); 
 
+  # RDF version of a node.
   print "Content-type: text/plain\n\n";
   print $rdf_writer->emit_rdfxml( node => "Masala Zone, N1 0NU" );
+
+  # Ten most recent changes.
+  print "Content-type: text/plain\n\n";
+  print $rdf_writer->make_recentchanges_rss( items => 10 );
 
 =head1 METHODS
 
@@ -239,8 +244,18 @@ sub emit_rdfxml {
 
 =item B<make_recentchanges_rss>
 
+  # Ten most recent changes.
   print "Content-type: text/plain\n\n";
-  print $rdf_writer->make_recentchanges_rss;
+  print $rdf_writer->make_recentchanges_rss(
+                                             items => 10,
+                                           );
+
+  # All the changes in the past week, ignoring minor edits.
+  print "Content-type: text/plain\n\n";
+  print $rdf_writer->make_recentchanges_rss(
+                                             days               => 2,
+                                             ignore_minor_edits => 1,
+                                           );
 
 =cut
 
@@ -254,13 +269,11 @@ sub make_recentchanges_rss {
 	recent_changes_link => $self->{config}->{_}->{script_url} . uri_escape($self->{config}->{_}->{script_name}) . "?RecentChanges"
      );
 
-    if ( $args{items} ) {
-        return $rssmaker->recent_changes( items => $args{items} );
-    } elsif ( $args{days} ) {
-        return $rssmaker->recent_changes( days => $args{days} );
-    } else {
-        return $rssmaker->recent_changes;
-    }
+    my %criteria;
+    $criteria{items} = $args{items} if $args{items};
+    $criteria{days} = $args{days} if $args{days};
+    $criteria{ignore_minor_changes} if $args{ignore_minor_edits};
+    return $rssmaker->recent_changes( %criteria );
 }
 
 =back

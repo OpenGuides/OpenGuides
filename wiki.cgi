@@ -106,6 +106,7 @@ eval {
         if ( !defined $feed or $feed eq "recent_changes" ) {
             my $items = $q->param("items") || "";
             my $days  = $q->param("days")  || "";
+            my $ignore_minor_edits = $q->param("ignore_minor_edits") ? 1 : 0;
             emit_recent_changes_rss( items => $items, days => $days);
         } elsif ( $feed eq "chef_dan" ) {
             display_node_rdf( node => $node );
