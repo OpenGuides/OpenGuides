@@ -1,6 +1,6 @@
 package OpenGuides::SuperSearch;
 use strict;
-our $VERSION = '0.07';
+our $VERSION = '0.08';
 
 use CGI qw( :standard );
 use CGI::Wiki::Plugin::Locator::UK;
@@ -116,393 +116,192 @@ sub run {
     my ($self, %args) = @_;
     $self->{return_output}  = $args{return_output}  || 0;
     $self->{return_tt_vars} = $args{return_tt_vars} || 0;
-    my %vars = %{ $args{vars} || {} };
-    my %tt_vars;
 
-    $tt_vars{ss_version}  = $VERSION;
-    $tt_vars{ss_info_url} = 'http://london.openguides.org/?Search_Script';
-
-    # Strip out any non-digits from dist and OS co-ords; lat and long
-    # also allowed '-' and '.'
-    foreach my $param( qw( lat long ) ) {
-        if ( defined $vars{$param} ) {
-            $vars{$param} =~ s/[^-\.0-9]//g;
-            # will check for definedness later as can be 0.
-            delete $vars{$param} if $vars{$param} eq "";
-	}
-    }
-    foreach my $param ( qw( os_x os_y distance_in_metres ) ) {
-        if ( defined $vars{$param} ) {
-            $vars{$param} =~ s/[^0-9]//g;
-            # will check for definedness later as can be 0.
-            delete $vars{$param} if $vars{$param} eq "";
-	}
+    $self->process_params( $args{vars} );
+    if ( $self->{error} ) {
+        warn $self->{error};
+        my %tt_vars = ( error_message => $self->{error} );
+        $self->process_template( tt_vars => \%tt_vars );
+        return;
     }
 
-    # Strip leading and trailing whitespace from search text.
-    $vars{search} ||= ""; # avoid uninitialised value warning
-    $vars{search} =~ s/^\s*//;
-    $vars{search} =~ s/\s*$//;
+    my %tt_vars = (
+                   ss_version  => $VERSION,
+                   ss_info_url => 'http://london.openguides.org/?Search_Script'
+                  );
 
-    # Do we have an existing search? if so, do it.
     my $doing_search;
-    if ( $vars{search}
-         or ( ( (defined $vars{lat} && defined $vars{long})
-                or (defined $vars{os_x} && defined $vars{os_y}) )
-              && defined $vars{distance_in_metres} )
-    ) {
+
+    # Run a text search if we have a search string.
+    if ( $self->{search_string} ) {
         $doing_search = 1;
-        $tt_vars{search_terms} = $vars{search};
-        $tt_vars{dist} = $vars{distance_in_metres};
-        foreach my $param ( qw( lat long os_x os_y ) ) {
-            $tt_vars{$param} = $vars{$param};
-	}
-        $self->_perform_search( vars => \%vars );
+        $tt_vars{search_terms} = $self->{search_string};
+        $self->run_text_search;
     }
 
+    # Run a distance search if we have sufficient criteria.
+    if ( defined $self->{distance_in_metres}
+         && (
+                 ( defined $self->{lat}  && defined $self->{long} )
+              || ( defined $self->{os_x} && defined $self->{os_y} )
+            )
+       ) {
+        $doing_search = 1;
+        $tt_vars{dist} = $self->{distance_in_metres};
+        foreach my $param ( qw( os_x os_y lat long ) ) {
+            $tt_vars{$param} = $self->{$param};
+	}
+        $self->run_distance_search;
+    }
+
+    # If we're not doing a search then just print the search form.
+    unless ( $doing_search ) {
+        return $self->process_template( tt_vars => \%tt_vars );
+    }
+
+    # At this point either $self->{error} or $self->{results} will be filled.
     if ( $self->{error} ) {
         $tt_vars{error_message} = $self->{error};
-    } elsif ( $doing_search ) {
-        my @results = values %{ $self->{results} || {} };
-        my $numres = scalar @results;
-
-        # Clear out wikitext; we're done with this search.  (Avoids
-        # subsequent searches with this object erroneously matching things
-        # that matched this time.)  Do it here (ie at the last minute) to
-        # avoid screwing up "AND" searches.
-        delete $self->{wikitext};
-
-        # Redirect to a single result only if the title is a good enough match.
-        # (Don't try a fuzzy search on a blank search string - Plucene chokes.)
-        if ( $self->{search_string} ) {
-            my %fuzzies =
-                      $self->wiki->fuzzy_title_match($self->{search_string});
-            if ( $numres == 1
-                 && !$self->{return_tt_vars} && scalar keys %fuzzies) {
-                my $node = $results[0]{name};
-                my $output = CGI::redirect( $self->{wikimain} . "?"
-                                            . CGI::escape($node) );
-                return $output if $self->{return_output};
-                print $output;
-                exit;
-	    }
-	}
-
-        # We browse through the results a page at a time.
-
-        # Figure out which results we're going to be showing on this
-        # page, and what the first one for the next page will be.
-        my $startpos = $vars{next} || 0;
-        $tt_vars{first_num} = $numres ? $startpos + 1 : 0;
-        $tt_vars{last_num}  = $numres > $startpos + 20
-                                                       ? $startpos + 20
-                                                       : $numres;
-        $tt_vars{total_num} = $numres;
-        if ( $numres > $startpos + 20 ) {
-            $tt_vars{next_page_startpos} = $startpos + 20;
-        }
-
-        # Sort the results - by distance if we're searching on that
-        # or by score otherwise.
-        if ( $vars{distance_in_metres} ) {
-            @results = sort { $a->{distance} <=> $b->{distance} } @results;
-	} else {
-            @results = sort { $b->{score} <=> $a->{score} } @results;
-        }
-
-        # Now snip out just the ones for this page.  The -1 is
-        # because arrays index from 0 and people from 1.
-        my $from = $tt_vars{first_num} ? $tt_vars{first_num} - 1 : 0;
-        my $to   = $tt_vars{last_num} - 1; # kludge to empty arr for no results
-        @results = @results[ $from .. $to ];
-
-        $tt_vars{results} = \@results;
+        $self->process_template( tt_vars => \%tt_vars );
+        return;
     }
 
+    # So now we know that we have been asked to perform a search, and we
+    # have performed it.
+    #
+    # $self->{results} will be a hash of refs to hashes like so:
+    #   'Node Name' => {
+    #                    name     => 'Node Name',
+    #                    distance => $distance_from_origin_if_any,
+    #                    score    => $relevance_to_search_string
+    #                  }
+
+    my %results_hash = %{ $self->{results} || [] };
+    my @results = values %results_hash;
+    my $numres = scalar @results;
+
+    # If we only have a single hit, and the title is a good enough match
+    # to the search string, redirect to that node.
+    # (Don't try a fuzzy search on a blank search string - Plucene chokes.)
+    if ( $self->{search_string} && $numres == 1 && !$self->{return_tt_vars}) {
+        my %fuzzies = $self->wiki->fuzzy_title_match($self->{search_string});
+        if ( scalar keys %fuzzies ) {
+            my $node = $results[0]{name};
+            my $formatter = $self->wiki->formatter;
+            my $node_param = CGI::escape(
+                            $formatter->node_name_to_node_param( $node )
+                                        );
+            my $output = CGI::redirect( $self->{wikimain} . "?$node_param" );
+            return $output if $self->{return_output};
+            print $output;
+            return;
+	}
+    }
+
+    # If we had no hits then go straight to the template.
+    if ( $numres == 0 ) {
+        %tt_vars = (
+                     %tt_vars,
+                     first_num => 0,
+                     results   => [],
+                   );
+        return $self->process_template( tt_vars => \%tt_vars );
+    }
+
+    # Otherwise, we browse through the results a page at a time.
+
+    # Figure out which results we're going to be showing on this
+    # page, and what the first one for the next page will be.
+    my $startpos = $args{vars}{next} || 0;
+    $tt_vars{first_num} = $numres ? $startpos + 1 : 0;
+    $tt_vars{last_num}  = $numres > $startpos + 20 ? $startpos + 20 : $numres;
+    $tt_vars{total_num} = $numres;
+    if ( $numres > $startpos + 20 ) {
+        $tt_vars{next_page_startpos} = $startpos + 20;
+    }
+
+    # Sort the results - by distance if we're searching on that
+    # or by score otherwise.
+    if ( $self->{distance_in_metres} ) {
+        @results = sort { $a->{distance} <=> $b->{distance} } @results;
+    } else {
+        @results = sort { $b->{score} <=> $a->{score} } @results;
+    }
+
+    # Now snip out just the ones for this page.  The -1 is because
+    # arrays index from 0 and people from 1.
+    my $from = $tt_vars{first_num} ? $tt_vars{first_num} - 1 : 0;
+    my $to   = $tt_vars{last_num} - 1; # kludge to empty arr for no results
+    @results = @results[ $from .. $to ];
+
+    # Add the URL to each result hit.
+    my $formatter = $self->wiki->formatter;
+    foreach my $i ( 0 .. $#results ) {
+        my $name = $results[$i]{name};
+        my $node_param = $formatter->node_name_to_node_param( $name );
+        $results[$i]{url} = $self->{wikimain} . "?$node_param";
+    }
+
+    # Finally pass the results to the template.
+    $tt_vars{results} = \@results;
     $self->process_template( tt_vars => \%tt_vars );
 }
 
-# thin wrapper around OpenGuides::Template
-sub process_template {
-    my ($self, %args) = @_;
-    my $tt_vars = $args{tt_vars} || {};
-
-    $tt_vars->{not_editable} = 1;
-    $tt_vars->{not_deletable} = 1;
-
-    return %$tt_vars if $self->{return_tt_vars};
-
-    my $output =  OpenGuides::Template->output(
-                                                wiki     => $self->wiki,
-                                                config   => $self->config,
-                                                template => "supersearch.tt",
-                                                vars     => $tt_vars,
-                                              );
-    return $output if $self->{return_output};
-
-    print $output;
-    return 1;
-}
-
-# method to populate $self with text of nodes potentially matching a query
-# This could contain many more nodes than actually match the query
-sub _prime_wikitext {
-    my ($self, %args) = @_;
-    my ($op, @leaves) = @{ $args{tree} };
+sub run_text_search {
+    my $self = shift;
+    my $searchstr = $self->{search_string};
     my $wiki = $self->wiki;
 
-    if ($op =~ /AND|OR/) {
-	# Recurse into parse tree for boolean op nodes
-	$self->_prime_wikitext( tree => $_ ) for @leaves;
-    } elsif ($op eq 'NOT') {
-	$self->_prime_wikitext( tree => \@leaves );
-    } elsif ($op eq 'word') {
-	foreach (@leaves) {
-	    # Search title and body.
-	    my %results = $wiki->search_nodes( $_ );
-	    foreach my $node ( keys %results ) {
-		next unless $node; # Search::InvertedIndex goes screwy sometimes
-		my $key = $wiki->formatter->node_name_to_node_param( $node );
-		my $text = $node . " " . $wiki->retrieve_node( $node );
-		$self->{wikitext}{$key}{text} ||= $self->_mungepage( $text );
-	    }
-	}
-
-	my $meta_title = join '_',@leaves;
-	my $matchstr = join ' ',@leaves;
-
-	# Search categories.
-	my @catmatches = $wiki->list_nodes_by_metadata(
-				 metadata_type  => "category",
-				 metadata_value => $meta_title,
-				 ignore_case    => 1,
-	);
-
-	foreach my $node ( @catmatches ) {
-		my $key = $wiki->formatter->node_name_to_node_param( $node );
-		my $text = $node. " " . $wiki->retrieve_node( $node );
-		$self->{wikitext}{$key}{text} ||= $self->_mungepage( $text );
-		# Append this category so the regex finds it later.
-		$self->{wikitext}{$key}{text} .= " [$matchstr]";
-                $self->{wikitext}{$key}{category_match} = 1;
-	}
-
-	# Search locales.
-	my @locmatches = $wiki->list_nodes_by_metadata(
-				 metadata_type  => "locale",
-				 metadata_value => $meta_title,
-				 ignore_case    => 1,
-	);
-	foreach my $node ( @locmatches ) {
-		my $key = $wiki->formatter->node_name_to_node_param( $node );
-		my $text = $node. " " . $wiki->retrieve_node( $node );
-		$self->{wikitext}{$key}{text} ||= $self->_mungepage( $text );
-		# Append this locale so the regex finds it later.
-		$self->{wikitext}{$key}{text} .= " [$matchstr]";
-                $self->{wikitext}{$key}{locale_match} = 1;
-	}
-    } # $op eq 'word'
-} # sub _prime_wikitext
-    
-# method to filter out undesirable markup from the raw wiki text
-sub _mungepage {
-    my ($self, $text) = @_;
-
-    # Remove HTML tags (sort of)
-    $text =~ s/<.*?>//g;
-
-    # Change WikiLinks into plain text
-    $text =~ s/\[\[(.*?)\|(.*?)\]\]/$2/g;  # titled WikiLink
-    $text =~ s/\[\[(.*?)\]\]/$1/g;         # normal WikiLink
-    $text =~ s/\[(.*?) (.*?)\]/$2/g;       # titled web link
-    
-    # Remove WikiFormatting
-    $text =~ s/=//g;      # heading
-    $text =~ s/'''//g;    # bold
-    $text =~ s/''//g;     # italic
-    $text =~ s/\*//g;     # bullet point
-    $text =~ s/----//g;   # horizontal rule
-
-    # Change "#REDIRECT" to something prettier
-    $text =~ s/\#REDIRECT/\(redirect\)/g;
-
-    return $text;
-}
-
-# Populates either $self->{error} or $self->{results}
-sub _perform_search {
-    my ($self, %args) = @_;
-    my %vars = %{ $args{vars} || {} };
-
-    my $srh = $vars{search};
-
-    # Perform text search if search terms entered, otherwise collect up
-    # all nodes to check distance.
-    if ( $srh ) {
-        # Check for only valid characters in tainted search param
-        # (quoted literals are OK, as they are escaped)
-        if ( $srh !~ /^("[^"]*"|[\w \-',()!*%\[\]])+$/i) { #"
-            $self->{error} = "Search expression contains invalid character(s)";
-            return;
-        }
-        $self->_build_parser && exists($self->{error}) && return;
-        $self->_apply_parser($srh);
-
-        # Now give extra bonus points to any nodes matching the entire
-        # search string verbatim.  This is really shonky and inefficient
-        # but then the whole of this module needs rewriting to be less
-        # ick in any case.
-        foreach my $page ( keys %{ $self->{results} } ) {
-            my $summary = $self->{results}{$page}{summary};
-            $summary =~ s/<\/?b>//g;
-            if ( $summary =~ /$self->{search_string}/i ) {
-                $self->{results}{$page}{score} += 5;
-	      }
-	}
-    } else {
-        my $wiki = $self->wiki;
-        my @all_nodes = $wiki->list_all_nodes;
-        my $formatter = $wiki->formatter;
-        my %results = map {
-              my $name = $formatter->node_name_to_node_param( $_ );
-              my %data = $wiki->retrieve_node( $_ );
-              my $content = $wiki->format( @data{ qw( content metadata ) } );
-              $content = $self->_mungepage( $content );
-              my $summary = substr( $content, 0, 150 );
-              $name => {
-                         name    => $name,
-                         score   => 0,
-                         summary => $summary,
-                       }
-                          } @all_nodes;
-        $self->{results} = \%results;
-    }
-
-    # Now filter by distance if required.
-    my ($os_x, $os_y, $lat, $long, $dist) =
-                         @vars{ qw( os_x os_y lat long distance_in_metres ) };
-    if ( ( (defined $lat && defined $long)
-           or (defined $os_x and defined $os_y)
-                                                ) && $dist ) {
-        my %results = %{ $self->{results} || {} };
-        my @close;
-        if ( defined $lat && defined $long ) {
-            @close = $self->{locator}->find_within_distance(
-                                                             lat    => $lat,
-                                                             long   => $long,
-                                                             metres => $dist,
-                                                           );
-	} else {
-            @close = $self->{locator}->find_within_distance(
-                                                             os_x   => $os_x,
-                                                             os_y   => $os_y,
-                                                             metres => $dist,
-                                                           );
-	}
-        my %close_hash = map { $_ => 1 } @close;
-        my @nodes = keys %results;
-        foreach my $node ( @nodes ) {
-            my $unmunged = $node; # KLUDGE
-            $unmunged =~ s/_/ /g;
-            if ( exists $close_hash{$unmunged} ) {
-                my $distance;
-	        if ( defined $lat && defined $long ) {
-                    $distance = $self->{locator}->distance(
-                                                 from_lat  => $lat,
-                                                 from_long => $long,
-					         to_node   => $unmunged,
-                                                 unit      => "metres"
-                                                          );
-		} else {
-                    $distance = $self->{locator}->distance(
-                                                 from_os_x => $os_x,
-                                                 from_os_y => $os_y,
-					         to_node   => $unmunged,
-                                                 unit      => "metres"
-                                                          );
-                }
-                $results{$node}{distance} = $distance;                
-	    } else {
-                delete $results{$node};
-            }
-	}
-        $self->{results} = \%results;
-    }      
-}
-
-sub _build_parser {
-    my $self = shift;
-
-    # Build RecDescent grammar for search syntax.
-
-    my $parse = Parse::RecDescent->new(q{
+    # Create parser to parse the search string.
+    my $parser = Parse::RecDescent->new( q{
 
         search: list eostring {$return = $item[1]}
 
-	list: comby(s)
+        list: comby(s)
             {$return = (@{$item[1]}>1) ? ['AND', @{$item[1]}] : $item[1][0]}
 
-        comby: <leftop: term ',' term> 
+        comby: <leftop: term ',' term>
             {$return = (@{$item[1]}>1) ? ['OR', @{$item[1]}] : $item[1][0]}
 
         term: '(' list ')' {$return = $item[2]}
             |        '-' term {$return = ['NOT', @{$item[2]}]}
-#           |        word ':' term {$return = ['meta', $item[1], $item[3]];}
-            |        '"' word(s) '"' {$return = ['word', @{$item[2]}]}
+            |        '"' word(s) '"' {$return = ['phrase', join " ", @{$item[2]}]}
             |        word {$return = ['word', $item[1]]}
             |        '[' word(s) ']' {$return = ['title', @{$item[2]}]}
-#	    |        m([/|\\]) m([^$item[1]]+) $item[1]
-#	    		{ $return = ['regexp', qr($item[2])] }
 
         word: /[\w'*%]+/ {$return = $item[1]}
-            
+
         eostring: /^\Z/
-	
-    });
 
-    unless ( $parse ) {
+    } );
+
+    unless ( $parser ) {
         warn $@;
-        $self->{error} = "can't create parse object";
-        return;
+        $self->{error} = "Can't create parse object - $@";
+        return $self;
     }
-    
-    $self->{parser} = $parse;
-    return $self;
-}
 
-sub _apply_parser {
-    my ($self,$search) = @_;
-	
-    # Turn search string into parse tree
-    my $tree = $self->{parser}->search($search);
+    # Run parser over search string.
+    my $tree = $parser->search( $searchstr );
     unless ( $tree ) {
-        $self->{error} = "Search syntax error";
-        return;
+        $self->{error} = "Syntax error in search: $searchstr";
+        return $self;
     }
 
-    # Store search string too.
-    $self->{search_string} = $search;
-
-    #Prime the search
-    $self->_prime_wikitext( tree => $tree);
-
-    # Apply search and return results
-    my %results = $self->_matched_items( tree => $tree );
+    # Run the search over the generated search tree.
+    my %results = $self->_run_search_tree( tree => $tree );
     $self->{results} = \%results;
     return $self;
 }
 
-# called with parse tree
-sub _matched_items {
+sub _run_search_tree {
     my ($self, %args) = @_;
     my $tree = $args{tree};
     my @tree_arr = @$tree;
     my $op = shift @tree_arr;
-    my $meth = 'matched_'.$op;
-    return $self->can($meth) ? $self->$meth(@tree_arr) : undef;
+    my $method = "_run_" . $op . "_search";
+    return $self->can($method) ? $self->$method(@tree_arr) : undef;
 }
-
-
 
 =head1 INPUT
 
@@ -518,13 +317,10 @@ will return all pages containing the word "escalator".
 
 =cut
 
-sub matched_word {
-    my $self = shift;
-    my $wmatch = join '\W+',@_;
-    $wmatch =~ s/%/\\w/g;
-    $wmatch =~ s/\*/\\w*/g;
-
-    return $self->_do_search($wmatch);
+sub _run_word_search {
+    my ($self, $word) = @_;
+    # A word is just a small phrase.
+    return $self->_run_phrase_search( $word );
 }
 
 =item B<AND searches>
@@ -538,33 +334,33 @@ will return all pages containing both the word "restaurant" and the word
 
 =cut
 
-sub matched_AND {
+sub _run_AND_search {
     my ($self, @subsearches) = @_;
 
     # Do the first subsearch.
-    my %results = $self->_matched_items( tree => $subsearches[0] );
+    my %results = $self->_run_search_tree( tree => $subsearches[0] );
 
     # Now do the rest one at a time and remove from the results anything
     # that doesn't come up in each subsearch.  Results that survive will
     # have a score that's the sum of their score in each subsearch.
     foreach my $tree ( @subsearches[ 1 .. $#subsearches ] ) {
-        my %subres = $self->_matched_items( tree => $tree );
+        my %subres = $self->_run_search_tree( tree => $tree );
         my @pages = keys %results;
         foreach my $page ( @pages ) {
-	    if ( exists $subres{$page} ) {
+	  if ( exists $subres{$page} ) {
                 $results{$page}{score} += $subres{$page}{score};
-	    } else {
+	      } else {
                 delete $results{$page};
             }
-	}
-    }
+        }
+      }
 
     return %results;
 }
 
 =item B<OR searches>
 
-A list of words separated by commas (and optional spaces) will be ORed, 
+A list of words separated by commas (and optional spaces) will be ORed,
 for example:
 
   restaurant, cafe
@@ -574,47 +370,23 @@ word "cafe".
 
 =cut
 
-sub matched_OR {
+sub _run_OR_search {
     my ($self, @subsearches) = @_;
 
     # Do all the searches.  Results will have a score that's the sum
     # of their score in each subsearch.
     my %results;
     foreach my $tree ( @subsearches ) {
-        my %subres = $self->_matched_items( tree => $tree );
+        my %subres = $self->_run_search_tree( tree => $tree );
         foreach my $page ( keys %subres ) {
-            if ( $results{$page} ) {
+	  if ( $results{$page} ) {
                 $results{$page}{score} += $subres{$page}{score};
-	    } else {
+	      } else {
                 $results{$page} = $subres{$page};
             }
         }
-    }
+      }
     return %results;
-}
-
-=item B<NOT searches>
-
-Words and phrases preceded by a minus sign are excluded, for example:
-
-  restaurant -expensive
-
-will return all pages that contain the word "restaurant" and do not 
-contain "expensive".
-
-Note that a NOT search is used to qualify an existing search, so you
-cannot use -foo standalone to give you all pages without foo.
-
-=cut
-
-# matched_NOT - Form complement of hash against %wikitext
-sub matched_NOT {
-    my $self = shift;
-    my %excludes = $self->_matched_items(tree => \@_);
-    my %out = map { $_ => { score => 0} } keys %{ $self->{wikitext} };
-
-    delete $out{$_} for keys %excludes;
-    return %out;
 }
 
 =item B<phrase searches>
@@ -628,14 +400,217 @@ that only contain, for example, "apple pie and meat sausage".
 
 =cut
 
-# matched_literal - we have a literal.
-sub matched_literal {
-    my $self = shift;
-    my $lit = shift;
-    $self->_do_search(quotemeta $lit);
+sub _run_phrase_search {
+    my ($self, $phrase) = @_;
+    my $wiki = $self->wiki;
+
+    # Search title and body.
+    my %contents_res = $wiki->search_nodes( $phrase );
+
+    # Rationalise the scores a little.  The scores returned by
+    # CGI::Wiki::Search::Plucene are simply a ranking.
+    my $num_results = scalar keys %contents_res;
+    foreach my $node ( keys %contents_res ) {
+        $contents_res{$node} = int( $contents_res{$node} / $num_results ) + 1;
+    }
+
+    # It'll be a real phrase (as opposed to a word) if it has a space in it.
+    # In this case, dump out the nodes that don't match the search exactly.
+    # I don't know why the phrase searching isn't working properly.  Fix later.
+    if ( $phrase =~ /\s/ ) {
+        my @tmp = keys %contents_res;
+        foreach my $node ( @tmp ) {
+            my $content = $wiki->retrieve_node( $node );
+            unless ( $content =~ /$phrase/i || $node =~ /$phrase/i ) {
+                delete $contents_res{$node};
+	    }
+        }
+    }
+
+    my %results = map { $_ => { name => $_, score => $contents_res{$_} } }
+                      keys %contents_res;
+
+    # Bump up the score if the title matches.
+    foreach my $node ( keys %results ) {
+        $results{$node}{score} += 10 if $node =~ /$phrase/i;
+    }
+
+    # Search categories.
+    my @catmatches = $wiki->list_nodes_by_metadata(
+				 metadata_type  => "category",
+ 				 metadata_value => $phrase,
+				 ignore_case    => 1,
+    );
+
+    foreach my $node ( @catmatches ) {
+        if ( $results{$node} ) {
+            $results{$node}{score} += 3;
+        } else {
+            $results{$node} = { name => $node, score => 3 };
+        }
+    }
+
+    # Search locales.
+    my @locmatches = $wiki->list_nodes_by_metadata(
+				 metadata_type  => "locale",
+ 				 metadata_value => $phrase,
+				 ignore_case    => 1,
+    );
+
+    foreach my $node ( @locmatches ) {
+        if ( $results{$node} ) {
+            $results{$node}{score} += 3;
+        } else {
+            $results{$node} = { name => $node, score => 3 };
+        }
+    }
+
+    return %results;
 }
 
-=back
+# Note this is called after any text search is run, and it is only called
+# if there are sufficient criteria to perform the search.
+sub run_distance_search {
+    my $self = shift;
+    my $os_x = $self->{os_x};
+    my $os_y = $self->{os_y};
+    my $lat  = $self->{lat};
+    my $long = $self->{long};
+    my $dist = $self->{distance_in_metres};
+
+    my @close;
+    if ( defined $lat && defined $long ) {
+        @close = $self->{locator}->find_within_distance(
+                                                         lat    => $lat,
+                                                         long   => $long,
+                                                         metres => $dist,
+                                                       );
+    } else {
+        @close = $self->{locator}->find_within_distance(
+                                                         os_x   => $os_x,
+                                                         os_y   => $os_y,
+                                                         metres => $dist,
+                                                       );
+    }
+    if ( $self->{results} ) {
+        my %close_hash = map { $_ => 1 } @close;
+        my %results = %{ $self->{results} };
+        my @candidates = keys %results;
+        foreach my $node ( @candidates ) {
+            if ( exists $close_hash{$node} ) {
+                my $distance = $self->_get_distance(
+                                                     node => $node,
+                                                     lat  => $lat,
+                                                     long => $long,
+                                                     os_x => $os_x,
+                                                     os_y => $os_y,
+                                                   );
+                $results{$node}{distance} = $distance;
+	    } else {
+                delete $results{$node};
+            }
+        }
+        $self->{results} = \%results;
+    } else {
+        my %results;
+        foreach my $node ( @close ) {
+            my $distance = $self->_get_distance (
+                                                     node => $node,
+                                                     lat  => $lat,
+                                                     long => $long,
+                                                     os_x => $os_x,
+                                                     os_y => $os_y,
+                                                   );
+            $results{$node} = {
+                                name     => $node,
+                                distance => $distance,
+                              };
+        }
+        $self->{results} = \%results;
+    }
+    return $self;
+}
+
+sub _get_distance {
+    my ($self, %args) = @_;
+    my ($node, $lat, $long, $x, $y) = @args{ qw( node lat long os_x os_y ) };
+    if ( defined $lat && defined $long ) {
+        return $self->{locator}->distance(
+                                           from_lat  => $lat,
+                                           from_long => $long,
+				           to_node   => $node,
+                                           unit      => "metres"
+                                         );
+    } else {
+        return $self->{locator}->distance(
+                                           from_os_x => $x,
+                                           from_os_y => $y,
+			                   to_node   => $node,
+                                           unit      => "metres"
+                                         );
+    }
+}
+
+sub process_params {
+    my ($self, $vars_hashref) = @_;
+    my %vars = %{ $vars_hashref || {} };
+
+    # Strip out any non-digits from distance and OS co-ords.
+    foreach my $param ( qw( os_x os_y distance_in_metres ) ) {
+        if ( defined $vars{$param} ) {
+            $vars{$param} =~ s/[^0-9]//g;
+            # 0 is an allowed value but the empty string isn't.
+            delete $vars{$param} if $vars{$param} eq "";
+            $self->{$param} = $vars{$param} if defined $vars{$param};
+	}
+    }
+
+    # Latitude and longitude are also allowed '-' and '.'
+    foreach my $param( qw( lat long ) ) {
+        if ( defined $vars{$param} ) {
+            $vars{$param} =~ s/[^-\.0-9]//g;
+            # 0 is an allowed value but the empty string isn't.
+            delete $vars{$param} if $vars{$param} eq "";
+            $self->{$param} = $vars{$param} if defined $vars{$param};
+	}
+    }
+
+    # Strip leading and trailing whitespace from search text.
+    $vars{search} ||= ""; # avoid uninitialised value warning
+    $vars{search} =~ s/^\s*//;
+    $vars{search} =~ s/\s*$//;
+
+    # Check for only valid characters in tainted search param
+    # (quoted literals are OK, as they are escaped)
+    # This regex copied verbatim from Ivor's old supersearch.
+    if ( $vars{search}
+         && $vars{search} !~ /^("[^"]*"|[\w \-',()!*%\[\]])+$/i) {
+        $self->{error} = "Search expression $vars{search} contains invalid character(s)";
+        return $self;
+    }
+    $self->{search_string} = $vars{search};
+
+    return $self;
+}
+
+# thin wrapper around OpenGuides::Template
+sub process_template {
+    my ($self, %args) = @_;
+    my $tt_vars = $args{tt_vars} || {};
+    $tt_vars->{not_editable} = 1;
+    $tt_vars->{not_deletable} = 1;
+    return %$tt_vars if $self->{return_tt_vars};
+    my $output =  OpenGuides::Template->output(
+                                                wiki     => $self->wiki,
+                                                config   => $self->config,
+                                                template => "supersearch.tt",
+                                                vars     => $tt_vars,
+                                              );
+    return $output if $self->{return_output};
+
+    print $output;
+    return 1;
+}
 
 =head1 OUTPUT
 
@@ -663,68 +638,6 @@ Two matches in the title beats one match in the title and one in the content.
 
 =cut
 
-sub intersperse {
-    my $self = shift;
-    my $pagnam = shift;
-    
-    my @mixed;   
-    my $score = 0;
-    
-    for my $j (@_) {
-        if (exists $j->{$pagnam}) {
-            $score += $j->{$pagnam}[0];
-            push @mixed,[$_,$j->{$pagnam}[$_]] for 1..$#{$j->{$pagnam}};
-        }
-    }
-    
-    my @interspersed = map $_->[1], sort {$a->[0] <=> $b->[0]} @mixed;
-    
-    unshift @interspersed,$score;
-    
-    return \@interspersed;
-}
-
-sub _do_search {
-    my ($self, $wmatch) = @_;
-
-    # Build regexp from parameter. Gobble upto 60 characters of
-    # context either side.
-    my $wexp = qr/\b.{0,60}\b$wmatch\b.{0,60}\b/is;
-    my %results;
-
-    # Search every wiki page for matches
-    my %wikitext = %{ $self->{wikitext} || {} };
-    while (my ($k,$v) = each %wikitext) {
-        my @out;
-        for ($v->{text} =~ /$wexp/g) {
-            my $match = "...$_...";
-            $match =~ s/<[^>]+>//gs;
-            $match =~ s!\b($wmatch)\b!<b>$&</b>!i;
-            push @out,$match;
-        }
-        my $temp = $k;
-        $temp =~ s/_/ /g;
-
-        # Compute score and create summary.
-        my $score = scalar @out; # 1 point for each match in body/title/cats
-        $score += 10 if $temp =~ /$wexp/; # 10 points if title matches
-        # 3 points for cat/locale match.  Check $score too since this might
-        # be a branch of an AND search and the cat/locale match may have
-        # been for the other branch,
-        $score += 3  if $v->{category_match} and $score;
-        $score += 3  if $v->{locale_match} and $score;
-
-        $results{$k} = {
-                         score   => $score,
-                         summary => join( "", @out ),
-                         name    => $k,
-                       }
-          if $score;
-    }
-    
-    return %results;
-}
-
 =head1 AUTHOR
 
 The OpenGuides Project (openguides-dev@openguides.org)
@@ -743,21 +656,3 @@ L<OpenGuides>
 =cut
 
 1;
-
-__END__
-
-# Not sure what this sub is meant to do.  It doesn't seem to match on [foo]
-sub matched_title {
-    my $wmatch = join '\W+',@_;
-    $wmatch =~ s/%/\\w/g;
-    $wmatch =~ s/\*/\\w*/g;
-
-    my $wexp = qr/\b$wmatch\b/is;
-    my %res;
-    
-    for (keys %wikitext) {
-        $res{$_} = [10] if /$wexp/g;
-    }
-    
-    %res;
-}

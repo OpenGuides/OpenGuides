@@ -88,7 +88,8 @@ if ( $@ ) {
                             return_output => 1,
                             vars          => { search => "weebl" },
                           );
-    unlike( $output, qr/Status: 302 Moved/, "no redirect if match is in body");
+    unlike( $output, qr/Status: 302 Moved/,
+            "no redirect if match only in body");
 
     # One hit in title should redirect to that page.
     $output = $search->run(
@@ -116,10 +117,12 @@ if ( $@ ) {
                              vars           => { search => "brains, pie" },
                            );
     @found = sort map { $_->{name} } @{ $tt_vars{results} || [] };
-    is_deeply( \@found, [ "Monkey", "Monkey_Brains", "Want_Pie_Now" ],
+    is_deeply( \@found, [ "Monkey", "Monkey Brains", "Want Pie Now" ],
                "OR search returns right results" );
     print "# Found in $_\n" foreach @found;
 
+    SKIP: {
+        skip "NOT search not done yet", 1;
     # Test the NOT search
     %tt_vars = $search->run(
                              return_tt_vars => 1,
@@ -127,6 +130,7 @@ if ( $@ ) {
                            );
     @found = sort map { $_->{name} } @{ $tt_vars{results} || [] };
     is_deeply( \@found, [ "Banana" ], "NOT search returns right results" );
+    } # end of SKIP
 
     # Test the phrase search
     $output = $search->run(

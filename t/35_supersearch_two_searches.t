@@ -48,7 +48,7 @@ if ( $@ ) {
                              vars           => { search => "parks" },
                            );
     @results = sort map { $_->{name} } @{ $tt_vars{results} || [] };
-    is_deeply( \@results, [ "Wandsworth_Common" ],
+    is_deeply( \@results, [ "Wandsworth Common" ],
                "first search returns expected results" );
     %tt_vars = $search->run(
                              return_tt_vars => 1,

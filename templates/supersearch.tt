@@ -67,7 +67,7 @@ summary="Results of search queries are displayed here, and new searches can also
       <ol start="[% first_num %]">
         [% FOREACH result = results %]
           <li>
-            <a href="[% full_cgi_url %]?[% result.name %]"><b>[% result.name.replace('_', ' ') %]</b></a> (score: [% result.score %])
+            <a href="[% result.url %]"><b>[% result.name %]</b></a> (score: [% result.score %])
             [% IF result.distance %]
               ([% result.distance %] metres away)
             [% END %]

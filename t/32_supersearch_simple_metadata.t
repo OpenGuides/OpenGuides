@@ -51,7 +51,7 @@ SKIP: {
                                 vars           => { search => "Pubs" },
                               );
     my @found = sort map { $_->{name} } @{ $tt_vars{results} || [] };
-    is_deeply( \@found, [ "Calthorpe_Arms", "Penderel's_Oak" ],
+    is_deeply( \@found, [ "Calthorpe Arms", "Penderel's Oak" ],
                "simple search looks in category" );
 
     %tt_vars = $search->run(
@@ -59,7 +59,7 @@ SKIP: {
                              vars           => { search => "pubs" },
                            );
     @found = sort map { $_->{name} } @{ $tt_vars{results} || [] };
-    is_deeply( \@found, [ "Calthorpe_Arms", "Penderel's_Oak" ],
+    is_deeply( \@found, [ "Calthorpe Arms", "Penderel's Oak" ],
                "...and is case-insensitive" );
 
     # Check that a search on its locale works.
@@ -68,7 +68,7 @@ SKIP: {
                              vars           => { search => "Holborn" },
                            );
     @found = sort map { $_->{name} } @{ $tt_vars{results} || [] };
-    is_deeply( \@found, [ "British_Museum", "Calthorpe_Arms", "Penderel's_Oak" ],
+    is_deeply( \@found, [ "British Museum", "Calthorpe Arms", "Penderel's Oak" ],
                "simple search looks in locale" );
 
     %tt_vars = $search->run(
@@ -76,7 +76,7 @@ SKIP: {
                              vars           => { search => "holborn" },
                            );
     @found = sort map { $_->{name} } @{ $tt_vars{results} || [] };
-    is_deeply( \@found, [ "British_Museum", "Calthorpe_Arms", "Penderel's_Oak" ],
+    is_deeply( \@found, [ "British Museum", "Calthorpe Arms", "Penderel's Oak" ],
                "...and is case-insensitive" );
 
     # Test AND search in various combinations.
@@ -85,7 +85,7 @@ SKIP: {
                              vars           => { search => "Holborn Pubs" },
                            );
     @found = sort map { $_->{name} } @{ $tt_vars{results} || [] };
-    is_deeply( \@found, [ "Calthorpe_Arms", "Penderel's_Oak" ],
+    is_deeply( \@found, [ "Calthorpe Arms", "Penderel's Oak" ],
                "AND search works between category and locale" );
 
     %tt_vars = $search->run(
@@ -93,7 +93,7 @@ SKIP: {
                              vars         => { search => "Holborn Penderel" },
                            );
     @found = sort map { $_->{name} } @{ $tt_vars{results} || [] };
-    is_deeply( \@found, [ "Penderel's_Oak" ],
+    is_deeply( \@found, [ "Penderel's Oak" ],
                "AND search works between title and locale" );
 
     %tt_vars = $search->run(
@@ -101,7 +101,7 @@ SKIP: {
                              vars           => { search => "Pubs Penderel" },
                            );
     @found = sort map { $_->{name} } @{ $tt_vars{results} || [] };
-    is_deeply( \@found, [ "Penderel's_Oak" ],
+    is_deeply( \@found, [ "Penderel's Oak" ],
                "AND search works between title and category" );
 
     %tt_vars = $search->run(
@@ -109,7 +109,7 @@ SKIP: {
                              vars           => { search => "Holborn beer" },
                            );
     @found = sort map { $_->{name} } @{ $tt_vars{results} || [] };
-    is_deeply( \@found, [ "Calthorpe_Arms", "Penderel's_Oak" ],
+    is_deeply( \@found, [ "Calthorpe Arms", "Penderel's Oak" ],
                "...and between body and locale" );
 
     %tt_vars = $search->run(
@@ -117,7 +117,7 @@ SKIP: {
                              vars           => { search => "Pubs beer" },
                            );
     @found = sort map { $_->{name} } @{ $tt_vars{results} || [] };
-    is_deeply( \@found, [ "Calthorpe_Arms", "Penderel's_Oak" ],
+    is_deeply( \@found, [ "Calthorpe Arms", "Penderel's Oak" ],
                "...and between body and category" );
 
     %tt_vars = $search->run(
@@ -125,6 +125,6 @@ SKIP: {
                              vars           => { search => '"major attractions"' },
                            );
     @found = sort map { $_->{name} } @{ $tt_vars{results} || [] };
-    is_deeply( \@found, [ "British_Museum", ],
+    is_deeply( \@found, [ "British Museum", ],
                "Multi word category name" );
 }

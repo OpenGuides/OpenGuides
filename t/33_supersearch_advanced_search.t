@@ -85,6 +85,17 @@ SKIP: {
                        $hbdata,
                      ) or die "Couldn't write node";
 
+    # Sanity check.
+    print "# Distances should be:\n";
+    use CGI::Wiki::Plugin::Locator::UK;
+    my $locator = CGI::Wiki::Plugin::Locator::UK->new;
+    $wiki->register_plugin( plugin => $locator );
+    foreach my $node ( "Blue Anchor", "Crabtree Tavern", "Hammersmith Bridge"){
+        print "# $node: " . $locator->distance( from_lat  => 51.484320,
+                                                from_long => -0.223484,
+                                                to_node   => $node ) . "\n";
+    }
+
     # Check that a distance search finds them.
     my %tt_vars = $search->run(
                                 return_tt_vars => 1,
@@ -96,20 +107,11 @@ SKIP: {
                               );
     my @ordered = map { $_->{name} } @{ $tt_vars{results} || [] };
     my @found = sort @ordered;
-    print "# Distances should be:\n";
-    use CGI::Wiki::Plugin::Locator::UK;
-    my $locator = CGI::Wiki::Plugin::Locator::UK->new;
-    $wiki->register_plugin( plugin => $locator );
-    foreach my $node ( "Blue Anchor", "Crabtree Tavern", "Hammersmith Bridge"){
-        print "# $node: " . $locator->distance( from_lat  => 51.484320,
-                                                from_long => -0.223484,
-                                                to_node   => $node ) . "\n";
-    }
     is_deeply( \@found,
-               [ "Blue_Anchor", "Crabtree_Tavern", "Hammersmith_Bridge" ],
+               [ "Blue Anchor", "Crabtree Tavern", "Hammersmith Bridge" ],
                "distance search finds the right things" );
     is_deeply( \@ordered,
-               [ "Crabtree_Tavern", "Hammersmith_Bridge", "Blue_Anchor" ],
+               [ "Crabtree Tavern", "Hammersmith Bridge", "Blue Anchor" ],
                "...and returns them in the right order" );
 
     %tt_vars = $search->run(
@@ -124,7 +126,7 @@ SKIP: {
     @ordered = map { $_->{name} } @{ $tt_vars{results} || [] };
     @found = sort @ordered;
     is_deeply( \@found,
-               [ "Blue_Anchor", "Crabtree_Tavern", "Hammersmith_Bridge" ],
+               [ "Blue Anchor", "Crabtree Tavern", "Hammersmith Bridge" ],
                "...still works if whitespace-only search text supplied" );
 
     %tt_vars = $search->run(
@@ -139,7 +141,7 @@ SKIP: {
     @ordered = map { $_->{name} } @{ $tt_vars{results} || [] };
     @found = sort @ordered;
     is_deeply( \@found,
-               [ "Blue_Anchor", "Crabtree_Tavern", "Hammersmith_Bridge" ],
+               [ "Blue Anchor", "Crabtree Tavern", "Hammersmith Bridge" ],
                "...works with OS co-ords" );
 
     %tt_vars = eval {
@@ -159,7 +161,7 @@ SKIP: {
     @ordered = map { $_->{name} } @{ $tt_vars{results} || [] };
     @found = sort @ordered;
     is_deeply( \@found,
-               [ "Blue_Anchor", "Crabtree_Tavern", "Hammersmith_Bridge" ],
+               [ "Blue Anchor", "Crabtree Tavern", "Hammersmith Bridge" ],
                  "...returns the right stuff" );
 
     %tt_vars = $search->run(
@@ -172,7 +174,7 @@ SKIP: {
                                      },
                            );
     @found = sort map { $_->{name} } @{ $tt_vars{results} || [] };
-    is_deeply( \@found, [ "Blue_Anchor", "Crabtree_Tavern", ],
+    is_deeply( \@found, [ "Blue Anchor", "Crabtree Tavern", ],
                "distance search in combination with text search works" );
 
     %tt_vars = $search->run(
@@ -185,6 +187,6 @@ SKIP: {
                                      },
                            );
     @found = sort map { $_->{name} } @{ $tt_vars{results} || [] };
-    is_deeply( \@found, [ "Blue_Anchor", "Crabtree_Tavern", ],
+    is_deeply( \@found, [ "Blue Anchor", "Crabtree Tavern", ],
                "...works with OS co-ords too" );
 }
