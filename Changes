@@ -1,4 +1,4 @@
-0.41    
+0.41    21 September 2004
         Added backlinks link to navbar.
         Added some anti-robot tags to certain pages.
         Fixed bug in install procedure - blank script_name should now get
