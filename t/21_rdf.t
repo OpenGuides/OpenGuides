@@ -90,7 +90,7 @@ SKIP: {
     like( $rdfxml, qr|<rdf:Description rdf:about="">|,
           "sets the 'about' correctly" );
 
-    like( $rdfxml, qr|<dc:source rdf:resource="http://wiki.example.com/mywiki.cgi\?id=Calthorpe_Arms" />|,
+    like( $rdfxml, qr|<dc:source rdf:resource="http://wiki.example.com/mywiki.cgi\?Calthorpe_Arms" />|,
 	  "set the dc:source with the version-independent uri" );
 
     like( $rdfxml, qr|<country>United Kingdom</country>|, "country" ).
