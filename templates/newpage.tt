@@ -1,5 +1,5 @@
 [%- USE CGI -%]
-[% INCLUDE header.tt %]
+[% INCLUDE header.tt page_title = "Create a new page - $site_name" %]
 [% INCLUDE banner.tt %]
 <div id="content">
 <table border="0" cellpadding="0" cellspacing="0" width="100%" summary="Form for entering details of a new page you want to create.">
