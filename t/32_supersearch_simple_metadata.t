@@ -10,7 +10,7 @@ eval { require DBD::SQLite; };
 if ( $@ ) {
     plan skip_all => "DBD::SQLite needed to run these tests";
 } else {
-    plan tests => 12;
+    plan tests => 10;
 
     # Ensure the test database is set up.
     CGI::Wiki::Setup::SQLite::setup( "t/sqlite.32.db" );
@@ -86,21 +86,21 @@ if ( $@ ) {
     is_deeply( \@found, [ "Calthorpe_Arms", "Penderel's_Oak" ],
                "AND search works between category and locale" );
 
-    my $output = $search->run(
-                             return_output => 1,
+    %tt_vars = $search->run(
+                             return_tt_vars => 1,
                              vars         => { search => "Holborn Penderel" },
                            );
-    like( $output, qr/Status: 302 Moved/, "title and locale, single hit" );
-    like( $output, qr/Location: http:\/\/example.com\/wiki.cgi\?Penderel%27s_Oak/,
-	          "...and node name munged correctly in URL" );
+    @found = sort map { $_->{name} } @{ $tt_vars{results} || [] };
+    is_deeply( \@found, [ "Penderel's_Oak" ],
+               "AND search works between title and locale" );
 
-    $output = $search->run(
-                             return_output => 1,
+    %tt_vars = $search->run(
+                             return_tt_vars => 1,
                              vars           => { search => "Pubs Penderel" },
                            );
-    like( $output, qr/Status: 302 Moved/, "title and category, single hit" );
-    like( $output, qr/Location: http:\/\/example.com\/wiki.cgi\?Penderel%27s_Oak/,
-	          "...and node name munged correctly in URL" );
+    @found = sort map { $_->{name} } @{ $tt_vars{results} || [] };
+    is_deeply( \@found, [ "Penderel's_Oak" ],
+               "AND search works between title and category" );
 
     %tt_vars = $search->run(
                              return_tt_vars => 1,
@@ -118,14 +118,11 @@ if ( $@ ) {
     is_deeply( \@found, [ "Calthorpe_Arms", "Penderel's_Oak" ],
                "...and between body and category" );
 
-SKIP: {
-    skip "Multi word category broken", 1;
-    $output = $search->run(
-                             return_output => 1,
-                             vars           => { search => "major attractions" },
+    %tt_vars = $search->run(
+                             return_tt_vars => 1,
+                             vars           => { search => '"major attractions"' },
                            );
-    like( $output, qr/Status: 302 Moved/, "Multi word category, single hit" );
-    like( $output, qr/Location: http:\/\/example.com\/wiki.cgi\?British_Museum/,
-	          "...and node name munged correctly in URL" );
-    }
+    @found = sort map { $_->{name} } @{ $tt_vars{results} || [] };
+    is_deeply( \@found, [ "British_Museum", ],
+               "Multi word category name" );
 }
