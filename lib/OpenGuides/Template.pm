@@ -318,8 +318,8 @@ sub extract_metadata_vars {
                       coord_field_1       => "latitude",
                       coord_field_2       => "longitude",
                       dist_field          => "latlong_dist",
-                      coord_field_1_name  => "Latitude",
-                      coord_field_2_name  => "Longitude",
+                      coord_field_1_name  => "Latitude (decimal)",
+                      coord_field_2_name  => "Longitude (decimal)",
                       coord_field_1_value => $metadata{latitude}[0],
                       coord_field_2_value => $metadata{longitude}[0],
                     );
@@ -445,8 +445,8 @@ sub extract_metadata_vars {
                           coord_field_1       => "latitude",
                           coord_field_2       => "longitude",
                           dist_field          => "latlong_dist",
-                          coord_field_1_name  => "Latitude",
-                          coord_field_2_name  => "Longitude",
+                          coord_field_1_name  => "Latitude (decimal)",
+                          coord_field_2_name  => "Longitude (decimal)",
                           coord_field_1_value => $lat,
                           coord_field_2_value => $long,
                         );
