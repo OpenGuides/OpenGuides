@@ -1,8 +1,10 @@
 use strict;
 use CGI::Wiki;
 use CGI::Wiki::TestConfig::Utilities;
+use CGI::Wiki::Plugin::Locator::UK;
+use CGI::Wiki::Plugin::Categoriser;
 use Test::More tests =>
-  (1 + 12 * $CGI::Wiki::TestConfig::Utilities::num_stores);
+  (1 + 14 * $CGI::Wiki::TestConfig::Utilities::num_stores);
 
 use_ok( "OpenGuides::UK::PubCrawl" );
 
@@ -11,7 +13,7 @@ my %stores = CGI::Wiki::TestConfig::Utilities->stores;
 my ($store_name, $store);
 while ( ($store_name, $store) = each %stores ) {
   SKIP: {
-      skip "$store_name storage backend not configured for testing", 12
+      skip "$store_name storage backend not configured for testing", 14
           unless $store;
 
       print "#\n##### TEST CONFIG: Store: $store_name\n#\n";
@@ -19,19 +21,29 @@ while ( ($store_name, $store) = each %stores ) {
       my $wiki = CGI::Wiki->new( store => $store );
       my $locator = CGI::Wiki::Plugin::Locator::UK->new;
       $wiki->register_plugin( plugin => $locator );
+      my $categoriser = CGI::Wiki::Plugin::Categoriser->new;
+      $wiki->register_plugin( plugin => $categoriser );
 
       # Test unsuccessful creation.
-      eval { OpenGuide::UK::PubCrawl->new; };
+      eval { OpenGuides::UK::PubCrawl->new( categoriser => $categoriser ); };
       ok( $@, "->new dies if no locator parameter supplied" );
-      eval { OpenGuide::UK::PubCrawl->new( locator => "foo" ); };
+      eval { OpenGuides::UK::PubCrawl->new( categoriser => $categoriser,
+                                           locator     => "foo" ); };
       ok ($@, "...and if locator param isn't a locator" );
+
+      eval { OpenGuides::UK::PubCrawl->new( locator => $locator ); };
+      ok( $@, "->new dies if no categoriser parameter supplied" );
+      eval { OpenGuides::UK::PubCrawl->new( categoriser => "foo",
+                                           locator     => $locator ); };
+      ok ($@, "...and if categoriser param isn't a categoriser" );
 
       # Test successful creation.
       my $crawler = eval {
-          OpenGuides::UK::PubCrawl->new( locator => $locator );
+          OpenGuides::UK::PubCrawl->new( categoriser => $categoriser,
+                                         locator     => $locator );
       };
       is ($@, "",
-          "...but not if a CGI::Wiki::Plugin::Locator::UK is supplied" );
+          "...but not if a CGI::Wiki::Plugin::Locator::UK and a CGI::Wiki::Plugin::Categoriser are supplied" );
       isa_ok( $crawler, "OpenGuides::UK::PubCrawl" );
       $wiki->register_plugin( plugin => $crawler );
 

@@ -5,6 +5,7 @@ use CGI;
 use CGI::Cookie;
 use CGI::Wiki;
 use CGI::Wiki::Formatter::UseMod;
+use CGI::Wiki::Plugin::Categoriser;
 use CGI::Wiki::Plugin::Locator::UK;
 use Config::Tiny;
 use OpenGuides::UK::PubCrawl;
@@ -51,7 +52,10 @@ sub generate_crawl {
     my $wiki = CGI::Wiki->new( store => $store, formatter => $formatter );
     my $locator = CGI::Wiki::Plugin::Locator::UK->new;
     $wiki->register_plugin( plugin => $locator );
-    my $crawler = OpenGuides::UK::PubCrawl->new( locator => $locator );
+    my $categoriser = CGI::Wiki::Plugin::Categoriser->new;
+    $wiki->register_plugin( plugin => $categoriser );
+    my $crawler = OpenGuides::UK::PubCrawl->new( locator     => $locator,
+						 categoriser => $categoriser );
     $wiki->register_plugin( plugin => $crawler );
 
     # Now do the stuff.

@@ -28,9 +28,14 @@ probably only useful to OpenGuides developers.
   use OpenGuides::UK::PubCrawl;
 
   my $wiki = CGI::Wiki->new( ... );
-  my $locator = CGI::Wiki::Locator::UK->new;
+  my $locator = CGI::Wiki::Plugin::Locator::UK->new;
   $wiki->register_plugin( plugin => $locator );
-  my $crawler = OpenGuides::UK::PubCrawl->new( locator => $locator );
+  my $categoriser = CGI::Wiki::Plugin::Categoriser->new;
+  $wiki->register_plugin( plugin => $categoriser );
+
+  my $crawler = OpenGuides::UK::PubCrawl->new(
+      locator     => $locator,
+      categoriser => $categoriser );
   $wiki->register_plugin( plugin => $crawler );
  
 =head1 METHODS
@@ -39,18 +44,29 @@ probably only useful to OpenGuides developers.
 
 =item B<new>
 
+  my $crawler = OpenGuides::UK::PubCrawl->new(
+      locator     => $locator,
+      categoriser => $categoriser );
+
   my $crawler = OpenGuides::UK::PubCrawl->new( locator => $locator );
 
-Croaks unless a C<CGI::Wiki::Plugin::Locator::UK> object is supplied.
+Croaks unless a C<CGI::Wiki::Plugin::Locator::UK> object and a
+C<CGI::Wiki::Plugin::Categoriser> object are supplied.
 
 =cut
 
 sub new {
     my ($class, %args) = @_;
-    my $locator = $args{locator} or croak "No locator parameter supplied";
-    croak "Locator paramater is not a CGI::Wiki::Plugin::Locator::UK"
+    my $locator = $args{locator}
+      or croak "No locator parameter supplied";
+    croak "Locator parameter is not a CGI::Wiki::Plugin::Locator::UK"
       unless UNIVERSAL::isa( $locator, "CGI::Wiki::Plugin::Locator::UK" );
-    my $self = { _locator => $locator };
+    my $categoriser = $args{categoriser}
+      or croak "No categoriser parameter supplied";
+    croak "Categoriser parameter is not a CGI::Wiki::Plugin::Categoriser"
+      unless UNIVERSAL::isa( $categoriser, "CGI::Wiki::Plugin::Categoriser" );
+    my $self = { _locator     => $locator,
+                 _categoriser => $categoriser };
     bless $self, $class;
     return $self;
 }
@@ -66,6 +82,17 @@ sub locator {
     return $self->{_locator};
 }
 
+=item B<categoriser>
+
+Returns categoriser object.
+
+=cut
+
+sub categoriser {
+    my $self = shift;
+    return $self->{_categoriser};
+}
+
 =item B<generate_crawl>
 
   my @crawl = $crawler->generate_crawl( start_location =>
@@ -77,7 +104,9 @@ sub locator {
                                       );
 
 These are the only options so far.  Returns an array of nodenames.
-C<num_pubs> will default to 5, for the sake of your liver.
+C<num_pubs> will default to 5, for the sake of your liver.  If it
+can't find a crawl as long as you asked for, returns the longest one
+it could find.
 
 =cut
 
@@ -88,13 +117,14 @@ sub generate_crawl {
     my $km = $args{max_km_between} or croak "No max_km_between";
     my $num_pubs = $args{num_pubs} || 5;
     my $locator = $self->locator;
+    my $categoriser = $self->categoriser;
     my @firsts = $locator->find_within_distance( os_x       => $x,
                                                  os_y       => $y,
                                                  kilometres => $km );
     my %omit = map { $_ => 1 } @{ $args{omit} || [] };
     @firsts = grep { !$omit{$_}
-                     and $self->_in_category( category => "Pubs",
-                                              node     => $_      )
+                     and $categoriser->in_category( category => "Pubs",
+                                                    node     => $_      )
                    } @firsts;
     return () unless scalar @firsts;
 
@@ -121,24 +151,6 @@ sub generate_crawl {
         }
     }
     return @fallback;
-}
-
-# $self->_in_category( category => "Pubs",
-#                      node     => "Cittie Of Yorke" );
-#
-# Returns true if node is in category, false otherwise.
-sub _in_category {
-    my ($self, %args) = @_;
-    my $dbh = $self->datastore->dbh;
-    my $sth = $dbh->prepare( "
-SELECT metadata.metadata_value FROM metadata, node WHERE node.name = ? AND metadata.node = node.name AND metadata.version = node.version AND metadata.metadata_type = 'category'
-    " );
-    $sth->execute( $args{node} );
-    my %categories;
-    while ( my ($cat) = $sth->fetchrow_array ) {
-        $categories{$cat} = 1;
-    }
-    return $categories{$args{category}};
 }
 
 =back
