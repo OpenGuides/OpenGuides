@@ -78,7 +78,8 @@ sub make_prefs_cookie {
                     prevab => $args{preview_above_edit_box},
                     lltrad => $args{latlong_traditional},
                     omitfmtlk => $args{omit_formatting_link},
-                  }
+                  },
+        -expires => "+1M",
     );
     return $cookie;
 }
