@@ -3,7 +3,7 @@ use CGI::Wiki;
 use URI::Escape;
 
 use Test::More tests =>
-  (1 + 19 * $CGI::Wiki::TestConfig::Utilities::num_stores);
+  (1 + 21 * $CGI::Wiki::TestConfig::Utilities::num_stores);
 
 use_ok( "OpenGuides::RDF" );
 
@@ -12,7 +12,7 @@ my %stores = CGI::Wiki::TestConfig::Utilities->stores;
 my ($store_name, $store);
 while ( ($store_name, $store) = each %stores ) {
   SKIP: {
-      skip "$store_name storage backend not configured for testing", 19
+      skip "$store_name storage backend not configured for testing", 21
           unless $store;
 
       print "#\n##### TEST CONFIG: Store: $store_name\n#\n";
@@ -43,6 +43,7 @@ while ( ($store_name, $store) = each %stores ) {
       );
       isa_ok( $rdf_writer, "OpenGuides::RDF" );
 
+      # Test the data for a node that exists.
       my $rdfxml = $rdf_writer->emit_rdfxml( node => "Calthorpe Arms" );
 
       like( $rdfxml, qr|<chefmoz:Neighborhood>Bloomsbury</chefmoz:Neighborhood>|,
@@ -86,6 +87,17 @@ while ( ($store_name, $store) = each %stores ) {
       like( $rdfxml, qr|<dc:date>|, "date element included" );
       unlike( $rdfxml, qr|<dc:date>1970|, "hasn't defaulted to the epoch" );
 
-#      print $rdfxml;
+
+      # Now test that there's a nice failsafe where a node doesn't exist.
+      $rdfxml = eval {
+          $rdf_writer->emit_rdfxml( node => "I Do Not Exist" );
+      };
+      is( $@, "",
+           "->emit_rdfxml doesn't die when called on a nonexistent node" );
+
+      like( $rdfxml, qr|<wiki:version>0</wiki:version>|,
+            "...and wiki:version is 0" );
+
+      #print $rdfxml;
   }
 }

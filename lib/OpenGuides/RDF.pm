@@ -3,7 +3,7 @@ package OpenGuides::RDF;
 use strict;
 
 use vars qw( $VERSION );
-$VERSION = '0.01';
+$VERSION = '0.02';
 
 use Time::Piece;
 use URI::Escape;
@@ -18,7 +18,7 @@ OpenGuides::RDF - An OpenGuides plugin to output RDF/XML.
 Does all the RDF stuff for OpenGuides.  Distributed and installed as
 part of the OpenGuides project, not intended for independent
 installation.  This documentation is probably only useful to OpenGuides
-developers
+developers.
 
 =head1 SYNOPSIS
 
@@ -165,8 +165,10 @@ sub emit_rdfxml {
     # Make a Time::Piece object.
     my $timestamp_fmt = $CGI::Wiki::Store::Database::timestamp_fmt;
 #        my $timestamp_fmt = $wiki->{store}->timestamp_fmt;
-    my $time = Time::Piece->strptime( $timestamp, $timestamp_fmt );
-    $timestamp = $time->strftime( "%Y-%m-%dT%H:%M:%S" );
+    if ( $timestamp ) {
+        my $time = Time::Piece->strptime( $timestamp, $timestamp_fmt );
+        $timestamp = $time->strftime( "%Y-%m-%dT%H:%M:%S" );
+    }
 
     my $url = $self->{make_node_url}->( $node_name, $version );
     my $version_indpt_uri = $self->{make_node_url}->( $node_name );
