@@ -208,6 +208,7 @@ my $build = OpenGuides::Build->new(
 	'CGI::Wiki' => '0.49',
 	'CGI::Wiki::Formatter::UseMod' => '0.09',
         'CGI::Wiki::Plugin::Categoriser' => 0,
+	'CGI::Wiki::Plugin::Diff' => 0,
 	'CGI::Wiki::Plugin::GeoCache' => 0,
 	'CGI::Wiki::Plugin::Locator::UK' => '0.06',
 	'CGI::Wiki::Plugin::RSS::ModWiki' => '0.02',
@@ -222,7 +223,6 @@ my $build = OpenGuides::Build->new(
         'Test::MockObject' => '0.07', # earlier doesn't use 'mock'
 	'Time::Piece' => 0,
 	'URI::Escape' => 0,
-        'VCS::Lite' => '0.04'
 	},
     build_requires => {
         'Module::Build' => '0.18', # earlier doesn't install script files
