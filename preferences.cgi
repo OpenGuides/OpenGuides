@@ -9,7 +9,8 @@ use OpenGuides::CGI;
 use OpenGuides::Utils;
 use OpenGuides::Template;
 
-my $config = OpenGuides::Config->new( file => "wiki.conf" );
+my $config_file = $ENV{OPENGUIDES_CONFIG_FILE} || "wiki.conf";
+my $config = OpenGuides::Config->new( file => $config_file );
 my $wiki = OpenGuides::Utils->make_wiki_object( config => $config );
 my $cgi = CGI->new();
 my $action = $cgi->param('action') || '';

@@ -13,7 +13,8 @@ my @badchars = qw( & ? );
 push @badchars, '#'; # Avoid warning about possible comments in qw()
 
 my $q = CGI->new;
-my $config = OpenGuides::Config->new( file => "wiki.conf" );
+my $config_file = $ENV{OPENGUIDES_CONFIG_FILE} || "wiki.conf";
+my $config = OpenGuides::Config->new( file => $config_file );
 my $wiki = OpenGuides::Utils->make_wiki_object( config => $config );
 
 my $pagename = $q->param("pagename") || "";

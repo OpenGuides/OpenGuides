@@ -20,7 +20,8 @@ use OpenGuides::Template;
 use Time::Piece;
 use URI::Escape;
 
-my $config = OpenGuides::Config->new( file => "wiki.conf" );
+my $config_file = $ENV{OPENGUIDES_CONFIG_FILE} || "wiki.conf";
+my $config = OpenGuides::Config->new( file => $config_file );
 
 my $script_name = $config->script_name;
 my $script_url  = $config->script_url;
