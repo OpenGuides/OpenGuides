@@ -326,7 +326,8 @@ sub show_wanted_pages {
     }
     process_template( "wanted_pages.tt",
                       "",
-                      { not_editable => 1,
-                        wanted       => \@wanted } );
+                      { not_editable  => 1,
+                        not_deletable => 1,
+                        wanted        => \@wanted } );
 }
 

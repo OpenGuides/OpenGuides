@@ -4,6 +4,7 @@
         Preferences now has an option for when your prefs expire.
         Navbar added to diff and history pages.
         The "omit help links" preference now actually works.
+        Set some pages to non-editable and non-deletable that should have been.
 
 0.39    15 September 2004
         Split commit_node out into OpenGuides.pm in preparation for spam filter
