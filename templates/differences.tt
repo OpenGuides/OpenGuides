@@ -28,7 +28,7 @@
 
 [% INCLUDE display_categories.tt %]
 
-<a href="wiki.cgi?action=list_all_versions;id=[% node_param %]">List all versions</a><br />
+<a href="[% cgi_url %]?action=list_all_versions;id=[% node_param %]">List all versions</a><br />
 
 <p>
 <form action="supersearch.cgi" method="get">
