@@ -4,7 +4,7 @@
 
 [% content %]
 
-<h2>Last five nodes edited by [% username %]</h2>
+<h2>Last five nodes edited by <a href="[% full_cgi_url %]?[% username %]">[% username %]</a></h2>
 
 <ul>
 [% FOREACH node = last_five_nodes %]
