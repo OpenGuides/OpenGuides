@@ -642,10 +642,10 @@ and/or modify it under the same terms as Perl itself.
 
 =head1 CREDITS
 
-Programming by Earle Martin, Kake Pugh, Ivor Williams.  Testing and
-bug reporting by Cal Henderson, Bob Walker, Kerry Bosworth, Dominic
-Hargreaves, Simon Cozens, among others.  Much of the Module::Build
-stuff copied from the Siesta project L<http://siesta.unixbeard.net/>
+Programming by Dominic Hargreaves, Earle Martin, Kake Pugh, Ivor Williams.
+Testing and bug reporting by Cal Henderson, Bob Walker, Kerry Bosworth,
+Simon Cozens, among others.  Much of the Module::Build stuff copied from
+the Siesta project L<http://siesta.unixbeard.net/>
 
 =cut
 
