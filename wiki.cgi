@@ -6,8 +6,6 @@ use warnings;
 use vars qw( $VERSION );
 $VERSION = '0.07';
 
-use lib "lib"; # for OpenGuides modules that are installed with this script
-
 use CGI qw/:standard/;
 use CGI::Carp qw(croak);
 use CGI::Cookie;
