@@ -7,7 +7,8 @@ META.yml
 PREREQUISITES
 README
 TROUBLESHOOTING
-examples/wiki.css
+examples/london.css
+examples/vegan-oxford.css
 lib/OpenGuides/Build.pm
 lib/OpenGuides/CGI.pm
 lib/OpenGuides/Diff.pm
