@@ -50,7 +50,7 @@ L<OpenGuides>
 
 =head1 AUTHOR
 
-Ivor Williams, E<lt>ivorw@earth.liE<gt>
+Ivor Williams, E<lt>ivor.williams@tiscali.co.ukE<gt>
 
 =head1 COPYRIGHT AND LICENSE
 
