@@ -4,7 +4,7 @@ use strict;
 use warnings;
 
 use vars qw( $VERSION );
-$VERSION = '0.24';
+$VERSION = '0.25';
 
 use CGI qw/:standard/;
 use CGI::Carp qw(croak);
@@ -258,7 +258,7 @@ sub display_node {
     } elsif ($node eq "Home") {
         my @recent = $wiki->list_recent_changes(
             last_n_changes => 10,
-            metadata_isnt  => { edit_type => "Minor tidying" },
+            metadata_wasnt  => { edit_type => "Minor tidying" },
         );
         @recent = map { {name          => $q->escapeHTML($_->{name}),
                          last_modified => $q->escapeHTML($_->{last_modified}),

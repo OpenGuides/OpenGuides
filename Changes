@@ -1,3 +1,6 @@
+0.25    
+        Applied recent changes fix to front page feed as well.
+
 0.24    8 September 2003
         Fix to recent changes so minor changes don't mask major ones.
         Fixed supersearch.cgi to use a template instead of CGI.pm to avoid
