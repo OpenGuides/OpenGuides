@@ -2,6 +2,7 @@
 
 use strict;
 use CGI;
+
 use Config::Tiny;
 use OpenGuides::CGI;
 use OpenGuides::Utils;
@@ -25,7 +26,7 @@ sub set_preferences {
     my $gc_link      = $cgi->param("include_geocache_link")  || 0;
     my $pre_above    = $cgi->param("preview_above_edit_box") || 0;
     my $latlong_trad = $cgi->param("latlong_traditional")    || 0;
-    my $omit_fmt_lnk = $cgi->param("omit_formatting_link")   || 0;
+    my $omit_hlplnks = $cgi->param("omit_help_links")        || 0;
     my $rc_minor_eds = $cgi->param("show_minor_edits_in_rc") || 0;
     my $cookie = OpenGuides::CGI->make_prefs_cookie(
         config => $config,
@@ -33,7 +34,7 @@ sub set_preferences {
         include_geocache_link  => $gc_link,
 	preview_above_edit_box => $pre_above,
         latlong_traditional    => $latlong_trad,
-        omit_formatting_link   => $omit_fmt_lnk,
+        omit_help_links        => $omit_hlplnks,
         show_minor_edits_in_rc => $rc_minor_eds,
     );
     print OpenGuides::Template->output(
@@ -46,7 +47,7 @@ sub set_preferences {
                       include_geocache_link  => $gc_link,
                       preview_above_edit_box => $pre_above,
                       latlong_traditional    => $latlong_trad,
-                      omit_formatting_link   => $omit_fmt_lnk,
+                      omit_help_links        => $omit_hlplnks,
                       show_minor_edits_in_rc => $rc_minor_eds,
                     }
     );

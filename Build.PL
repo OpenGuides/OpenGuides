@@ -14,67 +14,67 @@ my %existing_config = $read_config ? %{ $read_config->{_} } : ();
 
 my @questions = (
 { question =>
-        "what's the name of the database that this site runs on?",
+        "What's the name of the database that this site runs on?",
   variable => "dbname"
 },
-{ question => "and the database user that can access that database?",
+{ question => "...the database user that can access that database?",
   variable => "dbuser"
   },
-{ question => "and the password that they use to access the database?",
+{ question => "...the password that they use to access the database?",
   variable => "dbpass"
   },
-{ question => "and the machine that the database is hosted on? (blank if local)",
+{ question => "...the machine that the database is hosted on? (blank if local)",
   variable => "dbhost"
   },
-{ question => "what do you want the script to be called?",
+{ question => "What do you want the script to be called?",
   variable => "script_name",
   default  => "wiki.cgi"
   },
-{ question => "what directory should I install it in?",
+{ question => "What directory should I install it in?",
   variable => "install_directory",
   default  => "/usr/lib/cgi-bin/openguides/"
   },
-{ question => "what URL does the install directory map to?",
+{ question => "What URL does the install directory map to?",
   variable => "script_url",
   },
-{ question => "what directory can I use to store indexes in for searching? "
-            . "***NOTE*** this directory must exist and be writeable by the "
-            . "user that your script will run as.  See README for more ",
+{ question => "What directory can I use to store indexes in for searching? "
+            . "***NOTE*** This directory must exist and be writeable by the "
+            . "user that your script will run as.  See README for more on this.",
   variable => "indexing_directory",
   default  => "/usr/lib/cgi-bin/openguides/indexes/"
   },
-{ question => "what's the URL of the wiki's stylesheet?",
+{ question => "What's the URL of the wiki's stylesheet?",
   variable => "stylesheet_url"
 },
-{ question => "what's the wiki called? (should be unique)",
+{ question => "What's the wiki called? (should be unique)",
   variable => "site_name",
   default  => "OpenGuides Wiki"
   },
-{ question => "do you want the navigation bar included on the home page?",
+{ question => "Do you want the navigation bar included on the home page?",
   variable => "navbar_on_home_page",
   default  => "y",
   type     => "y_n"
   },
-{ question => "what should the home page of the wiki be called?",
+{ question => "What should the home page of the wiki be called?",
   variable => "home_name",
   default  => "Home"
   },
-{ question => "how would you describe the wiki?",
+{ question => "How would you describe the wiki?",
   variable => "site_desc",
   default  => "Development site for openguides.org's software"
   },
-{ question => "what city is the wiki based in?",
+{ question => "What city is the wiki based in?",
   variable => "default_city",
   default  => "London"
   },
-{ question => "what country is the wiki based in?",
+{ question => "What country is the wiki based in?",
   variable => "default_country",
   default  => "United Kingdom"
   },
-{ question => "contact email address for the wiki admin?",
+{ question => "Contact email address for the wiki admin?",
   variable => "contact_email"
   },
-{ question => "what's the name of the node to use for the text formatting rules link?",
+{ question => "What's the name of the node to use for the text formatting rules link?",
   variable => "formatting_rules_node",
   default  => "Text Formatting Examples"
   },
@@ -237,7 +237,7 @@ $build->add_to_cleanup( "configlib" );
 # Tell OpenGuides::Build which additional scripts and templates to install.
 $build->{config}{__extra_scripts}     = 
                       [ "wiki.conf", "preferences.cgi", "supersearch.cgi",
-                        "newpage.cgi", "pubcrawl.cgi" ];
+                        "newpage.cgi", "pubcrawl.cgi", "wiki.css" ];
 $build->{config}{__templates}         = [
 		      "backlink_results.tt",
                       "differences.tt",
