@@ -3,7 +3,7 @@ use CGI::Wiki;
 use URI::Escape;
 
 use Test::More tests =>
-  (1 + 21 * $CGI::Wiki::TestConfig::Utilities::num_stores);
+  (1 + 22 * $CGI::Wiki::TestConfig::Utilities::num_stores);
 
 use_ok( "OpenGuides::RDF" );
 
@@ -12,7 +12,7 @@ my %stores = CGI::Wiki::TestConfig::Utilities->stores;
 my ($store_name, $store);
 while ( ($store_name, $store) = each %stores ) {
   SKIP: {
-      skip "$store_name storage backend not configured for testing", 21
+      skip "$store_name storage backend not configured for testing", 22
           unless $store;
 
       print "#\n##### TEST CONFIG: Store: $store_name\n#\n";
@@ -45,6 +45,9 @@ while ( ($store_name, $store) = each %stores ) {
 
       # Test the data for a node that exists.
       my $rdfxml = $rdf_writer->emit_rdfxml( node => "Calthorpe Arms" );
+
+      like( $rdfxml, qr|<\?xml version="1.0"\?>|,
+            "RDF is encoding-neutral" );
 
       like( $rdfxml, qr|<chefmoz:Neighborhood>Bloomsbury</chefmoz:Neighborhood>|,
 	    "finds the first locale" );

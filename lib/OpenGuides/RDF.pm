@@ -3,7 +3,7 @@ package OpenGuides::RDF;
 use strict;
 
 use vars qw( $VERSION );
-$VERSION = '0.02';
+$VERSION = '0.03';
 
 use Time::Piece;
 use URI::Escape;
@@ -173,7 +173,7 @@ sub emit_rdfxml {
     my $url = $self->{make_node_url}->( $node_name, $version );
     my $version_indpt_uri = $self->{make_node_url}->( $node_name );
 
-    my $rdf = qq{<?xml version="1.0" encoding="UTF-8"?>
+    my $rdf = qq{<?xml version="1.0"?>
   <rdf:RDF
   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
   xmlns:dc="http://purl.org/dc/elements/1.1/"

@@ -2,6 +2,8 @@
         Fixed edit_conflict template and preview method to cope with stale
           checksum - passes through all the metadata properly now and offers
           a side by side comparison of what you input and what is stored.
+        RDF output for node is now encoding-agnostic (used to have UTF-8
+          hardcoded).  Also is now called as wiki.cgi?id=Node_Name;format=rdf
 
 0.07    3 May 2003
         Require CGI::Wiki 0.32 to avoid bug (again a Bob find!) where
