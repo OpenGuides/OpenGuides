@@ -156,8 +156,8 @@ sub intradiff {
 
     return (qq{<span class="diff1">$str1</span>},"") unless $str2;
     return ("",qq{<span class="diff2">$str2</span>}) unless $str1;
-    my @diffs = Algorithm::Diff::sdiff([$str1 =~ m!&.+?;|<br />|.!sg]
-    	,[$str2 =~ m!&.+?;|<br />|.!sg]);
+    my @diffs = Algorithm::Diff::sdiff([$str1 =~ m!&.+?;|<br />|\w+|.!sg]
+    	,[$str2 =~ m!&.+?;|<br />|\w+|.!sg]);
     my $out1 = '';
     my $out2 = '';
     my ($mode1,$mode2);
