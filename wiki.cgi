@@ -259,8 +259,8 @@ sub display_node {
     my $address    = $metadata{address}[0];
     my $hours_text = $metadata{opening_hours_text}[0];
     my $postcode   = $metadata{postcode}[0];
-    my $latitude   = $metadata{latitude}[0];
-    my $longitude  = $metadata{longitude}[0];
+    my $os_x       = $metadata{os_x}[0];
+    my $os_y       = $metadata{os_y}[0];
 
     my @categories = map { { name => $_,
                              url  => "$script_name?Category_"
@@ -280,8 +280,8 @@ sub display_node {
 		    hours_text    => $hours_text,
 		    address       => $address,
 		    postcode      => $postcode,
-		    latitude      => $latitude,
-		    longitude     => $longitude,
+		    os_x          => $os_x,
+		    os_y          => $os_y,
 		    last_modified => $modified,
 		    version       => $node_data{version},
 		    node_name     => $q->escapeHTML($node),
@@ -369,8 +369,8 @@ sub preview_node {
     my $hours_text      = $q->param('hours_text');
     my $address         = $q->param('address');
     my $postcode        = $q->param('postcode');
-    my $latitude        = $q->param('latitude');
-    my $longitude       = $q->param('longitude');
+    my $os_x            = $q->param('os_x');
+    my $os_y            = $q->param('os_y');
     my $username        = $q->param('username');
     my $comment         = $q->param('comment');
 
@@ -385,8 +385,8 @@ sub preview_node {
 		        hours_text   => $hours_text,
 			address      => $address,
                         postcode     => $postcode,
-			latitude     => $latitude,
-			longitude    => $longitude,
+			os_x         => $os_x,
+			os_y         => $os_y,
 			username     => $username,
 			comment      => $comment,
                         preview_html => $wiki->format($content),
@@ -419,8 +419,8 @@ sub edit_node {
 		    hours_text => $metadata{opening_hours_text}[0],
                     postcode   => $metadata{postcode}[0],
                     address    => $metadata{address}[0],
-		    latitude   => $metadata{latitude}[0],
-		    longitude  => $metadata{longitude}[0]
+		    os_x       => $metadata{os_x}[0],
+		    os_y       => $metadata{os_y}[0]
     );
 
     process_template("edit_form.tt", $node, \%tt_vars);
@@ -567,8 +567,8 @@ sub commit_node {
     my $address         = $q->param('address');
     my $hours_text      = $q->param('hours_text');
     my $postcode        = $q->param('postcode');
-    my $latitude        = $q->param('latitude');
-    my $longitude       = $q->param('longitude');
+    my $os_x            = $q->param('os_x');
+    my $os_y            = $q->param('os_y');
     my $username        = $q->param('username');
     my $comment         = $q->param('comment');
 
@@ -584,8 +584,8 @@ sub commit_node {
 				      address    => $address,
 			      opening_hours_text => $hours_text,
 				      postcode   => $postcode,
-				      latitude   => $latitude,
-				      longitude   => $longitude,
+				      os_x       => $os_x,
+				      os_y       => $os_y,
 				      username   => $username,
 				      comment    => $comment      } );
     if ($written) {

@@ -21,8 +21,8 @@
 [%- category %]
 [% END %]
 </textarea><br />
-<b>Latitude:</b> <input type="text" name="latitude" value="[% latitude %]">
-<b>Longitude:</b> <input type="text" name="longitude" value="[% longitude %]"><br />
+<b>OS X co-ord:</b> <input type="text" name="os_x" value="[% os_x %]">
+<b>OS Y co-ord:</b> <input type="text" name="os_y" value="[% os_y %]"><br />
 <b>Postcode:</b> <input type="text" name="postcode" value="[% postcode %]"><br />
 <br />
 <b>Your username:</b> <input type="text" name="username" value="[% username %]"><br />
