@@ -2,10 +2,10 @@
 <html lang="[% language %]">
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-  [% IF (node_name == 'category index' || node_name == 'locale index') %]
-  <title>Index of "[% criterion.name %]" - [% site_name %]</title>
+  [% IF page_title %]
+    <title>[% page_title %]</title>
   [% ELSE %]
-  <title>[% node_name %] - [% site_name %]</title>
+    <title>[% node_name %] - [% site_name %]</title>
   [% END %]
   [% IF contact_email %]
     <link rev="made" href="mailto:[% contact_email %]">

@@ -2,13 +2,13 @@ use strict;
 use CGI::Wiki::Setup::SQLite;
 use Config::Tiny;
 use OpenGuides;
-use Test::More tests => 4;
+use Test::More tests => 6;
 
 eval { require DBD::SQLite; };
 my $have_sqlite = $@ ? 0 : 1;
 
 SKIP: {
-    skip "DBD::SQLite not installed - no database to test with", 4
+    skip "DBD::SQLite not installed - no database to test with", 6
       unless $have_sqlite;
 
     CGI::Wiki::Setup::SQLite::setup( { dbname => "t/node.db" } );
@@ -47,6 +47,10 @@ SKIP: {
                           );
     };
     is( $@, "", "->show_index doesn't die" );
+    like( $output, qr|wiki.cgi\?Test_Page|,
+          "...and includes correct links" );
+    unlike( $output, qr|<title>\s*-|, "...sets <title> correctly" );
+
     $output = $guide->show_index(
                                   type          => "category",
                                   value         => "Alpha",

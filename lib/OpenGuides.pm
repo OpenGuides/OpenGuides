@@ -383,6 +383,7 @@ sub show_index {
             );
             my $name = ucfirst($args{type}) . " $args{value}" ;
             my $url = $self->config->{_}->{script_name}
+                      . "?"
                       . ucfirst( $args{type} )
                       . "_"
                       . uri_escape(

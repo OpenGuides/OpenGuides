@@ -76,7 +76,7 @@ eval {
     } elsif ($action eq 'random') {
         my @nodes = $wiki->list_all_nodes();
         $node = $nodes[int(rand(scalar(@nodes) + 1)) + 1];
-        $guide->redirect_to_node($node);
+        print $guide->redirect_to_node($node);
         exit 0;
     } elsif ($action eq 'find_within_distance') {
         $guide->find_within_distance(
@@ -329,7 +329,7 @@ sub commit_node {
     my $written = $wiki->write_node($node, $content, $checksum, \%metadata );
 
     if ($written) {
-        $guide->redirect_to_node($node);
+        print $guide->redirect_to_node($node);
     } else {
         my %node_data = $wiki->retrieve_node($node);
         my %tt_vars = ( checksum       => $node_data{checksum},
