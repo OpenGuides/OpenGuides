@@ -126,7 +126,7 @@ sub make_wiki_object {
         qr/\@INDEX_LIST\s+\[\[(Category|Locale)\s+([^\]]+)]]/ =>
              sub {
                    my ($wiki, $type, $value) = @_;
-                   my @nodes = $wiki->list_nodes_by_metadata(
+                   my @nodes = sort $wiki->list_nodes_by_metadata(
                        metadata_type  => $type,
                        metadata_value => $value,
                        ignore_case    => 1,
@@ -146,31 +146,32 @@ sub make_wiki_object {
 	           }
                    return $return;
                  },
-	qr/\@RSS\s+\[(.*?)\]/ => sub {
-                                       my $wiki = shift; 
-                                      # Get the URL. It's already been formatted into a 
-                                      # hyperlink so we need to reverse that.
-                                      my $url_raw = $_[0];
-                                      $url_raw =~ />(.*?)</;
-                                      my $url = $1;
+	qr/\@RSS\s+(.+)/ => sub {
+                    my ($wiki, $url) = @_;
 
-                                      # Retrieve the RSS from the given URL.
-                                      my $rss = CGI::Wiki::Plugin::RSS::Reader->new(url => $url);
-                                      my @items = $rss->retrieve;
+                    # The URL will already have been processed as an inline
+                    # link, so transform it back again.
+                    if ( $url =~ m/href="([^"]+)/ ) {
+                        $url = $1;
+                    }
 
-                                      # Ten items only at this till.
-                                      $#items = 10 if $#items > 10;
+                    my $rss = CGI::Wiki::Plugin::RSS::Reader->new(url => $url);
+                    my @items = $rss->retrieve;
 
-                                      # Make an HTML list with them.
-                                      my $list  = "<ul>\n";
-                                      foreach (@items)
-                                      {
-                                        my $link  = $_->{link};
-                                        my $title = $_->{title};
-                                        $list .= qq{\t<li><a href="$link">$title</a></li>\n};
-                                      }
-                                      $list .= "</ul>\n";
-                                    }
+                    # Ten items only at this till.
+                    $#items = 10 if $#items > 10;
+
+                    # Make a UseMod-formatted list with them - macros are
+                    # processed *before* UseMod formatting is applied but
+                    # *after* inline links like [http://foo/ bar]
+                    my $list = "\n";
+                    foreach (@items) {
+                        my $link  = $_->{link};
+                        my $title = $_->{title};
+                        $list .= qq{* <a href="$link">$title</a>\n};
+                    }
+                    $list .= "</ul>\n";
+        },
     );
 
     my $formatter = CGI::Wiki::Formatter::UseMod->new(

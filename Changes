@@ -8,6 +8,8 @@
           on edit form, banner at top of page (see CUSTOMISATION file
           for details).
         Added new macro - used as eg @INDEX_LIST [[Locale Fulham]]
+        Also fixed the RSS reader macro - use this as eg
+          @RSS http://london.openguides.org/?action=rss;username=Kake
 
 0.40    18 September 2004
         Recent Changes now shows changes in the past 24 hours, past week,
