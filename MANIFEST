@@ -2,6 +2,7 @@ Build.PL
 lib/OpenGuides/RDF.pm
 MANIFEST
 META.yml
+README
 supersearch.cgi
 templates/backlink_results.tt
 templates/display_metadata.tt
