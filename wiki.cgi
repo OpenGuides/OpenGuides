@@ -500,30 +500,10 @@ sub get_cookie {
 
 sub emit_recent_changes_rss {
     my %args = @_;
-    my $rss = CGI::Wiki::Plugin::RSS::ModWiki->new(
-        wiki      => $wiki,
-        site_name => $site_name,
-        site_description => $site_desc,
-        make_node_url => sub {
-            my ( $node_name, $version ) = @_;
-            return "$script_url$script_name?id="
-                 . uri_escape(
-                        $wiki->formatter->node_name_to_node_param( $node_name )
-			     )
-                 . ";version=" . uri_escape($version);
-	  },
-        recent_changes_link =>
-            "$script_url$script_name?RecentChanges"
-     );
-
+    my $rdf_writer = OpenGuides::RDF->new( wiki      => $wiki,
+					   config => $config );
     print "Content-type: text/plain\n\n";
-    if ( $args{items} ) {
-        print $rss->recent_changes( items => $args{items} );
-    } elsif ( $args{days} ) {
-        print $rss->recent_changes( days => $args{days} );
-    } else {
-        print $rss->recent_changes;
-    }
+    print $rdf_writer->make_recentchanges_rss( %args );
     exit 0;
 }
 
