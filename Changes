@@ -7,6 +7,7 @@
           user-definable path, and their names are prefixed with custom_.
 	  This only affects you if you have used the custom template support
 	  introduced in 0.41.
+        Replace dependency on CGI::Wiki::Plugin::Geocache with improved node.tt.
 
 0.41    21 September 2004
         Added backlinks link to navbar.
@@ -54,9 +55,9 @@
           avoid escapeHTML bug.
 
 0.36    13 July 2004
-        Added diff link to node template. Fixed case sensitivity bug in
-          index node autocreation.  Fixed bug with node history comments
-          not being HTML-escaped.
+        Added diff link to node template.
+        Fixed case sensitivity bug in index node autocreation.
+        Fixed bug with node history comments not being HTML-escaped.
 
 0.35    25 June 2004
         Forgot to add version prerequisite on CGI::Wiki.  Don't use 0.34,
