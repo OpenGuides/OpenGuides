@@ -1,3 +1,6 @@
+0.37    
+        Fixed bug in diff view - the versions are the right way round now...
+
 0.36    13 July 2004
         Added diff link to node template. Fixed case sensitivity bug in
           index node autocreation.  Fixed bug with node history comments

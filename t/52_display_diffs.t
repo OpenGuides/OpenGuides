@@ -2,13 +2,13 @@ use strict;
 use CGI::Wiki::Setup::SQLite;
 use Config::Tiny;
 use OpenGuides;
-use Test::More tests => 3;
+use Test::More tests => 4;
 
 eval { require DBD::SQLite; };
 my $have_sqlite = $@ ? 0 : 1;
 
 SKIP: {
-    skip "DBD::SQLite not installed - no database to test with", 3
+    skip "DBD::SQLite not installed - no database to test with", 4
       unless $have_sqlite;
 
     CGI::Wiki::Setup::SQLite::setup( { dbname => "t/node.db" } );
@@ -56,4 +56,6 @@ SKIP: {
           "...version numbers included in output" );
     unlike( $output, qr/contents are identical/i,
             "...'contents are identical' not printed when contents differ" );
+    like( $output, qr/<th.*Version\s+2.*Version\s+3.*apple.*lentil/s,
+          "...versions are right way round" );
 }

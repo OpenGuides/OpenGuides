@@ -11,8 +11,8 @@
   </tr>
 [% FOREACH hunk = diff %]
   <tr>
-    <td>[% hunk.left %]</td>
     <td>[% hunk.right %]</td>
+    <td>[% hunk.left %]</td>
   </tr>
 [% END %]
 </table><hr>
