@@ -1,30 +1,28 @@
-local $^W = 1;
 use strict;
 use CGI::Wiki::Setup::SQLite;
 use Config::Tiny;
 use OpenGuides::SuperSearch;
-use Test::More;
+use Test::More tests => 10;
 
 eval { require DBD::SQLite; };
+my $have_sqlite = $@ ? 0 : 1;
 
-if ( $@ ) {
-    plan skip_all => "DBD::SQLite needed to run these tests";
-} else {
-    plan tests => 10;
+SKIP: {
+    skip "DBD::SQLite not installed - no database to test with", 10
+      unless $have_sqlite;
 
-    # Ensure the test database is set up.
-    CGI::Wiki::Setup::SQLite::setup( "t/sqlite.32.db" );
-
+    CGI::Wiki::Setup::SQLite::setup( { dbname => "t/node.db" } );
     my $config = Config::Tiny->new;
     $config->{_} = {
                      dbtype             => "sqlite",
-                     dbname             => "t/sqlite.32.db",
-                     indexing_directory => "t/index.32/",
+                     dbname             => "t/node.db",
+                     indexing_directory => "t/indexes",
                      script_name        => "wiki.cgi",
                      script_url         => "http://example.com/",
                      site_name          => "Test Site",
                      template_path      => "./templates",
                    };
+
     my $search = OpenGuides::SuperSearch->new( config => $config );
 
     # Clear out the database from any previous runs.

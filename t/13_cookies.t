@@ -1,8 +1,7 @@
 use strict;
 use Config::Tiny;
-use Test::More tests => 16;
-
-use_ok( "OpenGuides::CGI" );
+use OpenGuides::CGI;
+use Test::More tests => 15;
 
 eval { OpenGuides::CGI->make_prefs_cookie; };
 ok( $@, "->make_prefs_cookie dies if no config object supplied" );
@@ -10,7 +9,10 @@ ok( $@, "->make_prefs_cookie dies if no config object supplied" );
 eval { OpenGuides::CGI->make_prefs_cookie( config => "foo" ); };
 ok( $@, "...or if config isn't a Config::Tiny" );
 
-my $config = Config::Tiny->read( "t/21_wiki.conf" );
+my $config = Config::Tiny->new;
+$config->{_} = {
+                 site_name => "Test Site",
+               };
 
 eval { OpenGuides::CGI->make_prefs_cookie( config => $config ); };
 is( $@, "", "...but not if it is" );

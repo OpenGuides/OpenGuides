@@ -1,13 +1,7 @@
 use strict;
 use Config::Tiny;
-use Test::More tests => 9;
-
-# Need to use a BEGIN block for the test or we get "Too late to run INIT block"
-# from Class::Delegation
-
-BEGIN {
-  use_ok( "OpenGuides::Utils" );
-}
+use OpenGuides::Utils;
+use Test::More tests => 7;
 
 eval { my $wiki = OpenGuides::Utils->make_wiki_object; };
 ok( $@, "->make_wiki_object croaks if no config param supplied" );
@@ -15,16 +9,30 @@ ok( $@, "->make_wiki_object croaks if no config param supplied" );
 eval { my $wiki = OpenGuides::Utils->make_wiki_object( config => "foo" ); };
 ok( $@, "...and if config param isn't a Config::Tiny object" );
 
-my $config = Config::Tiny->read( "wiki.conf" )
-    or die "Couldn't read wiki.conf";
-my $wiki = eval { OpenGuides::Utils->make_wiki_object( config => $config ); };
-is( $@, "", "...but not if a Config::Tiny object is supplied" );
-isa_ok( $wiki, "CGI::Wiki" );
+eval { require DBD::SQLite; };
+my $have_sqlite = $@ ? 0 : 1;
 
-ok( $wiki->store,      "...and store defined" );
-ok( $wiki->search_obj, "...and search defined" );
-ok( $wiki->formatter,  "...and formatter defined" );
+SKIP: {
+    skip "DBD::SQLite not installed - no database to test with", 5
+      unless $have_sqlite;
 
-# Ensure that we take note of any defined dbhost - note that this test
-# is only useful if we've defined a dbhost during perl Build.PL
-is( $wiki->store->dbhost, $config->{_}->{dbhost}, "dbhost taken note of" );
+    my $config = Config::Tiny->new;
+    $config->{_} = {
+                     dbtype             => "sqlite",
+                     dbname             => "t/node.db",
+                     indexing_directory => "t/indexes",
+                     script_url         => "",
+                     script_name        => "",
+                   };
+
+    my $wiki = eval {
+        OpenGuides::Utils->make_wiki_object( config => $config );
+    };
+    is( $@, "",
+        "...but not if a Config::Tiny object with suitable data is supplied" );
+    isa_ok( $wiki, "CGI::Wiki" );
+
+    ok( $wiki->store,      "...and store defined" );
+    ok( $wiki->search_obj, "...and search defined" );
+    ok( $wiki->formatter,  "...and formatter defined" );
+}

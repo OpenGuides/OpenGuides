@@ -1,34 +1,28 @@
-local $^W = 1;
 use strict;
-use vars qw( $sqlite_tests );
-BEGIN { $sqlite_tests = 16; }
-use Test::More tests => 1 + $sqlite_tests;
-
 use CGI::Wiki::Setup::SQLite;
 use Config::Tiny;
-
-use_ok( "OpenGuides::SuperSearch" );
+use OpenGuides::SuperSearch;
+use Test::More tests => 16;
 
 eval { require DBD::SQLite; };
-my $run_tests = $@ ? 0 : 1;
+my $have_sqlite = $@ ? 0 : 1;
 
 SKIP: {
-    skip "DBD::SQLite needed to run these tests", $sqlite_tests
-      unless $run_tests;
+    skip "DBD::SQLite not installed - no database to test with", 16
+      unless $have_sqlite;
 
-    # Ensure the test database is set up.
-    CGI::Wiki::Setup::SQLite::setup( "t/sqlite.31.db" );
-
+    CGI::Wiki::Setup::SQLite::setup( { dbname => "t/node.db" } );
     my $config = Config::Tiny->new;
     $config->{_} = {
                      dbtype             => "sqlite",
-                     dbname             => "t/sqlite.31.db",
-                     indexing_directory => "t/index.31/",
+                     dbname             => "t/node.db",
+                     indexing_directory => "t/indexes",
                      script_name        => "wiki.cgi",
                      script_url         => "http://example.com/",
                      site_name          => "Test Site",
                      template_path      => "./templates",
                    };
+
     my $search = OpenGuides::SuperSearch->new( config => $config );
     isa_ok( $search, "OpenGuides::SuperSearch" );
 
@@ -150,4 +144,3 @@ SKIP: {
     like( $output, qr/ol start="21"/,
           "second page of results starts with right numbering" );
 }
-

@@ -1,10 +1,10 @@
 use strict;
-use Test::More tests => 3;
 use Config::Tiny;
 use Cwd;
 use CGI::Wiki::Formatter::UseMod;
 use OpenGuides::Template;
 use Test::MockObject;
+use Test::More tests => 3;
 
 my $config = Config::Tiny->new;
 $config->{_}->{template_path} = cwd . "/templates";

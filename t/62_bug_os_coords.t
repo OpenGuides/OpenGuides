@@ -1,41 +1,36 @@
-local $^W = 1;
-use strict;
-use vars qw( $num_tests );
-BEGIN { $num_tests = 2; }
-use Test::More tests => $num_tests;
-
 use CGI::Wiki::Setup::SQLite;
 use Config::Tiny;
-use OpenGuides::Utils;
+use Cwd;
 use OpenGuides::Template;
+use OpenGuides::Utils;
+use Test::More tests => 2;
 
 eval { require DBD::SQLite; };
-my $run_tests = $@ ? 0 : 1;
+my $have_sqlite = $@ ? 0 : 1;
 
 SKIP: {
-    skip "DBD::SQLite needed to run these tests", $num_tests
-      unless $run_tests;
+    skip "DBD::SQLite not installed - no database to test with", 2
+      unless $have_sqlite;
 
-    # Ensure the test database is set up.
-    CGI::Wiki::Setup::SQLite::setup( "t/sqlite.62.db" );
-
+    CGI::Wiki::Setup::SQLite::setup( { dbname => "t/node.db" } );
     my $config = Config::Tiny->new;
     $config->{_} = {
                      dbtype             => "sqlite",
-                     dbname             => "t/sqlite.62.db",
-                     indexing_directory => "t/index.62/",
-                     script_name        => "wiki.cgi",
+                     dbname             => "t/node.db",
+                     indexing_directory => "t/indexes",
                      script_url         => "http://example.com/",
+                     script_name        => "wiki.cgi",
                      site_name          => "Test Site",
-                     template_path      => "./templates",
+                     template_path      => cwd . "/templates",
                    };
+
     my $wiki = OpenGuides::Utils->make_wiki_object( config => $config );
 
     my $q = CGI->new;
     $q->param( -name => "os_x", -value => "123456 " );
     $q->param( -name => "os_y", -value => "654321 " );
-    $q->param( -name => "categories", -value => "" ); # avoid uninit val warning
-    $q->param( -name => "locales", -value => "" );    # avoid uninit val warning
+    $q->param( -name => "categories", -value => "" ); #avoid uninit val warning
+    $q->param( -name => "locales", -value => "" );    #avoid uninit val warning
 
     my %metadata_vars = OpenGuides::Template->extract_metadata_vars(
         wiki    => $wiki,

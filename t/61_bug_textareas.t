@@ -1,31 +1,45 @@
-use strict;
+use CGI::Wiki::Setup::SQLite;
 use Config::Tiny;
 use Cwd;
 use OpenGuides::Template;
 use OpenGuides::Utils;
 use Test::More tests => 1;
 
-#####
-##### IMPORTANT: Treat this wiki object as read-only or we may eat live data.
-#####
+eval { require DBD::SQLite; };
+my $have_sqlite = $@ ? 0 : 1;
 
-my $config = Config::Tiny->read( "wiki.conf" )
-    or die "Couldn't read wiki.conf";
-my $wiki = OpenGuides::Utils->make_wiki_object( config => $config );
-$config->{_}{template_path} = cwd . "/templates";
+SKIP: {
+    skip "DBD::SQLite not installed - no database to test with", 1
+      unless $have_sqlite;
 
-my $out = OpenGuides::Template->output(
-    wiki     => $wiki,
-    config   => $config,
-    template => "edit_form.tt",
-    vars     => {
-                  locales  => [
-                                { name => "Barville" },
-                                { name => "Fooville" },
-                              ],
-                },
-);
+    CGI::Wiki::Setup::SQLite::setup( { dbname => "t/node.db" } );
+    my $config = Config::Tiny->new;
+    $config->{_} = {
+                     dbtype             => "sqlite",
+                     dbname             => "t/node.db",
+                     indexing_directory => "t/indexes",
+                     script_url         => "http://wiki.example.com/",
+                     script_name        => "mywiki.cgi",
+                     site_name          => "CGI::Wiki Test Site",
+                     template_path      => cwd . "/templates",
+                   };
 
-like( $out, qr/Barville\nFooville/, "locales properly separated in textarea" );
+    my $wiki = OpenGuides::Utils->make_wiki_object( config => $config );
+
+    my $out = OpenGuides::Template->output(
+        wiki     => $wiki,
+        config   => $config,
+        template => "edit_form.tt",
+        vars     => {
+                      locales  => [
+                                    { name => "Barville" },
+                                    { name => "Fooville" },
+                                  ],
+                    },
+    );
+
+    like( $out, qr/Barville\nFooville/,
+         "locales properly separated in textarea" );
+}
 
 

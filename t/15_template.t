@@ -1,20 +1,29 @@
 use strict;
-use Test::More tests => 28;
 use Config::Tiny;
 use Cwd;
 use CGI::Cookie;
 use CGI::Wiki::Formatter::UseMod;
+use OpenGuides::Template;
 use Test::MockObject;
+use Test::More tests => 27;
 
-use_ok( "OpenGuides::Template" );
-
-my $config = Config::Tiny->read( "t/21_wiki.conf" );
-$config->{_}->{template_path} = cwd . "/t/templates";
+my $config = Config::Tiny->new;
+$config->{_} = {
+                 template_path         => cwd . '/t/templates',
+                 site_name             => 'CGI::Wiki Test Site',
+                 script_url            => 'http://wiki.example.com/',
+                 script_name           => 'mywiki.cgi',
+                 default_country       => 'United Kingdom',
+                 default_city          => 'London',
+                 contact_email         => 'wiki@example.com',
+                 stylesheet_url        => 'http://wiki.example.com/styles.css',
+                 home_name             => 'Home Page',
+                 formatting_rules_node => 'Rules',
+               };
 
 # White box testing - we know that OpenGuides::Template only actually uses
 # the node_name_to_node_param method of the formatter component of the wiki
-# object passed in, and I CBA to faff about with picking out the test DB
-# info to make a proper wiki object here.
+# object passed in, and I CBA to make a proper wiki object here.
 my $fake_wiki = Test::MockObject->new;
 $fake_wiki->mock("formatter",
                  sub { return CGI::Wiki::Formatter::UseMod->new( munge_urls => 1 ); } );
@@ -102,8 +111,12 @@ $output = OpenGuides::Template->output(
 like( $output, qr/Set-Cookie: $cookie/, "cookie in header" );
 
 # Test that home_link is set correctly when script_name is blank.
-$config = Config::Tiny->read( "t/15_wiki.conf" );
-$config->{_}->{template_path} = cwd . "/t/templates";
+$config->{_} = {
+                 template_path         => cwd . '/t/templates',
+                 site_name             => 'CGI::Wiki Test Site',
+                 script_url            => 'http://wiki.example.com/',
+                 script_name           => '',
+               };
 $output = OpenGuides::Template->output(
     wiki     => $fake_wiki,
     config   => $config,
@@ -114,10 +127,12 @@ like( $output, qr/HOME LINK: http:\/\/wiki.example.com/,
 
 # Test that full_cgi_url comes out right if the trailing '/' is
 # missing from script_url in the config file.
-$config = Config::Tiny->read( "t/15_wiki.conf" );
-$config->{_}->{template_path} = cwd . "/t/templates";
-$config->{_}->{script_url} = "http://wiki.example.com";
-$config->{_}->{script_name} = "wiki.cgi";
+$config->{_} = {
+                 template_path         => cwd . '/t/templates',
+                 site_name             => 'CGI::Wiki Test Site',
+                 script_url            => 'http://wiki.example.com',
+                 script_name           => 'wiki.cgi',
+               };
 $output = OpenGuides::Template->output(
     wiki     => $fake_wiki,
     config   => $config,
