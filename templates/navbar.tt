@@ -1,54 +1,77 @@
 <div id="navbar">
 
-  <div class="navbar_group">
-    <div class="navbar_group_title">Tools:</div>
-    <div class="navbar_item"><a href="[% full_cgi_url %]?RecentChanges">Recent Changes</a> <span class="hidden">/</span></div>
-    <div class="navbar_item"><a href="newpage.cgi">Create a new page</a> <span class="hidden">/</span></div>
-    <div class="navbar_item"><a href="[% full_cgi_url %]?action=random">Random Page</a> <span class="hidden">/</span></div>
-    <div class="navbar_item"><a href="[% full_cgi_url %]?action=show_wanted_pages">Wanted Pages</a> <span class="hidden">/</span></div>
-    [% IF geocache_link AND latitude AND longitude %]
-      <div class="navbar_item"><a href="http://www.geocaching.com/seek/nearest_cache.asp?origin_lat=[% latitude %];origin_long=[% longitude %]">Look for nearby geocaches</a></div>
-    [% END %]
-  </div>
-
-  [% UNLESS omit_help_links %]
-    <div class="navbar_group">
-      <div class="navbar_group_title">Help: <span class="hidden">/</span></div>
-      <div class="navbar_item"><a href="[% full_cgi_url %]?FAQ">FAQ</a> <span class="hidden">/</span></div>
-      <div class="navbar_item"><a href="[% full_cgi_url %]?How_To_Get_Started">How To Get Started</a> <span class="hidden">/</span></div>
-      [% IF formatting_rules_link %]
-        <div class="navbar_item"><a href="[% formatting_rules_link %]">[% formatting_rules_node %]</a> <span class="hidden">/</span></div>
-      [% END %]
-      <div class="navbar_item"><a href="[% full_cgi_url %]?Wiki_Etiquette">Wiki Etiquette</a> <span class="hidden">/</span></div>
-    </div>
+  [% UNLESS node_param == 'Home' %]
+  <div class="navbar_site_name"><a href="[% full_cgi_url %]">[% site_name %]</a></div>
   [% END %]
 
-  <div class="navbar_group">
-    <div class="navbar_group_title">Options:</div>
-    <div class="navbar_item"><a href="preferences.cgi">Set username/prefs</a></div>
-  </div>
+  <div class="navbar_group_title">Tools:</div>
 
-  <div class="navbar_group">
-    <div class="navbar_group_title">Search:</div>
-    <div class="navbar_item">
+  <ul>
+    <li><a href="[% full_cgi_url %]?RecentChanges">Recent Changes</a>
+    <li><a href="newpage.cgi">Create New Page</a></li>
+    <li><a href="[% full_cgi_url %]?action=random">Random Page</a></li>
+    <li><a href="[% full_cgi_url %]?action=show_wanted_pages">Wanted Pages</a></li>
+    [% IF geocache_link AND latitude AND longitude %]
+      <li><a href="http://www.geocaching.com/seek/nearest_cache.asp?origin_lat=[% latitude %];origin_long=[% longitude %]">Look for nearby geocaches</a></li>
+    [% END %]
+  </ul>
+
+  [% UNLESS omit_help_links %]
+
+    <div class="navbar_group_title">Help: <span class="hidden">/</span></div>
+
+    <ul>
+      <li><a href="[% full_cgi_url %]?FAQ">FAQ</a></li>
+      <li><a href="[% full_cgi_url %]?How_To_Get_Started">How To Get Started</a></li>
+      [% IF formatting_rules_link %]
+        <li><a href="[% formatting_rules_link %]">[% formatting_rules_node %]</a></li>
+      [% END %]
+      <li><a href="[% full_cgi_url %]?Wiki_Etiquette">Wiki Etiquette</a></li>
+    </ul>
+
+  [% END %]
+
+  <div class="navbar_group_title">Options:</div>
+
+  <ul>
+    <li><a href="preferences.cgi">Set username/prefs</a></li>
+  </ul>
+
+  <div class="navbar_group_title">Search:</div>
+
+  <ul>
+    <li>
       <form method="post" action="supersearch.cgi" enctype="application/x-www-form-urlencoded">
         <input type="hidden" name="action" value="search" />
         <input type="text" size="15" name="search" id="nav_search" value="Search text" onfocus="this.value=''" /> <label for="nav_search" class="hidden">Search text</label>
         <input type="submit" value="Go" class="form_button" />
       </form>
-    </div>
-    <div class="navbar_item">
-      <a href="supersearch.cgi">Advanced Search</a>
-    </div>
+    </li>
+    <li><a href="supersearch.cgi">Advanced Search</a></li>
   </div>
 
   [% UNLESS not_editable %]
-    <div class="navbar_group">
-      <div class="navbar_group_title">This page:</div>
-        <div class="edit_page_link"><a href="[% full_cgi_url %]?id=[% node_param %];action=edit">Edit this page</a></div>
-      <div class="navbar_item">
-        <a href="[% cgi_url %]?action=show_backlinks;id=[% node_param %]">Pages that link to here</a>
-      </div>
+    <div class="navbar_group_title">This page:</div>
+
+    <ul>
+      <li><a class="edit_page_link" href="[% full_cgi_url %]?id=[% node_param %];action=edit">Edit this page</a></li>
+      <li><a href="[% cgi_url %]?action=show_backlinks;id=[% node_param %]">Show pages linking here</a></li>
+      [% IF version > 1 %]
+        <li><a href="[% cgi_url %]?action=list_all_versions;id=[% node_param %]">List all revisions</a></li> 
+      [% END %]
+        <li><a href="[% cgi_url %]?id=[% node_param %];format=rdf">RDF/XML version</a></li>
+      [% IF enable_page_deletion %]
+        <li><a href="[% full_cgi_url %]?id=[% node_param %];action=delete">Delete (admin only)</a></li>
+      [% END %]
+    </div>
+
+    <div class="navbar_revision">
+      [% IF current %]
+        Revision [% version %]. Last edited [% last_modified %].
+      [% ELSE %]
+        This is revision [% version %] (as of [% last_modified %]).<br />
+        <a href="[% cgi_url %]?[% node_param %]">View current version.</a>
+      [% END %]
     </div>
   [% END %]
 
