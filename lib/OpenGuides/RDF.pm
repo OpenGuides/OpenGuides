@@ -3,7 +3,7 @@ package OpenGuides::RDF;
 use strict;
 
 use vars qw( $VERSION );
-$VERSION = '0.06';
+$VERSION = '0.07';
 
 use CGI::Wiki::Plugin::RSS::ModWiki;
 use Time::Piece;
@@ -82,7 +82,7 @@ sub _init {
 	if ( defined $version ) {
 	    return $config->script_url . uri_escape($config->script_name) . "?id=" . uri_escape($wiki->formatter->node_name_to_node_param($node_name)) . ";version=" . uri_escape($version);
 	} else {
-	    return $config->script_url . uri_escape($config->script_name) . "?" . uri_escape($wiki->formatter->node_name_to_node_param($node_name));
+	    return $config->script_url . uri_escape($config->script_name) . "?id=" . uri_escape($wiki->formatter->node_name_to_node_param($node_name));
         }
     };
     $self->{default_city}     = $config->default_city     || "";
@@ -158,9 +158,18 @@ sub emit_rdfxml {
     my $catrefs            = $node_data{metadata}{category};
     my @locales            = @{ $node_data{metadata}{locale} || [] };
 
+    # replace any errant characters in data to prevent illegal XML
+    foreach ($phone, $fax, $website, $opening_hours_text, $postcode, $city, $country,
+    $latitude, $longitude, $version, $os_x, $os_y, $catrefs, @locales)
+    {
+      $_ =~ s/&/&amp;/g;
+      $_ =~ s/</&lt;/g;
+      $_ =~ s/>/&gt;/g;
+    }
+    
     my ($is_geospatial, $objType);
 
-    if ($latitude || $longitude || $postcode || $city || $country || @locales)
+    if ($latitude || $longitude || $postcode || @locales)
     {
       $is_geospatial = 1;
       $objType    = 'geo:SpatialThing';
@@ -208,29 +217,36 @@ sub emit_rdfxml {
 
   <$objType rdf:ID="obj" dc:title="$node_name">
 };
-    $rdf .= "    <!-- categories -->\n";
-    $rdf .= "    <dc:subject>$_</dc:subject>\n"             foreach @{$catrefs};
-    $rdf .= "\n    <!-- address and geospatial data -->\n";
-    $rdf .= "    <city>$city</city>" if $city && $is_geospatial;
-    $rdf .= "    <postalCode>$postcode</postalCode>\n"      if $postcode;
-    $rdf .= "    <country>$country</country>\n" if $country && $is_geospatial;
-    $rdf .= "    <foaf:based_near><wn:Neighborhood><foaf:name>$_</foaf:name></wn:Neighborhood></foaf:based_near>\n"   foreach @locales;
+    $rdf .= "\n    <!-- categories -->\n\n" if $catrefs;
+    $rdf .= "    <dc:subject>$_</dc:subject>\n" foreach @{$catrefs};
+    $rdf .= "\n    <!-- address and geospatial data -->\n\n" if $is_geospatial;
+    $rdf .= "    <city>$city</city>\n"                 if $city     && $is_geospatial;
+    $rdf .= "    <postalCode>$postcode</postalCode>\n" if $postcode && $is_geospatial;
+    $rdf .= "    <country>$country</country>\n"        if $country  && $is_geospatial;
+
+    $rdf .= qq{
+    <foaf:based_near>
+         <wn:Neighborhood>
+           <foaf:name>$_</foaf:name>
+         </wn:Neighborhood>
+    </foaf:based_near>\n} foreach @locales;
 
     if ($latitude && $longitude) {
-      $rdf .= qq{    <geo:lat>$latitude</geo:lat>
-    <geo:long>$longitude</geo:long>
-};
+      $rdf .= qq{
+    <geo:lat>$latitude</geo:lat>
+    <geo:long>$longitude</geo:long>\n};
     }
 
     if ($os_x && $os_y) {
-      $rdf .= qq{    <os:x>$os_x</os:x>
+      $rdf .= qq{
+    <os:x>$os_x</os:x>
     <os:y>$os_y</os:y>};
     }
 
-    $rdf .= "\n    <!-- contact information -->\n";
+    $rdf .= "\n\n    <!-- contact information -->\n\n" if ($phone || $fax || $website || $opening_hours_text);
     $rdf .= "    <phone>$phone</phone>\n"                              if $phone;
     $rdf .= "    <fax>$fax</fax>\n"                                    if $fax;
-    $rdf .= "    <homePage>$website</homePage>\n"                      if $website;
+    $rdf .= "    <foaf:homepage rdf:resource=\"$website\" />\n"        if $website;
     $rdf .= "    <chefmoz:Hours>$opening_hours_text</chefmoz:Hours>\n" if $opening_hours_text;
 
     $rdf .= qq{
@@ -308,9 +324,9 @@ under the same terms as Perl itself.
 
 =head1 CREDITS
 
-Code in this module written by Kake Pugh and Earle Martin.  Dan
-Brickley, Matt Biddulph and other inhabitants of #swig on irc.freenode.net
-gave useful feedback and advice.
+Code in this module written by Kake Pugh and Earle Martin.  Dan Brickley, Matt 
+Biddulph and other inhabitants of #swig on irc.freenode.net gave useful feedback 
+and advice.
 
 =cut
 
