@@ -484,11 +484,22 @@ sub show_index {
 
     my ($template, %conf);
 
-    if ( $args{format} and $args{format} eq "rdf" ) {
+    if ( $args{format} )
+    {
+      if ( $args{format} eq "rdf" )
+      {
 	$template = "rdf_index.tt";
         $conf{content_type} = "text/plain";
-    } else {
-	$template = "site_index.tt";
+      }
+      elsif ( $args{format} eq "plain" )
+      {
+        $template = "plain_index.tt";
+        $conf{content_type} = "text/plain";
+      }
+    }
+    else
+    {
+      $template = "site_index.tt";
     }
 
     %conf = (

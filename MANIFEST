@@ -43,6 +43,7 @@ templates/newpage.tt
 templates/node.tt
 templates/node_history.tt
 templates/openguides_information_boxes.tt
+templates/plain_index.tt
 templates/preferences.tt
 templates/rdf_index.tt
 templates/recent_changes.tt

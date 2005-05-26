@@ -10,6 +10,8 @@
             category/locale listings to facilitate integration with mapping
             applications.
 	Reorder navigation bar to provide more logical groupings.
+        Add "format=plain" option for all-nodes index listing and associated
+          template plain_index.tt.
 
 0.47    15 January 2005
         Fixed bug with list_all_versions for nodes with only one version.
