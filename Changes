@@ -1,6 +1,14 @@
 0.48    
-        Removed redundant "id" parameter specification from dc:source in
-          rdf:Description in RDF node listings.
+        RDF enhancements:
+          Removed redundant "id" parameter specification from dc:source in
+            rdf:Description in RDF node listings.
+          Fixed bug that was causing all nodes to be flagged as a
+            geo:SpatialThing whether they were or not.
+          Ensured that ampersands and greater/less than symbols were properly 
+            escaped so as not to be XML-toxic.
+          Added geo:lat, geo:long and RSS link attributes to items in 
+            category/locale listings to facilitate integration with mapping
+            applications.
 	Reorder navigation bar to provide more logical groupings.
 
 0.47    15 January 2005
