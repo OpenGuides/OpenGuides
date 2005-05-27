@@ -65,9 +65,9 @@ SKIP: {
 
     like( $rdfxml, qr|<\?xml version="1.0"\?>|, "RDF is encoding-neutral" );
 
-    like( $rdfxml, qr|<foaf:based_near><wn:Neighborhood><foaf:name>Bloomsbury</foaf:name></wn:Neighborhood></foaf:based_near>|,
+    like( $rdfxml, qr|<foaf:name>Bloomsbury</foaf:name>|,
 	  "finds the first locale" );
-    like( $rdfxml, qr|<foaf:based_near><wn:Neighborhood><foaf:name>St Pancras</foaf:name></wn:Neighborhood></foaf:based_near>|,
+    like( $rdfxml, qr|<foaf:name>St Pancras</foaf:name>|,
          "finds the second locale" );
 
     like( $rdfxml, qr|<phone>test phone number</phone>|,
@@ -76,7 +76,7 @@ SKIP: {
     like( $rdfxml, qr|<chefmoz:Hours>test hours</chefmoz:Hours>|,
 	  "picks up opening hours text" );
 
-    like( $rdfxml, qr|<homePage>test website</homePage>|, "picks up website" );
+    like( $rdfxml, qr|<foaf:homepage rdf:resource="test website" />|, "picks up website" );
 
     like( $rdfxml,
 	  qr|<dc:title>CGI::Wiki Test Site: Calthorpe Arms</dc:title>|,

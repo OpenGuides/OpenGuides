@@ -142,6 +142,7 @@ sub display_node {
     my $id = $args{id} || $self->config->home_name;
     my $wiki = $self->wiki;
     my $config = $self->config;
+    my $oldid = $args{oldid} || '';
 
     my %tt_vars;
 
@@ -170,7 +171,7 @@ sub display_node {
         $redirect =~ s/\]\]\s*$//;
         # See if this is a valid node, if not then just show the page as-is.
 	if ( $wiki->node_exists($redirect) ) {
-            my $output = $self->redirect_to_node($redirect);
+            my $output = $self->redirect_to_node($redirect, $id);
             return $output if $return_output;
             print $output;
             exit 0;
@@ -193,6 +194,7 @@ sub display_node {
 		 version       => $node_data{version},
                  node          => $id,
                  language      => $config->default_language,
+                 oldid         => $oldid,
                );
 
     # We've undef'ed $version above if this is the current version.
@@ -849,12 +851,19 @@ sub process_template {
 }
 
 sub redirect_to_node {
-    my ($self, $node) = @_;
+    my ($self, $node, $redirect) = @_;
     my $script_url = $self->config->script_url;
     my $script_name = $self->config->script_name;
     my $formatter = $self->wiki->formatter;
-    my $param = $formatter->node_name_to_node_param( $node );
-    return CGI->redirect( "$script_url$script_name?$param" );
+    my $id = $formatter->node_name_to_node_param( $node );
+    
+    my $oldid;
+    $oldid = $formatter->node_name_to_node_param( $redirect ) if $redirect;
+    
+    my $redir_param ='';
+    $redir_param = "&oldid=$oldid" if $oldid;
+    
+    return CGI->redirect( "$script_url$script_name?id=$id$redir_param" );    
 }
 
 sub get_cookie {

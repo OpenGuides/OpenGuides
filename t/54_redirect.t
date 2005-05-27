@@ -45,6 +45,6 @@ SKIP: {
 
     # Old versions of CGI.pm mistakenly print location: instead of Location:
     like( $output,
-          qr/[lL]ocation: http:\/\/example.com\/wiki.cgi\?Test_Page_2/,
+          qr/[lL]ocation: http:\/\/example.com\/wiki.cgi\?id=Test_Page_2\&oldid=Test_Page/,
           "...and redirects to the right place" );
 }

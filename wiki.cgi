@@ -40,11 +40,12 @@ eval {
     my $node = $q->param('id') || $q->param('title') || $q->param('keywords') || "";
     $node = $formatter->node_param_to_node_name( $node );
 
-    my $action = $q->param('action') || 'display';
-    my $commit = $q->param('Save') || 0;
-    my $preview = $q->param('preview') || 0;
-    my $search_terms = $q->param('terms') || $q->param('search') || '';
-    my $format = $q->param('format') || '';
+    my $action       = $q->param('action')  || 'display';
+    my $commit       = $q->param('Save')    || 0;
+    my $preview      = $q->param('preview') || 0;
+    my $search_terms = $q->param('terms')   || $q->param('search') || '';
+    my $format       = $q->param('format')  || '';
+    my $oldid        = $q->param('oldid')   || '';
 
     # Alternative method of calling search, supported by usemod.
     $action = 'search' if $q->param("search");
@@ -121,7 +122,12 @@ eval {
                                        other_version => $other_ver,
                                      );
             } else {
-                $guide->display_node( id => $node, version => $version );
+                $guide->display_node(
+                                      id      => $node,
+                                      version => $version,
+                                      oldid   => $oldid,
+                );
+                
 	    }
         }
     }
