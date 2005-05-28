@@ -259,3 +259,7 @@ textarea#content
 textarea#locales
     Used in: edit_conflict.tt, edit_form.tt
     Purpose: A box to enter the locales of the node
+
+div#redirect_message
+    Used in: node.tt
+    Purpose: A short message indicating that your reached a node via a redirect
