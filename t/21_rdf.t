@@ -5,7 +5,7 @@ use OpenGuides::RDF;
 use OpenGuides::Utils;
 use OpenGuides::Test;
 use URI::Escape;
-use Test::More tests => 24;
+use Test::More tests => 25;
 
 eval { require DBD::SQLite; };
 my $have_sqlite = $@ ? 0 : 1;
@@ -125,4 +125,20 @@ SKIP: {
 
     like( $rdfxml, qr|<wiki:version>0</wiki:version>|,
           "...and wiki:version is 0" );
+
+    # Test the data for a node that redirects.
+    $wiki->write_node( "Calthorpe Arms Pub",
+		       "#REDIRECT [[Calthorpe Arms]]",
+		       undef,
+		       {
+                         comment            => "Created as redirect to Calthorpe Arms page.",
+		         username           => "Earle",
+                       }
+    );
+
+    my $redirect_rdf = $rdf_writer->emit_rdfxml( node => "Calthorpe Arms Pub" );
+
+    like( $redirect_rdf, qr|<owl:sameAs rdf:resource="/\?id=Calthorpe_Arms;format=rdf#obj" />|,
+	  "redirecting node gets owl:sameAs to target" );
+
 }

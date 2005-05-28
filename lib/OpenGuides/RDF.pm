@@ -205,6 +205,7 @@ sub emit_rdfxml {
     xmlns:wn="http://xmlns.com/wordnet/1.6/"
     xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#"
     xmlns:os="http://downlode.org/rdf/os/0.1/"
+    xmlns:owl="http://www.w3.org/2002/07/owl#"
     xmlns="http://www.w3.org/2000/10/swap/pim/contact#"
   >
 
@@ -252,8 +253,19 @@ sub emit_rdfxml {
     $rdf .= "    <foaf:homepage rdf:resource=\"$website\" />\n"        if $website;
     $rdf .= "    <chefmoz:Hours>$opening_hours_text</chefmoz:Hours>\n" if $opening_hours_text;
 
-    $rdf .= qq{
-  </$objType>
+    if ($node_data{content} =~ /^\#REDIRECT \[\[(.*?)]\]$/)
+    {
+      my $redirect = $1;
+      
+      $rdf .= qq{    <owl:sameAs rdf:resource="} . $self->{config}->script_url
+      . uri_escape($self->{config}->script_name) . '?id='
+      . uri_escape($wiki->formatter->node_name_to_node_param($redirect))
+      . ';format=rdf#obj';
+      $rdf .= qq{" />\n};
+
+    }
+    
+    $rdf .= qq{  </$objType>
 </rdf:RDF>
 
 };
