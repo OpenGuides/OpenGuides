@@ -8,43 +8,41 @@
 
     [% IF phone %]
       <li class="telephone">
-        <label>Telephone:</label> [% CGI.escapeHTML(phone) %]
+        <span class="metadata_label">Telephone:</span> [% CGI.escapeHTML(phone) %]
       </li>
     [% END %]
     [% IF fax %]
       <li class="fax">
-        <label>Fax:</label> [% CGI.escapeHTML(fax) %]
+        <span class="metadata_label">Fax:</span> [% CGI.escapeHTML(fax) %]
       </li>
     [% END %]
     [% IF address %]
       <li class="address">
-        <label>Address:</label>
+        <span class="metadata_label">Address:</span>
+        [% CGI.escapeHTML(address) %], [% default_city %]
         [% IF map_link %]
-          [<a href="[% map_link %]">[% CGI.escapeHTML(address) %]</a>]
-        [% ELSE %]
-          [% CGI.escapeHTML(address) %]
+          <a href="[% map_link %]">(map of this place)</a>
         [% END %]
       </li>
     [% ELSIF map_link %]
       <li class="map">
-        <label>Map:</label>
-          [<a href="[% map_link %]">[% CGI.escapeHTML(map_link) %]</a>]
+        <span class="metadata_label"><a href="[% map_link %]">Map of this place</a></span>
       </li>
     [% END %]
     [% IF postcode %]
       <li class="postcode">
-        <label>Postcode:</label>
+        <span class="metadata_label">Postcode:</span>
         [% CGI.escapeHTML(postcode) %]
       </li>
     [% END %]
     [% IF formatted_website_text %]
       <li class="website_link">
-        <label>Website:</label> [% formatted_website_text %]
+        <span class="metadata_label">Website:</span> [% formatted_website_text %]
       </li>
     [% END %]
     [% IF hours_text %]
       <li class="opening_hours">
-        <label>Opening Hours:</label>
+        <span class="metadata_label">Opening Hours:</span>
         [% CGI.escapeHTML(hours_text) %]
       </li>
     [% END %]
@@ -56,7 +54,7 @@
   <ul id="categories_and_locales">
     [% IF categories.size AND categories.size > 0 %]
       <li class="categories_list">
-        <label>Categories:</label>
+        <span class="metadata_label">Categories:</span>
         [% FOREACH category = categories %]
           <a href="[% category.url %]">[% category.name %]</a>
           [% "/" UNLESS loop.last %]
@@ -66,7 +64,7 @@
 
     [% IF locales.size AND locales.size > 0 %]
       <li class="locales_list">
-        <label>Locale:</label>
+        <span class="metadata_label">Locale:</span>
         [% FOREACH locale = locales %]
           <a href="[% locale.url %]">[% locale.name %]</a>
           [% "/" UNLESS loop.last %]

@@ -113,7 +113,8 @@ sub output {
 
     my $script_name = $config->script_name;
     my $script_url  = $config->script_url;
-
+    my $default_city = $config->default_city;
+    
     # Check cookie to see if we need to set the formatting_rules_link.
     my ($formatting_rules_link, $omit_help_links);
     my $formatting_rules_node = $config->formatting_rules_node;
@@ -150,6 +151,7 @@ sub output {
                     openguides_version    => $OpenGuides::VERSION,
                     enable_page_deletion  => $enable_page_deletion,
                     language              => $config->default_language,
+                    default_city          => $default_city,
     };
 
     if ($args{node}) {
