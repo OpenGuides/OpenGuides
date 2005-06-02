@@ -16,6 +16,8 @@
           template plain_index.tt.
         New message to appear on pages when you have been redirected
           informing you of the fact.
+        Stop showing potentially very long map URLs in metadata section of
+          node display; also show city after address.
 
 0.47    15 January 2005
         Fixed bug with list_all_versions for nodes with only one version.
