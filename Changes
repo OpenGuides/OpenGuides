@@ -19,7 +19,9 @@
         Stop showing potentially very long map URLs in metadata section of
           node display; also show city after address.
         Replace ugly obliques in display of categories and locales with more
-          natural commas.
+          natural commas; change "locale" to "locales" in label.
+        Replace <label> tags in display_metadata.tt with <span
+          class="metadata_label">.
 
 0.47    15 January 2005
         Fixed bug with list_all_versions for nodes with only one version.

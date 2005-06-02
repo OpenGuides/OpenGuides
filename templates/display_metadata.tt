@@ -63,7 +63,7 @@
 
     [% IF locales.size AND locales.size > 0 %]
       <li class="locales_list">
-        <span class="metadata_label">Locale:</span>
+        <span class="metadata_label">Locales:</span>
         [% FOREACH locale = locales %]
           <a href="[% locale.url %]">[% locale.name %]</a>[%- "," UNLESS loop.last %]
         [% END %]
