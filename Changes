@@ -17,7 +17,7 @@
         New message to appear on pages when you have been redirected
           informing you of the fact.
         Stop showing potentially very long map URLs in metadata section of
-          node display; also show city after address.
+          node display.
         Replace ugly obliques in display of categories and locales with more
           natural commas; change "locale" to "locales" in label.
         Replace <label> tags in display_metadata.tt with <span

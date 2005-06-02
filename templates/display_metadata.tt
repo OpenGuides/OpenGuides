@@ -19,7 +19,7 @@
     [% IF address %]
       <li class="address">
         <span class="metadata_label">Address:</span>
-        [% CGI.escapeHTML(address) %], [% default_city %]
+        [% CGI.escapeHTML(address) %]<!--, [% default_city %] -->
         [% IF map_link %]
           <a href="[% map_link %]">(map of this place)</a>
         [% END %]
