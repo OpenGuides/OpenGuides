@@ -263,3 +263,7 @@ textarea#locales
 div#redirect_message
     Used in: node.tt
     Purpose: A short message indicating that your reached a node via a redirect
+
+table#wanted_pages
+    Used in:  wanted_pages.tt
+    Purpose: A list of all unlinked nodes

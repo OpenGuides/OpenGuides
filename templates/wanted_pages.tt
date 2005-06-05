@@ -7,15 +7,18 @@
 <p>
 These are nodes which have been linked to but do not yet exist.
 </p>
-<ul>
+<table id="wanted_pages">
+<tr><th>Node name</th><th>Number of backlinks</th><th>Action</th></tr>
   [% FOREACH node = wanted %]
-     <li>[% node.name %] ......
-         [<a href="[% node.edit_link %]"><b>Create</b></a>]
-         ......
-         [<a href="[% node.backlink_link %]">Show nodes linking to this</a>]
-     </li>
+     <tr>
+     <td>[% node.name %]</td>
+     <td>[% node.backlinks_count %]</td>
+     <td><a href="[% node.backlink_link %]">Show linking nodes</a>
+         or <a href="[% node.edit_link %]">Create node</a>
+     </td>
+     </tr>
   [% END %]
-</ul>
+</table>
 
 </div>
 [% INCLUDE footer.tt %]

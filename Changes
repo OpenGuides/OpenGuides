@@ -22,6 +22,8 @@
           natural commas; change "locale" to "locales" in label.
         Replace <label> tags in display_metadata.tt with <span
           class="metadata_label">.
+        Wanted pages listing now displays, and sorts by, the number of nodes
+        pointing to each node.
 
 0.47    15 January 2005
         Fixed bug with list_all_versions for nodes with only one version.

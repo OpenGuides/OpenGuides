@@ -294,9 +294,12 @@ sub do_search {
 
 sub show_wanted_pages {
     my @dangling = $wiki->list_dangling_links;
-    @dangling = sort @dangling;
     my @wanted;
+    my %backlinks_count;
     foreach my $node_name (@dangling) {
+        $backlinks_count{$node_name} = scalar($wiki->list_backlinks( node => $node_name ));
+    }
+    foreach my $node_name (sort { $backlinks_count{$b} <=> $backlinks_count{$a} } @dangling) {
         my $node_param =
  	    uri_escape($formatter->node_name_to_node_param($node_name));
         push @wanted, {
@@ -304,7 +307,8 @@ sub show_wanted_pages {
             edit_link     => $script_url . uri_escape($script_name)
                            . "?action=edit;id=$node_param",
             backlink_link => $script_url . uri_escape($script_name)
- 		           . "?action=show_backlinks;id=$node_param"
+ 		           . "?action=show_backlinks;id=$node_param",
+            backlinks_count => $backlinks_count{$node_name}
         };
     }
     process_template( "wanted_pages.tt",
