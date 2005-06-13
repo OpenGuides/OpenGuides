@@ -170,12 +170,14 @@ sub display_node {
         $redirect =~ s/^\[\[//;
         $redirect =~ s/\]\]\s*$//;
         # See if this is a valid node, if not then just show the page as-is.
-	if ( $wiki->node_exists($redirect) ) {
+        # Avoid loops by not generating redirects to the same node or the
+        # previous node.
+    if ( $wiki->node_exists($redirect) && $redirect != $id && $redirect != $oldid ) {
             my $output = $self->redirect_to_node($redirect, $id);
             return $output if $return_output;
             print $output;
             exit 0;
-	}
+    }
     }
     my $content    = $wiki->format($raw);
     my $modified   = $node_data{last_modified};
