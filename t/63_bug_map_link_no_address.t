@@ -21,6 +21,6 @@ SKIP: {
                                        id => "South Croydon Station",
                                        return_output => 1,
                                      );
-    like( $output, qr/Map:/, "map link included when no address" );
+    like( $output, qr/Map of this place/, "map link included when no address" );
 }
 
