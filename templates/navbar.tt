@@ -7,7 +7,7 @@
   <div class="navbar_group_title">Tools:</div>
 
   <ul>
-    <li><a href="[% full_cgi_url %]?RecentChanges">Recent Changes</a>
+    <li><a href="[% full_cgi_url %]?RecentChanges">Recent Changes</a></li>
     <li><a href="newpage.cgi">Create New Page</a></li>
     <li><a href="[% full_cgi_url %]?action=random">Random Page</a></li>
     <li><a href="[% full_cgi_url %]?action=show_wanted_pages">Wanted Pages</a></li>
@@ -18,16 +18,16 @@
 
   [% UNLESS omit_help_links %]
 
-    <div class="navbar_group_title">Help: <span class="hidden">/</span></div>
+  <div class="navbar_group_title">Help:</div>
 
-    <ul>
-      <li><a href="[% full_cgi_url %]?FAQ">FAQ</a></li>
-      <li><a href="[% full_cgi_url %]?How_To_Get_Started">How To Get Started</a></li>
-      [% IF formatting_rules_link %]
-        <li><a href="[% formatting_rules_link %]">[% formatting_rules_node %]</a></li>
-      [% END %]
-      <li><a href="[% full_cgi_url %]?Wiki_Etiquette">Wiki Etiquette</a></li>
-    </ul>
+  <ul>
+    <li><a href="[% full_cgi_url %]?FAQ">FAQ</a></li>
+    <li><a href="[% full_cgi_url %]?How_To_Get_Started">How To Get Started</a></li>
+    [% IF formatting_rules_link %]
+      <li><a href="[% formatting_rules_link %]">[% formatting_rules_node %]</a></li>
+    [% END %]
+    <li><a href="[% full_cgi_url %]?Wiki_Etiquette">Wiki Etiquette</a></li>
+  </ul>
 
   [% END %]
 
@@ -48,7 +48,7 @@
       </form>
     </li>
     <li><a href="supersearch.cgi">Advanced Search</a></li>
-  </div>
+  </ul>
 
   [% UNLESS not_editable %]
     <div class="navbar_group_title">This page:</div>
@@ -63,7 +63,7 @@
       [% IF enable_page_deletion %]
         <li><a href="[% full_cgi_url %]?id=[% node_param %];action=delete">Delete (admin only)</a></li>
       [% END %]
-    </div>
+    </ul>
 
     <div class="navbar_revision">
       [% IF current %]
