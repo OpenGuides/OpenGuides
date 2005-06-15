@@ -11,6 +11,8 @@
             applications.
           Added owl:sameAs property to RDF output for nodes that are redirects
             to other nodes.
+          RSS feed now has correct timestamp (matching most recent item) and
+            matching Last-Modified HTTP header.
         Reorder navigation bar to provide more logical groupings.
         Add "format=plain" option for all-nodes index listing and associated
           template plain_index.tt.

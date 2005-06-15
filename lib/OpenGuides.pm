@@ -170,6 +170,7 @@ sub display_node {
         $redirect =~ s/^\[\[//;
         $redirect =~ s/\]\]\s*$//;
         # See if this is a valid node, if not then just show the page as-is.
+
         # Avoid loops by not generating redirects to the same node or the
         # previous node.
     if ( $wiki->node_exists($redirect) && $redirect != $id && $redirect != $oldid ) {
@@ -619,7 +620,8 @@ sub display_rss {
 
     my $rdf_writer = OpenGuides::RDF->new( wiki   => $self->wiki,
 					   config => $self->config );
-    my $output = "Content-type: text/plain\n\n";
+    my $output = "Content-Type: text/plain\n";
+    $output .= "Last-Modified: " . $rdf_writer->rss_timestamp( %criteria ) . "\n\n";
     $output .= $rdf_writer->make_recentchanges_rss( %criteria );
     return $output if $return_output;
     print $output;
@@ -854,18 +856,19 @@ sub process_template {
 
 sub redirect_to_node {
     my ($self, $node, $redirect) = @_;
+    
     my $script_url = $self->config->script_url;
     my $script_name = $self->config->script_name;
     my $formatter = $self->wiki->formatter;
+
     my $id = $formatter->node_name_to_node_param( $node );
-    
     my $oldid;
     $oldid = $formatter->node_name_to_node_param( $redirect ) if $redirect;
-    
+
     my $redir_param ='';
     $redir_param = "&oldid=$oldid" if $oldid;
-    
-    return CGI->redirect( "$script_url$script_name?id=$id$redir_param" );    
+
+    return CGI->redirect( "$script_url$script_name?id=$id$redir_param" );
 }
 
 sub get_cookie {
