@@ -22,22 +22,19 @@ sub _init {
 
     my $wiki = $args{wiki};
     
-    unless ($wiki && UNIVERSAL::isa($wiki, "CGI::Wiki"))
-    {
+    unless ( $wiki && UNIVERSAL::isa( $wiki, "CGI::Wiki" ) ) {
       croak "No CGI::Wiki object supplied.";
     }
     $self->{wiki} = $wiki;
 
     my $config = $args{config};
-    unless ($config && UNIVERSAL::isa($config, "OpenGuides::Config"))
-    {
-      croak "No OpenGuides::Config object supplied.";
+
+    unless ( $config && UNIVERSAL::isa( $config, "OpenGuides::Config" ) ) {
+        croak "No OpenGuides::Config object supplied.";
     }
     $self->{config} = $config;
 
-    $self->{make_node_url} =
-      sub
-      {
+    $self->{make_node_url} = sub {
         my ($node_name, $version) = @_;
 
         my $config = $self->{config};
@@ -63,7 +60,7 @@ sub emit_rdfxml {
     my $node_name = $args{node};
     my $wiki = $self->{wiki};
 
-    my %node_data          = $wiki->retrieve_node($node_name);
+    my %node_data          = $wiki->retrieve_node( $node_name );
     my $phone              = $node_data{metadata}{phone}[0]              || '';
     my $fax                = $node_data{metadata}{fax}[0]                || '';
     my $website            = $node_data{metadata}{website}[0]            || '';
@@ -94,14 +91,11 @@ sub emit_rdfxml {
     
     my ($is_geospatial, $objType);
 
-    if ($latitude || $longitude || $postcode || @locales)
-    {
-      $is_geospatial = 1;
-      $objType    = 'geo:SpatialThing';
-    }
-    else
-    {
-      $objType = 'rdf:Description';
+    if ($latitude || $longitude || $postcode || @locales) {
+        $is_geospatial = 1;
+        $objType    = 'geo:SpatialThing';
+    } else {
+        $objType = 'rdf:Description';
     }
 
     my $timestamp = $node_data{last_modified};
@@ -109,14 +103,13 @@ sub emit_rdfxml {
     # Make a Time::Piece object.
     my $timestamp_fmt = $CGI::Wiki::Store::Database::timestamp_fmt;
 
-    if ($timestamp)
-    {
-      my $time   = Time::Piece->strptime($timestamp, $timestamp_fmt);
-      $timestamp = $time->strftime("%Y-%m-%dT%H:%M:%S");
+    if ( $timestamp ) {
+        my $time   = Time::Piece->strptime($timestamp, $timestamp_fmt);
+        $timestamp = $time->strftime("%Y-%m-%dT%H:%M:%S");
     }
 
-    my $url               = $self->{make_node_url}->($node_name, $version);
-    my $version_indpt_url = $self->{make_node_url}->($node_name);
+    my $url               = $self->{make_node_url}->( $node_name, $version );
+    my $version_indpt_url = $self->{make_node_url}->( $node_name );
 
     my $rdf = qq{<?xml version="1.0"?>
 <rdf:RDF
@@ -159,16 +152,14 @@ sub emit_rdfxml {
       </wn:Neighborhood>
     </foaf:based_near>\n} foreach @locales;
 
-    if ($latitude && $longitude)
-    {
-      $rdf .= qq{
+    if ( $latitude && $longitude ) {
+        $rdf .= qq{
     <geo:lat>$latitude</geo:lat>
     <geo:long>$longitude</geo:long>\n};
     }
 
-    if ($os_x && $os_y)
-    {
-      $rdf .= qq{
+    if ( $os_x && $os_y ) {
+        $rdf .= qq{
     <os:x>$os_x</os:x>
     <os:y>$os_y</os:y>};
     }
@@ -201,15 +192,15 @@ sub emit_rdfxml {
 sub rss_maker {
     my $self = shift;
 
-    unless ($self->{rss_maker}) # OAOO, please.
-    {
-      $self->{rss_maker} = CGI::Wiki::Plugin::RSS::ModWiki->new(
-        wiki                => $self->{wiki},
-        site_name           => $self->{site_name},
-        site_description    => $self->{site_description},
-        make_node_url       => $self->{make_node_url},
-        recent_changes_link => $self->{config}->script_url . uri_escape($self->{config}->script_name) . "?RecentChanges"
-      );
+    # OAOO, please.
+    unless ($self->{rss_maker}) {
+        $self->{rss_maker} = CGI::Wiki::Plugin::RSS::ModWiki->new(
+          wiki                => $self->{wiki},
+          site_name           => $self->{site_name},
+          site_description    => $self->{site_description},
+          make_node_url       => $self->{make_node_url},
+          recent_changes_link => $self->{config}->script_url . uri_escape($self->{config}->script_name) . "?RecentChanges"
+        );
     }
     
     $self->{rss_maker};
