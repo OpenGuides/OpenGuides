@@ -119,31 +119,31 @@ sub emit_rdfxml {
     my $version_indpt_url = $self->{make_node_url}->($node_name);
 
     my $rdf = qq{<?xml version="1.0"?>
-    <rdf:RDF
-    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-    xmlns:dc="http://purl.org/dc/elements/1.1/"
-    xmlns:dcterms="http://purl.org/dc/terms/"
-    xmlns:foaf="http://xmlns.com/foaf/0.1/"
-    xmlns:wiki="http://purl.org/rss/1.0/modules/wiki/"
-    xmlns:chefmoz="http://chefmoz.org/rdf/elements/1.0/"
-    xmlns:wn="http://xmlns.com/wordnet/1.6/"
-    xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#"
-    xmlns:os="http://downlode.org/rdf/os/0.1/"
-    xmlns:owl="http://www.w3.org/2002/07/owl#"
-    xmlns="http://www.w3.org/2000/10/swap/pim/contact#"
-    >
+<rdf:RDF
+  xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+  xmlns:dc="http://purl.org/dc/elements/1.1/"
+  xmlns:dcterms="http://purl.org/dc/terms/"
+  xmlns:foaf="http://xmlns.com/foaf/0.1/"
+  xmlns:wiki="http://purl.org/rss/1.0/modules/wiki/"
+  xmlns:chefmoz="http://chefmoz.org/rdf/elements/1.0/"
+  xmlns:wn="http://xmlns.com/wordnet/1.6/"
+  xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#"
+  xmlns:os="http://downlode.org/rdf/os/0.1/"
+  xmlns:owl="http://www.w3.org/2002/07/owl#"
+  xmlns="http://www.w3.org/2000/10/swap/pim/contact#"
+>
 
-    <rdf:Description rdf:about="">
-      <dc:title>} . $self->{site_name} . qq{: $node_name</dc:title>
-      <dc:date>$timestamp</dc:date>
-      <dcterms:modified>$timestamp</dcterms:modified>
-      <dc:contributor>$username</dc:contributor>
-      <dc:source rdf:resource="$version_indpt_url" />
-      <wiki:version>$version</wiki:version>
-      <foaf:topic rdf:resource="#obj" />
-    </rdf:Description>
+  <rdf:Description rdf:about="">
+    <dc:title>} . $self->{site_name} . qq{: $node_name</dc:title>
+    <dc:date>$timestamp</dc:date>
+    <dcterms:modified>$timestamp</dcterms:modified>
+    <dc:contributor>$username</dc:contributor>
+    <dc:source rdf:resource="$version_indpt_url" />
+    <wiki:version>$version</wiki:version>
+    <foaf:topic rdf:resource="#obj" />
+  </rdf:Description>
 
-    <$objType rdf:ID="obj" dc:title="$node_name">
+  <$objType rdf:ID="obj" dc:title="$node_name">
 };
     $rdf .= "\n    <!-- categories -->\n\n" if $catrefs;
     $rdf .= "    <dc:subject>$_</dc:subject>\n" foreach @{$catrefs};
@@ -154,9 +154,9 @@ sub emit_rdfxml {
 
     $rdf .= qq{
     <foaf:based_near>
-         <wn:Neighborhood>
-           <foaf:name>$_</foaf:name>
-         </wn:Neighborhood>
+      <wn:Neighborhood>
+        <foaf:name>$_</foaf:name>
+      </wn:Neighborhood>
     </foaf:based_near>\n} foreach @locales;
 
     if ($latitude && $longitude)
