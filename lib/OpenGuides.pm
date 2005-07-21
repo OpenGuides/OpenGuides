@@ -173,16 +173,12 @@ sub display_node {
 
         # Avoid loops by not generating redirects to the same node or the
         # previous node.
-      if ( $wiki->node_exists($redirect) ) {
-        unless ($redirect eq $id) {
-          unless ($redirect eq $oldid) {
+        if ( $wiki->node_exists($redirect) && $redirect ne $id && $redirect ne $oldid ) {
             my $output = $self->redirect_to_node($redirect, $id);
             return $output if $return_output;
             print $output;
             exit 0;
-          }
         }
-      }
     }
     my $content    = $wiki->format($raw);
     my $modified   = $node_data{last_modified};
