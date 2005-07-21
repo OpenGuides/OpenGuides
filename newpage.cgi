@@ -9,7 +9,7 @@ use OpenGuides::Template;
 use OpenGuides::Utils;
 use URI::Escape;
 
-my @badchars = qw( & ? );
+my @badchars = qw( & ? _ );
 push @badchars, '#'; # Avoid warning about possible comments in qw()
 
 my $q = CGI->new;
