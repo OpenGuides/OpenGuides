@@ -173,12 +173,16 @@ sub display_node {
 
         # Avoid loops by not generating redirects to the same node or the
         # previous node.
-    if ( $wiki->node_exists($redirect) && $redirect != $id && $redirect != $oldid ) {
+      if ( $wiki->node_exists($redirect) ) {
+        unless ($redirect eq $id) {
+          unless ($redirect eq $oldid) {
             my $output = $self->redirect_to_node($redirect, $id);
             return $output if $return_output;
             print $output;
             exit 0;
-    }
+          }
+        }
+      }
     }
     my $content    = $wiki->format($raw);
     my $modified   = $node_data{last_modified};
@@ -855,7 +859,7 @@ sub process_template {
 }
 
 sub redirect_to_node {
-    my ($self, $node, $redirect) = @_;
+    my ($self, $node, $redirected_from) = @_;
     
     my $script_url = $self->config->script_url;
     my $script_name = $self->config->script_name;
@@ -863,10 +867,10 @@ sub redirect_to_node {
 
     my $id = $formatter->node_name_to_node_param( $node );
     my $oldid;
-    $oldid = $formatter->node_name_to_node_param( $redirect ) if $redirect;
+    $oldid = $formatter->node_name_to_node_param( $redirected_from ) if $redirected_from;
 
     my $redir_param ='';
-    $redir_param = "&oldid=$oldid" if $oldid;
+    $redir_param = ";oldid=$oldid" if $oldid;
 
     return CGI->redirect( "$script_url$script_name?id=$id$redir_param" );
 }
