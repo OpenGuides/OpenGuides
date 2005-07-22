@@ -865,10 +865,12 @@ sub redirect_to_node {
     my $oldid;
     $oldid = $formatter->node_name_to_node_param( $redirected_from ) if $redirected_from;
 
-    my $redir_param ='';
-    $redir_param = ";oldid=$oldid" if $oldid;
-
-    return CGI->redirect( "$script_url$script_name?id=$id$redir_param" );
+    my $redir_param = "$script_url$script_name?";
+    $redir_param .= 'id=' if $oldid;
+    $redir_param .= $id;
+    $redir_param .= ";oldid=$oldid" if $oldid;
+    
+    return CGI->redirect( $redir_param );
 }
 
 sub get_cookie {
