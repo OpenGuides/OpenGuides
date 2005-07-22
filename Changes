@@ -27,6 +27,7 @@
         Wanted pages listing now displays, and sorts by, the number of nodes
         pointing to each node.
         Prevent redirect loops.
+        Add _ to the list of forbidden characters in node names
 
 0.47    15 January 2005
         Fixed bug with list_all_versions for nodes with only one version.
