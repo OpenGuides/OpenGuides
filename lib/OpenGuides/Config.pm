@@ -83,7 +83,7 @@ sub _init {
     my %stored;
     if ( $args{file} ) {
         my $read_config = Config::Tiny->read( $args{file} ) or
-            die "Cannot read config file $args{file}";
+            warn "Cannot read config file $args{file}";
         %stored = $read_config ? %{ $read_config->{_} } : ();
     } elsif ( $args{vars} ) {
         %stored = %{ $args{vars} };
