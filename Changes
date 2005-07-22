@@ -1,4 +1,4 @@
-0.48    
+0.48    22 July 2005
         RDF enhancements:
           Removed redundant "id" parameter specification from dc:source in
             rdf:Description in RDF node listings.
