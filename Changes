@@ -1,4 +1,8 @@
-0.48    22 July 2005
+0.49    24 July 2005
+        Add updated prerequisite on CGI::Wiki::Plugin::RSS::ModWiki (fixes
+        a test failure)
+
+0.48    24 July 2005
         RDF enhancements:
           Removed redundant "id" parameter specification from dc:source in
             rdf:Description in RDF node listings.
