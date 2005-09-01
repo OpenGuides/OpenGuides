@@ -3,7 +3,7 @@ package OpenGuides::RDF;
 use strict;
 
 use vars qw( $VERSION );
-$VERSION = '0.07';
+$VERSION = '0.071';
 
 use CGI::Wiki::Plugin::RSS::ModWiki;
 use Time::Piece;
@@ -42,7 +42,7 @@ sub _init {
         my $node_url = $config->script_url . uri_escape($config->script_name) . '?';
         $node_url .= 'id=' if defined $version;
         $node_url .= uri_escape($self->{wiki}->formatter->node_name_to_node_param($node_name));
-        $node_url .= '&version=' . uri_escape($version) if defined $version;
+        $node_url .= ';version=' . uri_escape($version) if defined $version;
 
         $node_url;
       };  
