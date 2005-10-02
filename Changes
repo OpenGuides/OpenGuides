@@ -1,7 +1,9 @@
+0.50    2 October 2005
+        Remove rogue ampersand that had crept into the RSS feed.
+        
 0.49    24 July 2005
         Add updated prerequisite on CGI::Wiki::Plugin::RSS::ModWiki (fixes
         a test failure)
-        Remove rogue ampersand that had crept into the RSS feed.
 
 0.48    24 July 2005
         RDF enhancements:
