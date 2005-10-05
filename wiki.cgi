@@ -114,7 +114,7 @@ eval {
             display_node_rdf( node => $node );
         } else {
             my $version = $q->param("version");
-	    my $other_ver = $q->param("diffversion");
+        my $other_ver = $q->param("diffversion");
             if ( $other_ver ) {
                 $guide->display_diffs(
                                        id            => $node,
@@ -122,13 +122,22 @@ eval {
                                        other_version => $other_ver,
                                      );
             } else {
+                my $redirect;
+                
+                if ($q->param("redirect") && ($q->param("redirect") == 0)) {
+                  $redirect = 0;
+                } else {
+                  $redirect = 1;                
+                }
+                
                 $guide->display_node(
-                                      id      => $node,
-                                      version => $version,
-                                      oldid   => $oldid,
+                                      id       => $node,
+                                      version  => $version,
+                                      oldid    => $oldid,
+                                      redirect => $redirect;
                 );
                 
-	    }
+        }
         }
     }
 };
@@ -161,14 +170,14 @@ sub show_userstats {
                                         : { host     => $host };
     my @nodes = $wiki->list_recent_changes( %criteria );
     @nodes = map { {name          => $q->escapeHTML($_->{name}),
-		    last_modified => $q->escapeHTML($_->{last_modified}),
-		    comment       => $q->escapeHTML($_->{metadata}{comment}[0]),
-		    url           => "$script_name?"
+            last_modified => $q->escapeHTML($_->{last_modified}),
+            comment       => $q->escapeHTML($_->{metadata}{comment}[0]),
+            url           => "$script_name?"
           . $q->escape($formatter->node_name_to_node_param($_->{name})) }
                        } @nodes;
     my %tt_vars = ( last_five_nodes => \@nodes,
-		    username        => $username,
-		    username_param  => $wiki->formatter->node_name_to_node_param($username),
+            username        => $username,
+            username_param  => $wiki->formatter->node_name_to_node_param($username),
                     host            => $host,
                   );
     process_template("userstats.tt", "", \%tt_vars);
@@ -182,8 +191,8 @@ sub preview_node {
 
     my %tt_metadata_vars = OpenGuides::Template->extract_metadata_vars(
                                                wiki                 => $wiki,
-					       config               => $config,
-					       cgi_obj              => $q,
+                           config               => $config,
+                           cgi_obj              => $q,
                                                set_coord_field_vars => 1,
     );
     foreach my $var ( qw( username comment edit_type ) ) {
@@ -197,7 +206,7 @@ sub preview_node {
             preview_html           => $wiki->format($content),
             preview_above_edit_box => get_cookie( "preview_above_edit_box" ),
             checksum               => $q->escapeHTML($checksum)
-	);
+    );
         process_template("edit_form.tt", $node, \%tt_vars);
     } else {
         my %node_data = $wiki->retrieve_node($node);
@@ -234,12 +243,12 @@ sub edit_node {
     my %metadata_vars = OpenGuides::Template->extract_metadata_vars(
                              wiki     => $wiki,
                              config   => $config,
-			     metadata => $node_data{metadata} );
+                 metadata => $node_data{metadata} );
 
     my %tt_vars = ( content         => $q->escapeHTML($content),
                     checksum        => $q->escapeHTML($checksum),
                     %metadata_vars,
-		    username        => $username,
+            username        => $username,
                     edit_type       => $edit_type,
                     deter_robots    => 1,
     );
@@ -256,7 +265,7 @@ sub get_cookie {
 sub display_node_rdf {
     my %args = @_;
     my $rdf_writer = OpenGuides::RDF->new( wiki      => $wiki,
-					   config => $config );
+                       config => $config );
     print "Content-type: text/plain\n\n";
     print $rdf_writer->emit_rdfxml( node => $args{node} );
     exit 0;
@@ -266,10 +275,10 @@ sub process_template {
     my ($template, $node, $vars, $conf, $omit_header) = @_;
 
     my %output_conf = ( wiki     => $wiki,
-			config   => $config,
+            config   => $config,
                         node     => $node,
-			template => $template,
-			vars     => $vars
+            template => $template,
+            vars     => $vars
     );
     $output_conf{content_type} = "" if $omit_header; # defaults otherwise
     print OpenGuides::Template->output( %output_conf );
@@ -283,7 +292,7 @@ sub do_search {
     my @sorted = sort keys %finds;
     my @results = map {
         { url   => $q->escape($formatter->node_name_to_node_param($_)),
-	  title => $q->escapeHTML($_)
+      title => $q->escapeHTML($_)
         }             } @sorted;
     my %tt_vars = ( results      => \@results,
                     num_results  => scalar @results,
@@ -301,13 +310,13 @@ sub show_wanted_pages {
     }
     foreach my $node_name (sort { $backlinks_count{$b} <=> $backlinks_count{$a} } @dangling) {
         my $node_param =
- 	    uri_escape($formatter->node_name_to_node_param($node_name));
+         uri_escape($formatter->node_name_to_node_param($node_name));
         push @wanted, {
             name          => $q->escapeHTML($node_name),
             edit_link     => $script_url . uri_escape($script_name)
                            . "?action=edit;id=$node_param",
             backlink_link => $script_url . uri_escape($script_name)
- 		           . "?action=show_backlinks;id=$node_param",
+                    . "?action=show_backlinks;id=$node_param",
             backlinks_count => $backlinks_count{$node_name}
         };
     }
