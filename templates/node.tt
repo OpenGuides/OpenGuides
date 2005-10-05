@@ -5,7 +5,7 @@
 [% INCLUDE navbar.tt %]
 <div id="maincontent">
 [% IF oldid %]
-<div id="redirect_message">(redirected from <a href="[% full_cgi_url %]?action=edit&id=[% oldid %]">[% oldid.replace('_', ' ') %]</a></div>
+<div id="redirect_message">(redirected from <a href="[% full_cgi_url %]?id=[% oldid %];redirect=0">[% oldid.replace('_', ' ') %]</a></div>
 [% END %]
 
 [% IF current %]

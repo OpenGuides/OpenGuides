@@ -124,7 +124,7 @@ eval {
             } else {
                 my $redirect;
                 
-                if ($q->param("redirect") && ($q->param("redirect") == 0)) {
+                if ((defined $q->param("redirect")) && ($q->param("redirect") == 0)) {
                   $redirect = 0;
                 } else {
                   $redirect = 1;                
@@ -134,10 +134,9 @@ eval {
                                       id       => $node,
                                       version  => $version,
                                       oldid    => $oldid,
-                                      redirect => $redirect;
-                );
-                
-        }
+                                      redirect => $redirect,
+                                    );
+            }
         }
     }
 };

@@ -1,6 +1,8 @@
 0.51
         Replace underscores in node names in redirection message with spaces.
-        
+        Redirection message now links to a rendered version of the old page
+         rather than the editing view.
+         
 0.50    2 October 2005
         Remove rogue ampersand that had crept into the RSS feed.
         

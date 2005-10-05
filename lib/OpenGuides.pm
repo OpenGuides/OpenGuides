@@ -143,6 +143,7 @@ sub display_node {
     my $wiki = $self->wiki;
     my $config = $self->config;
     my $oldid = $args{oldid} || '';
+    my $do_redirect = $args{redirect} || 1;
 
     my %tt_vars;
 
@@ -160,45 +161,56 @@ sub display_node {
     my $current_version = $current_data{version};
     undef $version if ($version && $version == $current_version);
     my %criteria = ( name => $id );
-    $criteria{version} = $version if $version;#retrieve_node default is current
+    $criteria{version} = $version if $version; # retrieve_node default is current
 
     my %node_data = $wiki->retrieve_node( %criteria );
-    my $raw = $node_data{content};
-    if ( $raw =~ /^#REDIRECT\s+(.+?)\s*$/ ) {
-        my $redirect = $1;
-        # Strip off enclosing [[ ]] in case this is an extended link.
-        $redirect =~ s/^\[\[//;
-        $redirect =~ s/\]\]\s*$//;
-        # See if this is a valid node, if not then just show the page as-is.
 
-        # Avoid loops by not generating redirects to the same node or the
-        # previous node.
-        if ( $wiki->node_exists($redirect) && $redirect ne $id && $redirect ne $oldid ) {
-            my $output = $self->redirect_to_node($redirect, $id);
-            return $output if $return_output;
-            print $output;
-            exit 0;
-        }
-    }
+    my $raw        = $node_data{content};
     my $content    = $wiki->format($raw);
     my $modified   = $node_data{last_modified};
     my %metadata   = %{$node_data{metadata}};
 
     my %metadata_vars = OpenGuides::Template->extract_metadata_vars(
                             wiki     => $wiki,
-                config   => $config,
+                            config   => $config,
                             metadata => $node_data{metadata} );
 
     %tt_vars = (
                  %tt_vars,
-         %metadata_vars,
-         content       => $content,
-         last_modified => $modified,
-         version       => $node_data{version},
+                 %metadata_vars,
+                 content       => $content,
+                 last_modified => $modified,
+                 version       => $node_data{version},
                  node          => $id,
                  language      => $config->default_language,
                  oldid         => $oldid,
                );
+
+    if ( $raw =~ /^#REDIRECT\s+(.+?)\s*$/ ) {
+        my $redirect = $1;
+        # Strip off enclosing [[ ]] in case this is an extended link.
+        $redirect =~ s/^\[\[//;
+        $redirect =~ s/\]\]\s*$//;
+
+        # Don't redirect if the parameter "redirect" is given as 0.
+        if ($do_redirect == 0) {
+            return %tt_vars if $args{return_tt_vars};
+            $tt_vars{current} = 1;
+            my $output = $self->process_template(
+                                                  id            => $id,
+                                                  template      => "node.tt",
+                                                  tt_vars       => \%tt_vars,
+                                                );
+            return $output if $return_output;
+            print $output;
+        } elsif ( $wiki->node_exists($redirect) && $redirect ne $id && $redirect ne $oldid ) {
+            # Avoid loops by not generating redirects to the same node or the previous node.
+            my $output = $self->redirect_to_node($redirect, $id);
+            return $output if $return_output;
+            print $output;
+            exit 0;
+        }
+    }
 
     # We've undef'ed $version above if this is the current version.
     $tt_vars{current} = 1 unless $version;
@@ -838,12 +850,13 @@ sub delete_node {
 
 sub process_template {
     my ($self, %args) = @_;
-    my %output_conf = ( wiki     => $self->wiki,
+    my %output_conf = (
+            wiki     => $self->wiki,
             config   => $self->config,
             node     => $args{id},
             template => $args{template},
             vars     => $args{tt_vars},
-                        cookies  => $args{cookies},
+            cookies  => $args{cookies},
     );
     if ( $args{content_type} ) {
         $output_conf{content_type} = "";
@@ -869,7 +882,7 @@ sub redirect_to_node {
     $redir_param .= 'id=' if $oldid;
     $redir_param .= $id;
     $redir_param .= ";oldid=$oldid" if $oldid;
-    
+
     return CGI->redirect( $redir_param );
 }
 
