@@ -186,15 +186,15 @@ sub display_node {
 
     my %metadata_vars = OpenGuides::Template->extract_metadata_vars(
                             wiki     => $wiki,
-			    config   => $config,
+                config   => $config,
                             metadata => $node_data{metadata} );
 
     %tt_vars = (
                  %tt_vars,
-		 %metadata_vars,
-		 content       => $content,
-		 last_modified => $modified,
-		 version       => $node_data{version},
+         %metadata_vars,
+         content       => $content,
+         last_modified => $modified,
+         version       => $node_data{version},
                  node          => $id,
                  language      => $config->default_language,
                  oldid         => $oldid,
@@ -229,11 +229,11 @@ sub display_node {
                   edit_type   => CGI->escapeHTML($_->{metadata}{edit_type}[0]),
                   url         => $config->script_name . "?"
           . CGI->escape($wiki->formatter->node_name_to_node_param($_->{name})),
-	        }
+            }
                        } @rc;
             if ( scalar @rc ) {
                 $recent_changes{since} = \@rc;
-    	    }
+            }
         } else {
             for my $days ( [0, 1], [1, 7], [7, 14], [14, 30] ) {
                 my %criteria = ( between_days => $days );
@@ -253,12 +253,12 @@ sub display_node {
                   edit_type   => CGI->escapeHTML($_->{metadata}{edit_type}[0]),
                   url         => $config->script_name . "?"
           . CGI->escape($wiki->formatter->node_name_to_node_param($_->{name})),
-	        }
+            }
                            } @rc;
                 if ( scalar @rc ) {
                     $recent_changes{$days->[1]} = \@rc;
-	        }
-    	    }
+            }
+            }
         }
         $tt_vars{recent_changes} = \%recent_changes;
         my %processing_args = (
@@ -267,7 +267,7 @@ sub display_node {
                                 tt_vars       => \%tt_vars,
                                );
         if ( !$since && $self->get_cookie("track_recent_changes_views") ) {
-	    my $cookie =
+        my $cookie =
                OpenGuides::CGI->make_recent_changes_cookie(config => $config );
             $processing_args{cookies} = $cookie;
             $tt_vars{last_viewed} = OpenGuides::CGI->get_last_recent_changes_visit_from_cookie( config => $config );
@@ -342,7 +342,7 @@ sub display_diffs {
     my %diff_vars = $self->differ->differences(
                                         node          => $args{id},
                                         left_version  => $args{version},
-   		                        right_version => $args{other_version},
+                                   right_version => $args{other_version},
                                               );
     $diff_vars{not_deletable} = 1;
     $diff_vars{not_editable} = 1;
@@ -395,7 +395,7 @@ sub show_backlinks {
     my @backlinks = $wiki->list_backlinks( node => $args{id} );
     my @results = map {
         { url   => CGI->escape($formatter->node_name_to_node_param($_)),
-	  title => CGI->escapeHTML($_)
+      title => CGI->escapeHTML($_)
         }             } sort @backlinks;
     my %tt_vars = ( results       => \@results,
                     num_results   => scalar @results,
@@ -452,12 +452,12 @@ sub show_index {
                 type  => $args{type},  # for RDF version
                 value => $args{value}, # for RDF version
                 name  => CGI->escapeHTML("Fuzzy Title Match on '$args{value}'")
-	    };
-	    $tt_vars{not_editable} = 1;
+        };
+        $tt_vars{not_editable} = 1;
         } else {
             @selnodes = $wiki->list_nodes_by_metadata(
                 metadata_type  => $args{type},
-	        metadata_value => $args{value},
+            metadata_value => $args{value},
                 ignore_case    => 1
             );
             my $name = ucfirst($args{type}) . " $args{value}" ;
@@ -472,9 +472,9 @@ sub show_index {
                 type  => $args{type},
                 value => $args{value}, # for RDF version
                 name  => CGI->escapeHTML( $name ),
-	        url   => $url
+            url   => $url
             };
-	    $tt_vars{not_editable} = 1;
+        $tt_vars{not_editable} = 1;
         }
     } else {
         @selnodes = $wiki->list_all_nodes();
@@ -482,8 +482,8 @@ sub show_index {
 
     my @nodes = map { { name      => $_,
                         node_data => { $wiki->retrieve_node( name => $_ ) },
-			param     => $formatter->node_name_to_node_param($_) }
-		    } sort @selnodes;
+            param     => $formatter->node_name_to_node_param($_) }
+            } sort @selnodes;
 
     $tt_vars{nodes} = \@nodes;
 
@@ -493,7 +493,7 @@ sub show_index {
     {
       if ( $args{format} eq "rdf" )
       {
-	$template = "rdf_index.tt";
+    $template = "rdf_index.tt";
         $conf{content_type} = "text/plain";
       }
       elsif ( $args{format} eq "plain" )
@@ -547,22 +547,22 @@ sub list_all_versions {
     my @history;
     for my $version ( 1 .. $curr_version ) {
         my %node_data = $self->wiki->retrieve_node( name    => $node,
-				  	            version => $version );
+                                  version => $version );
         # $node_data{version} will be zero if this version was deleted.
-	push @history, {
+    push @history, {
             version  => CGI->escapeHTML( $version ),
-	    modified => CGI->escapeHTML( $node_data{last_modified} ),
+        modified => CGI->escapeHTML( $node_data{last_modified} ),
             username => CGI->escapeHTML( $node_data{metadata}{username}[0] ),
             comment  => CGI->escapeHTML( $node_data{metadata}{comment}[0] ),
                        } if $node_data{version};
     }
     @history = reverse @history;
     my %tt_vars = ( node          => $node,
-		    version       => $curr_version,
+            version       => $curr_version,
                     not_deletable => 1,
                     not_editable  => 1,
                     deter_robots  => 1,
-		    history       => \@history );
+            history       => \@history );
     return %tt_vars if $args{return_tt_vars};
     my $output = $self->process_template(
                                           id       => $node,
@@ -619,7 +619,7 @@ sub display_rss {
     }
 
     my $rdf_writer = OpenGuides::RDF->new( wiki   => $self->wiki,
-					   config => $self->config );
+                       config => $self->config );
     my $output = "Content-Type: text/plain\n";
     $output .= "Last-Modified: " . $rdf_writer->rss_timestamp( %criteria ) . "\n\n";
     $output .= $rdf_writer->make_recentchanges_rss( %criteria );
@@ -679,7 +679,7 @@ sub commit_node {
     my %metadata = OpenGuides::Template->extract_metadata_vars(
         wiki    => $wiki,
         config  => $config,
-	cgi_obj => $q
+    cgi_obj => $q
     );
 
     $metadata{opening_hours_text} = $q->param("hours_text") || "";
@@ -695,24 +695,24 @@ sub commit_node {
     foreach my $type (qw(Category Locale)) {
         my $lctype = lc($type);
         foreach my $index (@{$metadata{$lctype}}) {
-	    $index =~ s/(.*)/\u$1/;
-	    my $node = $type . " " . $index;
-	    # Uppercase the node name before checking for existence
-	    $node =~ s/ (\S+)/ \u$1/g;
-	    unless ( $wiki->node_exists($node) ) {
-	        my $category = $type eq "Category" ? "Category" : "Locales";
-		$wiki->write_node( $node,
-		                   "\@INDEX_LINK [[$node]]",
-				   undef,
-				   { username => "Auto Create",
-				     comment  => "Auto created $lctype stub page",
-				     category => $category
-				   }
-		);
-	    }
-	}
+        $index =~ s/(.*)/\u$1/;
+        my $node = $type . " " . $index;
+        # Uppercase the node name before checking for existence
+        $node =~ s/ (\S+)/ \u$1/g;
+        unless ( $wiki->node_exists($node) ) {
+            my $category = $type eq "Category" ? "Category" : "Locales";
+        $wiki->write_node( $node,
+                           "\@INDEX_LINK [[$node]]",
+                   undef,
+                   { username => "Auto Create",
+                     comment  => "Auto created $lctype stub page",
+                     category => $category
+                   }
+        );
+        }
     }
-	
+    }
+    
     foreach my $var ( qw( username comment edit_type ) ) {
         $metadata{$var} = $q->param($var) || "";
     }
@@ -839,10 +839,10 @@ sub delete_node {
 sub process_template {
     my ($self, %args) = @_;
     my %output_conf = ( wiki     => $self->wiki,
-			config   => $self->config,
-                        node     => $args{id},
-			template => $args{template},
-			vars     => $args{tt_vars},
+            config   => $self->config,
+            node     => $args{id},
+            template => $args{template},
+            vars     => $args{tt_vars},
                         cookies  => $args{cookies},
     );
     if ( $args{content_type} ) {
