@@ -84,6 +84,10 @@ td.recentchanges_user
     Used in: recent_changes.tt
     Purpose: User who made a change
 
+div.hit_summary
+    Used in: supersearch.tt
+    Purpose: One-line summary of individual search result.
+
 IDs
 ---
 	

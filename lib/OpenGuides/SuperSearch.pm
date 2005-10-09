@@ -252,6 +252,11 @@ sub run {
     my $formatter = $self->wiki->formatter;
     foreach my $i ( 0 .. $#results ) {
         my $name = $results[$i]{name};
+
+        # Add the one-line summary of the node, if there is one.
+        my %node = $self->wiki->retrieve_node($name);
+        $results[$i]{summary} = $node{metadata}{summary}[0];
+
         my $node_param = $formatter->node_name_to_node_param( $name );
         $results[$i]{url} = $self->{wikimain} . "?$node_param";
     }
