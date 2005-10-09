@@ -111,8 +111,8 @@ sub output {
     my $custom_template_path = $config->custom_template_path || "";
     my $tt = Template->new( { INCLUDE_PATH => "$custom_template_path:$template_path" } );
 
-    my $script_name = $config->script_name;
-    my $script_url  = $config->script_url;
+    my $script_name  = $config->script_name;
+    my $script_url   = $config->script_url;
     my $default_city = $config->default_city;
     
     # Check cookie to see if we need to set the formatting_rules_link.
@@ -126,7 +126,7 @@ sub output {
         if (( $formatting_rules_node ) and !( $formatting_rules_link )){
             $formatting_rules_link = $script_url . $script_name . "?"
                                    . uri_escape($args{wiki}->formatter->node_name_to_node_param($formatting_rules_node));
-    }
+        }
     }
 
     my $enable_page_deletion = 0;
