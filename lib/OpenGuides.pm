@@ -114,21 +114,21 @@ sub differ {
 
   # Print node to STDOUT.
   $guide->display_node(
-                        id      => "Calthorpe Arms",
-                        version => 2,
+                          id      => "Calthorpe Arms",
+                          version => 2,
                       );
 
   # Or return output as a string (useful for writing tests).
   $guide->display_node(
-                        id            => "Calthorpe Arms",
-                        return_output => 1,
+                          id            => "Calthorpe Arms",
+                          return_output => 1,
                       );
 
   # Or return the hash of variables that will be passed to the template
   # (not including those set additionally by OpenGuides::Template).
   $guide->display_node(
-                        id             => "Calthorpe Arms",
-                        return_tt_vars => 1,
+                          id             => "Calthorpe Arms",
+                          return_tt_vars => 1,
                       );
 
 If C<version> is omitted then the latest version will be displayed.
@@ -173,17 +173,18 @@ sub display_node {
     my %metadata_vars = OpenGuides::Template->extract_metadata_vars(
                             wiki     => $wiki,
                             config   => $config,
-                            metadata => $node_data{metadata} );
+                            metadata => $node_data{metadata}
+                        );
 
     %tt_vars = (
-                 %tt_vars,
-                 %metadata_vars,
-                 content       => $content,
-                 last_modified => $modified,
-                 version       => $node_data{version},
-                 node          => $id,
-                 language      => $config->default_language,
-                 oldid         => $oldid,
+                   %tt_vars,
+                   %metadata_vars,
+                   content       => $content,
+                   last_modified => $modified,
+                   version       => $node_data{version},
+                   node          => $id,
+                   language      => $config->default_language,
+                   oldid         => $oldid,
                );
 
     if ( $raw =~ /^#REDIRECT\s+(.+?)\s*$/ ) {
@@ -231,18 +232,18 @@ sub display_node {
 
             @rc = map {
                 {
-                  name        => CGI->escapeHTML($_->{name}),
-                  last_modified => CGI->escapeHTML($_->{last_modified}),
-                  version     => CGI->escapeHTML($_->{version}),
-                  comment     => CGI->escapeHTML($_->{metadata}{comment}[0]),
-                  username    => CGI->escapeHTML($_->{metadata}{username}[0]),
-                  host        => CGI->escapeHTML($_->{metadata}{host}[0]),
-                  username_param => CGI->escape($_->{metadata}{username}[0]),
-                  edit_type   => CGI->escapeHTML($_->{metadata}{edit_type}[0]),
-                  url         => $config->script_name . "?"
-          . CGI->escape($wiki->formatter->node_name_to_node_param($_->{name})),
-            }
-                       } @rc;
+                    name           => CGI->escapeHTML($_->{name}),
+                    last_modified  => CGI->escapeHTML($_->{last_modified}),
+                    version        => CGI->escapeHTML($_->{version}),
+                    comment        => CGI->escapeHTML($_->{metadata}{comment}[0]),
+                    username       => CGI->escapeHTML($_->{metadata}{username}[0]),
+                    host           => CGI->escapeHTML($_->{metadata}{host}[0]),
+                    username_param => CGI->escape($_->{metadata}{username}[0]),
+                    edit_type      => CGI->escapeHTML($_->{metadata}{edit_type}[0]),
+                    url            => $config->script_name . "?"
+                                   . CGI->escape($wiki->formatter->node_name_to_node_param($_->{name})),
+                }
+            } @rc;
             if ( scalar @rc ) {
                 $recent_changes{since} = \@rc;
             }
@@ -254,33 +255,32 @@ sub display_node {
                 my @rc = $self->{wiki}->list_recent_changes( %criteria );
 
                 @rc = map {
-                {
-                  name        => CGI->escapeHTML($_->{name}),
-                  last_modified => CGI->escapeHTML($_->{last_modified}),
-                  version     => CGI->escapeHTML($_->{version}),
-                  comment     => CGI->escapeHTML($_->{metadata}{comment}[0]),
-                  username    => CGI->escapeHTML($_->{metadata}{username}[0]),
-                  host        => CGI->escapeHTML($_->{metadata}{host}[0]),
-                  username_param => CGI->escape($_->{metadata}{username}[0]),
-                  edit_type   => CGI->escapeHTML($_->{metadata}{edit_type}[0]),
-                  url         => $config->script_name . "?"
-          . CGI->escape($wiki->formatter->node_name_to_node_param($_->{name})),
-            }
-                           } @rc;
+                    {
+                        name           => CGI->escapeHTML($_->{name}),
+                        last_modified  => CGI->escapeHTML($_->{last_modified}),
+                        version        => CGI->escapeHTML($_->{version}),
+                        comment        => CGI->escapeHTML($_->{metadata}{comment}[0]),
+                        username       => CGI->escapeHTML($_->{metadata}{username}[0]),
+                        host           => CGI->escapeHTML($_->{metadata}{host}[0]),
+                        username_param => CGI->escape($_->{metadata}{username}[0]),
+                        edit_type      => CGI->escapeHTML($_->{metadata}{edit_type}[0]),
+                        url            => $config->script_name . "?"
+                                          . CGI->escape($wiki->formatter->node_name_to_node_param($_->{name})),
+                    }
+                } @rc;
                 if ( scalar @rc ) {
                     $recent_changes{$days->[1]} = \@rc;
-            }
+                }
             }
         }
         $tt_vars{recent_changes} = \%recent_changes;
         my %processing_args = (
-                                id            => $id,
-                                template      => "recent_changes.tt",
-                                tt_vars       => \%tt_vars,
-                               );
+                                  id            => $id,
+                                  template      => "recent_changes.tt",
+                                  tt_vars       => \%tt_vars,
+                              );
         if ( !$since && $self->get_cookie("track_recent_changes_views") ) {
-        my $cookie =
-               OpenGuides::CGI->make_recent_changes_cookie(config => $config );
+            my $cookie = OpenGuides::CGI->make_recent_changes_cookie(config => $config );
             $processing_args{cookies} = $cookie;
             $tt_vars{last_viewed} = OpenGuides::CGI->get_last_recent_changes_visit_from_cookie( config => $config );
         }
@@ -293,29 +293,32 @@ sub display_node {
             last_n_changes => 10,
             metadata_was   => { edit_type => "Normal edit" },
         );
-        @recent = map { {name          => CGI->escapeHTML($_->{name}),
-                         last_modified => CGI->escapeHTML($_->{last_modified}),
-                         version       => CGI->escapeHTML($_->{version}),
-                         comment       => CGI->escapeHTML($_->{metadata}{comment}[0]),
-                         username      => CGI->escapeHTML($_->{metadata}{username}[0]),
-                         url           => $config->script_name . "?"
-          . CGI->escape($wiki->formatter->node_name_to_node_param($_->{name})) }
-                       } @recent;
+        @recent = map {
+                          {
+                              name          => CGI->escapeHTML($_->{name}),
+                              last_modified => CGI->escapeHTML($_->{last_modified}),
+                              version       => CGI->escapeHTML($_->{version}),
+                              comment       => CGI->escapeHTML($_->{metadata}{comment}[0]),
+                              username      => CGI->escapeHTML($_->{metadata}{username}[0]),
+                              url           => $config->script_name . "?"
+                                               . CGI->escape($wiki->formatter->node_name_to_node_param($_->{name}))
+                          }
+                      } @recent;
         $tt_vars{recent_changes} = \@recent;
         return %tt_vars if $args{return_tt_vars};
         my $output = $self->process_template(
-                                              id            => $id,
-                                              template      => "home_node.tt",
-                                              tt_vars       => \%tt_vars,
+                                                id            => $id,
+                                                template      => "home_node.tt",
+                                                tt_vars       => \%tt_vars,
                                             );
         return $output if $return_output;
         print $output;
     } else {
         return %tt_vars if $args{return_tt_vars};
         my $output = $self->process_template(
-                                              id            => $id,
-                                              template      => "node.tt",
-                                              tt_vars       => \%tt_vars,
+                                                id            => $id,
+                                                template      => "node.tt",
+                                                tt_vars       => \%tt_vars,
                                             );
         return $output if $return_output;
         print $output;
@@ -325,26 +328,26 @@ sub display_node {
 =item B<display_diffs>
 
   $guide->display_diffs(
-                         id            => "Home Page",
-                         version       => 6,
-                         other_version => 5,
+                           id            => "Home Page",
+                           version       => 6,
+                           other_version => 5,
                        );
 
   # Or return output as a string (useful for writing tests).
   my $output = $guide->display_diffs(
-                                      id            => "Home Page",
-                                      version       => 6,
-                                      other_version => 5,
-                                      return_output => 1,
+                                        id            => "Home Page",
+                                        version       => 6,
+                                        other_version => 5,
+                                        return_output => 1,
                                     );
 
   # Or return the hash of variables that will be passed to the template
   # (not including those set additionally by OpenGuides::Template).
   my %vars = $guide->display_diffs(
-                                    id             => "Home Page",
-                                    version        => 6,
-                                    other_version  => 5,
-                                    return_tt_vars => 1,
+                                      id             => "Home Page",
+                                      version        => 6,
+                                      other_version  => 5,
+                                      return_tt_vars => 1,
                                   );
 
 =cut
@@ -352,18 +355,18 @@ sub display_node {
 sub display_diffs {
     my ($self, %args) = @_;
     my %diff_vars = $self->differ->differences(
-                                        node          => $args{id},
-                                        left_version  => $args{version},
-                                   right_version => $args{other_version},
+                                                  node          => $args{id},
+                                                  left_version  => $args{version},
+                                                  right_version => $args{other_version},
                                               );
     $diff_vars{not_deletable} = 1;
-    $diff_vars{not_editable} = 1;
-    $diff_vars{deter_robots} = 1;
+    $diff_vars{not_editable}  = 1;
+    $diff_vars{deter_robots}  = 1;
     return %diff_vars if $args{return_tt_vars};
     my $output = $self->process_template(
-                                          id       => $args{id},
-                                          template => "differences.tt",
-                                          tt_vars  => \%diff_vars
+                                            id       => $args{id},
+                                            template => "differences.tt",
+                                            tt_vars  => \%diff_vars
                                         );
     return $output if $args{return_output};
     print $output;
@@ -372,8 +375,8 @@ sub display_diffs {
 =item B<find_within_distance>
 
   $guide->find_within_distance(
-                                id => $node,
-                                metres => $q->param("distance_in_metres")
+                                  id => $node,
+                                  metres => $q->param("distance_in_metres")
                               );
 
 =cut
@@ -406,9 +409,11 @@ sub show_backlinks {
 
     my @backlinks = $wiki->list_backlinks( node => $args{id} );
     my @results = map {
-        { url   => CGI->escape($formatter->node_name_to_node_param($_)),
-      title => CGI->escapeHTML($_)
-        }             } sort @backlinks;
+                          {
+                              url   => CGI->escape($formatter->node_name_to_node_param($_)),
+                              title => CGI->escapeHTML($_)
+                          }
+                      } sort @backlinks;
     my %tt_vars = ( results       => \@results,
                     num_results   => scalar @results,
                     not_deletable => 1,
@@ -416,11 +421,11 @@ sub show_backlinks {
                     not_editable  => 1 );
     return %tt_vars if $args{return_tt_vars};
     my $output = OpenGuides::Template->output(
-                                               node    => $args{id},
-                                               wiki    => $wiki,
-                                               config  => $self->config,
-                                               template=>"backlink_results.tt",
-                                               vars    => \%tt_vars,
+                                                 node    => $args{id},
+                                                 wiki    => $wiki,
+                                                 config  => $self->config,
+                                                 template=>"backlink_results.tt",
+                                                 vars    => \%tt_vars,
                                              );
     return $output if $args{return_output};
     print $output;
@@ -429,22 +434,22 @@ sub show_backlinks {
 =item B<show_index>
 
   $guide->show_index(
-                      type   => "category",
-                      value  => "pubs",
+                        type   => "category",
+                        value  => "pubs",
                     );
 
   # RDF version.
   $guide->show_index(
-                      type   => "locale",
-                      value  => "Holborn",
-                      format => "rdf",
+                        type   => "locale",
+                        value  => "Holborn",
+                        format => "rdf",
                     );
 
   # Or return output as a string (useful for writing tests).
   $guide->show_index(
-                      type          => "category",
-                      value         => "pubs",
-                      return_output => 1,
+                        type          => "category",
+                        value         => "pubs",
+                        return_output => 1,
                     );
 
 =cut
@@ -464,67 +469,64 @@ sub show_index {
                 type  => $args{type},  # for RDF version
                 value => $args{value}, # for RDF version
                 name  => CGI->escapeHTML("Fuzzy Title Match on '$args{value}'")
-        };
-        $tt_vars{not_editable} = 1;
+            };
+            $tt_vars{not_editable} = 1;
         } else {
             @selnodes = $wiki->list_nodes_by_metadata(
                 metadata_type  => $args{type},
-            metadata_value => $args{value},
+                metadata_value => $args{value},
                 ignore_case    => 1
             );
-            my $name = ucfirst($args{type}) . " $args{value}" ;
+            my $name = ucfirst($args{type}) . " $args{value}";
             my $url = $self->config->script_name
                       . "?"
                       . ucfirst( $args{type} )
                       . "_"
                       . uri_escape(
-                              $formatter->node_name_to_node_param($args{value})
+                                      $formatter->node_name_to_node_param($args{value})
                                   );
             $tt_vars{criterion} = {
                 type  => $args{type},
                 value => $args{value}, # for RDF version
                 name  => CGI->escapeHTML( $name ),
-            url   => $url
+                url   => $url
             };
-        $tt_vars{not_editable} = 1;
+            $tt_vars{not_editable} = 1;
         }
     } else {
         @selnodes = $wiki->list_all_nodes();
     }
 
-    my @nodes = map { { name      => $_,
-                        node_data => { $wiki->retrieve_node( name => $_ ) },
-            param     => $formatter->node_name_to_node_param($_) }
-            } sort @selnodes;
+    my @nodes = map {
+                        {
+                            name      => $_,
+                            node_data => { $wiki->retrieve_node( name => $_ ) },
+                            param     => $formatter->node_name_to_node_param($_) }
+                        } sort @selnodes;
 
     $tt_vars{nodes} = \@nodes;
 
     my ($template, %conf);
 
-    if ( $args{format} )
-    {
-      if ( $args{format} eq "rdf" )
-      {
-    $template = "rdf_index.tt";
-        $conf{content_type} = "text/plain";
-      }
-      elsif ( $args{format} eq "plain" )
-      {
-        $template = "plain_index.tt";
-        $conf{content_type} = "text/plain";
-      }
-    }
-    else
-    {
-      $template = "site_index.tt";
+    if ( $args{format} ) {
+        if ( $args{format} eq "rdf" ) {
+            $template = "rdf_index.tt";
+            $conf{content_type} = "text/plain";
+        }
+        elsif ( $args{format} eq "plain" ) {
+            $template = "plain_index.tt";
+            $conf{content_type} = "text/plain";
+        }
+    } else {
+        $template = "site_index.tt";
     }
 
     %conf = (
-              %conf,
-              node        => "$args{type} index", # KLUDGE
-              template    => $template,
-              tt_vars     => \%tt_vars,
-    );
+                %conf,
+                node        => "$args{type} index", # KLUDGE
+                template    => $template,
+                tt_vars     => \%tt_vars,
+            );
 
     my $output = $self->process_template( %conf );
     return $output if $args{return_output};
@@ -537,15 +539,15 @@ sub show_index {
 
   # Or return output as a string (useful for writing tests).
   $guide->list_all_versions (
-                              id            => "Home Page",
-                              return_output => 1,
+                                id            => "Home Page",
+                                return_output => 1,
                             );
 
   # Or return the hash of variables that will be passed to the template
   # (not including those set additionally by OpenGuides::Template).
   $guide->list_all_versions (
-                              id             => "Home Page",
-                              return_tt_vars => 1,
+                                id             => "Home Page",
+                                return_tt_vars => 1,
                             );
 
 =cut
@@ -559,27 +561,29 @@ sub list_all_versions {
     my @history;
     for my $version ( 1 .. $curr_version ) {
         my %node_data = $self->wiki->retrieve_node( name    => $node,
-                                  version => $version );
+                                                    version => $version );
         # $node_data{version} will be zero if this version was deleted.
-    push @history, {
+        push @history, {
             version  => CGI->escapeHTML( $version ),
-        modified => CGI->escapeHTML( $node_data{last_modified} ),
+            modified => CGI->escapeHTML( $node_data{last_modified} ),
             username => CGI->escapeHTML( $node_data{metadata}{username}[0] ),
             comment  => CGI->escapeHTML( $node_data{metadata}{comment}[0] ),
                        } if $node_data{version};
     }
     @history = reverse @history;
-    my %tt_vars = ( node          => $node,
-            version       => $curr_version,
-                    not_deletable => 1,
-                    not_editable  => 1,
-                    deter_robots  => 1,
-            history       => \@history );
+    my %tt_vars = (
+                      node          => $node,
+                      version       => $curr_version,
+                      not_deletable => 1,
+                      not_editable  => 1,
+                      deter_robots  => 1,
+                      history       => \@history
+                  );
     return %tt_vars if $args{return_tt_vars};
     my $output = $self->process_template(
-                                          id       => $node,
-                                          template => "node_history.tt",
-                                          tt_vars  => \%tt_vars,
+                                            id       => $node,
+                                            template => "node_history.tt",
+                                            tt_vars  => \%tt_vars,
                                         );
     return $output if $return_output;
     print $output;
@@ -589,16 +593,16 @@ sub list_all_versions {
 
   # Last ten non-minor edits to Hammersmith pages.
   $guide->display_rss(
-                       items              => 10,
-                       ignore_minor_edits => 1,
-                       locale             => "Hammersmith",
+                         items              => 10,
+                         ignore_minor_edits => 1,
+                         locale             => "Hammersmith",
                      );
 
   # All edits bob has made to pub pages in the last week.
   $guide->display_rss(
-                       days     => 7,
-                       username => "bob",
-                       category => "Pubs",
+                         days     => 7,
+                         username => "bob",
+                         category => "Pubs",
                      );
 
 As with other methods, the C<return_output> parameter can be used to
@@ -618,9 +622,9 @@ sub display_rss {
     my $category = $args{category} || "";
     my $locale   = $args{locale}   || "";
     my %criteria = (
-                     items              => $items,
-                     days               => $days,
-                     ignore_minor_edits => $ignore_minor_edits,
+                       items              => $items,
+                       days               => $days,
+                       ignore_minor_edits => $ignore_minor_edits,
                    );
     my %filter;
     $filter{username} = $username if $username;
@@ -630,8 +634,10 @@ sub display_rss {
         $criteria{filter_on_metadata} = \%filter;
     }
 
-    my $rdf_writer = OpenGuides::RDF->new( wiki   => $self->wiki,
-                       config => $self->config );
+    my $rdf_writer = OpenGuides::RDF->new(
+                                             wiki   => $self->wiki,
+                                             config => $self->config
+                                         );
     my $output = "Content-Type: text/plain\n";
     $output .= "Last-Modified: " . $rdf_writer->rss_timestamp( %criteria ) . "\n\n";
     $output .= $rdf_writer->make_recentchanges_rss( %criteria );
@@ -642,8 +648,8 @@ sub display_rss {
 =item B<commit_node>
 
   $guide->commit_node(
-                       id      => $node,
-                       cgi_obj => $q,
+                         id      => $node,
+                         cgi_obj => $q,
                      );
 
 As with other methods, parameters C<return_tt_vars> and
@@ -707,22 +713,24 @@ sub commit_node {
     foreach my $type (qw(Category Locale)) {
         my $lctype = lc($type);
         foreach my $index (@{$metadata{$lctype}}) {
-        $index =~ s/(.*)/\u$1/;
-        my $node = $type . " " . $index;
-        # Uppercase the node name before checking for existence
-        $node =~ s/ (\S+)/ \u$1/g;
-        unless ( $wiki->node_exists($node) ) {
-            my $category = $type eq "Category" ? "Category" : "Locales";
-        $wiki->write_node( $node,
-                           "\@INDEX_LINK [[$node]]",
-                   undef,
-                   { username => "Auto Create",
-                     comment  => "Auto created $lctype stub page",
-                     category => $category
-                   }
-        );
+            $index =~ s/(.*)/\u$1/;
+            my $node = $type . " " . $index;
+            # Uppercase the node name before checking for existence
+            $node =~ s/ (\S+)/ \u$1/g;
+            unless ( $wiki->node_exists($node) ) {
+                my $category = $type eq "Category" ? "Category" : "Locales";
+                $wiki->write_node(
+                                     $node,
+                                     "\@INDEX_LINK [[$node]]",
+                                     undef,
+                                     {
+                                         username => "Auto Create",
+                                         comment  => "Auto created $lctype stub page",
+                                         category => $category
+                                     }
+                                 );
+            }
         }
-    }
     }
     
     foreach my $var ( qw( username comment edit_type ) ) {
@@ -776,9 +784,9 @@ sub commit_node {
 =item B<delete_node>
 
   $guide->delete_node(
-                       id       => "FAQ",
-                       version  => 15,
-                       password => "beer",
+                         id       => "FAQ",
+                         version  => 15,
+                         password => "beer",
                      );
 
 C<version> is optional - if it isn't supplied then all versions of the
@@ -801,9 +809,9 @@ sub delete_node {
     my $return_output = $args{return_output} || 0;
 
     my %tt_vars = (
-                    not_editable  => 1,
-                    not_deletable => 1,
-                    deter_robots  => 1,
+                      not_editable  => 1,
+                      not_deletable => 1,
+                      deter_robots  => 1,
                   );
     $tt_vars{delete_version} = $args{version} || "";
 
@@ -813,36 +821,36 @@ sub delete_node {
         if ($password ne $self->config->admin_pass) {
             return %tt_vars if $return_tt_vars;
             my $output = $self->process_template(
-                                     id       => $node,
-                                     template => "delete_password_wrong.tt",
-                                     tt_vars  => \%tt_vars,
-                                   );
+                                                    id       => $node,
+                                                    template => "delete_password_wrong.tt",
+                                                    tt_vars  => \%tt_vars,
+                                                );
             return $output if $return_output;
             print $output;
         } else {
             $self->wiki->delete_node(
-                                      name    => $node,
-                                      version => $args{version},
+                                        name    => $node,
+                                        version => $args{version},
                                     );
             # Check whether any versions of this node remain.
             my %check = $self->wiki->retrieve_node( name => $node );
             $tt_vars{other_versions_remain} = 1 if $check{version};
             return %tt_vars if $return_tt_vars;
             my $output = $self->process_template(
-                                     id       => $node,
-                                     template => "delete_done.tt",
-                                     tt_vars  => \%tt_vars,
-                                   );
+                                                    id       => $node,
+                                                    template => "delete_done.tt",
+                                                    tt_vars  => \%tt_vars,
+                                                );
             return $output if $return_output;
             print $output;
         }
     } else {
         return %tt_vars if $return_tt_vars;
         my $output = $self->process_template(
-                                 id       => $node,
-                                 template => "delete_confirm.tt",
-                                 tt_vars  => \%tt_vars,
-                               );
+                                                id       => $node,
+                                                template => "delete_confirm.tt",
+                                                tt_vars  => \%tt_vars,
+                                            );
         return $output if $return_output;
         print $output;
     }
@@ -851,13 +859,13 @@ sub delete_node {
 sub process_template {
     my ($self, %args) = @_;
     my %output_conf = (
-            wiki     => $self->wiki,
-            config   => $self->config,
-            node     => $args{id},
-            template => $args{template},
-            vars     => $args{tt_vars},
-            cookies  => $args{cookies},
-    );
+                          wiki     => $self->wiki,
+                          config   => $self->config,
+                          node     => $args{id},
+                          template => $args{template},
+                          vars     => $args{tt_vars},
+                          cookies  => $args{cookies},
+                      );
     if ( $args{content_type} ) {
         $output_conf{content_type} = "";
         my $output = "Content-Type: $args{content_type}\n\n"
