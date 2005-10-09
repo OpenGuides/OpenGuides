@@ -126,7 +126,7 @@ sub output {
         if (( $formatting_rules_node ) and !( $formatting_rules_link )){
             $formatting_rules_link = $script_url . $script_name . "?"
                                    . uri_escape($args{wiki}->formatter->node_name_to_node_param($formatting_rules_node));
-	}
+    }
     }
 
     my $enable_page_deletion = 0;
@@ -137,21 +137,22 @@ sub output {
         $enable_page_deletion = 1;
     }
 
-    my $tt_vars = { site_name             => $config->site_name,
-	   	    cgi_url               => $script_name,
-		    full_cgi_url          => $script_url . $script_name,
-		    contact_email         => $config->contact_email,
-		    stylesheet            => $config->stylesheet_url,
-		    home_link             => $script_url . $script_name,
-		    home_name             => $config->home_name,
-                    navbar_on_home_page   => $config->navbar_on_home_page,
-                    omit_help_links       => $omit_help_links,
-                    formatting_rules_link => $formatting_rules_link,
-                    formatting_rules_node => $formatting_rules_node,
-                    openguides_version    => $OpenGuides::VERSION,
-                    enable_page_deletion  => $enable_page_deletion,
-                    language              => $config->default_language,
-                    default_city          => $default_city,
+    my $tt_vars = {
+        site_name             => $config->site_name,
+        cgi_url               => $script_name,
+        full_cgi_url          => $script_url . $script_name,
+        contact_email         => $config->contact_email,
+        stylesheet            => $config->stylesheet_url,
+        home_link             => $script_url . $script_name,
+        home_name             => $config->home_name,
+        navbar_on_home_page   => $config->navbar_on_home_page,
+        omit_help_links       => $omit_help_links,
+        formatting_rules_link => $formatting_rules_link,
+        formatting_rules_node => $formatting_rules_node,
+        openguides_version    => $OpenGuides::VERSION,
+        enable_page_deletion  => $enable_page_deletion,
+        language              => $config->default_language,
+        default_city          => $default_city,
     };
 
     if ($args{node}) {
@@ -170,11 +171,12 @@ sub output {
 
     # vile hack
     my %field_vars = OpenGuides::Template->extract_metadata_vars(
-                                        wiki                 => $args{wiki},
-                                        config               => $config,
-                                        set_coord_field_vars => 1,
-                                        metadata => {},
-      		                                           );
+                         wiki                 => $args{wiki},
+                         config               => $config,
+                         set_coord_field_vars => 1,
+                         metadata => {},
+                     );
+                     
     $tt_vars = { %field_vars, %$tt_vars };
 
     my $output;
@@ -193,25 +195,28 @@ sub output {
   my %node_data = $wiki->retrieve_node( "Home Page" );
 
   my %metadata_vars = OpenGuides::Template->extract_metadata_vars(
-                                        wiki     => $wiki,
-                                        config   => $config,
-                                        metadata => $node_data{metadata} );
+                          wiki     => $wiki,
+                          config   => $config,
+                          metadata => $node_data{metadata}
+                      );
 
   # -- or --
 
   my %metadata_vars = OpenGuides::Template->extract_metadata_vars(
-                                        wiki     => $wiki,
-                                        config   => $config,
-					cgi_obj  => $q );
+                          wiki     => $wiki,
+                          config   => $config,
+                          cgi_obj  => $q
+                      );
 
   # -- then --
 
-  print OpenGuides::Template->output( wiki     => $wiki,
-                                      config   => $config,
-                                      template => "node.tt",
-                                      vars     => { foo => "bar",
-                                                    %metadata_vars }
-				     );
+  print OpenGuides::Template->output(
+            wiki     => $wiki,
+            config   => $config,
+            template => "node.tt",
+            vars     => { foo => "bar",
+                          %metadata_vars }
+        );
 
 Picks out things like categories, locales, phone number etc from
 EITHER the metadata hash returned by L<CGI::Wiki> OR the query
@@ -246,11 +251,11 @@ sub extract_metadata_vars {
         @catlist = @{ $metadata{category} || [] };
         @loclist = @{ $metadata{locale}   || [] };
     } else {
-	my $categories_text = $q->param('categories');
-	my $locales_text    = $q->param('locales');
-	@catlist = sort map { s/^\s+//; s/\s+$//; $_; } # trim lead/trail space
+        my $categories_text = $q->param('categories');
+        my $locales_text    = $q->param('locales');
+        @catlist = sort map { s/^\s+//; s/\s+$//; $_; } # trim lead/trail space
                         split("\r\n", $categories_text);
-	@loclist = sort map { s/^\s+//; s/\s+$//; $_; } # trim lead/trail space
+        @loclist = sort map { s/^\s+//; s/\s+$//; $_; } # trim lead/trail space
                         split("\r\n", $locales_text);
     }
 
@@ -270,18 +275,19 @@ sub extract_metadata_vars {
     if ( $website ) {
         $formatted_website_text = $class->format_website_text(
             formatter => $formatter,
-            text      => $website );
+            text      => $website
+        );
     }
 
     my $hours_text = $args{metadata} ? $metadata{opening_hours_text}[0]
-   	                             : $q->param("hours_text");
+                                    : $q->param("hours_text");
     my %vars = (
         categories             => \@categories,
-	locales                => \@locales,
-	category               => \@catlist,
+        locales                => \@locales,
+        category               => \@catlist,
         locale                 => \@loclist,
-	formatted_website_text => $formatted_website_text,
-	hours_text             => $hours_text
+        formatted_website_text => $formatted_website_text,
+        hours_text             => $hours_text
     );
 
     if ( $args{metadata} ) {
@@ -293,38 +299,38 @@ sub extract_metadata_vars {
         my $geo_handler = $config->geo_handler;
         if ( $geo_handler == 1 ) {
             %vars = (
-                      %vars,
-                      coord_field_1       => "os_x",
-                      coord_field_2       => "os_y",
-                      dist_field          => "os_dist",
-                      coord_field_1_name  => "OS X coordinate",
-                      coord_field_2_name  => "OS Y coordinate",
-                      coord_field_1_value => $metadata{os_x}[0],
-                      coord_field_2_value => $metadata{os_y}[0],
+                        %vars,
+                        coord_field_1       => "os_x",
+                        coord_field_2       => "os_y",
+                        dist_field          => "os_dist",
+                        coord_field_1_name  => "OS X coordinate",
+                        coord_field_2_name  => "OS Y coordinate",
+                        coord_field_1_value => $metadata{os_x}[0],
+                        coord_field_2_value => $metadata{os_y}[0],
                     );
-	} elsif ( $geo_handler == 2 ) {
+        } elsif ( $geo_handler == 2 ) {
             %vars = (
-                      %vars,
-                      coord_field_1       => "osie_x",
-                      coord_field_2       => "osie_y",
-                      dist_field          => "osie_dist",
-                      coord_field_1_name  =>"Irish National Grid X coordinate",
-                      coord_field_2_name  =>"Irish National Grid Y coordinate",
-                      coord_field_1_value => $metadata{osie_x}[0],
-                      coord_field_2_value => $metadata{osie_y}[0],
+                        %vars,
+                        coord_field_1       => "osie_x",
+                        coord_field_2       => "osie_y",
+                        dist_field          => "osie_dist",
+                        coord_field_1_name  =>"Irish National Grid X coordinate",
+                        coord_field_2_name  =>"Irish National Grid Y coordinate",
+                        coord_field_1_value => $metadata{osie_x}[0],
+                        coord_field_2_value => $metadata{osie_y}[0],
                     );
-	} else {
+        } else {
             %vars = (
-                      %vars,
-                      coord_field_1       => "latitude",
-                      coord_field_2       => "longitude",
-                      dist_field          => "latlong_dist",
-                      coord_field_1_name  => "Latitude (decimal)",
-                      coord_field_2_name  => "Longitude (decimal)",
-                      coord_field_1_value => $metadata{latitude}[0],
-                      coord_field_2_value => $metadata{longitude}[0],
+                        %vars,
+                        coord_field_1       => "latitude",
+                        coord_field_2       => "longitude",
+                        dist_field          => "latlong_dist",
+                        coord_field_1_name  => "Latitude (decimal)",
+                        coord_field_2_name  => "Longitude (decimal)",
+                        coord_field_1_value => $metadata{latitude}[0],
+                        coord_field_2_value => $metadata{longitude}[0],
                     );
-	}
+        }
     } else {
         foreach my $var ( qw( phone fax address postcode map_link website) ) {
             $vars{$var} = $q->param($var);
@@ -332,11 +338,11 @@ sub extract_metadata_vars {
 
         my $geo_handler = $config->geo_handler;
         if ( $geo_handler == 1 ) {
-	    require Geography::NationalGrid::GB;
-   	    my $os_x   = $q->param("os_x");
-	    my $os_y   = $q->param("os_y");
-	    my $lat    = $q->param("latitude");
-	    my $long   = $q->param("longitude");
+            require Geography::NationalGrid::GB;
+            my $os_x   = $q->param("os_x");
+            my $os_y   = $q->param("os_y");
+            my $lat    = $q->param("latitude");
+            my $long   = $q->param("longitude");
 
             # Trim whitespace - trailing whitespace buggers up the
             # integerification by postgres and it's an easy mistake to
@@ -344,87 +350,89 @@ sub extract_metadata_vars {
             $os_x =~ s/\s+//g;
             $os_y =~ s/\s+//g;
 
-	    # If we were sent x and y, work out lat/long; and vice versa.
-  	    if ( $os_x && $os_y ) {
-	        my $point = Geography::NationalGrid::GB->new( Easting =>$os_x,
-		   					      Northing=>$os_y);
+            # If we were sent x and y, work out lat/long; and vice versa.
+            if ( $os_x && $os_y ) {
+                my $point = Geography::NationalGrid::GB->new( Easting =>$os_x,
+                                     Northing=>$os_y);
                 $lat  = sprintf("%.6f", $point->latitude);
                 $long = sprintf("%.6f", $point->longitude);
-	    } elsif ( $lat && $long ) {
-	        my $point = Geography::NationalGrid::GB->new(Latitude =>$lat,
-		   					     Longitude=>$long);
+            } elsif ( $lat && $long ) {
+                my $point = Geography::NationalGrid::GB->new(Latitude  => $lat,
+                                                             Longitude => $long);
                 $os_x = $point->easting;
                 $os_y = $point->northing;
-	    }
+            }
+            
             if ( $os_x && $os_y ) {
-	        %vars = (
-                          %vars,
-		          latitude  => $lat,
-	                  longitude => $long,
-	                  os_x      => $os_x,
-	                  os_y      => $os_y,
-	                );
-	    }
+                %vars = (
+                            %vars,
+                            latitude  => $lat,
+                            longitude => $long,
+                            os_x      => $os_x,
+                            os_y      => $os_y,
+                        );
+            }
             if ( $args{set_coord_field_vars} ) {
                 %vars = (
-                          %vars,
-                          coord_field_1       => "os_x",
-                          coord_field_2       => "os_y",
-                          dist_field          => "os_dist",
-                          coord_field_1_name  => "OS X coordinate",
-                          coord_field_2_name  => "OS Y coordinate",
-                          coord_field_1_value => $os_x,
-                          coord_field_2_value => $os_y,
+                            %vars,
+                            coord_field_1       => "os_x",
+                            coord_field_2       => "os_y",
+                            dist_field          => "os_dist",
+                            coord_field_1_name  => "OS X coordinate",
+                            coord_field_2_name  => "OS Y coordinate",
+                            coord_field_1_value => $os_x,
+                            coord_field_2_value => $os_y,
                         );
-	    }
-	} elsif ( $geo_handler == 2 ) {
-	    require Geography::NationalGrid::IE;
-   	    my $osie_x = $q->param("osie_x");
-	    my $osie_y = $q->param("osie_y");
-	    my $lat    = $q->param("latitude");
-	    my $long   = $q->param("longitude");
+            }
+        } elsif ( $geo_handler == 2 ) {
+            require Geography::NationalGrid::IE;
+            my $osie_x = $q->param("osie_x");
+            my $osie_y = $q->param("osie_y");
+            my $lat    = $q->param("latitude");
+            my $long   = $q->param("longitude");
 
             # Trim whitespace.
             $osie_x =~ s/\s+//g;
             $osie_y =~ s/\s+//g;
 
-	    # If we were sent x and y, work out lat/long; and vice versa.
-  	    if ( $osie_x && $osie_y ) {
-	        my $point = Geography::NationalGrid::IE->new(Easting=>$osie_x,
-		   					    Northing=>$osie_y);
+            # If we were sent x and y, work out lat/long; and vice versa.
+            if ( $osie_x && $osie_y ) {
+                my $point = Geography::NationalGrid::IE->new(Easting=>$osie_x,
+                                   Northing=>$osie_y);
                 $lat = sprintf("%.6f", $point->latitude);
-		$long = sprintf("%.6f", $point->longitude);
-	    } elsif ( $lat && $long ) {
-	        my $point = Geography::NationalGrid::GB->new(Latitude =>$lat,
-		   					     Longitude=>$long);
+                $long = sprintf("%.6f", $point->longitude);
+            } elsif ( $lat && $long ) {
+                my $point = Geography::NationalGrid::GB->new(Latitude  => $lat,
+                                                             Longitude => $long);
                 $osie_x = $point->easting;
                 $osie_y = $point->northing;
-	    }
-	    if ( $osie_x && $osie_y ) {
-	        %vars = (
-                          %vars,
-		          latitude  => $lat,
-	                  longitude => $long,
-	                  osie_x    => $osie_x,
-	                  osie_y    => $osie_y,
-	                );
-	    }
+            }
+            if ( $osie_x && $osie_y ) {
+                %vars = (
+                            %vars,
+                            latitude  => $lat,
+                            longitude => $long,
+                            osie_x    => $osie_x,
+                            osie_y    => $osie_y,
+                        );
+            }
             if ( $args{set_coord_field_vars} ) {
                 %vars = (
-                          %vars,
-                          coord_field_1       => "osie_x",
-                          coord_field_2       => "osie_y",
-                          dist_field          => "osie_dist",
-                     coord_field_1_name  => "Irish National Grid X coordinate",
-                     coord_field_2_name  => "Irish National Grid Y coordinate",
-                          coord_field_1_value => $osie_x,
-                          coord_field_2_value => $osie_y,
+                            %vars,
+                            coord_field_1       => "osie_x",
+                            coord_field_2       => "osie_y",
+                            dist_field          => "osie_dist",
+                            coord_field_1_name  => "Irish National Grid X coordinate",
+                            coord_field_2_name  => "Irish National Grid Y coordinate",
+                            coord_field_1_value => $osie_x,
+                            coord_field_2_value => $osie_y,
                         );
-	    }
-	} elsif ( $geo_handler == 3 ) {
-	    require Geo::Coordinates::UTM;
-	    my $lat    = $q->param("latitude");
-	    my $long   = $q->param("longitude");
+            }
+        } elsif ( $geo_handler == 3 ) {
+            require Geo::Coordinates::UTM;
+            my $lat    = $q->param("latitude");
+            my $long   = $q->param("longitude");
+            
             if ( $lat && $long ) {
                 # Trim whitespace.
                 $lat =~ s/\s+//g;
@@ -434,26 +442,27 @@ sub extract_metadata_vars {
                                                        $lat, $long );
                 $easting  =~ s/\..*//; # chop off decimal places
                 $northing =~ s/\..*//; # - metre accuracy enough
-	        %vars = ( %vars,
-		          latitude  => $lat,
-	                  longitude => $long,
-	                  easting   => $easting,
-	                  northing  => $northing,
-	                );
-	    }
-            if ( $args{set_coord_field_vars} ) {
                 %vars = (
-                          %vars,
-                          coord_field_1       => "latitude",
-                          coord_field_2       => "longitude",
-                          dist_field          => "latlong_dist",
-                          coord_field_1_name  => "Latitude (decimal)",
-                          coord_field_2_name  => "Longitude (decimal)",
-                          coord_field_1_value => $lat,
-                          coord_field_2_value => $long,
+                            %vars,
+                            latitude  => $lat,
+                            longitude => $long,
+                            easting   => $easting,
+                            northing  => $northing,
                         );
-	    }
-	}
+             }
+             if ( $args{set_coord_field_vars} ) {
+                %vars = (
+                            %vars,
+                            coord_field_1       => "latitude",
+                            coord_field_2       => "longitude",
+                            dist_field          => "latlong_dist",
+                            coord_field_1_name  => "Latitude (decimal)",
+                            coord_field_2_name  => "Longitude (decimal)",
+                            coord_field_1_value => $lat,
+                            coord_field_2_value => $long,
+                        );
+             }
+        }
     }
 
     # Check whether we need to munge lat and long.
