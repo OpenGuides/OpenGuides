@@ -77,6 +77,7 @@ sub emit_rdfxml {
     my $os_y               = $node_data{metadata}{os_y}[0]               || '';
     my $catrefs            = $node_data{metadata}{category};
     my @locales            = @{ $node_data{metadata}{locale} || [] };
+    my $summary            = $node_data{metadata}{summary}[0]            || '';
 
     # replace any errant characters in data to prevent illegal XML
     foreach ($phone, $fax, $website, $opening_hours_text, $postcode, $city, $country,
@@ -139,6 +140,8 @@ sub emit_rdfxml {
 
   <$objType rdf:ID="obj" dc:title="$node_name">
 };
+    $rdf .= "    <dc:description>$summary</dc:description>\n" if $summary;
+
     $rdf .= "\n    <!-- categories -->\n\n" if $catrefs;
     $rdf .= "    <dc:subject>$_</dc:subject>\n" foreach @{$catrefs};
     

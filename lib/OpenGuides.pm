@@ -733,7 +733,7 @@ sub commit_node {
         }
     }
     
-    foreach my $var ( qw( username comment edit_type ) ) {
+    foreach my $var ( qw( summary username comment edit_type ) ) {
         $metadata{$var} = $q->param($var) || "";
     }
     $metadata{host} = $ENV{REMOTE_ADDR};

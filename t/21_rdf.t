@@ -5,7 +5,7 @@ use OpenGuides::RDF;
 use OpenGuides::Utils;
 use OpenGuides::Test;
 use URI::Escape;
-use Test::More tests => 25;
+use Test::More tests => 26;
 
 eval { require DBD::SQLite; };
 my $have_sqlite = $@ ? 0 : 1;
@@ -57,7 +57,8 @@ SKIP: {
 			 website            => "test website",
 			 opening_hours_text => "test hours",
 			 latitude           => "51.524193",
-			 longitude          => "-0.114436"
+			 longitude          => "-0.114436",
+       summary            => "a nice pub",
                        }
     );
 
@@ -98,6 +99,7 @@ SKIP: {
     like( $rdfxml, qr|<postalCode>WC1X 8JR</postalCode>|, "postcode" );
     like( $rdfxml, qr|<geo:lat>51.524193</geo:lat>|, "latitude" );
     like( $rdfxml, qr|<geo:long>-0.114436</geo:long>|, "longitude" );
+    like( $rdfxml, qr|<dc:description>a nice pub</dc:description>|, "summary (description)" );
 
     like( $rdfxml, qr|<dc:date>|, "date element included" );
     unlike( $rdfxml, qr|<dc:date>1970|, "hasn't defaulted to the epoch" );

@@ -281,18 +281,24 @@ sub extract_metadata_vars {
 
     my $hours_text = $args{metadata} ? $metadata{opening_hours_text}[0]
                                     : $q->param("hours_text");
+
+    my $summary = $args{metadata} ? $metadata{summary}[0]
+                                  : $q->param("summary");
+                                  
     my %vars = (
         categories             => \@categories,
         locales                => \@locales,
         category               => \@catlist,
         locale                 => \@loclist,
         formatted_website_text => $formatted_website_text,
-        hours_text             => $hours_text
+        hours_text             => $hours_text,
+        summary                => $summary,
     );
 
     if ( $args{metadata} ) {
         foreach my $var ( qw( phone fax address postcode os_x os_y osie_x
-                              osie_y latitude longitude map_link website) ) {
+                              osie_y latitude longitude map_link website
+                              summary) ) {
             $vars{$var} = $metadata{$var}[0];
         }
         # Data for the distance search forms on the node display.
@@ -332,7 +338,7 @@ sub extract_metadata_vars {
                     );
         }
     } else {
-        foreach my $var ( qw( phone fax address postcode map_link website) ) {
+        foreach my $var ( qw( phone fax address postcode map_link website summary) ) {
             $vars{$var} = $q->param($var);
         }
 
