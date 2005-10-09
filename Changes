@@ -1,4 +1,5 @@
 0.51
+        Add "address" field that had got missed out from the RDF.
         Replace underscores in node names in redirection message with spaces.
         Redirection message now links to a rendered version of the old page
          rather than the editing view.

@@ -65,6 +65,7 @@ sub emit_rdfxml {
     my $fax                = $node_data{metadata}{fax}[0]                || '';
     my $website            = $node_data{metadata}{website}[0]            || '';
     my $opening_hours_text = $node_data{metadata}{opening_hours_text}[0] || '';
+    my $address            = $node_data{metadata}{address}[0]            || '';
     my $postcode           = $node_data{metadata}{postcode}[0]           || '';
     my $city               = $node_data{metadata}{city}[0]               || $self->{default_city};
     my $country            = $node_data{metadata}{country}[0]            || $self->{default_country};
@@ -91,7 +92,7 @@ sub emit_rdfxml {
     
     my ($is_geospatial, $objType);
 
-    if ($latitude || $longitude || $postcode || @locales) {
+    if ($os_x || $os_y || $latitude || $longitude || $address || $postcode || @locales) {
         $is_geospatial = 1;
         $objType    = 'geo:SpatialThing';
     } else {
@@ -140,30 +141,34 @@ sub emit_rdfxml {
 };
     $rdf .= "\n    <!-- categories -->\n\n" if $catrefs;
     $rdf .= "    <dc:subject>$_</dc:subject>\n" foreach @{$catrefs};
-    $rdf .= "\n    <!-- address and geospatial data -->\n\n" if $is_geospatial;
-    $rdf .= "    <city>$city</city>\n"                 if $city     && $is_geospatial;
-    $rdf .= "    <postalCode>$postcode</postalCode>\n" if $postcode && $is_geospatial;
-    $rdf .= "    <country>$country</country>\n"        if $country  && $is_geospatial;
+    
+    if ($is_geospatial)
+    {
+      $rdf .= "\n    <!-- address and geospatial data -->\n\n" if $is_geospatial;
+      $rdf .= "    <city>$city</city>\n"                 if $city;
+      $rdf .= "    <postalCode>$postcode</postalCode>\n" if $postcode;
+      $rdf .= "    <country>$country</country>\n"        if $country;
 
-    $rdf .= qq{
+      $rdf .= qq{
     <foaf:based_near>
       <wn:Neighborhood>
         <foaf:name>$_</foaf:name>
       </wn:Neighborhood>
     </foaf:based_near>\n} foreach @locales;
 
-    if ( $latitude && $longitude ) {
-        $rdf .= qq{
+      if ( $latitude && $longitude ) {
+          $rdf .= qq{
     <geo:lat>$latitude</geo:lat>
     <geo:long>$longitude</geo:long>\n};
-    }
+      }
 
-    if ( $os_x && $os_y ) {
-        $rdf .= qq{
+      if ( $os_x && $os_y ) {
+          $rdf .= qq{
     <os:x>$os_x</os:x>
     <os:y>$os_y</os:y>};
+      }
     }
-
+    
     $rdf .= "\n\n    <!-- contact information -->\n\n" if ($phone || $fax || $website || $opening_hours_text);
     $rdf .= "    <phone>$phone</phone>\n"                              if $phone;
     $rdf .= "    <fax>$fax</fax>\n"                                    if $fax;
