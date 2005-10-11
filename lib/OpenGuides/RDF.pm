@@ -147,7 +147,8 @@ sub emit_rdfxml {
     
     if ($is_geospatial)
     {
-      $rdf .= "\n    <!-- address and geospatial data -->\n\n" if $is_geospatial;
+      $rdf .= "\n    <!-- address and geospatial data -->\n\n";
+      $rdf .= "    <address>$address</address>\n"        if $address;
       $rdf .= "    <city>$city</city>\n"                 if $city;
       $rdf .= "    <postalCode>$postcode</postalCode>\n" if $postcode;
       $rdf .= "    <country>$country</country>\n"        if $country;
