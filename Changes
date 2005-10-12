@@ -8,8 +8,11 @@
           was being used.
         Replace underscores in node names in redirection message with spaces.
         Redirection message now links to a rendered version of the old page
-         rather than the editing view.
-         
+          rather than the editing view.
+        Fix bug in OpenGuides::SuperSearch that wasn't passing "latitude" and
+          "longitude" values to the search template when a distance search
+          was being done.
+        
 0.50    2 October 2005
         Remove rogue ampersand that had crept into the RSS feed.
         
