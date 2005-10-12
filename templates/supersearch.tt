@@ -35,10 +35,17 @@
       <tr>
         <th>Location:</th>
         <td>
+        [% IF coord_field_1 != 'latitude' %]
           <p>
             within <input type="text" name="[% dist_field %]" value="[% dist %]" size="5" maxlength="5" /> metres of<br />
             [% coord_field_1_name %] <input type="text" name="[% coord_field_1 %]" value="[% coord_field_1_value %]" size="10" maxlength="10" />,<br />
             [% coord_field_2_name %] <input type="text" name="[% coord_field_2 %]" value="[% coord_field_2_value %]" size="10" maxlength="10" />
+          </p>
+        [% END %]
+          <p>
+            within <input type="text" name="latlong_dist" value="[% dist %]" size="5" maxlength="5" /> metres of<br />
+            latitude (decimal) <input type="text" name="latitude" value="[% latitude %]" size="10" maxlength="10" />,<br />
+            longitude (decimal) <input type="text" name="longitude" value="[% longitude %]" size="10" maxlength="10" />
           </p>
         </td>
       </tr>
