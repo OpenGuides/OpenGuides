@@ -112,6 +112,11 @@ eval {
     } else { # Default is to display a node.
         if ( $format and $format eq "rdf" ) {
             display_node_rdf( node => $node );
+        } elsif ( $format and $format eq 'raw' ) {
+            $guide->display_node(
+                                  id       => $node,
+                                  format   => 'raw',
+                                );
         } else {
             my $version = $q->param("version");
         my $other_ver = $q->param("diffversion");

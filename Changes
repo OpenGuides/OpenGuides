@@ -1,4 +1,5 @@
 0.51
+        New "format=raw" option for outputting wiki text of a node. 
         New "summary" metadata field for one-line summaries of nodes.
         Add "summary" field to RDF as dc:description.
         Show node summary in search results.

@@ -170,6 +170,12 @@ sub display_node {
     my $modified   = $node_data{last_modified};
     my %metadata   = %{$node_data{metadata}};
 
+    if ($args{format} && $args{format} eq 'raw') {
+      print "Content-Type: text/plain\n\n";
+      print $raw;
+      exit 0;
+    }
+   
     my %metadata_vars = OpenGuides::Template->extract_metadata_vars(
                             wiki     => $wiki,
                             config   => $config,
