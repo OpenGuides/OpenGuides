@@ -13,7 +13,7 @@ use URI::Escape;
 
 use vars qw( $VERSION );
 
-$VERSION = '0.50';
+$VERSION = '0.51';
 
 =head1 NAME
 

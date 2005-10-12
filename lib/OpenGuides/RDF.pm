@@ -3,7 +3,7 @@ package OpenGuides::RDF;
 use strict;
 
 use vars qw( $VERSION );
-$VERSION = '0.071';
+$VERSION = '0.08';
 
 use CGI::Wiki::Plugin::RSS::ModWiki;
 use Time::Piece;
