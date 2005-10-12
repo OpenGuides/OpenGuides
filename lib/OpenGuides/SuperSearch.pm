@@ -155,6 +155,8 @@ sub run {
         $doing_search = 1;
         # Make sure to pass the criteria to the template.
         $tt_vars{dist} = $self->{distance_in_metres};
+        $tt_vars{latitude} = $self->{latitude};
+        $tt_vars{longitude} = $self->{longitude};
         if ( $self->config->geo_handler eq 1 ) {
             $tt_vars{coord_field_1_value} = $self->{os_x};
             $tt_vars{coord_field_2_value} = $self->{os_y};
