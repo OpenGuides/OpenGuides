@@ -22,6 +22,9 @@
     <span class="node_name">[% node_name %]</span></em>
   </h2>
 [% END %]
+[% IF not (content || coord_field_1_value || coord_field_2_value || latitude || longitude) %]
+We don't have a node called "[% node_param %]". Would you like to <a href="[% full_cgi_url %]?action=edit;id=[% node_param %]">make
+[% ELSE %]
 [% INCLUDE display_metadata.tt %]
 
 <!-- NODE CONTENT STARTS -->
@@ -94,6 +97,6 @@
 versions.</a>
 [% END %]
 </div>
-
+[% END %]
 </div>
 [% INCLUDE footer.tt %]
