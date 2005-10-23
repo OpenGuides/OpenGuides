@@ -45,14 +45,14 @@ if ( $skip_config ) {
 } else {
     until ( $dbtype ) {
         my $def = $existing_config->dbtype;
-	$dbtype = Module::Build->prompt("\n$dbtype_qu", $def);
-	$dbtype = lc($dbtype);
-	$dbtype =~ s/^\s*//;
-	$dbtype =~ s/\s*$//;
-	unless ( $dbtype eq "postgres" or $dbtype eq "mysql"
+        $dbtype = Module::Build->prompt("\n$dbtype_qu", $def);
+        $dbtype = lc($dbtype);
+        $dbtype =~ s/^\s*//;
+        $dbtype =~ s/\s*$//;
+        unless ( $dbtype eq "postgres" or $dbtype eq "mysql"
                  or $dbtype eq "sqlite" ) {
-	    undef $dbtype;
-	}
+            undef $dbtype;
+        }
     }
 }
 
@@ -94,8 +94,8 @@ foreach my $var ( qw(
        ) {
         print "$var not relevant for SQLite... skipping...\n";
         push @answers, { question => $qu,
-	   	         variable => $var,
-		         value    => "not-used" };
+                            variable => $var,
+                         value    => "not-used" };
         next;
     }
 
@@ -120,9 +120,9 @@ foreach my $var ( qw(
                 $def = $def ? "y" : "n";
             }
             $val = Module::Build->y_n("\n$qu ", $def);
-	} else {
+        } else {
             $val = Module::Build->prompt("\n$qu ", $def);
-	}
+        }
     }
 
     # Store install_directory so we can use it to suggest template paths.
@@ -138,8 +138,8 @@ foreach my $var ( qw(
     }
 
     push @answers, { question => $qu,
-		     variable => $var,
-		     value    => $val };
+                     variable => $var,
+                     value    => $val };
 }
 
 # Now deal with the geo stuff.
@@ -157,12 +157,12 @@ if ( $skip_config ) {
     my $choice;
     until ( $choice ) {
         my $def = $existing_config->geo_handler;
-	$choice = Module::Build->prompt("\n".$geo_handler_qu, $def);
-	$choice =~ s/^\s*//;
-	$choice =~ s/\s*$//;
-	unless ( $choice eq "1" or $choice eq "2" or $choice eq "3" ) {
+        $choice = Module::Build->prompt("\n".$geo_handler_qu, $def);
+        $choice =~ s/^\s*//;
+        $choice =~ s/\s*$//;
+        unless ( $choice eq "1" or $choice eq "2" or $choice eq "3" ) {
             undef $choice;
-	}
+        }
     }
     $geo_handler = $choice;
 }
@@ -182,8 +182,8 @@ if ( $geo_handler eq "3" ) {
     } else {
         my $def = $existing_config->ellipsoid;
         $ellipsoid = Module::Build->prompt("\n".$qu, $def);
-	$ellipsoid =~ s/^\s*//;
-	$ellipsoid =~ s/\s*$//;
+        $ellipsoid =~ s/^\s*//;
+        $ellipsoid =~ s/\s*$//;
     }
     push @answers, {
                      question => $qu,
@@ -214,32 +214,32 @@ my $build = OpenGuides::Build->new(
     license => "perl",
     requires => {
         'Algorithm::Diff'                 => '0.13', # for sdiff 
-	'CGI'                             => '2.92', # avoid escapeHTML bug
-	'CGI::Carp'                       => 0,
-	'CGI::Cookie'                     => 0,
-	'CGI::Wiki'                       => '0.62', # fixed delete version
-	'CGI::Wiki::Formatter::UseMod'    => '0.16', # macros
+        'CGI'                             => '2.92', # avoid escapeHTML bug
+        'CGI::Carp'                       => 0,
+        'CGI::Cookie'                     => 0,
+        'CGI::Wiki'                       => '0.62', # fixed delete version
+        'CGI::Wiki::Formatter::UseMod'    => '0.16', # macros
         'CGI::Wiki::Plugin::Categoriser'  => 0,
-	'CGI::Wiki::Plugin::Diff'         => '0.07', # earlier buggy
-	'CGI::Wiki::Plugin::Locator::Grid'=> '0.02', # cope with sqlite 3
-	'CGI::Wiki::Plugin::RSS::ModWiki' => '0.072', # provides RSS timestamp
+        'CGI::Wiki::Plugin::Diff'         => '0.07', # earlier buggy
+        'CGI::Wiki::Plugin::Locator::Grid'=> '0.02', # cope with sqlite 3
+        'CGI::Wiki::Plugin::RSS::ModWiki' => '0.073', # earlier doesn't escape XML properly
         'CGI::Wiki::Plugin::RSS::Reader'  => '1.3',  # earlier versions don't support RSS 2.0
         'Class::Accessor'                 => 0,
-	'Config::Tiny'                    => 0,
-	'Data::Dumper'                    => 0,
+        'Config::Tiny'                    => 0,
+        'Data::Dumper'                    => 0,
         $drivers{$dbtype}                 => 0,
-	'File::Spec::Functions'           => 0,
+        'File::Spec::Functions'           => 0,
         'File::Temp'                      => 0,
-	'Geography::NationalGrid'         => 0,
+        'Geography::NationalGrid'         => 0,
         'LWP::Simple'                     => 0,
-	'Parse::RecDescent'               => 0,
-	$search_module                    => 0,
-	'Template'                        => 0,
+        'Parse::RecDescent'               => 0,
+        $search_module                    => 0,
+        'Template'                        => 0,
         'Test::MockObject'                => '0.07', # earlier doesn't use 'mock'
-	'Time::Piece'                     => 0,
-	'URI::Escape'                     => 0,
+        'Time::Piece'                     => 0,
+        'URI::Escape'                     => 0,
         'XML::RSS'                        => 0,
-	},
+        },
     build_requires => {
         'Module::Build' => '0.18', # earlier doesn't install script files
         },
@@ -259,13 +259,13 @@ $build->{config}{__extra_scripts}     =
                       [ "wiki.conf", "preferences.cgi", "supersearch.cgi",
                         "newpage.cgi" ];
 $build->{config}{__templates}         = [
-		      "backlink_results.tt",
-		      "banner.tt",
+                      "backlink_results.tt",
+                      "banner.tt",
                       "delete_confirm.tt",
                       "delete_done.tt",
                       "delete_password_wrong.tt",
                       "differences.tt",
-		      "display_metadata.tt",
+                      "display_metadata.tt",
                       "edit_conflict.tt",
                       "edit_form.tt",
                       "error.tt",
@@ -277,7 +277,7 @@ $build->{config}{__templates}         = [
                       "node.tt",
                       "node_history.tt",
                       "openguides_information_boxes.tt",
-		      "preferences.tt",
+                      "preferences.tt",
                       "rdf_index.tt",
                       "recent_changes.tt",
                       "search_results.tt",
