@@ -80,8 +80,9 @@ sub emit_rdfxml {
     my $summary            = $node_data{metadata}{summary}[0]            || '';
 
     # replace any errant characters in data to prevent illegal XML
-    foreach ($phone, $fax, $website, $opening_hours_text, $postcode, $city, $country,
-    $latitude, $longitude, $version, $os_x, $os_y, $catrefs, @locales, $summary)
+    foreach ($phone, $fax, $website, $opening_hours_text, $address, $postcode, 
+             $city, $country, $latitude, $longitude, $version, $os_x, $os_y, 
+             $catrefs, @locales, $summary)
     {
       if ($_)
       {
