@@ -81,7 +81,7 @@ sub emit_rdfxml {
 
     # replace any errant characters in data to prevent illegal XML
     foreach ($phone, $fax, $website, $opening_hours_text, $postcode, $city, $country,
-    $latitude, $longitude, $version, $os_x, $os_y, $catrefs, @locales)
+    $latitude, $longitude, $version, $os_x, $os_y, $catrefs, @locales, $summary)
     {
       if ($_)
       {
