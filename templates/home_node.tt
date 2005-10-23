@@ -29,7 +29,7 @@
 <div id="maincontent">
 <div id="recent">
 
-<h3>Ten most <a href="[% cgi_url %]?RecentChanges">recent changes</a>
+<h3>Ten most <a href="[% cgi_url %]?action=rc">recent changes</a>
     (<a href="[% full_cgi_url %]?action=rc;format=rss">RSS</a>):</h3>
 
 <dl>

@@ -24,9 +24,7 @@
     <meta name="ICBM" content="[% latitude %], [% longitude %]" />
     <meta name="DC.title" content="[% site_name %]" />
   [% END %]
-  [% IF (node_name == 'RecentChanges') %]
-    <link rel="alternate" type="application/rss+xml" title="RSS feed for this page" href="[% full_cgi_url %]?action=rc;format=rss" />
-  [% END %]
+    <link rel="alternate" type="application/rss+xml" title="[% site_name %] - Recent Changes (RSS 1.0)" href="[% full_cgi_url %]?action=rc;format=rss" />
   [% IF deter_robots %]
     <meta name="robots" content="noindex,nofollow" />
   [% END %]

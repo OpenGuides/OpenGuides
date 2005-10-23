@@ -10,9 +10,9 @@
   [% END %]
 
   [% IF last_viewed %]
-    <p><a href="[% full_cgi_url %]?id=RecentChanges;since=[% last_viewed %]">View changes since your last visit to Recent Changes</a>.</p>
+    <p><a href="[% full_cgi_url %]?action=rc;since=[% last_viewed %]">View changes since your last visit to Recent Changes</a>.</p>
   [% ELSIF since %]
-    <p><a href="[% full_cgi_url %]?id=RecentChanges">View the regular Recent Changes page</a>.</p>
+    <p><a href="[% full_cgi_url %]?action=rc">View the regular Recent Changes page</a>.</p>
   [% END %]
 
   [% BLOCK changes %]
