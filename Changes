@@ -1,24 +1,39 @@
 0.51
-        When trying to view a non-existent node, you will now be presented
-          with a message asking if you want to create that node, rather than
-          a blank page.
-        New "summary" metadata field for one-line summaries of nodes.
-        Add summary field to RDF as dc:description.
-        Show node summary in search results.
-        New "format=raw" option for outputting wiki text of a node. 
-        Add "address" field that was missing from the RDF node view.
-        Update URL for Dublin Core elements in RDF index view.
-        Locales, address and summary fields now XML-escaped properly.
-          Requirement on CGI::Wiki::Plugin::RSS::ModWiki bumped to 0.073 for
-          associated fix escaping node names in RSS feed.
-        Fix bug that was breaking coordinate entry fields on search page if lat/lon
-          was being used.
-        Replace underscores in node names in redirection message with spaces.
-        Redirection message now links to a rendered version of the old page
-          rather than the editing view.
-        Fix bug in OpenGuides::SuperSearch that wasn't passing "latitude" and
-          "longitude" values to the search template when a distance search
-          was being done.
+        Important changes:
+          * The preferred way to get RecentChanges is now to pass the CGI the
+            parameter "action=rc", rather than just using the page name
+            "RecentChanges". However, this method will still work for the time
+            being. Similarly, the URL parameter for the RecentChanges RSS feed 
+            has changed from "action=rss" to "action=rc;format=rss". Requests 
+            for the former will be redirected to the latter.
+
+        New features:
+          * When trying to view a non-existent node, you will now be presented
+            with a message asking if you want to create that node, rather than
+            a blank page.
+          * New "summary" metadata field for one-line summaries of nodes:
+            - Add summary field to RDF as dc:description.
+            - Show node summary in search results.
+          * New "format=raw" option for outputting wiki text of a node. 
+        
+        RDF bugfixes:
+          * Locales, address and summary fields now XML-escaped properly.
+            (Requirement on CGI::Wiki::Plugin::RSS::ModWiki bumped to 0.073 for
+            associated fix escaping node names in RSS feed.)
+          * Add "address" field that was missing from the RDF node view.
+          * Update URL for Dublin Core elements in RDF index view.
+        
+        Search bugfixes:
+          * Fix bug that was breaking coordinate entry fields on search page if 
+            lat/lon was being used.
+          * Fix bug in OpenGuides::SuperSearch that wasn't passing "latitude" and
+            "longitude" values to the search template when a distance search
+            was being done.
+        
+        Minor improvements:
+          * Replace underscores in node names in "redirected from" message with spaces.
+          * "Redirected from" message now links to a rendered version of the old page
+            rather than the editing view.
         
 0.50    2 October 2005
         Remove rogue ampersand that had crept into the RSS feed.
@@ -29,18 +44,18 @@
 
 0.48    24 July 2005
         RDF enhancements:
-          Removed redundant "id" parameter specification from dc:source in
+          * Removed redundant "id" parameter specification from dc:source in
             rdf:Description in RDF node listings.
-          Fixed bug that was causing all nodes to be flagged as a
+          * Fixed bug that was causing all nodes to be flagged as a
             geo:SpatialThing whether they were or not.
-          Ensured that ampersands and greater/less than symbols were properly 
+          * Ensured that ampersands and greater/less than symbols were properly 
             escaped so as not to be XML-toxic.
-          Added geo:lat, geo:long and RSS link attributes to items in 
+          * Added geo:lat, geo:long and RSS link attributes to items in 
             category/locale listings to facilitate integration with mapping
             applications.
-          Added owl:sameAs property to RDF output for nodes that are redirects
+          * Added owl:sameAs property to RDF output for nodes that are redirects
             to other nodes.
-          RSS feed now has correct timestamp (matching most recent item) and
+          * RSS feed now has correct timestamp (matching most recent item) and
             matching Last-Modified HTTP header.
         Reorder navigation bar to provide more logical groupings.
         Add "format=plain" option for all-nodes index listing and associated
