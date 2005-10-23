@@ -30,7 +30,7 @@
 <div id="recent">
 
 <h3>Ten most <a href="[% cgi_url %]?RecentChanges">recent changes</a>
-    (<a href="[% full_cgi_url %]?action=rss">RSS</a>):</h3>
+    (<a href="[% full_cgi_url %]?action=rc;format=rss">RSS</a>):</h3>
 
 <dl>
   [% FOREACH node = recent_changes %]

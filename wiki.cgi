@@ -1,10 +1,11 @@
 #!/usr/local/bin/perl
 
 use strict;
+use lib qw( /home/earle/openguides.org/testing/lib );
 use warnings;
 
 use vars qw( $VERSION );
-$VERSION = '0.50';
+$VERSION = '0.51';
 
 use CGI qw/:standard/;
 use CGI::Carp qw(croak);
@@ -97,18 +98,24 @@ eval {
                       );
     } elsif ($action eq 'list_all_versions') {
         $guide->list_all_versions( id => $node );
-    } elsif ($action eq 'rss') {
-        my $feed = $q->param("feed");
-        if ( !defined $feed or $feed eq "recent_changes" ) {
-            my %args = map { $_ => ( $q->param($_) || "" ) }
-                       qw( feed items days ignore_minor_edits username
-                           category locale );
-            $guide->display_rss( %args );
-        } elsif ( $feed eq "chef_dan" ) {
-            display_node_rdf( node => $node );
+    } elsif ($action eq 'rc') {
+        if ($format && $format eq 'rss') {
+            my $feed = $q->param("feed");
+            if ( !defined $feed or $feed eq "recent_changes" ) {
+                my %args = map { $_ => ( $q->param($_) || "" ) }
+                           qw( feed items days ignore_minor_edits username
+                               category locale );
+                $guide->display_rss( %args );
+            } elsif ( $feed eq "chef_dan" ) {
+                display_node_rdf( node => $node );
+            } else {
+                croak "Unknown RSS feed type '$feed'";
+            }
         } else {
-            croak "Unknown RSS feed type '$feed'";
+            $guide->display_node( id => 'RecentChanges' );
         }
+    } elsif ($action eq 'rss') {
+        print $q->redirect( $script_url . '?action=rc;format=rss' );
     } else { # Default is to display a node.
         if ( $format and $format eq "rdf" ) {
             display_node_rdf( node => $node );
@@ -119,7 +126,7 @@ eval {
                                 );
         } else {
             my $version = $q->param("version");
-        my $other_ver = $q->param("diffversion");
+            my $other_ver = $q->param("diffversion");
             if ( $other_ver ) {
                 $guide->display_diffs(
                                        id            => $node,

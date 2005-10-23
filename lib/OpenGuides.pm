@@ -153,7 +153,7 @@ sub display_node {
         $tt_vars{index_type} = lc($type);
         $tt_vars{index_value} = $2;
         $tt_vars{"rss_".lc($type)."_url"} =
-                           $config->script_name . "?action=rss;"
+                           $config->script_name . "?action=rc;format=rss;"
                            . lc($type) . "=" . lc(CGI->escape($2));
     }
 
@@ -223,77 +223,7 @@ sub display_node {
     $tt_vars{current} = 1 unless $version;
 
     if ($id eq "RecentChanges") {
-        my $minor_edits = $self->get_cookie( "show_minor_edits_in_rc" );
-        my %recent_changes;
-        my $q = CGI->new;
-        my $since = $q->param("since");
-        if ( $since ) {
-            $tt_vars{since} = $since;
-            my $t = localtime($since); # overloaded by Time::Piece
-            $tt_vars{since_string} = $t->strftime;
-            my %criteria = ( since => $since );
-            $criteria{metadata_was} = { edit_type => "Normal edit" }
-              unless $minor_edits;
-            my @rc = $self->{wiki}->list_recent_changes( %criteria );
-
-            @rc = map {
-                {
-                    name           => CGI->escapeHTML($_->{name}),
-                    last_modified  => CGI->escapeHTML($_->{last_modified}),
-                    version        => CGI->escapeHTML($_->{version}),
-                    comment        => CGI->escapeHTML($_->{metadata}{comment}[0]),
-                    username       => CGI->escapeHTML($_->{metadata}{username}[0]),
-                    host           => CGI->escapeHTML($_->{metadata}{host}[0]),
-                    username_param => CGI->escape($_->{metadata}{username}[0]),
-                    edit_type      => CGI->escapeHTML($_->{metadata}{edit_type}[0]),
-                    url            => $config->script_name . "?"
-                                   . CGI->escape($wiki->formatter->node_name_to_node_param($_->{name})),
-                }
-            } @rc;
-            if ( scalar @rc ) {
-                $recent_changes{since} = \@rc;
-            }
-        } else {
-            for my $days ( [0, 1], [1, 7], [7, 14], [14, 30] ) {
-                my %criteria = ( between_days => $days );
-                $criteria{metadata_was} = { edit_type => "Normal edit" }
-                  unless $minor_edits;
-                my @rc = $self->{wiki}->list_recent_changes( %criteria );
-
-                @rc = map {
-                    {
-                        name           => CGI->escapeHTML($_->{name}),
-                        last_modified  => CGI->escapeHTML($_->{last_modified}),
-                        version        => CGI->escapeHTML($_->{version}),
-                        comment        => CGI->escapeHTML($_->{metadata}{comment}[0]),
-                        username       => CGI->escapeHTML($_->{metadata}{username}[0]),
-                        host           => CGI->escapeHTML($_->{metadata}{host}[0]),
-                        username_param => CGI->escape($_->{metadata}{username}[0]),
-                        edit_type      => CGI->escapeHTML($_->{metadata}{edit_type}[0]),
-                        url            => $config->script_name . "?"
-                                          . CGI->escape($wiki->formatter->node_name_to_node_param($_->{name})),
-                    }
-                } @rc;
-                if ( scalar @rc ) {
-                    $recent_changes{$days->[1]} = \@rc;
-                }
-            }
-        }
-        $tt_vars{recent_changes} = \%recent_changes;
-        my %processing_args = (
-                                  id            => $id,
-                                  template      => "recent_changes.tt",
-                                  tt_vars       => \%tt_vars,
-                              );
-        if ( !$since && $self->get_cookie("track_recent_changes_views") ) {
-            my $cookie = OpenGuides::CGI->make_recent_changes_cookie(config => $config );
-            $processing_args{cookies} = $cookie;
-            $tt_vars{last_viewed} = OpenGuides::CGI->get_last_recent_changes_visit_from_cookie( config => $config );
-        }
-        return %tt_vars if $args{return_tt_vars};
-        my $output = $self->process_template( %processing_args );
-        return $output if $return_output;
-        print $output;
+        $self->display_recent_changes(%args);
     } elsif ( $id eq $self->config->home_name ) {
         my @recent = $wiki->list_recent_changes(
             last_n_changes => 10,
@@ -329,6 +259,95 @@ sub display_node {
         return $output if $return_output;
         print $output;
     }
+}
+
+=item B<display_recent_changes>  
+
+  $guide->display_recent_changes;
+
+As with other methods, the C<return_output> parameter can be used to
+return the output instead of printing it to STDOUT.
+
+=cut
+
+sub display_recent_changes {
+    my ($self, %args) = @_;
+    my $config = $self->config;
+    my $wiki = $self->wiki;
+    my $minor_edits = $self->get_cookie( "show_minor_edits_in_rc" );
+    my $id = $args{id} || $self->config->home_name;
+    my $return_output = $args{return_output} || 0;
+    my (%tt_vars, %recent_changes);
+    my $q = CGI->new;
+    my $since = $q->param("since");
+    if ( $since ) {
+        $tt_vars{since} = $since;
+        my $t = localtime($since); # overloaded by Time::Piece
+        $tt_vars{since_string} = $t->strftime;
+        my %criteria = ( since => $since );   
+        $criteria{metadata_was} = { edit_type => "Normal edit" }
+          unless $minor_edits;
+        my @rc = $self->{wiki}->list_recent_changes( %criteria );
+ 
+        @rc = map {
+            {
+              name        => CGI->escapeHTML($_->{name}),
+              last_modified => CGI->escapeHTML($_->{last_modified}),
+              version     => CGI->escapeHTML($_->{version}),
+              comment     => CGI->escapeHTML($_->{metadata}{comment}[0]),
+              username    => CGI->escapeHTML($_->{metadata}{username}[0]),
+              host        => CGI->escapeHTML($_->{metadata}{host}[0]),
+              username_param => CGI->escape($_->{metadata}{username}[0]),
+              edit_type   => CGI->escapeHTML($_->{metadata}{edit_type}[0]),
+              url         => $config->script_name . "?"
+      . CGI->escape($wiki->formatter->node_name_to_node_param($_->{name})),
+        }
+                   } @rc;
+        if ( scalar @rc ) {
+            $recent_changes{since} = \@rc; 
+        }
+    } else {
+        for my $days ( [0, 1], [1, 7], [7, 14], [14, 30] ) {
+            my %criteria = ( between_days => $days );
+            $criteria{metadata_was} = { edit_type => "Normal edit" }
+              unless $minor_edits;
+            my @rc = $self->{wiki}->list_recent_changes( %criteria );
+
+            @rc = map {
+            {
+              name        => CGI->escapeHTML($_->{name}),
+              last_modified => CGI->escapeHTML($_->{last_modified}),
+              version     => CGI->escapeHTML($_->{version}),
+              comment     => CGI->escapeHTML($_->{metadata}{comment}[0]),
+              username    => CGI->escapeHTML($_->{metadata}{username}[0]),
+              host        => CGI->escapeHTML($_->{metadata}{host}[0]),
+              username_param => CGI->escape($_->{metadata}{username}[0]),
+              edit_type   => CGI->escapeHTML($_->{metadata}{edit_type}[0]),
+              url         => $config->script_name . "?"
+      . CGI->escape($wiki->formatter->node_name_to_node_param($_->{name})),
+        }
+                       } @rc;
+            if ( scalar @rc ) {
+                $recent_changes{$days->[1]} = \@rc;
+        }
+        }
+    }
+    $tt_vars{recent_changes} = \%recent_changes;
+    my %processing_args = (
+                            id            => $id,
+                            template      => "recent_changes.tt",
+                            tt_vars       => \%tt_vars,
+                           );
+    if ( !$since && $self->get_cookie("track_recent_changes_views") ) {
+    my $cookie =
+           OpenGuides::CGI->make_recent_changes_cookie(config => $config );
+        $processing_args{cookies} = $cookie;
+        $tt_vars{last_viewed} = OpenGuides::CGI->get_last_recent_changes_visit_from_cookie( config => $config );
+    }
+    return %tt_vars if $args{return_tt_vars};
+    my $output = $self->process_template( %processing_args );
+    return $output if $return_output;
+    print $output;
 }
 
 =item B<display_diffs>
