@@ -3,7 +3,7 @@ package OpenGuides::RDF;
 use strict;
 
 use vars qw( $VERSION );
-$VERSION = '0.08';
+$VERSION = '0.071';
 
 use CGI::Wiki::Plugin::RSS::ModWiki;
 use Time::Piece;
@@ -75,14 +75,14 @@ sub emit_rdfxml {
     my $username           = $node_data{metadata}{username}[0]           || '';
     my $os_x               = $node_data{metadata}{os_x}[0]               || '';
     my $os_y               = $node_data{metadata}{os_y}[0]               || '';
-    my $catrefs            = $node_data{metadata}{category};
+    my @categories         = @{ $node_data{metadata}{category} || [] };
     my @locales            = @{ $node_data{metadata}{locale} || [] };
     my $summary            = $node_data{metadata}{summary}[0]            || '';
 
     # replace any errant characters in data to prevent illegal XML
     foreach ($phone, $fax, $website, $opening_hours_text, $address, $postcode, 
              $city, $country, $latitude, $longitude, $version, $os_x, $os_y, 
-             $catrefs, @locales, $summary)
+             @categories, @locales, $summary)
     {
       if ($_)
       {
@@ -143,8 +143,8 @@ sub emit_rdfxml {
 };
     $rdf .= "    <dc:description>$summary</dc:description>\n" if $summary;
 
-    $rdf .= "\n    <!-- categories -->\n\n" if $catrefs;
-    $rdf .= "    <dc:subject>$_</dc:subject>\n" foreach @{$catrefs};
+    $rdf .= "\n    <!-- categories -->\n\n" if @categories;
+    $rdf .= "    <dc:subject>$_</dc:subject>\n" foreach @categories;
     
     if ($is_geospatial)
     {
