@@ -19,8 +19,6 @@
         
         RDF bugfixes:
           * Locales, address and summary fields now XML-escaped properly.
-            (Requirement on CGI::Wiki::Plugin::RSS::ModWiki bumped to 0.073 for
-            associated fix escaping node names in RSS feed.)
           * Add "address" field that was missing from the RDF node view.
           * Update URL for Dublin Core elements in RDF index view.
           * Fix URL in the RSS <channel> element to point to the RSS URL,
