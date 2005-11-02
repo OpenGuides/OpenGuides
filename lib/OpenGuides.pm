@@ -660,8 +660,9 @@ sub display_rss {
     }
 
     my $rdf_writer = OpenGuides::RDF->new(
-                                             wiki   => $self->wiki,
-                                             config => $self->config
+                                             wiki       => $self->wiki,
+                                             config     => $self->config,
+                                             og_version => $VERSION,
                                          );
     my $output = "Content-Type: text/plain\n";
     $output .= "Last-Modified: " . $rdf_writer->rss_timestamp( %criteria ) . "\n\n";

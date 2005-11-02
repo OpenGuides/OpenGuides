@@ -3,7 +3,7 @@ package OpenGuides::RDF;
 use strict;
 
 use vars qw( $VERSION );
-$VERSION = '0.071';
+$VERSION = '0.08';
 
 use CGI::Wiki::Plugin::RSS::ModWiki;
 use Time::Piece;
@@ -50,6 +50,7 @@ sub _init {
     $self->{default_city}     = $config->default_city     || "";
     $self->{default_country}  = $config->default_country  || "";
     $self->{site_description} = $config->site_desc        || "";
+    $self->{og_version}       = $args{og_version};
 
     $self;
 }
@@ -207,9 +208,13 @@ sub rss_maker {
         $self->{rss_maker} = CGI::Wiki::Plugin::RSS::ModWiki->new(
           wiki                => $self->{wiki},
           site_name           => $self->{site_name},
+          site_url            => $self->{config}->script_url,
           site_description    => $self->{site_description},
           make_node_url       => $self->{make_node_url},
-          recent_changes_link => $self->{config}->script_url . uri_escape($self->{config}->script_name) . "?RecentChanges"
+          recent_changes_link => $self->{config}->script_url . '?action=rss',
+          software_name       => 'OpenGuides',
+          software_homepage   => 'http://openguides.org/',
+          software_version    => $self->{og_version},
         );
     }
     

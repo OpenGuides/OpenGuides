@@ -15,6 +15,7 @@
             - Add summary field to RDF as dc:description.
             - Show node summary in search results.
           * New "format=raw" option for outputting wiki text of a node. 
+          * RSS feed now contains DOAP (http://usefulinc.com/doap) metadata.
         
         RDF bugfixes:
           * Locales, address and summary fields now XML-escaped properly.
@@ -22,6 +23,8 @@
             associated fix escaping node names in RSS feed.)
           * Add "address" field that was missing from the RDF node view.
           * Update URL for Dublin Core elements in RDF index view.
+          * Fix URL in the RSS <channel> element to point to the RSS URL,
+            not the RecentChanges page URL.
         
         Search bugfixes:
           * Fix bug that was breaking coordinate entry fields on search page if 
