@@ -36,6 +36,9 @@
           * "Redirected from" message now links to a rendered version of the old page
             rather than the editing view.
         
+        Miscellaneous bugfixes:
+          * Fix problem with newer Text::Wikiformat and blank nodes.
+        
 0.50    2 October 2005
         Remove rogue ampersand that had crept into the RSS feed.
         

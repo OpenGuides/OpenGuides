@@ -165,7 +165,8 @@ sub display_node {
 
     my %node_data = $wiki->retrieve_node( %criteria );
 
-    my $raw        = $node_data{content};
+    # Fixes passing undefined values to Text::Wikiformat if node doesn't exist.
+    my $raw        = $node_data{content} || " ";
     my $content    = $wiki->format($raw);
     my $modified   = $node_data{last_modified};
     my %metadata   = %{$node_data{metadata}};
