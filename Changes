@@ -39,6 +39,7 @@
         
         Miscellaneous bugfixes:
           * Fix problem with newer Text::Wikiformat and blank nodes.
+          * Fix bug in navbar template that caused warnings in the tests.
         
 0.50    2 October 2005
         Remove rogue ampersand that had crept into the RSS feed.
