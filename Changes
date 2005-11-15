@@ -1,4 +1,4 @@
-0.51
+0.51    15 November 2005
         Important changes:
           * The preferred way to get RecentChanges is now to pass the CGI the
             parameter "action=rc", rather than just using the page name
