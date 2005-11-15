@@ -27,14 +27,15 @@
         Search bugfixes:
           * Fix bug that was breaking coordinate entry fields on search page if 
             lat/lon was being used.
-          * Fix bug in OpenGuides::SuperSearch that wasn't passing "latitude" and
-            "longitude" values to the search template when a distance search
-            was being done.
+          * Fix bug in OpenGuides::SuperSearch that wasn't passing "latitude"
+            and "longitude" values to the search template when a distance
+            search was being done.
         
         Minor improvements:
-          * Replace underscores in node names in "redirected from" message with spaces.
-          * "Redirected from" message now links to a rendered version of the old page
-            rather than the editing view.
+          * Replace underscores in node names in "redirected from" message
+            with spaces.
+          * "Redirected from" message now links to a rendered version of
+            the old page rather than the editing view.
         
         Miscellaneous bugfixes:
           * Fix problem with newer Text::Wikiformat and blank nodes.
