@@ -1,7 +1,6 @@
 #!/usr/local/bin/perl
 
 use strict;
-use lib qw( /home/earle/openguides.org/testing/lib );
 use warnings;
 
 use vars qw( $VERSION );
