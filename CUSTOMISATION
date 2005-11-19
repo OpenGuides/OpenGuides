@@ -29,6 +29,9 @@ The custom templates currently supported are:
     - [% site_name %]
       Contains the value supplied in wiki.conf as the name of the site.
 
+ - custom_node.tt
+   Will be included just below the main wiki content in node.tt.
+
 Requests for further custom inserts are welcomed.
 
 If you include your own versions of other (non custom_) templates in
