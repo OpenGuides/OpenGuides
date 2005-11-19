@@ -15,7 +15,7 @@ BUGS AND CAVEATS
     UTF8 data are currently not handled correctly throughout.
 
     Other bugs are documented at
-    <http://rt.cpan.org/NoAuth/Bugs.html?Dist=OpenGuides>
+    <http://dev.openguides.org/>
 
 SEE ALSO
     * http://london.openguides.org/, the first and biggest OpenGuides site.
@@ -29,7 +29,7 @@ FEEDBACK
     openguides-dev@openguides.org (moderated mailing list, will reach all
     current developers but you'll have to wait for your post to be approved)
     or file a bug report at
-    <http://rt.cpan.org/NoAuth/Bugs.html?Dist=OpenGuides>
+    <http://dev.openguides.org/>
 
 AUTHOR
     The OpenGuides Project (openguides-dev@openguides.org)

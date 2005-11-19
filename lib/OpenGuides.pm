@@ -937,7 +937,7 @@ sub get_cookie {
 UTF8 data are currently not handled correctly throughout.
 
 Other bugs are documented at
-L<http://rt.cpan.org/NoAuth/Bugs.html?Dist=OpenGuides>
+L<http://dev.openguides.org/>
 
 =head1 SEE ALSO
 
@@ -957,7 +957,7 @@ If you have a question, a bug report, or a patch, or you're interested
 in joining the development team, please contact openguides-dev@openguides.org
 (moderated mailing list, will reach all current developers but you'll have
 to wait for your post to be approved) or file a bug report at
-L<http://rt.cpan.org/NoAuth/Bugs.html?Dist=OpenGuides>
+L<http://dev.openguides.org/>
 
 =head1 AUTHOR
 
