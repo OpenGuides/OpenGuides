@@ -31,6 +31,10 @@ We don't have a node called "[% node_param %]". Would you like to <a href="[% fu
 [% content %]
 <!-- NODE CONTENT ENDS -->
 
+[% TRY %]
+  [% INCLUDE custom_node.tt %]
+[% CATCH %]
+                          
 [% IF coord_field_1_value AND coord_field_2_value %]
   <br clear="all" />
   <div id="find_within_distance">

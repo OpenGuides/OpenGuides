@@ -1,4 +1,5 @@
 0.52    Fix missing bracket in node.tt.
+        Add custom_node template just below main content in node.tt.
 
 0.51    15 November 2005
         Important changes:
