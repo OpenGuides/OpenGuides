@@ -23,7 +23,7 @@
   </h2>
 [% END %]
 [% IF not (content || coord_field_1_value || coord_field_2_value || latitude || longitude) %]
-We don't have a node called "[% node_param %]". Would you like to <a href="[% full_cgi_url %]?action=edit;id=[% node_param %]">make
+We don't have a node called "[% node_param %]". Would you like to <a href="[% full_cgi_url %]?action=edit;id=[% node_param %]">create it</a>?
 [% ELSE %]
 [% INCLUDE display_metadata.tt %]
 
@@ -34,6 +34,7 @@ We don't have a node called "[% node_param %]". Would you like to <a href="[% fu
 [% TRY %]
   [% INCLUDE custom_node.tt %]
 [% CATCH %]
+[% END %]
                           
 [% IF coord_field_1_value AND coord_field_2_value %]
   <br clear="all" />
