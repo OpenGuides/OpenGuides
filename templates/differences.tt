@@ -32,7 +32,7 @@
 <a href="[% cgi_url %]?action=list_all_versions;id=[% node_param %]">List all versions</a><br />
 
 <p>
-<form action="supersearch.cgi" method="get">
+<form action="search.cgi" method="get">
   <input type="text" size="50" name="search" />
   <input type="submit" name="Go" value="Search" class="form_button" />
 </form>

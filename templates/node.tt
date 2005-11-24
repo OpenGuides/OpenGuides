@@ -39,7 +39,7 @@ We don't have a node called "[% node_param %]". Would you like to <a href="[% fu
 [% IF coord_field_1_value AND coord_field_2_value %]
   <br clear="all" />
   <div id="find_within_distance">
-    <form action="supersearch.cgi">
+    <form action="search.cgi">
       <label for="distance">Find all things within</label>
       <select name="[% dist_field %]" id="distance">
         <option value="500">500 metres</option>

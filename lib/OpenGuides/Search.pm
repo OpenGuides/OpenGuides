@@ -1,4 +1,4 @@
-package OpenGuides::SuperSearch;
+package OpenGuides::Search;
 use strict;
 our $VERSION = '0.10';
 
@@ -11,7 +11,7 @@ use Parse::RecDescent;
 
 =head1 NAME
 
-OpenGuides::SuperSearch - Search form generation and processing for OpenGuides.
+OpenGuides::Search - Search form generation and processing for OpenGuides.
 
 =head1 DESCRIPTION
 
@@ -23,10 +23,10 @@ This documentation is probably only useful to OpenGuides developers.
 
   use CGI;
   use OpenGuides::Config;
-  use OpenGuides::SuperSearch;
+  use OpenGuides::Search;
 
   my $config = OpenGuides::Config->new( file => "wiki.conf" );
-  my $search = OpenGuides::SuperSearch->new( config => $config );
+  my $search = OpenGuides::Search->new( config => $config );
   my %vars = CGI::Vars();
   $search->run( vars => \%vars );
 
@@ -37,7 +37,7 @@ This documentation is probably only useful to OpenGuides developers.
 =item B<new>
 
   my $config = OpenGuides::Config->new( file => "wiki.conf" );
-  my $search = OpenGuides::SuperSearch->new( config => $config );
+  my $search = OpenGuides::Search->new( config => $config );
 
 =cut
 
@@ -691,7 +691,7 @@ sub process_template {
     my $output =  OpenGuides::Template->output(
                                                 wiki     => $self->wiki,
                                                 config   => $self->config,
-                                                template => "supersearch.tt",
+                                                template => "search.tt",
                                                 vars     => $tt_vars,
                                               );
     return $output if $self->{return_output};

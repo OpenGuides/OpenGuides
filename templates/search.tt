@@ -22,7 +22,7 @@
     <a href="[% ss_info_url %]">information page</a> for help and more details.
   </small></p>
 
-  <form method="get" action="supersearch.cgi">
+  <form method="get" action="search.cgi">
     <table border="1">
       <tr>
          <th>
@@ -80,13 +80,13 @@
       <p>
       Matches [% first_num %] - [% last_num %] of [% total_num %]. 
       [% IF (first_num > 20) %]
-        <a href="supersearch.cgi?search=[% search_terms %]&next=[% first_num - 21 %]">Previous 20 results</a> 
+        <a href="search.cgi?search=[% search_terms %]&next=[% first_num - 21 %]">Previous 20 results</a> 
       [% END %] 
       [% IF ((first_num > 20) and next_page_startpos) %]
       / 
       [% END %]
       [% IF next_page_startpos %]
-        <a href="supersearch.cgi?search=[% search_terms %];[% dist_field %]=[% dist %];[% coord_field_1 %]=[% coord_field_1_value %];[% coord_field_2 %]=[% coord_field_2_value %];next=[% next_page_startpos %]">Next 
+        <a href="search.cgi?search=[% search_terms %];[% dist_field %]=[% dist %];[% coord_field_1 %]=[% coord_field_1_value %];[% coord_field_2 %]=[% coord_field_2_value %];next=[% next_page_startpos %]">Next 
         [% IF ((total_num - last_num >= 20)) %]
           20
         [% ELSE %]
@@ -100,7 +100,7 @@
       <h2>No Items Matched</h2>
     [% END %]  
 
-  <form method="get" action="supersearch.cgi">
+  <form method="get" action="search.cgi">
     <label for="search_lower">Search:</label> 
     <input type="text" name="search" id="search_lower" value="[% search_terms %]" size="50" maxlength="80" value="Search text" onclick="this.value=''" />
     <input type="submit" name="go" class="form_button" value="Go" />
