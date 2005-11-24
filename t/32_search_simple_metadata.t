@@ -1,7 +1,7 @@
 use strict;
 use CGI::Wiki::Setup::SQLite;
 use OpenGuides::Config;
-use OpenGuides::SuperSearch;
+use OpenGuides::Search;
 use Test::More tests => 10;
 
 eval { require DBD::SQLite; };
@@ -32,7 +32,7 @@ SKIP: {
     eval { require CGI::Wiki::Search::Plucene; };
     if ( $@ ) { $config->use_plucene( 0 ) };
 
-    my $search = OpenGuides::SuperSearch->new( config => $config );
+    my $search = OpenGuides::Search->new( config => $config );
 
     # Add some data.  We write it twice to avoid hitting the redirect.
     my $wiki = $search->{wiki}; # white boxiness

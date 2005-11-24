@@ -2,7 +2,7 @@ use strict;
 use CGI::Wiki::Plugin::Locator::Grid; # use directly to help debug
 use CGI::Wiki::Setup::SQLite;
 use OpenGuides::Config;
-use OpenGuides::SuperSearch;
+use OpenGuides::Search;
 use OpenGuides::Test;
 use Test::More;
 
@@ -41,7 +41,7 @@ my $config = OpenGuides::Config->new(
                  geo_handler        => 1,
            }
 );
-my $search = OpenGuides::SuperSearch->new( config => $config );
+my $search = OpenGuides::Search->new( config => $config );
 my $guide = OpenGuides->new( config => $config );
 
 # Write some data.

@@ -1,6 +1,6 @@
 use strict;
 use CGI::Wiki::Setup::SQLite;
-use OpenGuides::SuperSearch;
+use OpenGuides::Search;
 use OpenGuides::Test;
 use Test::More;
 
@@ -23,8 +23,8 @@ if ( $@ ) {
     eval { require CGI::Wiki::Search::Plucene; };
     if ( $@ ) { $config->use_plucene( 0 ) };
 
-    my $search = OpenGuides::SuperSearch->new( config => $config );
-    isa_ok( $search, "OpenGuides::SuperSearch" );
+    my $search = OpenGuides::Search->new( config => $config );
+    isa_ok( $search, "OpenGuides::Search" );
 
     my $output = $search->run( return_output => 1 );
     unlike( $output, qr/no items matched/i,

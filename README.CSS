@@ -30,7 +30,7 @@ div.warning_text
 
 input.form_button
     Used in: differences.tt, edit_form.tt, footer.tt, navbar.tt, newpage.tt,
-	     node.tt, preferences.tt, supersearch.tt
+	     node.tt, preferences.tt, search.tt
     Purpose: A standard form button
 
 label.hidden
@@ -85,7 +85,7 @@ td.recentchanges_user
     Purpose: User who made a change
 
 div.hit_summary
-    Used in: supersearch.tt
+    Used in: search.tt
     Purpose: One-line summary of individual search result.
 
 IDs
@@ -101,7 +101,7 @@ div#maincontent
 	     delete_password_wrong.tt, edit_conflict.tt, edit_form.tt,
 	     home_node.tt, newpage.tt, node.tt, preferences.tt,
 	     recent_changes.tt, search_results.tt, site_index.tt,
-	     supersearch.tt, userstats.tt, wanted_pages.tt
+	     search.tt, userstats.tt, wanted_pages.tt
     Purpose: Defines the main textual content of the page
              content includes the navbar and footer; maincontent does not
 
@@ -219,11 +219,11 @@ input#search
     Purpose: An input field for the search at the bottom of the page
 
 input#search_lower
-    Used in: supersearch.tt
+    Used in: search.tt
     Purpose: An iput field for the lower search in the main search page
 
 input#search_upper
-    Used in: supersearch.tt
+    Used in: search.tt
     Purpose: An input field for the upper search in the main search page
 
 input#show_minor

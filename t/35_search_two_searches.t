@@ -1,7 +1,7 @@
 use strict;
 use CGI::Wiki::Setup::SQLite;
 use OpenGuides::Config;
-use OpenGuides::SuperSearch;
+use OpenGuides::Search;
 use Test::More;
 
 eval { require DBD::SQLite; };
@@ -52,7 +52,7 @@ my $config = OpenGuides::Config->new(
 eval { require CGI::Wiki::Search::Plucene; };
 if ( $@ ) { $config->use_plucene( 0 ) };
 
-my $search = OpenGuides::SuperSearch->new( config => $config );
+my $search = OpenGuides::Search->new( config => $config );
 
 # Write some data.
 my $wiki = $search->{wiki};
@@ -105,7 +105,7 @@ ok( !$search->{x}, "...and forgotten" );
 
 # Now with Irish National Grid.
 $config->geo_handler( 2 );
-$search = OpenGuides::SuperSearch->new( config => $config );
+$search = OpenGuides::Search->new( config => $config );
 $search->run(
               return_output => 1,
               vars => { osie_x => 100000, osie_y => 200000, osie_dist => 100 },
@@ -120,7 +120,7 @@ ok( !$search->{x}, "...and forgotten" );
 # Now with UTM.
 $config->geo_handler( 3 );
 $config->ellipsoid( "Airy" );
-$search = OpenGuides::SuperSearch->new( config => $config );
+$search = OpenGuides::Search->new( config => $config );
 $search->run(
               return_output => 1,
               vars => { latitude => 10, longitude => 0, latlong_dist => 1000 },

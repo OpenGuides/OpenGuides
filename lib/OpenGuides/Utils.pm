@@ -111,7 +111,7 @@ sub make_wiki_object {
 
     # Make formatter.
     my $script_name = $config->script_name;
-    my $search_url = $config->script_url . "supersearch.cgi";
+    my $search_url = $config->script_url . "search.cgi";
 
     my %macros = (
         '@SEARCHBOX' =>

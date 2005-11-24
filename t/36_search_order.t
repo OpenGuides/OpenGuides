@@ -1,7 +1,7 @@
 use strict;
 use CGI::Wiki::Setup::SQLite;
 use OpenGuides::Config;
-use OpenGuides::SuperSearch;
+use OpenGuides::Search;
 use Test::More;
 
 eval { require DBD::SQLite; };
@@ -36,8 +36,8 @@ my $config = OpenGuides::Config->new(
                }
 );
 
-my $search = OpenGuides::SuperSearch->new( config => $config );
-isa_ok( $search, "OpenGuides::SuperSearch" );
+my $search = OpenGuides::Search->new( config => $config );
+isa_ok( $search, "OpenGuides::Search" );
 
 # Write some data.
 my $wiki = $search->{wiki};

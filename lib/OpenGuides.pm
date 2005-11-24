@@ -415,7 +415,7 @@ sub find_within_distance {
     my $lat = $data{metadata}{latitude}[0];
     my $long = $data{metadata}{longitude}[0];
     my $script_url = $self->config->script_url;
-    print CGI->redirect( $script_url . "supersearch.cgi?lat=$lat;long=$long;distance_in_metres=$metres" );
+    print CGI->redirect( $script_url . "search.cgi?lat=$lat;long=$long;distance_in_metres=$metres" );
 }
 
 =item B<show_backlinks>

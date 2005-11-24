@@ -1,7 +1,7 @@
 use strict;
 use CGI::Wiki::Setup::SQLite;
 use OpenGuides::Config;
-use OpenGuides::SuperSearch;
+use OpenGuides::Search;
 use Test::More;
 
 eval { require DBD::SQLite; };
@@ -31,8 +31,8 @@ if ( $@ ) {
     eval { require CGI::Wiki::Search::Plucene; };
     if ( $@ ) { $config->use_plucene( 0 ) };
 
-    my $search = OpenGuides::SuperSearch->new( config => $config );
-    isa_ok( $search, "OpenGuides::SuperSearch" );
+    my $search = OpenGuides::Search->new( config => $config );
+    isa_ok( $search, "OpenGuides::Search" );
     my $wiki = $search->wiki;
     $wiki->write_node( "Pub Crawls", "The basic premise of the pub crawl is to visit a succession of pubs, rather than spending the entire evening or day in a single establishment. London offers an excellent choice of themes for your pub crawl.", undef, { category => "Pubs" } ) or die "Can't write node";
 

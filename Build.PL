@@ -256,7 +256,7 @@ $build->add_to_cleanup( "t/node.db" );
 
 # Tell OpenGuides::Build which additional scripts and templates to install.
 $build->{config}{__extra_scripts}     = 
-                      [ "wiki.conf", "preferences.cgi", "supersearch.cgi",
+                      [ "wiki.conf", "preferences.cgi", "search.cgi",
                         "newpage.cgi" ];
 $build->{config}{__templates}         = [
                       "backlink_results.tt",
@@ -282,7 +282,7 @@ $build->{config}{__templates}         = [
                       "recent_changes.tt",
                       "search_results.tt",
                       "site_index.tt",
-                      "supersearch.tt",
+                      "search.tt",
                       "userstats.tt",
                       "wanted_pages.tt"
     ];

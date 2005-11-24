@@ -1,6 +1,6 @@
 use strict;
 use CGI::Wiki::Setup::SQLite;
-use OpenGuides::SuperSearch;
+use OpenGuides::Search;
 use OpenGuides::Test;
 use Test::More;
 
@@ -45,7 +45,7 @@ my $config = OpenGuides::Test->make_basic_config;
 $config->use_plucene( 1 );
 
 # British National Grid guides should have os and latlong search fields.
-my $search = OpenGuides::SuperSearch->new( config => $config );
+my $search = OpenGuides::Search->new( config => $config );
 my $output = $search->run( return_output => 1 );
 # Strip Content-Type header to stop Test::HTML::Content getting confused.
 $output =~ s/^Content-Type.*[\r\n]+//m;
@@ -71,7 +71,7 @@ Test::HTML::Content::no_tag( $output, "input", { name => "osie_y" },
 
 # Irish National Grid guides should have osie and latlong.
 $config->geo_handler( 2 );
-$search = OpenGuides::SuperSearch->new( config => $config );
+$search = OpenGuides::Search->new( config => $config );
 $output = $search->run( return_output => 1 );
 $output =~ s/^Content-Type.*[\r\n]+//m;
 
@@ -97,7 +97,7 @@ Test::HTML::Content::no_tag( $output, "input", { name => "os_y" },
 # UTM guides should have latitude/longitude/latlong_dist only.
 $config->geo_handler( 3 );
 $config->ellipsoid( "Airy" );
-$search = OpenGuides::SuperSearch->new( config => $config );
+$search = OpenGuides::Search->new( config => $config );
 $output = $search->run( return_output => 1 );
 $output =~ s/^Content-Type.*[\r\n]+//m;
 

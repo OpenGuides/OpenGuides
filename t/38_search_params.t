@@ -2,7 +2,7 @@ use strict;
 use CGI;
 use CGI::Wiki::Setup::SQLite;
 use OpenGuides::Config;
-use OpenGuides::SuperSearch;
+use OpenGuides::Search;
 use Test::More;
 
 eval { require DBD::SQLite; };
@@ -59,7 +59,7 @@ $q->param( -name => "os_dist",      -value => 500    );
 $q->param( -name => "osie_dist",    -value => 600    );
 $q->param( -name => "latlong_dist", -value => 700    );
 my %vars = $q->Vars();
-my $search = OpenGuides::SuperSearch->new( config => $config );
+my $search = OpenGuides::Search->new( config => $config );
 $search->run( vars => \%vars, return_output => 1 );
 is( $search->{distance_in_metres}, 500,
     "os_dist picked up when OS co-ords given and using British grid" );
@@ -73,7 +73,7 @@ $q->param( -name => "os_dist",      -value => 500    );
 $q->param( -name => "osie_dist",    -value => 600    );
 $q->param( -name => "latlong_dist", -value => 700    );
 %vars = $q->Vars();
-$search = OpenGuides::SuperSearch->new( config => $config );
+$search = OpenGuides::Search->new( config => $config );
 $search->run( vars => \%vars, return_output => 1 );
 ok( !defined $search->{distance_in_metres},
     "OSIE co-ords ignored when using British grid" );
@@ -85,7 +85,7 @@ $q->param( -name => "os_dist",      -value => 500 );
 $q->param( -name => "osie_dist",    -value => 600 );
 $q->param( -name => "latlong_dist", -value => 700 );
 %vars = $q->Vars();
-$search = OpenGuides::SuperSearch->new( config => $config );
+$search = OpenGuides::Search->new( config => $config );
 $search->run( vars => \%vars, return_output => 1 );
 is( $search->{distance_in_metres}, 700,
     "latlong_dist picked up when lat/long given and using British grid" );
@@ -103,7 +103,7 @@ $q->param( -name => "os_dist",      -value => 500    );
 $q->param( -name => "osie_dist",    -value => 600    );
 $q->param( -name => "latlong_dist", -value => 700    );
 %vars = $q->Vars();
-$search = OpenGuides::SuperSearch->new( config => $config );
+$search = OpenGuides::Search->new( config => $config );
 $search->run( vars => \%vars, return_output => 1 );
 is( $search->{distance_in_metres}, 600,
     "osie_dist picked up when OS co-ords given and using Irish grid" );
@@ -117,7 +117,7 @@ $q->param( -name => "os_dist",      -value => 500    );
 $q->param( -name => "osie_dist",    -value => 600    );
 $q->param( -name => "latlong_dist", -value => 700    );
 %vars = $q->Vars();
-$search = OpenGuides::SuperSearch->new( config => $config );
+$search = OpenGuides::Search->new( config => $config );
 $search->run( vars => \%vars, return_output => 1 );
 ok( !defined $search->{distance_in_metres},
     "OS co-ords ignored when using Irish grid" );
@@ -129,7 +129,7 @@ $q->param( -name => "os_dist",      -value => 500 );
 $q->param( -name => "osie_dist",    -value => 600 );
 $q->param( -name => "latlong_dist", -value => 700 );
 %vars = $q->Vars();
-$search = OpenGuides::SuperSearch->new( config => $config );
+$search = OpenGuides::Search->new( config => $config );
 $search->run( vars => \%vars, return_output => 1 );
 is( $search->{distance_in_metres}, 700,
     "latlong_dist picked up when lat/long given and using Irish grid" );
@@ -148,7 +148,7 @@ $q->param( -name => "os_dist",      -value => 500    );
 $q->param( -name => "osie_dist",    -value => 600    );
 $q->param( -name => "latlong_dist", -value => 700    );
 %vars = $q->Vars();
-$search = OpenGuides::SuperSearch->new( config => $config );
+$search = OpenGuides::Search->new( config => $config );
 $search->run( vars => \%vars, return_output => 1 );
 ok( !defined $search->{distance_in_metres},
     "OS co-ords ignored when using UTM" );
@@ -160,7 +160,7 @@ $q->param( -name => "os_dist",      -value => 500    );
 $q->param( -name => "osie_dist",    -value => 600    );
 $q->param( -name => "latlong_dist", -value => 700    );
 %vars = $q->Vars();
-$search = OpenGuides::SuperSearch->new( config => $config );
+$search = OpenGuides::Search->new( config => $config );
 $search->run( vars => \%vars, return_output => 1 );
 ok( !defined $search->{distance_in_metres},
     "OSIE co-ords ignored when using UTM" );
@@ -172,7 +172,7 @@ $q->param( -name => "os_dist",      -value => 500 );
 $q->param( -name => "osie_dist",    -value => 600 );
 $q->param( -name => "latlong_dist", -value => 700 );
 %vars = $q->Vars();
-$search = OpenGuides::SuperSearch->new( config => $config );
+$search = OpenGuides::Search->new( config => $config );
 $search->run( vars => \%vars, return_output => 1 );
 is( $search->{distance_in_metres}, 700,
     "latlong_dist picked up when lat/long given and using UTM" );
