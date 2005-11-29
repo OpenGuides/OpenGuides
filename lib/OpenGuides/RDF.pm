@@ -256,11 +256,11 @@ developers.
                                          config => $config ); 
 
     # RDF version of a node.
-    print "Content-Type: text/plain\n\n";
+    print "Content-Type: application/rdf+xml\n\n";
     print $rdf_writer->emit_rdfxml( node => "Masala Zone, N1 0NU" );
 
     # Ten most recent changes.
-    print "Content-Type: text/plain\n";
+    print "Content-Type: application/rdf+xml\n";
     print "Last-Modified: " . $self->rss_timestamp( items => 10 ) . "\n\n";
     print $rdf_writer->make_recentchanges_rss( items => 10 );
 
@@ -287,7 +287,7 @@ L<OpenGuides::Config> object.  Both arguments mandatory.
 		       locale   => "Islington" }
     );
 
-    print "Content-Type: text/plain\n\n";
+    print "Content-Type: application/rdf+xml\n\n";
     print $rdf_writer->emit_rdfxml( node => "Masala Zone, N1 0NU" );
 
 B<Note:> Some of the fields emitted by the RDF/XML generator are taken
@@ -323,7 +323,7 @@ invoked this module with.
 =item B<make_recentchanges_rss>
 
     # Ten most recent changes.
-    print "Content-Type: text/plain\n";
+    print "Content-Type: application/rdf+xml\n";
     print "Last-Modified: " . $rdf_writer->rss_timestamp( items => 10 ) . "\n\n";
     print $rdf_writer->make_recentchanges_rss( items => 10 );
 
@@ -335,7 +335,7 @@ invoked this module with.
                  filter_on_metadata => { username => "bob" },
                );
 
-    print "Content-Type: text/plain\n";
+    print "Content-Type: application/rdf+xml\n";
     print "Last-Modified: " . $rdf_writer->rss_timestamp( %args ) . "\n\n";
     print $rdf_writer->make_recentchanges_rss( %args );
 

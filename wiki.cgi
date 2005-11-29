@@ -276,7 +276,7 @@ sub display_node_rdf {
     my %args = @_;
     my $rdf_writer = OpenGuides::RDF->new( wiki      => $wiki,
                        config => $config );
-    print "Content-type: text/plain\n\n";
+    print "Content-type: application/rdf+xml\n\n";
     print $rdf_writer->emit_rdfxml( node => $args{node} );
     exit 0;
 }

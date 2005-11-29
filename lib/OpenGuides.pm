@@ -13,7 +13,7 @@ use URI::Escape;
 
 use vars qw( $VERSION );
 
-$VERSION = '0.51';
+$VERSION = '0.52';
 
 =head1 NAME
 
@@ -537,7 +537,7 @@ sub show_index {
     if ( $args{format} ) {
         if ( $args{format} eq "rdf" ) {
             $template = "rdf_index.tt";
-            $conf{content_type} = "text/plain";
+            $conf{content_type} = "application/rdf+xml";
         }
         elsif ( $args{format} eq "plain" ) {
             $template = "plain_index.tt";
@@ -665,7 +665,7 @@ sub display_rss {
                                              config     => $self->config,
                                              og_version => $VERSION,
                                          );
-    my $output = "Content-Type: text/plain\n";
+    my $output = "Content-Type: application/rdf+xml\n";
     $output .= "Last-Modified: " . $rdf_writer->rss_timestamp( %criteria ) . "\n\n";
     $output .= $rdf_writer->make_recentchanges_rss( %criteria );
     return $output if $return_output;
@@ -894,12 +894,9 @@ sub process_template {
                           cookies  => $args{cookies},
                       );
     if ( $args{content_type} ) {
-        $output_conf{content_type} = "";
-        my $output = "Content-Type: $args{content_type}\n\n"
-                     . OpenGuides::Template->output( %output_conf );
-    } else {
-        return OpenGuides::Template->output( %output_conf );
+        $output_conf{content_type} = $args{content_type};
     }
+    return OpenGuides::Template->output( %output_conf );
 }
 
 sub redirect_to_node {

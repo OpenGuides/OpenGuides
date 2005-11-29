@@ -166,7 +166,13 @@ sub output {
 
     my $header = "";
     unless ( defined $args{content_type} and $args{content_type} eq "" ) {
-        $header = CGI::header( -cookie => $args{cookies} );
+        my $content_type;
+        if ($args{content_type}) {
+            $content_type = $args{content_type};
+        } else {
+            $content_type = "text/html";
+        }
+        $header = CGI::header( -type => $content_type, -cookie => $args{cookies} );
     }
 
     # vile hack

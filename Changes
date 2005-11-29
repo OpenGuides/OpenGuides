@@ -3,6 +3,7 @@
           have customisations to your templates, you may need to make changes
           to reflect this.
         Rename OpenGuides::SuperSearch to OpenGuides::Search.
+        Use corrent content-type (application/rdf+xml) for all RDF output.
         Fix missing bracket in node.tt.
         Add custom_node template just below main content in node.tt.
 

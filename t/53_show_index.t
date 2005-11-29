@@ -50,6 +50,6 @@ SKIP: {
                                   return_output => 1,
                                   format        => "rdf"
                                 );
-    like( $output, qr|Content-Type: text/plain|,
-          "RDF output gets content-type of text/plain" );
+    like( $output, qr|Content-Type: application/rdf\+xml|,
+          "RDF output gets content-type of application/rdf+xml" );
 }

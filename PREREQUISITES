@@ -10,7 +10,7 @@ CGI::Wiki::Formatter::UseMod (version 0.16 or later)
 CGI::Wiki::Plugin::Categoriser
 CGI::Wiki::Plugin::Diff (version 0.07 or later)
 CGI::Wiki::Plugin::Locator::Grid (version 0.02 or later)
-CGI::Wiki::Plugin::RSS::ModWiki (version 0.081 or later)
+CGI::Wiki::Plugin::RSS::ModWiki (version 0.09 or later)
 CGI::Wiki::Plugin::RSS::Reader (version 1.3 or later)
 Class::Accessor
 Config::Tiny
@@ -39,6 +39,7 @@ Parse::RecDescent
     -- or --
   Search::InvertedIndex
 )
+POSIX
 Template
 Test::MockObject (version 0.07 or later)
 Time::Piece
