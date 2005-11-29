@@ -12,7 +12,7 @@ my $have_sqlite = $@ ? 0 : 1;
 
 SKIP: {
     skip "DBD::SQLite not installed - no database to test with", 24
-      unless $have_sqlite;
+        unless $have_sqlite;
 
     CGI::Wiki::Setup::SQLite::setup( { dbname => "t/node.db" } );
     my $config = OpenGuides::Config->new(
@@ -67,32 +67,31 @@ SKIP: {
     like( $rdfxml, qr|<\?xml version="1.0"\?>|, "RDF is encoding-neutral" );
 
     like( $rdfxml, qr|<foaf:name>Bloomsbury</foaf:name>|,
-      "finds the first locale" );
+        "finds the first locale" );
     like( $rdfxml, qr|<foaf:name>St Pancras</foaf:name>|,
-         "finds the second locale" );
+        "finds the second locale" );
 
     like( $rdfxml, qr|<phone>test phone number</phone>|,
-      "picks up phone number" );
+        "picks up phone number" );
 
     like( $rdfxml, qr|<chefmoz:Hours>test hours</chefmoz:Hours>|,
-      "picks up opening hours text" );
+        "picks up opening hours text" );
 
     like( $rdfxml, qr|<foaf:homepage rdf:resource="test website" />|, "picks up website" );
 
     like( $rdfxml,
-      qr|<dc:title>CGI::Wiki Test Site: Calthorpe Arms</dc:title>|,
-      "sets the title correctly" );
+        qr|<dc:title>CGI::Wiki Test Site: Calthorpe Arms</dc:title>|,
+        "sets the title correctly" );
 
     like( $rdfxml, qr|<dc:contributor>Kake</dc:contributor>|,
-      "last username to edit used as contributor" );
+        "last username to edit used as contributor" );
 
     like( $rdfxml, qr|<wiki:version>1</wiki:version>|, "version picked up" );
 
-    like( $rdfxml, qr|<rdf:Description rdf:about="">|,
-          "sets the 'about' correctly" );
+    like( $rdfxml, qr|<rdf:Description rdf:about="">|, "sets the 'about' correctly" );
 
     like( $rdfxml, qr|<dc:source rdf:resource="http://wiki.example.com/mywiki.cgi\?Calthorpe_Arms" />|,
-      "set the dc:source with the version-independent uri" );
+        "set the dc:source with the version-independent uri" );
 
     like( $rdfxml, qr|<country>United Kingdom</country>|, "country" ).
     like( $rdfxml, qr|<city>London</city>|, "city" ).
@@ -110,10 +109,10 @@ SKIP: {
     $config->default_country( "" );
     my $guide = OpenGuides->new( config => $config );
     OpenGuides::Test->write_data(
-                                  guide => $guide,
-                                  node  => "Star Tavern",
-                                  latitude => 51.498,
-                                  longitude => -0.154,
+                                    guide => $guide,
+                                    node  => "Star Tavern",
+                                    latitude => 51.498,
+                                    longitude => -0.154,
                                 );
     $rdf_writer = OpenGuides::RDF->new( wiki => $guide->wiki, config => $config );
     $rdfxml = $rdf_writer->emit_rdfxml( node => "Star Tavern" );
@@ -122,11 +121,9 @@ SKIP: {
 
     # Now test that there's a nice failsafe where a node doesn't exist.
     $rdfxml = eval { $rdf_writer->emit_rdfxml( node => "I Do Not Exist" ); };
-    is( $@, "",
-        "->emit_rdfxml doesn't die when called on a nonexistent node" );
+    is( $@, "", "->emit_rdfxml doesn't die when called on a nonexistent node" );
 
-    like( $rdfxml, qr|<wiki:version>0</wiki:version>|,
-          "...and wiki:version is 0" );
+    like( $rdfxml, qr|<wiki:version>0</wiki:version>|, "...and wiki:version is 0" );
 
     # Test the data for a node that redirects.
     $wiki->write_node( "Calthorpe Arms Pub",
@@ -141,6 +138,6 @@ SKIP: {
     my $redirect_rdf = $rdf_writer->emit_rdfxml( node => "Calthorpe Arms Pub" );
 
     like( $redirect_rdf, qr|<owl:sameAs rdf:resource="/\?id=Calthorpe_Arms;format=rdf#obj" />|,
-      "redirecting node gets owl:sameAs to target" );
+        "redirecting node gets owl:sameAs to target" );
 
 }
