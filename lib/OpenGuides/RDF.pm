@@ -95,7 +95,7 @@ sub emit_rdfxml {
     
     my ($is_geospatial, $objType);
 
-    if ($os_x || $os_y || $latitude || $longitude || $address || $postcode || @locales) {
+    if ($os_x || $os_y || $latitude || $longitude || $address || $postcode || @locales || $opening_hours_text) {
         $is_geospatial = 1;
         $objType    = 'geo:SpatialThing';
     } else {
@@ -114,7 +114,6 @@ sub emit_rdfxml {
 
     my $url               = $self->{make_node_url}->( $node_name, $version );
     my $version_indpt_url = $self->{make_node_url}->( $node_name );
-
     my $rdf = qq{<?xml version="1.0"?>
 <rdf:RDF
   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"

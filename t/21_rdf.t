@@ -5,7 +5,7 @@ use OpenGuides::RDF;
 use OpenGuides::Utils;
 use OpenGuides::Test;
 use URI::Escape;
-use Test::More tests => 26;
+use Test::More tests => 27;
 
 eval { require DBD::SQLite; };
 my $have_sqlite = $@ ? 0 : 1;
@@ -139,5 +139,20 @@ SKIP: {
 
     like( $redirect_rdf, qr|<owl:sameAs rdf:resource="/\?id=Calthorpe_Arms;format=rdf#obj" />|,
         "redirecting node gets owl:sameAs to target" );
+
+    $wiki->write_node( "Nonesuch Stores",
+        "A metaphysical wonderland",
+        undef,
+        {
+            comment            => "Yup.",
+            username           => "Nobody",
+            opening_hours_text => "Open All Hours",
+        }
+    );
+
+    my $rdfxml = $rdf_writer->emit_rdfxml( node => "Nonesuch Stores" );
+
+    like( $rdfxml, qr|<geo:SpatialThing rdf:ID="obj" dc:title="Nonesuch Stores">|,
+        "having opening hours marks node as geospatial" );
 
 }
