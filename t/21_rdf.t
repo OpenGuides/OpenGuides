@@ -16,16 +16,16 @@ SKIP: {
 
     CGI::Wiki::Setup::SQLite::setup( { dbname => "t/node.db" } );
     my $config = OpenGuides::Config->new(
-           vars => {
-                     dbtype             => "sqlite",
-                     dbname             => "t/node.db",
-                     indexing_directory => "t/indexes",
-                     script_url         => "http://wiki.example.com/",
-                     script_name        => "mywiki.cgi",
-                     site_name          => "CGI::Wiki Test Site",
-                     default_city       => "London",
-                     default_country    => "United Kingdom",
-                   }
+        vars => {
+                    dbtype             => "sqlite",
+                    dbname             => "t/node.db",
+                    indexing_directory => "t/indexes",
+                    script_url         => "http://wiki.example.com/",
+                    script_name        => "mywiki.cgi",
+                    site_name          => "CGI::Wiki Test Site",
+                    default_city       => "London",
+                    default_country    => "United Kingdom",
+                }
     );
     eval { require CGI::Wiki::Search::Plucene; };
     if ( $@ ) { $config->use_plucene ( 0 ) };
@@ -46,20 +46,20 @@ SKIP: {
 
     # Test the data for a node that exists.
     $wiki->write_node( "Calthorpe Arms",
-		       "CAMRA-approved pub near King's Cross",
-		       undef,
-		       {
-                         comment            => "Stub page, please update!",
-		         username           => "Kake",
-		         postcode           => "WC1X 8JR",
-			 locale             => [ "Bloomsbury", "St Pancras" ],
-                         phone              => "test phone number",
-			 website            => "test website",
-			 opening_hours_text => "test hours",
-			 latitude           => "51.524193",
-			 longitude          => "-0.114436",
-       summary            => "a nice pub",
-                       }
+        "CAMRA-approved pub near King's Cross",
+        undef,
+        {
+            comment            => "Stub page, please update!",
+            username           => "Kake",
+            postcode           => "WC1X 8JR",
+            locale             => [ "Bloomsbury", "St Pancras" ],
+            phone              => "test phone number",
+            website            => "test website",
+            opening_hours_text => "test hours",
+            latitude           => "51.524193",
+            longitude          => "-0.114436",
+            summary            => "a nice pub",
+        }
     );
 
     my $rdfxml = $rdf_writer->emit_rdfxml( node => "Calthorpe Arms" );
@@ -67,24 +67,24 @@ SKIP: {
     like( $rdfxml, qr|<\?xml version="1.0"\?>|, "RDF is encoding-neutral" );
 
     like( $rdfxml, qr|<foaf:name>Bloomsbury</foaf:name>|,
-	  "finds the first locale" );
+      "finds the first locale" );
     like( $rdfxml, qr|<foaf:name>St Pancras</foaf:name>|,
          "finds the second locale" );
 
     like( $rdfxml, qr|<phone>test phone number</phone>|,
-	  "picks up phone number" );
+      "picks up phone number" );
 
     like( $rdfxml, qr|<chefmoz:Hours>test hours</chefmoz:Hours>|,
-	  "picks up opening hours text" );
+      "picks up opening hours text" );
 
     like( $rdfxml, qr|<foaf:homepage rdf:resource="test website" />|, "picks up website" );
 
     like( $rdfxml,
-	  qr|<dc:title>CGI::Wiki Test Site: Calthorpe Arms</dc:title>|,
-	  "sets the title correctly" );
+      qr|<dc:title>CGI::Wiki Test Site: Calthorpe Arms</dc:title>|,
+      "sets the title correctly" );
 
     like( $rdfxml, qr|<dc:contributor>Kake</dc:contributor>|,
-	  "last username to edit used as contributor" );
+      "last username to edit used as contributor" );
 
     like( $rdfxml, qr|<wiki:version>1</wiki:version>|, "version picked up" );
 
@@ -92,7 +92,7 @@ SKIP: {
           "sets the 'about' correctly" );
 
     like( $rdfxml, qr|<dc:source rdf:resource="http://wiki.example.com/mywiki.cgi\?Calthorpe_Arms" />|,
-	  "set the dc:source with the version-independent uri" );
+      "set the dc:source with the version-independent uri" );
 
     like( $rdfxml, qr|<country>United Kingdom</country>|, "country" ).
     like( $rdfxml, qr|<city>London</city>|, "city" ).
@@ -130,17 +130,17 @@ SKIP: {
 
     # Test the data for a node that redirects.
     $wiki->write_node( "Calthorpe Arms Pub",
-		       "#REDIRECT [[Calthorpe Arms]]",
-		       undef,
-		       {
-                         comment            => "Created as redirect to Calthorpe Arms page.",
-		         username           => "Earle",
-                       }
+        "#REDIRECT [[Calthorpe Arms]]",
+        undef,
+        {
+            comment  => "Created as redirect to Calthorpe Arms page.",
+            username => "Earle",
+        }
     );
 
     my $redirect_rdf = $rdf_writer->emit_rdfxml( node => "Calthorpe Arms Pub" );
 
     like( $redirect_rdf, qr|<owl:sameAs rdf:resource="/\?id=Calthorpe_Arms;format=rdf#obj" />|,
-	  "redirecting node gets owl:sameAs to target" );
+      "redirecting node gets owl:sameAs to target" );
 
 }
