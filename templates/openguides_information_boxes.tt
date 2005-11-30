@@ -1,6 +1,6 @@
 <fieldset>
   <legend>OpenGuides information</legend>
-  <table summary="Fields for entering information about the changes being made to this page">
+  <table summary="Fields for entering additional information summarising the node and the change being made to it">
     <tr>
       <td colspan="2"><label for="summary">One-line summary of this node:</label></td>
     </tr>
