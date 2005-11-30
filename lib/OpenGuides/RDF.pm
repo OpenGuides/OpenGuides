@@ -133,7 +133,7 @@ sub emit_rdfxml {
     <dc:title>} . $self->{site_name} . qq{: $node_name</dc:title>
     <dc:date>$timestamp</dc:date>
     <dcterms:modified>$timestamp</dcterms:modified>
-    <dc:contributor>$username</dc:contributor>
+    <dc:contributor foaf:nick="$username" />
     <dc:source rdf:resource="$version_indpt_url" />
     <wiki:version>$version</wiki:version>
     <foaf:topic rdf:resource="#obj" />

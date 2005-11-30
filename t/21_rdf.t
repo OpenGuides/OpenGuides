@@ -83,7 +83,7 @@ SKIP: {
         qr|<dc:title>CGI::Wiki Test Site: Calthorpe Arms</dc:title>|,
         "sets the title correctly" );
 
-    like( $rdfxml, qr|<dc:contributor>Kake</dc:contributor>|,
+    like( $rdfxml, qr|<dc:contributor foaf:nick="Kake" />|,
         "last username to edit used as contributor" );
 
     like( $rdfxml, qr|<wiki:version>1</wiki:version>|, "version picked up" );
