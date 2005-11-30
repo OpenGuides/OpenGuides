@@ -150,7 +150,7 @@ SKIP: {
         }
     );
 
-    my $rdfxml = $rdf_writer->emit_rdfxml( node => "Nonesuch Stores" );
+    $rdfxml = $rdf_writer->emit_rdfxml( node => "Nonesuch Stores" );
 
     like( $rdfxml, qr|<geo:SpatialThing rdf:ID="obj" dc:title="Nonesuch Stores">|,
         "having opening hours marks node as geospatial" );
