@@ -59,12 +59,6 @@
           <legend>Metadata (optional)</legend>
           <table summary="Form for entering metadata about the subject of this node">
             <tr>
-              <td class="label" colspan="2"><label for="summary">One-line summary of this node:</label></td>
-            </tr>
-            <tr>
-              <td colspan="2"><input type="text" size="50" id="summary" name="summary" value="[% summary %]" /></td>
-            </tr>
-            <tr>
               <td class="label"><label for="phone">Phone:</label></td>
               <td><input type="text" size="50" id="phone" name="phone" value="[% phone %]" /></td>
             </tr>
