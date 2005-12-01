@@ -210,7 +210,7 @@ sub rss_maker {
           site_url            => $self->{config}->script_url,
           site_description    => $self->{site_description},
           make_node_url       => $self->{make_node_url},
-          recent_changes_link => $self->{config}->script_url . '?action=rss',
+          recent_changes_link => $self->{config}->script_url . '?action=rc',
           software_name       => 'OpenGuides',
           software_homepage   => 'http://openguides.org/',
           software_version    => $self->{og_version},
