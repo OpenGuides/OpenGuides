@@ -255,6 +255,8 @@ sub edit_node {
                              config   => $config,
                  metadata => $node_data{metadata} );
 
+    $metadata_vars{website} ||= 'http://';
+
     my %tt_vars = ( content         => $q->escapeHTML($content),
                     checksum        => $q->escapeHTML($checksum),
                     %metadata_vars,

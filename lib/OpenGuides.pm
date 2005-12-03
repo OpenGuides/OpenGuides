@@ -727,6 +727,8 @@ sub commit_node {
     cgi_obj => $q
     );
 
+    delete $metadata{website} if $metadata{website} eq 'http://';
+
     $metadata{opening_hours_text} = $q->param("hours_text") || "";
 
     # Pick out the unmunged versions of lat/long if they're set.
