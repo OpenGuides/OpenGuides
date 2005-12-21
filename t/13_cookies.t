@@ -3,7 +3,7 @@ use OpenGuides::Config;
 use OpenGuides::CGI;
 use Time::Piece;
 use Time::Seconds;
-use Test::More tests => 19;
+use Test::More tests => 20;
 
 eval { OpenGuides::CGI->make_prefs_cookie; };
 ok( $@, "->make_prefs_cookie dies if no config object supplied" );
@@ -27,6 +27,7 @@ my $cookie = OpenGuides::CGI->make_prefs_cookie(
     default_edit_type          => "tidying",
     cookie_expires             => "never",
     track_recent_changes_views => 1,
+    display_google_maps => 1
 );
 isa_ok( $cookie, "CGI::Cookie", "->make_prefs_cookie returns a cookie" );
 
@@ -63,9 +64,10 @@ is( $prefs{show_minor_edits_in_rc}, 1, "...and minor edits prefs" );
 is( $prefs{default_edit_type}, "tidying", "...and default edit prefs" );
 is( $prefs{cookie_expires}, "never", "...and requested cookie expiry" );
 ok( $prefs{track_recent_changes_views}, "...and recent changes tracking" );
+is( $prefs{display_google_maps}, 1, "...and Google Maps display preference" );
 
 # Check that cookie parsing fails nicely if no cookie set.
 delete $ENV{HTTP_COOKIE};
 %prefs = eval { OpenGuides::CGI->get_prefs_from_cookie( config => $config ); };
 is( $@, "", "->get_prefs_from_cookie doesn't die if no cookie set" );
-is( keys %prefs, 9, "...and returns nine default values" );
+is( keys %prefs, 10, "...and returns ten default values" );

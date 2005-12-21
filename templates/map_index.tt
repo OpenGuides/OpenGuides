@@ -1,0 +1,61 @@
+[% INCLUDE header.tt page_title = "Map of all nodes" %]
+[% INCLUDE banner.tt %]
+<div id="content">
+<a href="" id="permalink">Link to this Page</a> | <a href="" onclick="showTowns(); return false;">Show Town Boundaries</a>
+
+<div id="maincontent">
+
+[% IF gmaps_api_key %]
+  <ul style="height:400px; overflow:auto;float:right; width:30%;">
+  [% i = 0 %]
+  [% FOREACH node = nodes %]
+    [% metadata = node.node_data.metadata %]
+    [% i = i + 1 %]
+    [% IF metadata.latitude.list.first AND metadata.longitude.list.first %]
+      <li><a href='#' onclick="marker[% i %].openInfoWindowHtml(htmlString[% i %]); return false;">[% node.name %]</a>[% IF metadata.city.list.first %], [% metadata.city.list.first %][% END %]</li>
+    [% END %]
+  [% END %]
+  </ul>
+
+  <table width="100%" height="100%">
+  <tr><td><div id="map" style=" width: 65%; height: 450px"></div></td></tr>
+  </table>
+
+  <script defer="defer" type="text/javascript">
+    //<![CDATA[
+      var map = new GMap(document.getElementById("map"));
+      map.addControl(new GLargeMapControl());
+      map.addControl(new GMapTypeControl());
+      map.centerAndZoom(new GPoint([% IF long %][% long %][% ELSE %][% centre_long %][% END %],[% IF lat %][% lat %][% ELSE %][% centre_lat %][% END %]), [% IF zoom %][% zoom %][% ELSE %][% default_gmaps_zoom %][% END %]);
+
+      [% i = 0 %]
+      [% FOREACH node = nodes %]
+        [% i = i + 1 %]
+        [% metadata = node.node_data.metadata %]
+        [% IF metadata.latitude.list.first AND metadata.longitude.list.first %]
+          var point[% i %] = new GPoint([% metadata.longitude.list.first %], [% metadata.latitude.list.first %]); 
+          var marker[% i %] = new GMarker(point[% i %],baseIcon);
+          var htmlString[% i %] = "<a href=\"?[% node.param %]\">[% node.name %]</a>&nbsp;<a style='text-decoration:none;' href=\"?id=[% node.param %];action=edit\">(edit)</a><br />[% metadata.address.list.first %]<br />[% metadata.city.list.first %]";
+          GEvent.addListener(marker[% i %], "click", function() { 
+            marker[% i %].openInfoWindowHtml(htmlString[% i %]); 
+            }); 
+          map.addOverlay(marker[% i %]); 
+        [% END %]
+      [% END %]
+      function map_recenter() {
+        var center = map.getCenterLatLng();
+        var link = document.getElementById('permalink');
+        var zoom = map.getZoomLevel();
+        link.href = "?action=index;format=map&long="+center.x+"&lat="+center.y+"&zoom="+zoom;
+      }
+      GEvent.addListener(map, "moveend", map_recenter );
+    //]]>
+  </script>
+[% ELSE %]
+  Sorry, this guide doesn't have Google Maps functionality enabled.
+[% END %]
+
+</div>
+</div>
+
+[% INCLUDE footer.tt %]
