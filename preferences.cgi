@@ -33,6 +33,7 @@ sub set_preferences {
     my $edit_type    = $cgi->param("default_edit_type")          || "normal";
     my $expires      = $cgi->param("cookie_expires")             || "month";
     my $track_rc     = $cgi->param("track_recent_changes_views") || 0;
+    my $gmaps        = $cgi->param("display_google_maps")        || 0;
     my $prefs_cookie = OpenGuides::CGI->make_prefs_cookie(
         config => $config,
         username => $username,
@@ -44,6 +45,7 @@ sub set_preferences {
         default_edit_type      => $edit_type,
         cookie_expires         => $expires,
         track_recent_changes_views => $track_rc,
+        display_google_maps    => $gmaps
     );
     my @cookies = ( $prefs_cookie );
     # If they've asked not to have their recent changes visits tracked,
@@ -71,6 +73,7 @@ sub set_preferences {
                       default_edit_type          => $edit_type,
                       cookie_expires             => $expires,
                       track_recent_changes_views => $track_rc,
+                      display_google_maps        => $gmaps
                     }
     );
 }

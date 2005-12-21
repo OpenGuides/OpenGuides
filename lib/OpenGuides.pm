@@ -171,6 +171,10 @@ sub display_node {
     my $modified   = $node_data{last_modified};
     my %metadata   = %{$node_data{metadata}};
 
+    my ($wgs84_long, $wgs84_lat) = OpenGuides::Utils->get_wgs84_coords(
+                                        longitude => $metadata{longitude}[0],
+                                        latitude => $metadata{latitude}[0],
+                                        config => $config);
     if ($args{format} && $args{format} eq 'raw') {
       print "Content-Type: text/plain\n\n";
       print $raw;
@@ -192,6 +196,10 @@ sub display_node {
                    node          => $id,
                    language      => $config->default_language,
                    oldid         => $oldid,
+                   enable_gmaps  => 1,
+                   display_google_maps => $self->get_cookie("display_google_maps"),
+                   wgs84_long    => $wgs84_long,
+                   wgs84_lat     => $wgs84_lat
                );
 
     if ( $raw =~ /^#REDIRECT\s+(.+?)\s*$/ ) {
@@ -542,6 +550,18 @@ sub show_index {
         elsif ( $args{format} eq "plain" ) {
             $template = "plain_index.tt";
             $conf{content_type} = "text/plain";
+        } elsif ( $args{format} eq "map" ) {
+            my $q = CGI->new;
+            $tt_vars{zoom} = $q->param('zoom') || '';
+            $tt_vars{lat} = $q->param('lat') || '';
+            $tt_vars{long} = $q->param('long') || '';
+            $tt_vars{centre_long} = $self->config->centre_long;
+            $tt_vars{centre_lat} = $self->config->centre_lat;
+            $tt_vars{default_gmaps_zoom} = $self->config->default_gmaps_zoom;
+            $tt_vars{enable_gmaps} = 1;
+            $tt_vars{display_google_maps} = 1; # override for this page
+            $template = "map_index.tt";
+            
         }
     } else {
         $template = "site_index.tt";
@@ -927,7 +947,6 @@ sub get_cookie {
     my %cookie_data = OpenGuides::CGI->get_prefs_from_cookie(config=>$config);
     return $cookie_data{$pref_name};
 }
-
 
 =back
 

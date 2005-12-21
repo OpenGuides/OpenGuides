@@ -86,6 +86,8 @@ in the config object or the user cookies.
 
 =item * C<home_name>
 
+=item * C<gmaps_api_key>
+
 =back
 
 =over
@@ -153,6 +155,7 @@ sub output {
         enable_page_deletion  => $enable_page_deletion,
         language              => $config->default_language,
         default_city          => $default_city,
+        gmaps_api_key         => $config->gmaps_api_key
     };
 
     if ($args{node}) {

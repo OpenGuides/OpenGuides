@@ -75,6 +75,17 @@
       <label for="track_recent_changes_views">Track my visits to Recent Changes and offer me a link for &#8220;changes since I last viewed Recent Changes&#8221;.</label>
     </p>
 
+    [% IF gmaps_api_key %]
+      <p>
+        [% IF display_google_maps %]
+          <input type="checkbox" id="display_google_maps" name="display_google_maps" value="1" checked="1" />
+        [% ELSE %]
+          <input type="checkbox" id="display_google_maps" name="display_google_maps" value="1" />
+        [% END %]
+        <label for="display_google_maps">Display Google Maps.</label>
+      </p>
+    [% END %]
+
     <p>
       <label for="default_edit_type">Default edit type:</label>
       <select name="default_edit_type">
@@ -149,6 +160,12 @@
   <p>Your visits to Recent Changes will
     [% UNLESS track_recent_changes_views %] not [% END %]
   be tracked.</p>
+
+  [% IF gmaps_api_key %]
+    <p>Google Maps will
+      [% UNLESS display_google_maps %] not [% END %]
+    be displayed.</p>
+  [% END %]
 
   <p>Default edit type set to
     [% IF default_edit_type == 'normal' %]

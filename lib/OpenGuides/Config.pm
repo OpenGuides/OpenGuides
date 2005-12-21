@@ -9,8 +9,9 @@ my @variables = qw(
    custom_lib_path use_plucene indexing_directory enable_page_deletion
    admin_pass stylesheet_url site_name navbar_on_home_page home_name
    site_desc default_city default_country contact_email default_language
-   formatting_rules_node formatting_rules_link backlinks_in_title template_path custom_template_path
-   geo_handler ellipsoid
+   formatting_rules_node formatting_rules_link backlinks_in_title template_path
+   custom_template_path geo_handler ellipsoid gmaps_api_key centre_long
+   centre_lat default_gmaps_zoom default_gmaps_search_zoom force_wgs84
 );
 my @questions = map { $_ . "__qu" } @variables;
 OpenGuides::Config->mk_accessors( @variables );
@@ -76,7 +77,12 @@ sub _init {
                      formatting_rules_link => "http://openguides.org/page/text_formatting",
                      backlinks_in_title => 0,
                      geo_handler => 1,
-                     ellipsoid => "International"
+                     ellipsoid => "International",
+                     centre_long => 0,
+                     centre_lat => 0,
+                     default_gmaps_zoom => 5,
+                     default_gmaps_search_zoom => 3,
+                     force_wgs84 => 0
                    );
 
     # See if we already have some config variables set.
@@ -134,6 +140,12 @@ sub _init {
 	formatting_rules_link => "What URL do you want to use for the text formatting rules (leave blank to use a wiki node instead)?",
         backlinks_in_title => "Make node titles link to node backlinks (C2 style)?",
         ellipsoid => "Which ellipsoid do you want to use? (eg 'Airy', 'WGS-84')",
+        gmaps_api_key => "Do you have a Google Maps API key to use with this guide? If you enter it here the Google Maps functionality will be automatically enabled.",
+        centre_long => "What is the longitude of the centre point of a map to draw for your guide? (This question can be ignored if you aren't using Google Maps)",
+        centre_lat => "What is the latitude of the centre point of a map to draw for your guide? (This question can be ignored if you aren't using Google Maps)",
+        default_gmaps_zoom => "What default zoom level shall we use for Google Maps? (This question can be ignored if you aren't using Google Maps)",
+        default_gmaps_search_zoom => "What default zoom level shall we use for Google Maps in the search results? (This question can be ignored if you aren't using Google Maps)",
+        force_wgs84 => "Forcibly treat stored lat/long data as if they used the WGS84 ellipsoid?"
     );
 
     foreach my $var ( keys %questions ) {
@@ -221,6 +233,18 @@ sub script_url {
 =item * geo_handler (default: C<1>)
 
 =item * ellipsoid (default: C<International>)
+
+=item * gmaps_api_key
+
+=item * centre_long
+
+=item * centre_lat
+
+=item * default_gmaps_zoom
+
+=item * default_gmaps_search_zoom
+
+=item * force_wgs84
 
 =back
 

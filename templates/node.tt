@@ -8,6 +8,23 @@
 <div id="redirect_message">(redirected from <a href="[% full_cgi_url %]?id=[% oldid %];redirect=0">[% oldid.replace('_', ' ') %]</a>)</div>
 [% END %]
 
+[% IF wgs84_lat AND wgs84_long AND display_google_maps and gmaps_api_key %]
+  <div id="map" style="float:right; width: 300px; height: 200px"></div>
+  <script defer="defer" type="text/javascript">
+  //<![CDATA[
+    var map = new GMap(document.getElementById("map"));
+    map.addControl(new GSmallMapControl());
+    map.centerAndZoom(new GPoint([% longitude %], [% latitude %]), 3);
+    var point0 = new GPoint([% wgs84_long %], [% wgs84_lat %]);
+    var marker0 = new GMarker(point0,baseIcon);
+    GEvent.addListener(marker0, "click", function() {
+      marker0.openInfoWindowHtml("[% node_name %]");
+      });
+    map.addOverlay(marker0);
+  //]]>
+  </script>
+[% END %]
+
 [% IF current %]
   [% IF backlinks_in_title AND is_indexable_node %]
     <h2 class="node_name"><a href="[% cgi_url %]?action=index;index_type=[% CGI.escape(index_type) %];index_value=[% CGI.escape(index_value) %]">[% node_name %]</a></h2>

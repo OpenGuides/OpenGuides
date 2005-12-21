@@ -76,7 +76,8 @@ foreach my $var ( qw(
    custom_lib_path use_plucene indexing_directory enable_page_deletion
    admin_pass stylesheet_url site_name navbar_on_home_page home_name
    site_desc default_city default_country contact_email default_language
-   formatting_rules_node backlinks_in_title
+   formatting_rules_node backlinks_in_title gmaps_api_key centre_long
+   centre_lat default_gmaps_zoom default_gmaps_search_zoom force_wgs84
   ) ) {
     my $q_method = $var . "__qu";
     my $qu  = $existing_config->$q_method;

@@ -7,6 +7,9 @@
         Things with opening hours are marked as geospatial in RDF.
         Fix missing bracket in node.tt.
         Add custom_node template just below main content in node.tt.
+        Google Maps support! There is a new index type,
+        wiki.cgi?action=index;format=map, and maps appear in the node listings
+        (the latter feature is user-configurable).
         Fix <link> in RSS to point to RecentChanges page, not the feed itself.
         #67 Default website for a page is now http://
 

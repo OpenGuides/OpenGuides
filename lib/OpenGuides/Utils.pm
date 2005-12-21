@@ -2,7 +2,7 @@ package OpenGuides::Utils;
 
 use strict;
 use vars qw( $VERSION );
-$VERSION = '0.08';
+$VERSION = '0.09';
 
 use Carp qw( croak );
 use CGI::Wiki;
@@ -216,6 +216,45 @@ sub make_wiki_object {
     return $wiki;
 }
 
+=item B<get_wgs84_coords>
+
+Returns coordinate data suitable for use with Google Maps (and other GIS
+systems that assume WGS-84 data).
+
+    my ($wgs84_long, $wgs84_lat) = OpenGuides::Utils->get_wgs84_coords(
+                                        longitude => $longitude,
+                                        latitude => $latitude,
+                                        config => $config
+                                   );
+
+=cut
+
+sub get_wgs84_coords {
+    my ($self, %args) = @_;
+    my ($longitude, $latitude, $config) = ($args{longitude}, $args{latitude},
+                                           $args{config})
+       or croak "No longitude supplied to get_wgs84_coords";
+    croak "geo_handler not defined!" unless $config->geo_handler;
+    if ($config->force_wgs84) {
+        # Only as a rough approximation, good enough for large scale guides
+        return ($longitude, $latitude);
+    } elsif ($config->geo_handler == 1) {
+        # Do conversion here
+        return undef;
+    } elsif ($config->geo_handler == 2) {
+        # Do conversion here
+        return undef;
+    } elsif ($config->geo_handler == 3) {
+        if ($config->ellipsoid eq "WGS-84") {
+            return ($longitude, $latitude);
+        } else {
+            # Do conversion here
+            return undef;
+        }
+    } else {
+        croak "Invalid geo_handler config option $config->geo_handler";
+    }
+}
 
 =back
 
@@ -225,7 +264,7 @@ The OpenGuides Project (openguides-dev@openguides.org)
 
 =head1 COPYRIGHT
 
-     Copyright (C) 2003-2004 The OpenGuides Project.  All Rights Reserved.
+     Copyright (C) 2003-2005 The OpenGuides Project.  All Rights Reserved.
 
 This module is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself.

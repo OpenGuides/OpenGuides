@@ -1,7 +1,7 @@
 package OpenGuides::CGI;
 use strict;
 use vars qw( $VERSION );
-$VERSION = '0.06';
+$VERSION = '0.07';
 
 use Carp qw( croak );
 use CGI::Cookie;
@@ -38,6 +38,7 @@ Saving preferences in a cookie:
       default_edit_type          => "tidying",
       cookie_expires             => "never",
       track_recent_changes_views => 1,
+      display_google_maps        => 1
   );
 
   my $wiki = OpenGuides::Utils->make_wiki_object( config => $config );
@@ -82,6 +83,7 @@ Tracking visits to Recent Changes:
       default_edit_type          => "tidying",
       cookie_expires             => "never",
       track_recent_changes_views => 1,
+      display_google_maps        => 1
   );
 
 Croaks unless an L<OpenGuides::Config> object is supplied as C<config>.
@@ -124,6 +126,7 @@ sub make_prefs_cookie {
                     defedit    => $args{default_edit_type} || "normal",
                     exp        => $args{cookie_expires},
                     trackrc    => $args{track_recent_changes_views} || 0,
+                    gmaps      => $args{display_google_maps} || 0
                   },
         -expires => $expires,
     );
@@ -161,6 +164,7 @@ sub get_prefs_from_cookie {
              default_edit_type          => $data{defedit}    || "normal",
              cookie_expires             => $data{exp}        || "month",
              track_recent_changes_views => $data{trackrc}    || 0,
+             display_google_maps        => $data{gmaps}      || 0
            );
 }
 
@@ -255,7 +259,7 @@ The OpenGuides Project (openguides-dev@openguides.org)
 
 =head1 COPYRIGHT
 
-     Copyright (C) 2003-2004 The OpenGuides Project.  All Rights Reserved.
+     Copyright (C) 2003-2005 The OpenGuides Project.  All Rights Reserved.
 
 This module is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself.

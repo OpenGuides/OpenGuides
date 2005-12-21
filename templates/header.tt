@@ -28,5 +28,22 @@
   [% IF deter_robots %]
     <meta name="robots" content="noindex,nofollow" />
   [% END %]
+  [% IF enable_gmaps AND display_google_maps AND gmaps_api_key %]
+    <script src="http://maps.google.com/maps?file=api&amp;v=1&amp;key=[% gmaps_api_key %]" type="text/javascript"></script>
+  [% END %]
 </head>
 <body>
+  [% IF enable_gmaps AND display_google_maps AND gmaps_api_key %]
+    <script defer="defer" type="text/javascript">
+      //<![CDATA[
+        var baseIcon = new GIcon();
+        baseIcon.image = "http://www.google.com/mapfiles/marker.png";
+        baseIcon.shadow = "http://www.google.com/mapfiles/shadow50.png";
+        baseIcon.iconSize = new GSize(10, 17);
+        baseIcon.shadowSize = new GSize(20, 17);
+        baseIcon.iconAnchor = new GPoint(5, 17);
+        baseIcon.infoWindowAnchor = new GPoint(9, 2);
+        baseIcon.infoShadowAnchor = new GPoint(9, 12);
+      //]]>
+    </script>
+  [% END %]
