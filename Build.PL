@@ -274,6 +274,7 @@ $build->{config}{__templates}         = [
                       "footer.tt",
                       "header.tt",
                       "home_node.tt",
+                      "map_index.tt",
                       "navbar.tt",
                       "newpage.tt",
                       "node.tt",

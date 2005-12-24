@@ -191,6 +191,32 @@ You might want to call the node "Text Formatting Examples",
 Note that these the latter question will override the former, so if you
 want to use a local node make sure to leave the latter blank.
 
+  "Make node titles link to node backlinks (C2 style)?"
+
+This refers to turning titles into links which bring up a list of referring
+pages. This was the convention with older wikis, but is not intuitive.
+
+  "Do you have a Google Maps API key to use with this guide?"
+
+If you want Google Maps integration, you need to register with Google to get
+an API key. Visit http://www.google.com/apis/maps/signup.html and follow the
+instructions. Paste the great long string into the console window where you
+are installing.
+
+  "What is the longitude of the centre point of a map to draw for your guide?"
+  "What is the latitude of the centre point of a map to draw for your guide?"
+
+It's probably a good idea to pick some notionally central point for your 
+guide. For example, Carfax for Oxford, Charing Cross for London.
+
+  "What default zoom level shall we use for Google Maps?"
+  "What default zoom level shall we use for Google Maps in the search results?"
+
+The defaults are probably appropriate in most cases.
+
+  "Forcibly treat stored lat/long data as if they used the WGS84 ellipsoid?"
+
+Default this answer if you don't know what it means.
 
   "Distance calculation methods available are:
       1) British National Grid
