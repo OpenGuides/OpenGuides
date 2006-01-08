@@ -1,7 +1,7 @@
 Modules required by OpenGuides 0.51
 ===================================
 
-Algorithm::Diff (version 0.13 or later. Note that the latest verrsion uses 
+Algorithm::Diff (version 0.13 or later. Note that the latest version uses 
         .zip rather than .tar.gz and breaks some automated installs)
 CGI (version 2.92 or later)
 CGI::Carp
