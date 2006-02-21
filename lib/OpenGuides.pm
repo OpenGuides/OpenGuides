@@ -423,7 +423,8 @@ sub find_within_distance {
     my $lat = $data{metadata}{latitude}[0];
     my $long = $data{metadata}{longitude}[0];
     my $script_url = $self->config->script_url;
-    print CGI->redirect( $script_url . "search.cgi?lat=$lat;long=$long;distance_in_metres=$metres" );
+    my $q = CGI->new;
+    print $q->redirect( $script_url . "search.cgi?lat=$lat;long=$long;distance_in_metres=$metres" );
 }
 
 =item B<show_backlinks>
@@ -936,8 +937,9 @@ sub redirect_to_node {
     $redir_param .= 'id=' if $oldid;
     $redir_param .= $id;
     $redir_param .= ";oldid=$oldid" if $oldid;
-
-    return CGI->redirect( $redir_param );
+    
+    my $q = CGI->new;
+    return $q->redirect( $redir_param );
 }
 
 sub get_cookie {

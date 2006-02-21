@@ -12,6 +12,7 @@
         (the latter feature is user-configurable).
         Fix <link> in RSS to point to RecentChanges page, not the feed itself.
         #67 Default website for a page is now http://
+        Fix mod_perl redirect bug.
 
 0.51    15 November 2005
         Important changes:
