@@ -201,7 +201,7 @@ pages. This was the convention with older wikis, but is not intuitive.
 If you want Google Maps integration, you need to register with Google to get
 an API key. Visit http://www.google.com/apis/maps/signup.html and follow the
 instructions. Paste the great long string into the console window where you
-are installing.
+are installing. See README.GMAPS for more information.
 
   "What is the longitude of the centre point of a map to draw for your guide?"
   "What is the latitude of the centre point of a map to draw for your guide?"
@@ -248,6 +248,9 @@ or as grid co-ordinates.
 You must have Geography::NationalGrid::GB installed to use the British
 National Grid, Geography::NationalGrid::IE to use the Irish National
 Grid, and Geo::Coordinates::UTM to use a UTM ellipsoid.
+
+If you want to use a UTM ellipsoid, WGS-84 is the best choice, as it
+will allow you to use the Google Maps support with the minimum of fuss.
 
 * Dependency errors
 

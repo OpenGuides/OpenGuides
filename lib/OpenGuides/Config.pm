@@ -77,7 +77,7 @@ sub _init {
                      formatting_rules_link => "http://openguides.org/page/text_formatting",
                      backlinks_in_title => 0,
                      geo_handler => 1,
-                     ellipsoid => "International",
+                     ellipsoid => "WGS-84",
                      centre_long => 0,
                      centre_lat => 0,
                      default_gmaps_zoom => 5,
@@ -232,7 +232,7 @@ sub script_url {
 
 =item * geo_handler (default: C<1>)
 
-=item * ellipsoid (default: C<International>)
+=item * ellipsoid (default: C<WGS-84>)
 
 =item * gmaps_api_key
 
@@ -254,7 +254,7 @@ The OpenGuides Project (openguides-dev@openguides.org)
 
 =head1 COPYRIGHT
 
-     Copyright (C) 2004-2005 The OpenGuides Project.  All Rights Reserved.
+     Copyright (C) 2004-2006 The OpenGuides Project.  All Rights Reserved.
 
 The OpenGuides distribution is free software; you can redistribute it
 and/or modify it under the same terms as Perl itself.

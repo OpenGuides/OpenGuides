@@ -13,6 +13,8 @@ DESCRIPTION
 
 BUGS AND CAVEATS
     UTF8 data are currently not handled correctly throughout.
+    Google Maps points will display offset when using British and Irish
+    National Grid input systems.
 
     Other bugs are documented at
     <http://dev.openguides.org/>
@@ -35,7 +37,7 @@ AUTHOR
     The OpenGuides Project (openguides-dev@openguides.org)
 
 COPYRIGHT
-         Copyright (C) 2003-2005 The OpenGuides Project.  All Rights Reserved.
+         Copyright (C) 2003-2006 The OpenGuides Project.  All Rights Reserved.
 
     The OpenGuides distribution is free software; you can redistribute it
     and/or modify it under the same terms as Perl itself.
