@@ -81,7 +81,7 @@ if ( $@ ) {
                             return_output => 1,
                             vars          => { search => "weebl" },
                           );
-    unlike( $output, qr/Status: 302 (?:Moved|Found)/,
+    unlike( $output, qr/Status: 302/,
             "no redirect if match only in body");
 
     # One hit in title should redirect to that page.
@@ -89,7 +89,7 @@ if ( $@ ) {
                             return_output => 1,
                             vars          => { search => "want pie now" },
                           );
-    like( $output, qr/Status: 302 (?:Moved|Found)/,
+    like( $output, qr/Status: 302/,
           "prints redirect on single hit and match in title" );
     # Old versions of CGI.pm mistakenly print location: instead of Location:
     like( $output,
