@@ -157,7 +157,7 @@ sub emit_rdfxml {
       $rdf .= qq{
     <foaf:based_near>
       <wn:Neighborhood>
-        <foaf:name>$_</foaf:name>
+        <dc:title>$_</dc:title>
       </wn:Neighborhood>
     </foaf:based_near>\n} foreach @locales;
 
