@@ -304,6 +304,10 @@ sub extract_metadata_vars {
         summary                => $summary,
     );
 
+    if (exists $metadata{source}) {
+        ($vars{source_site}) = $metadata{source}[0] =~ /^(.*?)(?:\?|$)/;
+    }
+    
     if ( $args{metadata} ) {
         foreach my $var ( qw( phone fax address postcode os_x os_y osie_x
                               osie_y latitude longitude map_link website

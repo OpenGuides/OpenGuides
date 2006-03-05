@@ -54,7 +54,7 @@
     <div class="navbar_group_title">This page:</div>
 
     <ul>
-      <li><a class="edit_page_link" href="[% full_cgi_url %]?id=[% node_param %];action=edit">Edit this page</a></li>
+      <li><a class="edit_page_link" href="[% source_site or full_cgi_url %]?id=[% node_param %];action=edit">Edit this page</a></li>
       <li><a href="[% cgi_url %]?action=show_backlinks;id=[% node_param %]">Show pages linking here</a></li>
       [% IF version AND version > 1 %]
         <li><a href="[% cgi_url %]?action=list_all_versions;id=[% node_param %]">List all revisions</a></li> 

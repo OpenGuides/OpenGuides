@@ -35,7 +35,10 @@
         [% IF metadata.latitude.list.first AND metadata.longitude.list.first %]
           var point[% i %] = new GPoint([% metadata.longitude.list.first %], [% metadata.latitude.list.first %]); 
           var marker[% i %] = new GMarker(point[% i %],baseIcon);
-          var htmlString[% i %] = "<a href=\"?[% node.param %]\">[% node.name %]</a>&nbsp;<a style='text-decoration:none;' href=\"?id=[% node.param %];action=edit\">(edit)</a><br />[% metadata.address.list.first %]<br />[% metadata.city.list.first %]";
+          [% IF metadata.source %]
+            [% source_url = metadata.source.list.first.match('^(.*?)\?(?:\?|$)').first %]
+          [% END %]
+          var htmlString[% i %] = "<a href=\"?[% node.param %]\">[% node.name %]</a>&nbsp;<a style='text-decoration:none;' href=\"%[ source_url %]?id=[% node.param %];action=edit\">(edit)</a><br />[% metadata.address.list.first %]<br />[% metadata.city.list.first %]";
           GEvent.addListener(marker[% i %], "click", function() { 
             marker[% i %].openInfoWindowHtml(htmlString[% i %]); 
             }); 
