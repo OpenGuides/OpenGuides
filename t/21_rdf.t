@@ -66,9 +66,9 @@ SKIP: {
 
     like( $rdfxml, qr|<\?xml version="1.0"\?>|, "RDF is encoding-neutral" );
 
-    like( $rdfxml, qr|<dc:title>Bloomsbury</foaf:name>|,
+    like( $rdfxml, qr|<dc:title>Bloomsbury</dc:title>|,
         "finds the first locale" );
-    like( $rdfxml, qr|<dc:title>St Pancras</foaf:name>|,
+    like( $rdfxml, qr|<dc:title>St Pancras</dc:title>|,
         "finds the second locale" );
 
     like( $rdfxml, qr|<phone>test phone number</phone>|,
