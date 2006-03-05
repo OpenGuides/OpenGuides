@@ -12,6 +12,8 @@
     [% metadata = node.node_data.metadata %]
     [% i = i + 1 %]
     [% IF metadata.latitude.list.first AND metadata.longitude.list.first %]
+      [% NEXT IF metadata.latitude.list.first.match('m') %]
+      [% NEXT IF metadata.longitude.list.first.match('m') %]
       <li><a href='#' onclick="marker[% i %].openInfoWindowHtml(htmlString[% i %]); return false;">[% node.name %]</a>[% IF metadata.city.list.first %], [% metadata.city.list.first %][% END %]</li>
     [% END %]
   [% END %]
@@ -33,6 +35,8 @@
         [% i = i + 1 %]
         [% metadata = node.node_data.metadata %]
         [% IF metadata.latitude.list.first AND metadata.longitude.list.first %]
+        [% NEXT IF metadata.latitude.list.first.match('m') %]
+        [% NEXT IF metadata.longitude.list.first.match('m') %]
           var point[% i %] = new GPoint([% metadata.longitude.list.first %], [% metadata.latitude.list.first %]); 
           var marker[% i %] = new GMarker(point[% i %],baseIcon);
           [% IF metadata.source %]
