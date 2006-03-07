@@ -75,7 +75,6 @@ eval {
         my @nodes = $wiki->list_all_nodes();
         $node = $nodes[int(rand(scalar(@nodes) + 1)) + 1];
         print $guide->redirect_to_node($node);
-        exit 0;
     } elsif ($action eq 'find_within_distance') {
         $guide->find_within_distance(
                                       id => $node,
@@ -166,7 +165,6 @@ if ($@) {
       . qq(</blockquote><p><a href="$script_name">Return to the Wiki home page</a>
            </body></html>);
 }
-exit 0;
 
 ############################ subroutines ###################################
 
@@ -280,7 +278,6 @@ sub display_node_rdf {
                        config => $config );
     print "Content-type: application/rdf+xml\n\n";
     print $rdf_writer->emit_rdfxml( node => $args{node} );
-    exit 0;
 }
 
 sub process_template {

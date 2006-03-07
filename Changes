@@ -1,3 +1,6 @@
+0.53
+        Miscellanous fixes for mod_perl.
+
 0.52    5 March 2006
         IMPORTANT CHANGE: "supersearch.cgi" is now simply "search.cgi". If you
           have customisations to your templates, you may need to make changes
