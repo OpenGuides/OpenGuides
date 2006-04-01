@@ -1,7 +1,7 @@
 [% INCLUDE header.tt page_title = "Map of all nodes" %]
 [% INCLUDE banner.tt %]
 <div id="content">
-<a href="" id="permalink">Link to this Page</a> | <a href="" onclick="showTowns(); return false;">Show Town Boundaries</a>
+<a href="" id="permalink">Link to this page</a>
 
 <div id="maincontent">
 
