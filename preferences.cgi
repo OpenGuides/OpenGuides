@@ -21,8 +21,6 @@ if ( $action eq "set_preferences" ) {
     show_form();
 }
 
-exit 0;
-
 sub set_preferences {
     my $username     = $cgi->param("username")                   || "";
     my $gc_link      = $cgi->param("include_geocache_link")      || 0;

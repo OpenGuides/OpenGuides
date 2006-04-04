@@ -178,7 +178,7 @@ sub display_node {
     if ($args{format} && $args{format} eq 'raw') {
       print "Content-Type: text/plain\n\n";
       print $raw;
-      exit 0;
+      return 0;
     }
    
     my %metadata_vars = OpenGuides::Template->extract_metadata_vars(
@@ -224,7 +224,7 @@ sub display_node {
             my $output = $self->redirect_to_node($redirect, $id);
             return $output if $return_output;
             print $output;
-            exit 0;
+            return 0;
         }
     }
 

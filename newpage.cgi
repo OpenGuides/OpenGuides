@@ -29,8 +29,6 @@ if ( $action eq "makepage" ) {
     show_form();
 }
 
-exit 0;
-
 sub show_form {
     print OpenGuides::Template->output( wiki     => $wiki,
 					config   => $config,
@@ -56,7 +54,7 @@ sub make_page {
                           deter_robots  => 1,
 			  message       => "Please enter a page name!",
 			  return_url    => "newpage.cgi" } );
-        exit 0;
+        return 0;
     }
 
     # Ensure pagename valid.
@@ -81,13 +79,13 @@ sub make_page {
 		return_url   => "newpage.cgi?pagename=" . uri_escape($pagename)
             }
         );
-        exit 0;
+        return 0;
     }
 
     # Hurrah, we're OK.
     my $node_param = $wiki->formatter->node_name_to_node_param($pagename);
     print "Location: ".$config->script_url.$config->script_name."?action=edit;id=$node_param\n\n";
-    exit 0;
+    return 0;
 }
 
 
