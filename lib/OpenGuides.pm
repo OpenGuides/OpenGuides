@@ -6,6 +6,7 @@ use CGI;
 use CGI::Wiki::Plugin::Diff;
 use CGI::Wiki::Plugin::Locator::Grid;
 use OpenGuides::CGI;
+use OpenGuides::Feed;
 use OpenGuides::Template;
 use OpenGuides::Utils;
 use Time::Piece;
@@ -13,7 +14,7 @@ use URI::Escape;
 
 use vars qw( $VERSION );
 
-$VERSION = '0.52';
+$VERSION = '0.53';
 
 =head1 NAME
 
@@ -154,6 +155,9 @@ sub display_node {
         $tt_vars{index_value} = $2;
         $tt_vars{"rss_".lc($type)."_url"} =
                            $config->script_name . "?action=rc;format=rss;"
+                           . lc($type) . "=" . lc(CGI->escape($2));
+        $tt_vars{"atom_".lc($type)."_url"} =
+                           $config->script_name . "?action=rc;format=atom;"
                            . lc($type) . "=" . lc(CGI->escape($2));
     }
 
@@ -636,30 +640,38 @@ sub list_all_versions {
     print $output;
 }
 
-=item B<display_rss>
+=item B<display_feed>
 
-  # Last ten non-minor edits to Hammersmith pages.
-  $guide->display_rss(
+  # Last ten non-minor edits to Hammersmith pages in RSS 1.0 format
+  $guide->display_feed(
+                         feed_type          => 'rss',
                          items              => 10,
                          ignore_minor_edits => 1,
                          locale             => "Hammersmith",
                      );
 
-  # All edits bob has made to pub pages in the last week.
-  $guide->display_rss(
-                         days     => 7,
-                         username => "bob",
-                         category => "Pubs",
+  # All edits bob has made to pub pages in the last week in Atom format
+  $guide->display_feed(
+                         feed_type => 'atom',
+                         days      => 7,
+                         username  => "bob",
+                         category  => "Pubs",
                      );
+
+C<feed_type> is a mandatory parameter. Supported values at present are 
+"rss" and "atom".
 
 As with other methods, the C<return_output> parameter can be used to
 return the output instead of printing it to STDOUT.
 
 =cut
 
-sub display_rss {
+sub display_feed {
     my ($self, %args) = @_;
 
+    my $feed_type = $args{feed_type};
+    croak "No feed type given" unless $feed_type;
+    
     my $return_output = $args{return_output} ? 1 : 0;
 
     my $items = $args{items} || "";
@@ -672,6 +684,7 @@ sub display_rss {
                        items              => $items,
                        days               => $days,
                        ignore_minor_edits => $ignore_minor_edits,
+                       feed_type          => $feed_type,
                    );
     my %filter;
     $filter{username} = $username if $username;
@@ -681,14 +694,28 @@ sub display_rss {
         $criteria{filter_on_metadata} = \%filter;
     }
 
-    my $rdf_writer = OpenGuides::RDF->new(
-                                             wiki       => $self->wiki,
-                                             config     => $self->config,
-                                             og_version => $VERSION,
-                                         );
-    my $output = "Content-Type: application/rdf+xml\n";
-    $output .= "Last-Modified: " . $rdf_writer->rss_timestamp( %criteria ) . "\n\n";
-    $output .= $rdf_writer->make_recentchanges_rss( %criteria );
+    my $feed = OpenGuides::Feed->new(
+                                        wiki       => $self->wiki,
+                                        config     => $self->config,
+                                        og_version => $VERSION,
+                                    );
+
+    my $output;
+    
+    if ($feed_type eq 'rss') {
+        $output = "Content-Type: application/rdf+xml\n";
+    }
+    elsif ($feed_type eq 'atom') {
+        $output = "Content-Type: application/atom+xml\n";
+    }
+    else {
+        croak "Unknown feed type given: $feed_type";
+    }
+    
+    $output .= "Last-Modified: " . $feed->feed_timestamp( %criteria ) . "\n\n";
+
+    $output .= $feed->make_feed( %criteria );
+
     return $output if $return_output;
     print $output;
 }

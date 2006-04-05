@@ -4,7 +4,7 @@ use strict;
 use warnings;
 
 use vars qw( $VERSION );
-$VERSION = '0.52';
+$VERSION = '0.53';
 
 use CGI qw/:standard/;
 use CGI::Carp qw(croak);
@@ -103,12 +103,19 @@ eval {
                 my %args = map { $_ => ( $q->param($_) || "" ) }
                            qw( feed items days ignore_minor_edits username
                                category locale );
-                $guide->display_rss( %args );
+                $args{feed_type} = 'rss';
+                $guide->display_feed( %args );
             } elsif ( $feed eq "chef_dan" ) {
                 display_node_rdf( node => $node );
             } else {
                 croak "Unknown RSS feed type '$feed'";
             }
+        } elsif ($format && $format eq 'atom') {
+            my %args = map { $_ => ( $q->param($_) || "" ) }
+                       qw( feed items days ignore_minor_edits username
+                           category locale );
+            $args{feed_type} = 'atom';
+            $guide->display_feed( %args );
         } else {
             $guide->display_node( id => 'RecentChanges' );
         }

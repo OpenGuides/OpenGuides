@@ -42,11 +42,11 @@ my $config = OpenGuides::Config->new(
 # Basic sanity check first.
 my $wiki = OpenGuides::Utils->make_wiki_object( config => $config );
 
-my $rdf_writer = OpenGuides::RDF->new( wiki   => $wiki,
-                                       config => $config );
+my $feed = OpenGuides::Feed->new( wiki   => $wiki,
+                                  config => $config );
 
-my $rss = eval { $rdf_writer->make_recentchanges_rss; };
-is( $@, "", "->make_recentchanges_rss doesn't croak" );
+my $rss = eval { $feed->make_feed(feed_type => 'rss'); };
+is( $@, "", "->make_feed for rss doesn't croak" );
 
 # Now write some data, first a minor edit then a non-minor one.
 my $guide = OpenGuides->new( config => $config );
@@ -97,7 +97,8 @@ ok( $wiki->node_exists( "Badgers" ), "Badgers written" );
 ok( $wiki->node_exists( "Wombles" ), "Wombles written" );
 
 # Check that the minor edits can be filtered out.
-$output = $guide->display_rss(
+$output = $guide->display_feed(
+                               feed_type          => "rss",
                                items              => 5,
                                username           => "bob",
                                ignore_minor_edits => 1,

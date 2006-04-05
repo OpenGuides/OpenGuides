@@ -3,7 +3,7 @@ package OpenGuides::RDF;
 use strict;
 
 use vars qw( $VERSION );
-$VERSION = '0.08';
+$VERSION = '0.09';
 
 use CGI::Wiki::Plugin::RSS::ModWiki;
 use Time::Piece;
@@ -199,39 +199,6 @@ sub emit_rdfxml {
     return $rdf;
 }
 
-sub rss_maker {
-    my $self = shift;
-
-    # OAOO, please.
-    unless ($self->{rss_maker}) {
-        $self->{rss_maker} = CGI::Wiki::Plugin::RSS::ModWiki->new(
-          wiki                => $self->{wiki},
-          site_name           => $self->{site_name},
-          site_url            => $self->{config}->script_url,
-          site_description    => $self->{site_description},
-          make_node_url       => $self->{make_node_url},
-          recent_changes_link => $self->{config}->script_url . '?action=rc',
-          software_name       => 'OpenGuides',
-          software_homepage   => 'http://openguides.org/',
-          software_version    => $self->{og_version},
-        );
-    }
-    
-    $self->{rss_maker};
-}
-
-sub make_recentchanges_rss {
-    my ($self, %args) = @_;
-
-    $self->rss_maker->recent_changes(%args);
-}
-
-sub rss_timestamp {
-    my ($self, %args) = @_;
-    
-    $self->rss_maker->rss_timestamp(%args);
-}
-
 =head1 NAME
 
 OpenGuides::RDF - An OpenGuides plugin to output RDF/XML.
@@ -257,11 +224,6 @@ developers.
     # RDF version of a node.
     print "Content-Type: application/rdf+xml\n\n";
     print $rdf_writer->emit_rdfxml( node => "Masala Zone, N1 0NU" );
-
-    # Ten most recent changes.
-    print "Content-Type: application/rdf+xml\n";
-    print "Last-Modified: " . $self->rss_timestamp( items => 10 ) . "\n\n";
-    print $rdf_writer->make_recentchanges_rss( items => 10 );
 
 =head1 METHODS
 
@@ -314,42 +276,6 @@ all of the following metadata when calling C<write_node>:
 
 =back
 
-=item B<rss_maker>
-
-Returns a raw L<CGI::Wiki::Plugin::RSS::ModWiki> object created with the values you
-invoked this module with.
-
-=item B<make_recentchanges_rss>
-
-    # Ten most recent changes.
-    print "Content-Type: application/rdf+xml\n";
-    print "Last-Modified: " . $rdf_writer->rss_timestamp( items => 10 ) . "\n\n";
-    print $rdf_writer->make_recentchanges_rss( items => 10 );
-
-    # All the changes made by bob in the past week, ignoring minor edits.
-
-    my %args = (
-                 days               => 7,
-                 ignore_minor_edits => 1,
-                 filter_on_metadata => { username => "bob" },
-               );
-
-    print "Content-Type: application/rdf+xml\n";
-    print "Last-Modified: " . $rdf_writer->rss_timestamp( %args ) . "\n\n";
-    print $rdf_writer->make_recentchanges_rss( %args );
-
-=item B<rss_timestamp>
-
-    print "Last-Modified: " . $rdf_writer->rss_timestamp( %args ) . "\n\n";
-
-Returns the timestamp of the RSS feed in POSIX::strftime style ("Tue, 29 Feb 2000 
-12:34:56 GMT"), which is equivalent to the timestamp of the most recent item
-in the feed. Takes the same arguments as make_recentchanges_rss(). You will most 
-likely need this to print a Last-Modified HTTP header so user-agents can determine
-whether they need to reload the feed or not.
-
-=back
-
 =head1 SEE ALSO
 
 =over 4
@@ -368,7 +294,7 @@ The OpenGuides Project (openguides-dev@openguides.org)
 
 =head1 COPYRIGHT
 
-Copyright (C) 2003-2005 The OpenGuides Project.  All Rights Reserved.
+Copyright (C) 2003-2006 The OpenGuides Project.  All Rights Reserved.
 
 This module is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself.
