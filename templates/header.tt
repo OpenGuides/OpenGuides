@@ -11,11 +11,8 @@
   [% IF contact_email %]
     <link rev="made" href="mailto:[% contact_email %]" />
   [% END %]
-  [% IF description %]
-    <meta name="description" content="[% description %]" />
-  [% END %]
-  [% IF keywords %]
-    <meta name="keywords" content="[% keywords %]" />
+  [% IF summary %]
+    <meta name="description" content="[% summary %]" />
   [% END %]
   [% IF stylesheet %]
     <link rel="stylesheet" href="[% stylesheet %]" type="text/css" title="Stylesheet for [% site_name %]" />
