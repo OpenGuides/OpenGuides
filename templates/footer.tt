@@ -21,7 +21,7 @@
       [% INCLUDE delete_link %]
     </p>
     <p>
-      This wiki powered by <a href="http://openguides.org/">OpenGuides</a> (version [% openguides_version %]).
+      Powered by <a href="[% full_cgi_url%]?action=about">OpenGuides [% openguides_version %]</a>.
     </p>
   [% END %]
 

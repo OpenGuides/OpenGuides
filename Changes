@@ -1,5 +1,6 @@
 0.53
         Miscellanous fixes for mod_perl.
+        #42 New "About" screen. Try action=about and action=about;format=rdf.
         #97 Use "summary" metadata to generate HTML meta descriptions.
         Support for Atom feeds for RecentChanges; new OpenGuides::Feed
           module to handle feed generation (code was previously in

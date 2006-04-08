@@ -720,6 +720,148 @@ sub display_feed {
     print $output;
 }
 
+sub display_about {
+    my ($self, %args) = @_;
+
+    my $output;
+
+    if ($args{format} && $args{format} =~ /^rdf$/i) {
+        $output = qq{Content-Type: application/rdf+xml
+
+<?xml version="1.0" encoding="UTF-8"?>
+<rdf:RDF xmlns      = "http://usefulinc.com/ns/doap#"
+         xmlns:rdf  = "http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+         xmlns:foaf = "http://xmlns.com/foaf/0.1/">
+<Project rdf:ID="OpenGuides">
+  <name>OpenGuides</name>
+
+  <created>2003-04-29</created>
+  
+  <shortdesc xml:lang="en">
+    A wiki engine for collaborative description of places with specialised
+    geodata metadata features.
+  </shortdesc>
+
+  <description xml:lang="en">
+    OpenGuides is a collaborative wiki environment, written in Perl, for 
+    building guides and sharing information, as both human-readable text 
+    and RDF. The engine contains a number of geodata-specific metadata 
+    mechanisms such as locale search, node classification and integration 
+    with Google Maps.
+  </description>
+
+  <homepage rdf:resource="http://openguides.org/" />
+  <mailing-list rdf:resource="http://openguides.org/mm/listinfo/openguides-dev/" />
+  <mailing-list rdf:resource="http://urchin.earth.li/mailman/listinfo/openguides-commits/" />
+
+  <maintainer>
+    <foaf:Person>
+      <foaf:name>Dominic Hargreaves</foaf:name>
+      <foaf:homepage rdf:resource="http://www.larted.org.uk/~dom/" />
+    </foaf:Person>
+  </maintainer>
+
+  <repository>
+    <SVNRepository>
+      <location rdf:resource="https://urchin.earth.li/svn/openguides/" />
+      <browse rdf:resource="http://dev.openguides.org/browser" />
+    </SVNRepository>
+  </repository>
+
+  <release>
+    <Version>
+      <revision>$VERSION</revision>
+    </Version>
+  </release>
+
+  <download-page rdf:resource="http://search.cpan.org/dist/OpenGuides/" />
+  
+  <!-- Freshmeat category: Internet :: WWW/HTTP :: Dynamic Content -->
+  <category rdf:resource="http://freshmeat.net/browse/92/" />
+  
+  <license rdf:resource="http://www.opensource.org/licenses/gpl-license.php" />
+  <license rdf:resource="http://www.opensource.org/licenses/artistic-license.php" />
+
+</Project>
+
+</rdf:RDF>};
+    }
+    else {
+        my $site_name  = $self->config->{site_name};
+        my $script_url = $self->config->{script_url};
+        $output = qq{Content-Type: text/html; charset=utf-8
+
+<html>
+<head>
+  <title>About $site_name</title>
+<style type="text/css">
+body        { margin: 0px; }
+#content    { padding: 50px; margin: auto; width: 50%; }
+h1          { margin-bottom: 0px; font-style: italic; }
+h2          { margin-top: 0px; }
+#logo       { text-align: center; }
+#logo a img { border: 1px solid #000; }
+#about      { margin: 0em 0em 1em 0em; border-top: 1px solid #ddd; border-bottom: 1px solid #ddd; }
+#meta       { font-size: small; text-align: center;}
+</style>
+<link rel="alternate"
+  type="application/rdf+xml"
+  title="DOAP (Description Of A Project) profile for this site's software" 
+  href="$script_url?action=about;format=rdf" />
+</head>
+<body>
+<div id="content">
+<div id="logo">
+<a href="http://openguides.org/"><img 
+src="http://openguides.org/img/logo.jpg" alt="OpenGuides.org"></a>
+<h1><a href="$script_url">$site_name</a></h1>
+<h2>is powered by <a href="http://openguides.org/">OpenGuides</a> -<br>
+the guides built by you.</h2>
+<h3>version <a href="http://search.cpan.org/~dom/OpenGuides-$VERSION">$VERSION</a></h3>
+</div>
+<div id="about">
+<p>
+<a href="http://www.w3.org/RDF/"><img 
+src="http://openguides.org/img/rdf_icon.png" width="44" height="48"
+style="float: right; margin-left: 10px; border: 0px"></a> OpenGuides is a 
+web-based collaborative <a href="http://wiki.org/wiki.cgi?WhatIsWiki">wiki</a> 
+environment for building guides and sharing information, as both 
+human-readable text and <a href="http://www.w3.org/RDF/"><acronym 
+title="Resource Description Framework">RDF</acronym></a>. The engine contains 
+a number of geodata-specific metadata mechanisms such as locale search, node 
+classification and integration with <a href="http://maps.google.com/">Google 
+Maps</a>.
+</p>
+<p>
+OpenGuides is written in <a href="http://www.perl.org/">Perl</a>, and is
+made available under the same license as Perl itself (dual <a
+href="http://dev.perl.org/licenses/artistic.html" title='The "Artistic Licence"'>Artistic</a> and <a
+href="http://www.opensource.org/licenses/gpl-license.php"><acronym
+title="GNU Public Licence">GPL</acronym></a>). Developer information for the 
+project is available from the <a href="http://dev.openguides.org/">OpenGuides 
+development site</a>.
+</p>
+<p>
+Copyright &copy;2003-2006, <a href="http://openguides.org/">The OpenGuides
+Project</a>. "OpenGuides", "[The] Open Guide To..." and "The guides built by
+you" are trademarks of The OpenGuides Project. Any uses on this site are made 
+with permission.
+</p>
+</div>
+<div id="meta">
+<a href="$script_url?action=about;format=rdf"><acronym
+title="Description Of A Project">DOAP</acronym> RDF version of this 
+information</a>
+</div>
+</div>
+</body>
+</html>};
+    }
+    
+    return $output if $args{return_output};
+    print $output;
+}
+
 =item B<commit_node>
 
   $guide->commit_node(
@@ -977,7 +1119,6 @@ sub get_cookie {
     return $cookie_data{$pref_name};
 }
 
-=back
 
 =head1 BUGS AND CAVEATS
 
