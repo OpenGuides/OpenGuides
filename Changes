@@ -1,5 +1,9 @@
 0.53
         Miscellanous fixes for mod_perl.
+        #97 Use "summary" metadata to generate HTML meta descriptions.
+        Support for Atom feeds for RecentChanges; new OpenGuides::Feed
+          module to handle feed generation (code was previously in
+          OpenGuides::RDF).
 
 0.52    5 March 2006
         IMPORTANT CHANGE: "supersearch.cgi" is now simply "search.cgi". If you
