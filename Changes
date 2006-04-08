@@ -1,3 +1,5 @@
+"#" items refer to tickets. See <http://dev.openguides.org/report/9> for details.
+
 0.53
         Miscellanous fixes for mod_perl.
         #42 New "About" screen. Try action=about and action=about;format=rdf.
