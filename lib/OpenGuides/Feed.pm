@@ -5,8 +5,8 @@ use strict;
 use vars qw( $VERSION );
 $VERSION = '0.01';
 
-use CGI::Wiki::Plugin::Atom;
-use CGI::Wiki::Plugin::RSS::ModWiki;
+use Wiki::Toolkit::Plugin::Atom;
+use Wiki::Toolkit::Plugin::RSS::ModWiki;
 use Time::Piece;
 use URI::Escape;
 use Carp 'croak';
@@ -23,8 +23,8 @@ sub _init {
 
     my $wiki = $args{wiki};
     
-    unless ( $wiki && UNIVERSAL::isa( $wiki, "CGI::Wiki" ) ) {
-       croak "No CGI::Wiki object supplied.";
+    unless ( $wiki && UNIVERSAL::isa( $wiki, "Wiki::Toolkit" ) ) {
+       croak "No Wiki::Toolkit object supplied.";
     }
     $self->{wiki} = $wiki;
 
@@ -81,7 +81,7 @@ sub atom_maker {
     my $self = shift;
   
     unless ($self->{atom_maker}) {
-        $self->{atom_maker} = CGI::Wiki::Plugin::Atom->new(
+        $self->{atom_maker} = Wiki::Toolkit::Plugin::Atom->new(
             wiki                => $self->{wiki},
             site_name           => $self->{site_name},
             site_url            => $self->{config}->script_url,
@@ -102,7 +102,7 @@ sub rss_maker {
     my $self = shift;
 
     unless ($self->{rss_maker}) {
-        $self->{rss_maker} = CGI::Wiki::Plugin::RSS::ModWiki->new(
+        $self->{rss_maker} = Wiki::Toolkit::Plugin::RSS::ModWiki->new(
             wiki                => $self->{wiki},
             site_name           => $self->{site_name},
             site_url            => $self->{config}->script_url,
@@ -139,11 +139,11 @@ developers.
 
 =head1 SYNOPSIS
 
-    use CGI::Wiki;
+    use Wiki::Toolkit;
     use OpenGuides::Config;
     use OpenGuides::Feed;
 
-    my $wiki = CGI::Wiki->new( ... );
+    my $wiki = Wiki::Toolkit->new( ... );
     my $config = OpenGuides::Config->new( file => "wiki.conf" );
     my $feed = OpenGuides::Feed->new( wiki       => $wiki,
                                       config     => $config,
@@ -166,19 +166,19 @@ developers.
                                       config     => $config,
                                       og_version => '1.0', ); 
 
-C<wiki> must be a L<CGI::Wiki> object and C<config> must be an
+C<wiki> must be a L<Wiki::Toolkit> object and C<config> must be an
 L<OpenGuides::Config> object.  Both of these arguments are mandatory.
 C<og_version> is an optional argument specifying the version of
 OpenGuides for inclusion in the feed.
 
 =item B<rss_maker>
 
-Returns a raw L<CGI::Wiki::Plugin::RSS::ModWiki> object created with the values you
+Returns a raw L<Wiki::Toolkit::Plugin::RSS::ModWiki> object created with the values you
 invoked this module with.
 
 =item B<atom_maker>
 
-Returns a raw L<CGI::Wiki::Plugin::Atom> object created with the values you
+Returns a raw L<Wiki::Toolkit::Plugin::Atom> object created with the values you
 invoked this module with.
 
 =item B<make_feed>
@@ -215,7 +215,7 @@ whether they need to reload the feed or not.
 
 =over 4
 
-=item * L<CGI::Wiki>, L<CGI::Wiki::Plugin::RSS::ModWiki> and L<CGI::Wiki::Plugin::Atom>
+=item * L<Wiki::Toolkit>, L<Wiki::Toolkit::Plugin::RSS::ModWiki> and L<Wiki::Toolkit::Plugin::Atom>
 
 =item * L<http://openguides.org/>
 

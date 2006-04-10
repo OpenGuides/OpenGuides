@@ -74,7 +74,7 @@
         Remove rogue ampersand that had crept into the RSS feed.
         
 0.49    24 July 2005
-        Add updated prerequisite on CGI::Wiki::Plugin::RSS::ModWiki (fixes
+        Add updated prerequisite on Wiki::Toolkit::Plugin::RSS::ModWiki (fixes
         a test failure)
 
 0.48    24 July 2005
@@ -111,7 +111,7 @@
 0.47    15 January 2005
         Fixed bug with list_all_versions for nodes with only one version.
         Extended config changes to examples/reindex.pl (thanks jimbo).
-        Now require CGI::Wiki 0.62 to fix bug with deleting versions.
+        Now require Wiki::Toolkit 0.62 to fix bug with deleting versions.
         Try to ensure that a .htaccess file protecting wiki.conf is installed.
         Allow for external URLs for Text Formatting help.
         Home node recent changes box now flags new entries.
@@ -174,7 +174,7 @@
           user-definable path, and their names are prefixed with custom_.
           This only affects you if you have used the custom template support
           introduced in 0.41.
-        Replace use of CGI::Wiki::Plugin::Geocache with improved node.tt.
+        Replace use of Wiki::Toolkit::Plugin::Geocache with improved node.tt.
 
 0.41    21 September 2004
         Added backlinks link to navbar.
@@ -227,7 +227,7 @@
         Fixed bug with node history comments not being HTML-escaped.
 
 0.35    25 June 2004
-        Forgot to add version prerequisite on CGI::Wiki.  Don't use 0.34,
+        Forgot to add version prerequisite on Wiki::Toolkit.  Don't use 0.34,
           use this.
 
 0.34    25 June 2004
@@ -267,7 +267,7 @@
 
 0.31    09 May 2004
         Created a new macro to allow the embedding of RSS feeds into
-          pages, using CGI::Wiki::Plugin::RSS::Reader. This allows you
+          pages, using Wiki::Toolkit::Plugin::RSS::Reader. This allows you
           to do this to produce a list of up to ten hyperlinks:
             @RSS [http://example.com/example.rss]
        
@@ -316,7 +316,7 @@
 
         Removed newlines from output of search box macro.
 
-	Reimplemented diffing using CGI::Wiki::Plugin::Diff as it seems the
+	Reimplemented diffing using Wiki::Toolkit::Plugin::Diff as it seems the
           change in 0.30 got lost. Removed OpenGuides::Diff.pm as we should not 
           be distributing it.
 
@@ -350,7 +350,7 @@
 
 	Removed pubcrawl stuff from distro for now - it doesn't really work.
 
-	Changed to use CGI::Wiki::Plugin::Diff instead of OpenGuides::Diff.
+	Changed to use Wiki::Toolkit::Plugin::Diff instead of OpenGuides::Diff.
 
 0.29    8 November 2003
         Expanded section in TROUBLESHOOTING about permissions problems.
@@ -539,7 +539,7 @@
         hardcoded).  Also is now called as wiki.cgi?id=Node_Name;format=rdf
 
 0.07    3 May 2003
-        Require CGI::Wiki 0.32 to avoid bug (again a Bob find!) where
+        Require Wiki::Toolkit 0.32 to avoid bug (again a Bob find!) where
         committing a node with metadata but no content would die.
 
         Auto-created category/locale stub pages now added to Category Category

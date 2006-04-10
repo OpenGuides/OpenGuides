@@ -1,4 +1,4 @@
-use CGI::Wiki::Setup::SQLite;
+use Wiki::Toolkit::Setup::SQLite;
 use OpenGuides::Config;
 use OpenGuides;
 use OpenGuides::Template;
@@ -16,7 +16,7 @@ plan tests => 8;
 # Clear out the database from any previous runs.
 unlink "t/node.db";
 unlink <t/indexes/*>;
-CGI::Wiki::Setup::SQLite::setup( { dbname => "t/node.db" } );
+Wiki::Toolkit::Setup::SQLite::setup( { dbname => "t/node.db" } );
 
 my $config = OpenGuides::Test->make_basic_config;
 my $guide = OpenGuides->new( config => $config );

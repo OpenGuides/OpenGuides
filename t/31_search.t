@@ -1,5 +1,5 @@
 use strict;
-use CGI::Wiki::Setup::SQLite;
+use Wiki::Toolkit::Setup::SQLite;
 use OpenGuides::Search;
 use OpenGuides::Test;
 use Test::More;
@@ -14,13 +14,13 @@ if ( $@ ) {
     unlink "t/node.db";
     unlink <t/indexes/*>;
 
-    CGI::Wiki::Setup::SQLite::setup( { dbname => "t/node.db" } );
+    Wiki::Toolkit::Setup::SQLite::setup( { dbname => "t/node.db" } );
     my $config = OpenGuides::Test->make_basic_config;
     $config->script_name( "wiki.cgi" );
     $config->script_url( "http://example.com/" );
 
     # Plucene is the recommended searcher now.
-    eval { require CGI::Wiki::Search::Plucene; };
+    eval { require Wiki::Toolkit::Search::Plucene; };
     if ( $@ ) { $config->use_plucene( 0 ) };
 
     my $search = OpenGuides::Search->new( config => $config );

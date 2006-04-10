@@ -22,7 +22,7 @@ BUGS AND CAVEATS
 SEE ALSO
     * http://london.openguides.org/, the first and biggest OpenGuides site.
     * http://openguides.org/, with a list of all live OpenGuides installs.
-    * CGI::Wiki, the Wiki toolkit which does the heavy lifting for
+    * Wiki::Toolkit, the Wiki toolkit which does the heavy lifting for
     OpenGuides
 
 FEEDBACK

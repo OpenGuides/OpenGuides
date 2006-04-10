@@ -1,5 +1,5 @@
 use strict;
-use CGI::Wiki::Setup::SQLite;
+use Wiki::Toolkit::Setup::SQLite;
 use OpenGuides::Config;
 use OpenGuides;
 use OpenGuides::Test;
@@ -35,7 +35,7 @@ plan tests => 53;
 unlink "t/node.db";
 unlink <t/indexes/*>;
 
-CGI::Wiki::Setup::SQLite::setup( { dbname => "t/node.db" } );
+Wiki::Toolkit::Setup::SQLite::setup( { dbname => "t/node.db" } );
 my $config = OpenGuides::Config->new(
        vars => {
                  dbtype             => "sqlite",

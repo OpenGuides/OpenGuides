@@ -1,4 +1,4 @@
-use CGI::Wiki::Setup::SQLite;
+use Wiki::Toolkit::Setup::SQLite;
 use OpenGuides;
 use OpenGuides::Config;
 use OpenGuides::RDF;
@@ -14,7 +14,7 @@ SKIP: {
     skip "DBD::SQLite not installed - no database to test with", 24
         unless $have_sqlite;
 
-    CGI::Wiki::Setup::SQLite::setup( { dbname => "t/node.db" } );
+    Wiki::Toolkit::Setup::SQLite::setup( { dbname => "t/node.db" } );
     my $config = OpenGuides::Config->new(
         vars => {
                     dbtype             => "sqlite",
@@ -22,12 +22,12 @@ SKIP: {
                     indexing_directory => "t/indexes",
                     script_url         => "http://wiki.example.com/",
                     script_name        => "mywiki.cgi",
-                    site_name          => "CGI::Wiki Test Site",
+                    site_name          => "Wiki::Toolkit Test Site",
                     default_city       => "London",
                     default_country    => "United Kingdom",
                 }
     );
-    eval { require CGI::Wiki::Search::Plucene; };
+    eval { require Wiki::Toolkit::Search::Plucene; };
     if ( $@ ) { $config->use_plucene ( 0 ) };
 
 
@@ -80,7 +80,7 @@ SKIP: {
     like( $rdfxml, qr|<foaf:homepage rdf:resource="test website" />|, "picks up website" );
 
     like( $rdfxml,
-        qr|<dc:title>CGI::Wiki Test Site: Calthorpe Arms</dc:title>|,
+        qr|<dc:title>Wiki::Toolkit Test Site: Calthorpe Arms</dc:title>|,
         "sets the title correctly" );
 
     like( $rdfxml, qr|<dc:contributor foaf:nick="Kake" />|,

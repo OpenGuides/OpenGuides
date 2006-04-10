@@ -1,7 +1,7 @@
 use strict;
 use Cwd;
 use CGI::Cookie;
-use CGI::Wiki::Formatter::UseMod;
+use Wiki::Toolkit::Formatter::UseMod;
 use OpenGuides::Config;
 use OpenGuides::Template;
 use Test::MockObject;
@@ -10,7 +10,7 @@ use Test::More tests => 28;
 my $config = OpenGuides::Config->new(
        vars => {
                  template_path         => cwd . '/t/templates',
-                 site_name             => 'CGI::Wiki Test Site',
+                 site_name             => 'Wiki::Toolkit Test Site',
                  script_url            => 'http://wiki.example.com/',
                  script_name           => 'mywiki.cgi',
                  default_country       => 'United Kingdom',
@@ -28,7 +28,7 @@ my $config = OpenGuides::Config->new(
 # object passed in, and I CBA to make a proper wiki object here.
 my $fake_wiki = Test::MockObject->new;
 $fake_wiki->mock("formatter",
-                 sub { return CGI::Wiki::Formatter::UseMod->new( munge_urls => 1 ); } );
+                 sub { return Wiki::Toolkit::Formatter::UseMod->new( munge_urls => 1 ); } );
 
 eval { OpenGuides::Template->output( wiki   => $fake_wiki,
                                      config => $config ); };
@@ -74,7 +74,7 @@ $output = OpenGuides::Template->output(
     template => "15_test.tt"
 );
 
-like( $output, qr/SITE NAME: CGI::Wiki Test Site/, "site_name var set" );
+like( $output, qr/SITE NAME: Wiki::Toolkit Test Site/, "site_name var set" );
 like( $output, qr/CGI URL: mywiki.cgi/, "cgi_url var set" );
 like( $output, qr/FULL CGI URL: http:\/\/wiki.example.com\/mywiki.cgi/,
       "full_cgi_url var set" );
@@ -116,7 +116,7 @@ like( $output, qr/Set-Cookie: $cookie/, "cookie in header" );
 $config = OpenGuides::Config->new(
        vars => {
                  template_path         => cwd . '/t/templates',
-                 site_name             => 'CGI::Wiki Test Site',
+                 site_name             => 'Wiki::Toolkit Test Site',
                  script_url            => 'http://wiki.example.com/',
                  script_name           => 'mywiki.cgi',
 		 formatting_rules_node => 'Some External Help',
@@ -135,7 +135,7 @@ like ( $output, qr/FORMATTING RULES LINK: http:\/\/www.example.com\/wikitext/,
 $config = OpenGuides::Config->new(
        vars => {
                  template_path         => cwd . '/t/templates',
-                 site_name             => 'CGI::Wiki Test Site',
+                 site_name             => 'Wiki::Toolkit Test Site',
                  script_url            => 'http://wiki.example.com/',
                  script_name           => '',
                }
@@ -153,7 +153,7 @@ like( $output, qr/HOME LINK: http:\/\/wiki.example.com/,
 $config = OpenGuides::Config->new(
        vars => {
                  template_path         => cwd . '/t/templates',
-                 site_name             => 'CGI::Wiki Test Site',
+                 site_name             => 'Wiki::Toolkit Test Site',
                  script_url            => 'http://wiki.example.com',
                  script_name           => 'wiki.cgi',
                }

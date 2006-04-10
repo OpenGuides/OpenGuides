@@ -5,7 +5,7 @@ use strict;
 use vars qw( $VERSION );
 $VERSION = '0.09';
 
-use CGI::Wiki::Plugin::RSS::ModWiki;
+use Wiki::Toolkit::Plugin::RSS::ModWiki;
 use Time::Piece;
 use URI::Escape;
 use Carp 'croak';
@@ -22,8 +22,8 @@ sub _init {
 
     my $wiki = $args{wiki};
     
-    unless ( $wiki && UNIVERSAL::isa( $wiki, "CGI::Wiki" ) ) {
-      croak "No CGI::Wiki object supplied.";
+    unless ( $wiki && UNIVERSAL::isa( $wiki, "Wiki::Toolkit" ) ) {
+      croak "No Wiki::Toolkit object supplied.";
     }
     $self->{wiki} = $wiki;
 
@@ -105,7 +105,7 @@ sub emit_rdfxml {
     my $timestamp = $node_data{last_modified};
     
     # Make a Time::Piece object.
-    my $timestamp_fmt = $CGI::Wiki::Store::Database::timestamp_fmt;
+    my $timestamp_fmt = $Wiki::Toolkit::Store::Database::timestamp_fmt;
 
     if ( $timestamp ) {
         my $time   = Time::Piece->strptime($timestamp, $timestamp_fmt);
@@ -212,11 +212,11 @@ developers.
 
 =head1 SYNOPSIS
 
-    use CGI::Wiki;
+    use Wiki::Toolkit;
     use OpenGuides::Config;
     use OpenGuides::RDF;
 
-    my $wiki = CGI::Wiki->new( ... );
+    my $wiki = Wiki::Toolkit->new( ... );
     my $config = OpenGuides::Config->new( file => "wiki.conf" );
     my $rdf_writer = OpenGuides::RDF->new( wiki   => $wiki,
                                          config => $config ); 
@@ -234,7 +234,7 @@ developers.
     my $rdf_writer = OpenGuides::RDF->new( wiki   => $wiki,
                                            config => $config ); 
 
-C<wiki> must be a L<CGI::Wiki> object and C<config> must be an
+C<wiki> must be a L<Wiki::Toolkit> object and C<config> must be an
 L<OpenGuides::Config> object.  Both arguments mandatory.
 
 
@@ -253,7 +253,7 @@ L<OpenGuides::Config> object.  Both arguments mandatory.
 
 B<Note:> Some of the fields emitted by the RDF/XML generator are taken
 from the node metadata. The form of this metadata is I<not> mandated
-by L<CGI::Wiki>. Your wiki application should make sure to store some or
+by L<Wiki::Toolkit>. Your wiki application should make sure to store some or
 all of the following metadata when calling C<write_node>:
 
 =over 4
@@ -280,7 +280,7 @@ all of the following metadata when calling C<write_node>:
 
 =over 4
 
-=item * L<CGI::Wiki>
+=item * L<Wiki::Toolkit>
 
 =item * L<http://openguides.org/>
 

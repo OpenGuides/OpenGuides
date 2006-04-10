@@ -1,6 +1,6 @@
 use strict;
 use CGI;
-use CGI::Wiki::Setup::SQLite;
+use Wiki::Toolkit::Setup::SQLite;
 use OpenGuides::Config;
 use OpenGuides::Search;
 use Test::More;
@@ -11,7 +11,7 @@ if ( $@ ) {
     exit 0;
 }
 
-eval { require CGI::Wiki::Search::Plucene; };
+eval { require Wiki::Toolkit::Search::Plucene; };
 if ( $@ ) { 
     plan skip_all => "Plucene not installed";
     exit 0;
@@ -36,7 +36,7 @@ plan tests => 19;
 unlink "t/node.db";
 unlink <t/indexes/*>;
 
-CGI::Wiki::Setup::SQLite::setup( { dbname => "t/node.db" } );
+Wiki::Toolkit::Setup::SQLite::setup( { dbname => "t/node.db" } );
 my $config = OpenGuides::Config->new(
        vars => {
                  dbtype             => "sqlite",

@@ -1,6 +1,6 @@
 use strict;
 use CGI;
-use CGI::Wiki::Setup::SQLite;
+use Wiki::Toolkit::Setup::SQLite;
 use OpenGuides::Config;
 use OpenGuides::CGI;
 use OpenGuides;
@@ -23,7 +23,7 @@ plan tests => 4;
 unlink "t/node.db";
 unlink <t/indexes/*>;
 
-CGI::Wiki::Setup::SQLite::setup( { dbname => "t/node.db" } );
+Wiki::Toolkit::Setup::SQLite::setup( { dbname => "t/node.db" } );
 my $config = OpenGuides::Config->new(
        vars => {
                  dbtype             => "sqlite",
@@ -40,7 +40,7 @@ my $config = OpenGuides::Config->new(
 );
 
 # Plucene is the recommended searcher now.
-eval { require CGI::Wiki::Search::Plucene; };
+eval { require Wiki::Toolkit::Search::Plucene; };
 if ( $@ ) { $config->use_plucene( 0 ) };
 
 my $guide = OpenGuides->new( config => $config );

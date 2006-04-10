@@ -1,5 +1,5 @@
 use strict;
-use CGI::Wiki::Setup::SQLite;
+use Wiki::Toolkit::Setup::SQLite;
 use OpenGuides;
 use OpenGuides::Test;
 use Test::More;

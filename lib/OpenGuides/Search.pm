@@ -3,7 +3,7 @@ use strict;
 our $VERSION = '0.10';
 
 use CGI qw( :standard );
-use CGI::Wiki::Plugin::Locator::Grid;
+use Wiki::Toolkit::Plugin::Locator::Grid;
 use File::Spec::Functions qw(:ALL);
 use OpenGuides::Template;
 use OpenGuides::Utils;
@@ -64,7 +64,7 @@ sub new {
         %locator_params = ( x => "easting", y => "northing" );
     }
 
-    my $locator = CGI::Wiki::Plugin::Locator::Grid->new( %locator_params );
+    my $locator = Wiki::Toolkit::Plugin::Locator::Grid->new( %locator_params );
     $wiki->register_plugin( plugin => $locator );
     $self->{locator} = $locator;
 
@@ -75,7 +75,7 @@ sub new {
 
   my $wiki = $search->wiki;
 
-An accessor; returns the underlying L<CGI::Wiki> object.
+An accessor; returns the underlying L<Wiki::Toolkit> object.
 
 =cut
 
@@ -429,7 +429,7 @@ sub _run_phrase_search {
     my %contents_res = $wiki->search_nodes( $phrase );
 
     # Rationalise the scores a little.  The scores returned by
-    # CGI::Wiki::Search::Plucene are simply a ranking.
+    # Wiki::Toolkit::Search::Plucene are simply a ranking.
     my $num_results = scalar keys %contents_res;
     foreach my $node ( keys %contents_res ) {
         $contents_res{$node} = int( $contents_res{$node} / $num_results ) + 1;

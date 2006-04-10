@@ -1,5 +1,5 @@
 use strict;
-use CGI::Wiki::Setup::SQLite;
+use Wiki::Toolkit::Setup::SQLite;
 use OpenGuides::Config;
 use OpenGuides;
 use Test::More tests => 7;
@@ -11,7 +11,7 @@ SKIP: {
     skip "DBD::SQLite not installed - no database to test with", 5
       unless $have_sqlite;
 
-    CGI::Wiki::Setup::SQLite::setup( { dbname => "t/node.db" } );
+    Wiki::Toolkit::Setup::SQLite::setup( { dbname => "t/node.db" } );
     my $config = OpenGuides::Config->new(
            vars => {
                      dbtype             => "sqlite",
@@ -24,13 +24,13 @@ SKIP: {
                      home_name          => "Home",
                    }
     );
-    eval { require CGI::Wiki::Search::Plucene; };
+    eval { require Wiki::Toolkit::Search::Plucene; };
     if ( $@ ) { $config->use_plucene ( 0 ) };
 
     my $guide = OpenGuides->new( config => $config );
     isa_ok( $guide, "OpenGuides" );
     my $wiki = $guide->wiki;
-    isa_ok( $wiki, "CGI::Wiki" );
+    isa_ok( $wiki, "Wiki::Toolkit" );
     $wiki->write_node( "Test Page", "foo", undef, { source => "alternate.cgi?Test_Page" } );
     my $output = eval {
         $guide->display_node( id => "Test Page", return_output => 1 );

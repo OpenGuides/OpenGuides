@@ -1,6 +1,6 @@
 use strict;
-use CGI::Wiki::Plugin::Locator::Grid; # use directly to help debug
-use CGI::Wiki::Setup::SQLite;
+use Wiki::Toolkit::Plugin::Locator::Grid; # use directly to help debug
+use Wiki::Toolkit::Setup::SQLite;
 use OpenGuides::Config;
 use OpenGuides::Search;
 use OpenGuides::Test;
@@ -26,7 +26,7 @@ plan tests => 8;
 # Clear out the database from any previous runs.
 unlink "t/node.db";
 unlink <t/indexes/*>;
-CGI::Wiki::Setup::SQLite::setup( { dbname => "t/node.db" } );
+Wiki::Toolkit::Setup::SQLite::setup( { dbname => "t/node.db" } );
 
 my $config = OpenGuides::Config->new(
        vars => {
@@ -78,7 +78,7 @@ OpenGuides::Test->write_data(
 
 # Sanity check.
 print "# Distances should be:\n";
-my $locator = CGI::Wiki::Plugin::Locator::Grid->new(x => "os_x", y => "os_y");
+my $locator = Wiki::Toolkit::Plugin::Locator::Grid->new(x => "os_x", y => "os_y");
 my $wiki = $guide->wiki;
 $wiki->register_plugin( plugin => $locator );
 foreach my $node ( "Blue Anchor", "Crabtree Tavern", "Hammersmith Bridge"){
