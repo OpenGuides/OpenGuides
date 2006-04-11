@@ -755,21 +755,21 @@ sub display_about {
   <mailing-list rdf:resource="http://urchin.earth.li/mailman/listinfo/openguides-commits/" />
 
   <maintainer>
-    <foaf:Person>
+    <foaf:Person rdf:ID="OpenGuidesMaintainer">
       <foaf:name>Dominic Hargreaves</foaf:name>
       <foaf:homepage rdf:resource="http://www.larted.org.uk/~dom/" />
     </foaf:Person>
   </maintainer>
 
   <repository>
-    <SVNRepository>
+    <SVNRepository rdf:ID="OpenGuidesSVN">
       <location rdf:resource="https://urchin.earth.li/svn/openguides/" />
       <browse rdf:resource="http://dev.openguides.org/browser" />
     </SVNRepository>
   </repository>
 
   <release>
-    <Version>
+    <Version rdf:ID="OpenGuidesVersion">
       <revision>$VERSION</revision>
     </Version>
   </release>
