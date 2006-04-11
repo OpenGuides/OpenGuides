@@ -133,7 +133,13 @@ sub emit_rdfxml {
     <dc:title>} . $self->{site_name} . qq{: $node_name</dc:title>
     <dc:date>$timestamp</dc:date>
     <dcterms:modified>$timestamp</dcterms:modified>
-    <dc:contributor foaf:nick="$username" />
+
+    <dc:contributor>
+      <foaf:Person rdf:ID="$username">
+        <foaf:nick>$username</foaf:nick>
+      </foaf:Person>
+    </dc:contributor>
+
     <dc:source rdf:resource="$version_indpt_url" />
     <wiki:version>$version</wiki:version>
     <foaf:topic rdf:resource="#obj" />
@@ -154,13 +160,19 @@ sub emit_rdfxml {
       $rdf .= "    <postalCode>$postcode</postalCode>\n" if $postcode;
       $rdf .= "    <country>$country</country>\n"        if $country;
 
+    foreach (@locales)
+    { 
+      my $locale_id = $_;
+      $locale_id =~ s/ /_/g;
+   
       $rdf .= qq{
     <foaf:based_near>
-      <wn:Neighborhood>
+      <wn:Neighborhood rdf:ID="$locale_id">
         <dc:title>$_</dc:title>
       </wn:Neighborhood>
-    </foaf:based_near>\n} foreach @locales;
-
+    </foaf:based_near>\n};
+    }
+    
       if ( $latitude && $longitude ) {
           $rdf .= qq{
     <geo:lat>$latitude</geo:lat>
