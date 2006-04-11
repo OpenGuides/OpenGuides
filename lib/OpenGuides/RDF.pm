@@ -112,6 +112,9 @@ sub emit_rdfxml {
         $timestamp = $time->strftime("%Y-%m-%dT%H:%M:%S");
     }
 
+    my $user_id = $username;
+    $user_id =~ s/ /_/g;
+    
     my $url               = $self->{make_node_url}->( $node_name, $version );
     my $version_indpt_url = $self->{make_node_url}->( $node_name );
     my $rdf = qq{<?xml version="1.0"?>
@@ -135,7 +138,7 @@ sub emit_rdfxml {
     <dcterms:modified>$timestamp</dcterms:modified>
 
     <dc:contributor>
-      <foaf:Person rdf:ID="$username">
+      <foaf:Person rdf:ID="$user_id">
         <foaf:nick>$username</foaf:nick>
       </foaf:Person>
     </dc:contributor>
