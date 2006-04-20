@@ -124,6 +124,8 @@ eval {
             }
         }
         print $q->redirect( $redir_target );
+    } elsif ($action eq 'about') {
+        $guide->display_about(format => $format);
     } else { # Default is to display a node.
         if ( $format and $format eq "rdf" ) {
             display_node_rdf( node => $node );
