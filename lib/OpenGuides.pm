@@ -14,7 +14,7 @@ use URI::Escape;
 
 use vars qw( $VERSION );
 
-$VERSION = '0.53-svn';
+$VERSION = '0.53';
 
 =head1 NAME
 
@@ -773,7 +773,7 @@ sub display_about {
     }
     else {
         my $site_name  = $self->config->{site_name};
-        my $script_url = $self->config->{script_url};
+        my $script_name = $self->config->{script_name};
         $output = qq{Content-Type: text/html; charset=utf-8
 
 <html>
@@ -792,14 +792,14 @@ h2          { margin-top: 0px; }
 <link rel="alternate"
   type="application/rdf+xml"
   title="DOAP (Description Of A Project) profile for this site's software" 
-  href="$script_url?action=about;format=rdf" />
+  href="$script_name?action=about;format=rdf" />
 </head>
 <body>
 <div id="content">
 <div id="logo">
 <a href="http://openguides.org/"><img 
 src="http://openguides.org/img/logo.jpg" alt="OpenGuides.org"></a>
-<h1><a href="$script_url">$site_name</a></h1>
+<h1><a href="$script_name">$site_name</a></h1>
 <h2>is powered by <a href="http://openguides.org/">OpenGuides</a> -<br>
 the guides built by you.</h2>
 <h3>version <a href="http://search.cpan.org/~dom/OpenGuides-$VERSION">$VERSION</a></h3>
@@ -834,7 +834,7 @@ with permission.
 </p>
 </div>
 <div id="meta">
-<a href="$script_url?action=about;format=rdf"><acronym
+<a href="$script_name?action=about;format=rdf"><acronym
 title="Description Of A Project">DOAP</acronym> RDF version of this 
 information</a>
 </div>
