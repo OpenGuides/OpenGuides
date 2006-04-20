@@ -1,4 +1,4 @@
-#!/usr/local/bin/perl
+#!/usr/bin/perl
 
 use strict;
 use warnings;
@@ -114,7 +114,16 @@ eval {
             $guide->display_node( id => 'RecentChanges' );
         }
     } elsif ($action eq 'rss') {
-        print $q->redirect( $script_url . '?action=rc;format=rss' );
+        my $redir_target = $script_url . $script_name . '?action=rc;format=rss';
+        my %args = map { $_ => ( $q->param($_) || "" ) }
+            qw( feed items days ignore_minor_edits username
+                category locale );
+        foreach my $arg (sort keys %args) {
+            if ($args{$arg} ne "") {
+                $redir_target .= ";$arg=$args{$arg}";
+            }
+        }
+        print $q->redirect( $redir_target );
     } else { # Default is to display a node.
         if ( $format and $format eq "rdf" ) {
             display_node_rdf( node => $node );

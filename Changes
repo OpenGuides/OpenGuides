@@ -10,6 +10,7 @@
         #107 Don't display partial http:// URL in preview.
         #93 Upgrade to new Google Maps API (for smaller javascript download)
         #103 Fix empty Category/Locale list bug.
+        #54 Fix RSS redirection for backwards compatibility.
 
 0.52    5 March 2006
         IMPORTANT CHANGE: "supersearch.cgi" is now simply "search.cgi". If you
