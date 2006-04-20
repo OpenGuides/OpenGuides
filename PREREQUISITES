@@ -8,7 +8,6 @@ CGI::Carp
 CGI::Cookie
 CGI::Wiki (version 0.62 or later)
 CGI::Wiki::Formatter::UseMod (version 0.16 or later)
-CGI::Wiki::Plugin::Atom
 CGI::Wiki::Plugin::Categoriser
 CGI::Wiki::Plugin::Diff (version 0.08 or later)
 CGI::Wiki::Plugin::Locator::Grid (version 0.02 or later)

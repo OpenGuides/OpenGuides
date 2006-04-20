@@ -220,7 +220,6 @@ my $build = OpenGuides::Build->new(
         'CGI::Cookie'                     => 0,
         'CGI::Wiki'                       => '0.62',  # fixed delete version
         'CGI::Wiki::Formatter::UseMod'    => '0.16',  # macros
-        'CGI::Wiki::Plugin::Atom'         => 0,
         'CGI::Wiki::Plugin::Categoriser'  => 0,
         'CGI::Wiki::Plugin::Diff'         => '0.08',  # earlier buggy
         'CGI::Wiki::Plugin::Locator::Grid'=> '0.02',  # cope with sqlite 3
