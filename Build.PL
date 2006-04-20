@@ -78,6 +78,7 @@ foreach my $var ( qw(
    site_desc default_city default_country contact_email default_language
    formatting_rules_node backlinks_in_title gmaps_api_key centre_long
    centre_lat default_gmaps_zoom default_gmaps_search_zoom force_wgs84
+   licence_name licence_url licence_info_url
   ) ) {
     my $q_method = $var . "__qu";
     my $qu  = $existing_config->$q_method;
