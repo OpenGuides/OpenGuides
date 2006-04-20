@@ -252,6 +252,23 @@ Grid, and Geo::Coordinates::UTM to use a UTM ellipsoid.
 If you want to use a UTM ellipsoid, WGS-84 is the best choice, as it
 will allow you to use the Google Maps support with the minimum of fuss.
 
+  "What licence will you use for the guide?"
+
+We strongly recommend that you think at the outset about the licence your
+guide will use, for maximum usefulness. In particular for a guide that will
+be on the OpenGuides network, we recommend the
+"Creative Commons Attribution-ShareAlike 2.5" licence.
+
+  "What is the URL to your licence?"
+
+If you used our recommendation above the URL you will want here is:
+http://creativecommons.org/licenses/by-sa/2.5/
+
+  "What is the URL to your local page about your licensing policy?"
+
+You should probably include a page on your wiki about your local licensing
+policy, but you can leave this blank for now if you don't have one yet.
+
 * Dependency errors
 
 If, after you have answered these questions, the build script complains

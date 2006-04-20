@@ -12,6 +12,7 @@ my @variables = qw(
    formatting_rules_node formatting_rules_link backlinks_in_title template_path
    custom_template_path geo_handler ellipsoid gmaps_api_key centre_long
    centre_lat default_gmaps_zoom default_gmaps_search_zoom force_wgs84
+   licence_name licence_url licence_info_url
 );
 my @questions = map { $_ . "__qu" } @variables;
 OpenGuides::Config->mk_accessors( @variables );
@@ -82,7 +83,10 @@ sub _init {
                      centre_lat => 0,
                      default_gmaps_zoom => 5,
                      default_gmaps_search_zoom => 3,
-                     force_wgs84 => 0
+                     force_wgs84 => 0,
+                     licence_name => "",
+                     licence_url => "",
+                     licence_info_url => ""
                    );
 
     # See if we already have some config variables set.
@@ -145,7 +149,10 @@ sub _init {
         centre_lat => "What is the latitude of the centre point of a map to draw for your guide? (This question can be ignored if you aren't using Google Maps)",
         default_gmaps_zoom => "What default zoom level shall we use for Google Maps? (This question can be ignored if you aren't using Google Maps)",
         default_gmaps_search_zoom => "What default zoom level shall we use for Google Maps in the search results? (This question can be ignored if you aren't using Google Maps)",
-        force_wgs84 => "Forcibly treat stored lat/long data as if they used the WGS84 ellipsoid?"
+        force_wgs84 => "Forcibly treat stored lat/long data as if they used the WGS84 ellipsoid?",
+        licence_name => "What licence will you use for the guide?",
+        licence_url => "What is the URL to your licence?",
+        licence_info_url => "What is the URL to your local page about your licensing policy?"
     );
 
     foreach my $var ( keys %questions ) {
@@ -245,6 +252,12 @@ sub script_url {
 =item * default_gmaps_search_zoom
 
 =item * force_wgs84
+
+=item * licence_name
+
+=item * licence_url
+
+=item * licence_info_url
 
 =back
 

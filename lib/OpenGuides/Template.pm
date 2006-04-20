@@ -88,6 +88,12 @@ in the config object or the user cookies.
 
 =item * C<gmaps_api_key>
 
+=item * C<licence_name>
+
+=item * C<licence_url>
+
+=item * C<licence_info_url>
+
 =back
 
 =over
@@ -155,7 +161,10 @@ sub output {
         enable_page_deletion  => $enable_page_deletion,
         language              => $config->default_language,
         default_city          => $default_city,
-        gmaps_api_key         => $config->gmaps_api_key
+        gmaps_api_key         => $config->gmaps_api_key,
+        licence_name          => $config->licence_name,
+        licence_url           => $config->licence_url,
+        licence_info_url      => $config->licence_info_url
     };
 
     if ($args{node}) {
