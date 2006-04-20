@@ -11,6 +11,7 @@
         #93 Upgrade to new Google Maps API (for smaller javascript download)
         #103 Fix empty Category/Locale list bug.
         #54 Fix RSS redirection for backwards compatibility.
+        #79 Partial fix to help combat HTML spam
 
 0.52    5 March 2006
         IMPORTANT CHANGE: "supersearch.cgi" is now simply "search.cgi". If you

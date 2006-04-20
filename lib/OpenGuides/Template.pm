@@ -262,6 +262,13 @@ sub extract_metadata_vars {
     } else {
         my $categories_text = $q->param('categories');
         my $locales_text    = $q->param('locales');
+
+        # Basic sanity-checking. Probably lives elsewhere.
+        $categories_text =~ s/</&lt;/g;
+        $categories_text =~ s/>/&gt;/g;
+        $locales_text =~ s/</&lt;/g;
+        $locales_text =~ s/>/&gt;/g;
+
         @catlist = sort grep { s/^\s+//; s/\s+$//; $_; } # trim lead/trail space
                         split("\r\n", $categories_text);
         @loclist = sort grep { s/^\s+//; s/\s+$//; $_; } # trim lead/trail space
