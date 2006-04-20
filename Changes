@@ -8,6 +8,7 @@
           previously in OpenGuides::RDF).
         Generate URIs for locales and contributors in RDF output.
         #107 Don't display partial http:// URL in preview.
+        #93 Upgrade to new Google Maps API (for smaller javascript download)
 
 0.52    5 March 2006
         IMPORTANT CHANGE: "supersearch.cgi" is now simply "search.cgi". If you
