@@ -1,6 +1,6 @@
 "#" items refer to tickets. See <http://dev.openguides.org/report/9> for details.
 
-0.53
+0.53    20 April 2006
         Miscellanous fixes for mod_perl.
         #42 New "About" screen. Try action=about and action=about;format=rdf.
         #97 Use "summary" metadata to generate HTML meta descriptions.
