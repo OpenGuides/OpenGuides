@@ -281,7 +281,7 @@ sub extract_metadata_vars {
     my $website = $args{metadata} ? $metadata{website}[0]
                                   : $q->param("website");
     my $formatted_website_text = "";
-    if ( $website ) {
+    if ( $website && $website != "http://" ) {
         $formatted_website_text = $class->format_website_text(
             formatter => $formatter,
             text      => $website
