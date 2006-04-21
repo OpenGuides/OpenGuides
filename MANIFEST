@@ -92,5 +92,6 @@ t/64_bug_node_history.t
 t/65_bug_metadata_escape.t
 t/66_bug_latlong_representation.t
 t/67_bug_first_version.t
+t/68_bug_website_displayed.t
 t/templates/15_test.tt
 wiki.cgi
