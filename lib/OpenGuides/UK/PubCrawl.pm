@@ -5,10 +5,10 @@ use vars qw( $VERSION @ISA );
 $VERSION = '0.02';
 
 use Carp qw( croak );
-use CGI::Wiki::Plugin;
-use CGI::Wiki::Plugin::Locator::UK;
+use Wiki::Toolkit::Plugin;
+use Wiki::Toolkit::Plugin::Locator::UK;
 
-@ISA = qw( CGI::Wiki::Plugin );
+@ISA = qw( Wiki::Toolkit::Plugin );
 
 =head1 NAME
 
@@ -23,14 +23,14 @@ probably only useful to OpenGuides developers.
 
 =head1 SYNOPSIS
 
-  use CGI::Wiki;
-  use CGI::Wiki::Plugin::Locator::UK;
+  use Wiki::Toolkit;
+  use Wiki::Toolkit::Plugin::Locator::UK;
   use OpenGuides::UK::PubCrawl;
 
-  my $wiki = CGI::Wiki->new( ... );
-  my $locator = CGI::Wiki::Plugin::Locator::UK->new;
+  my $wiki = Wiki::Toolkit->new( ... );
+  my $locator = Wiki::Toolkit::Plugin::Locator::UK->new;
   $wiki->register_plugin( plugin => $locator );
-  my $categoriser = CGI::Wiki::Plugin::Categoriser->new;
+  my $categoriser = Wiki::Toolkit::Plugin::Categoriser->new;
   $wiki->register_plugin( plugin => $categoriser );
 
   my $crawler = OpenGuides::UK::PubCrawl->new(
@@ -50,8 +50,8 @@ probably only useful to OpenGuides developers.
 
   my $crawler = OpenGuides::UK::PubCrawl->new( locator => $locator );
 
-Croaks unless a C<CGI::Wiki::Plugin::Locator::UK> object and a
-C<CGI::Wiki::Plugin::Categoriser> object are supplied.
+Croaks unless a C<Wiki::Toolkit::Plugin::Locator::UK> object and a
+C<Wiki::Toolkit::Plugin::Categoriser> object are supplied.
 
 =cut
 
@@ -59,12 +59,12 @@ sub new {
     my ($class, %args) = @_;
     my $locator = $args{locator}
       or croak "No locator parameter supplied";
-    croak "Locator parameter is not a CGI::Wiki::Plugin::Locator::UK"
-      unless UNIVERSAL::isa( $locator, "CGI::Wiki::Plugin::Locator::UK" );
+    croak "Locator parameter is not a Wiki::Toolkit::Plugin::Locator::UK"
+      unless UNIVERSAL::isa( $locator, "Wiki::Toolkit::Plugin::Locator::UK" );
     my $categoriser = $args{categoriser}
       or croak "No categoriser parameter supplied";
-    croak "Categoriser parameter is not a CGI::Wiki::Plugin::Categoriser"
-      unless UNIVERSAL::isa( $categoriser, "CGI::Wiki::Plugin::Categoriser" );
+    croak "Categoriser parameter is not a Wiki::Toolkit::Plugin::Categoriser"
+      unless UNIVERSAL::isa( $categoriser, "Wiki::Toolkit::Plugin::Categoriser" );
     my $self = { _locator     => $locator,
                  _categoriser => $categoriser };
     bless $self, $class;

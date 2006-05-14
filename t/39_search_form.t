@@ -1,5 +1,5 @@
 use strict;
-use CGI::Wiki::Setup::SQLite;
+use Wiki::Toolkit::Setup::SQLite;
 use OpenGuides::Search;
 use OpenGuides::Test;
 use Test::More;
@@ -40,7 +40,7 @@ plan tests => 27;
 unlink "t/node.db";
 unlink <t/indexes/*>;
 
-CGI::Wiki::Setup::SQLite::setup( { dbname => "t/node.db" } );
+Wiki::Toolkit::Setup::SQLite::setup( { dbname => "t/node.db" } );
 my $config = OpenGuides::Test->make_basic_config;
 $config->use_plucene( 1 );
 

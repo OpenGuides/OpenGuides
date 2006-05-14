@@ -1,5 +1,5 @@
 use strict;
-use CGI::Wiki::Formatter::UseMod;
+use Wiki::Toolkit::Formatter::UseMod;
 use OpenGuides::Template;
 use OpenGuides::Test;
 use Test::MockObject;
@@ -15,7 +15,7 @@ $config->script_url( "/" );
 # info to make a proper wiki object here.
 my $fake_wiki = Test::MockObject->new;
 $fake_wiki->mock("formatter",
-                 sub { return CGI::Wiki::Formatter::UseMod->new( munge_urls => 1 ); } );
+                 sub { return Wiki::Toolkit::Formatter::UseMod->new( munge_urls => 1 ); } );
 
 my $output = OpenGuides::Template->output(
     wiki     => $fake_wiki,

@@ -1,19 +1,19 @@
-Modules required by OpenGuides 0.54
-===================================
+Modules required by OpenGuides 0.54_01
+======================================
 
 Algorithm::Diff (version 0.13 or later. Note that the latest version uses 
         .zip rather than .tar.gz and breaks some automated installs)
 CGI (version 2.92 or later)
 CGI::Carp
 CGI::Cookie
-CGI::Wiki (version 0.62 or later)
-CGI::Wiki::Formatter::UseMod (version 0.16 or later)
-CGI::Wiki::Plugin::Atom
-CGI::Wiki::Plugin::Categoriser
-CGI::Wiki::Plugin::Diff (version 0.08 or later)
-CGI::Wiki::Plugin::Locator::Grid (version 0.02 or later)
-CGI::Wiki::Plugin::RSS::ModWiki (version 0.09 or later)
-CGI::Wiki::Plugin::RSS::Reader (version 1.3 or later)
+Wiki::Toolkit
+Wiki::Toolkit::Feed::Atom
+Wiki::Toolkit::Feed::RSS
+Wiki::Toolkit::Formatter::UseMod
+Wiki::Toolkit::Plugin::Categoriser
+Wiki::Toolkit::Plugin::Diff
+Wiki::Toolkit::Plugin::Locator::Grid
+Wiki::Toolkit::Plugin::RSS::Reader
 Class::Accessor
 Config::Tiny
 Data::Dumper

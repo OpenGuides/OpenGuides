@@ -26,7 +26,7 @@ sub ACTION_install {
 			  mysql    => "MySQL",
 			  sqlite   => "SQLite" );
 
-    my $cgi_wiki_module = "CGI::Wiki::Setup::" . $cgi_wiki_exts{$dbtype};
+    my $cgi_wiki_module = "Wiki::Toolkit::Setup::" . $cgi_wiki_exts{$dbtype};
     eval "require $cgi_wiki_module";
     die "There was a problem: $@" if $@;
 

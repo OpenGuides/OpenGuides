@@ -26,7 +26,7 @@ SKIP: {
                    }
     );
 
-    eval { require CGI::Wiki::Search::Plucene; };
+    eval { require Wiki::Toolkit::Search::Plucene; };
     if ( $@ ) { $config->use_plucene ( 0 ) };
 
     my $wiki = eval {
@@ -34,7 +34,7 @@ SKIP: {
     };
     is( $@, "",
         "...but not with an OpenGuides::Config object with suitable data" );
-    isa_ok( $wiki, "CGI::Wiki" );
+    isa_ok( $wiki, "Wiki::Toolkit" );
 
     ok( $wiki->store,      "...and store defined" );
     ok( $wiki->search_obj, "...and search defined" );

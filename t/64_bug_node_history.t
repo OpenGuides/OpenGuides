@@ -1,4 +1,4 @@
-use CGI::Wiki::Setup::SQLite;
+use Wiki::Toolkit::Setup::SQLite;
 use OpenGuides::Config;
 use Cwd;
 use OpenGuides;
@@ -11,8 +11,8 @@ SKIP: {
     skip "DBD::SQLite not installed - no database to test with", 1
       unless $have_sqlite;
 
-    CGI::Wiki::Setup::SQLite::cleardb( { dbname => "t/node.db" } );
-    CGI::Wiki::Setup::SQLite::setup( { dbname => "t/node.db" } );
+    Wiki::Toolkit::Setup::SQLite::cleardb( { dbname => "t/node.db" } );
+    Wiki::Toolkit::Setup::SQLite::setup( { dbname => "t/node.db" } );
     my $config = OpenGuides::Config->new(
            vars => {
                      dbtype             => "sqlite",
@@ -20,11 +20,11 @@ SKIP: {
                      indexing_directory => "t/indexes",
                      script_url         => "http://wiki.example.com/",
                      script_name        => "mywiki.cgi",
-                     site_name          => "CGI::Wiki Test Site",
+                     site_name          => "Wiki::Toolkit Test Site",
                      template_path      => cwd . "/templates",
                    }
     );
-    eval { require CGI::Wiki::Search::Plucene; };
+    eval { require Wiki::Toolkit::Search::Plucene; };
     if ( $@ ) { $config->use_plucene ( 0 ) };
 
     my $guide = OpenGuides->new( config => $config );

@@ -67,7 +67,7 @@ sub make_basic_config {
                    }
     );
 
-    eval { require CGI::Wiki::Search::Plucene; };
+    eval { require Wiki::Toolkit::Search::Plucene; };
     if ( $@ ) { $config->use_plucene ( 0 ) };
 	
     return $config;

@@ -3,8 +3,8 @@ use strict;
 
 use Carp "croak";
 use CGI;
-use CGI::Wiki::Plugin::Diff;
-use CGI::Wiki::Plugin::Locator::Grid;
+use Wiki::Toolkit::Plugin::Diff;
+use Wiki::Toolkit::Plugin::Locator::Grid;
 use OpenGuides::CGI;
 use OpenGuides::Feed;
 use OpenGuides::Template;
@@ -50,18 +50,18 @@ sub new {
     my $geo_handler = $self->config->geo_handler;
     my $locator;
     if ( $geo_handler == 1 ) {
-        $locator = CGI::Wiki::Plugin::Locator::Grid->new(
+        $locator = Wiki::Toolkit::Plugin::Locator::Grid->new(
                                              x => "os_x",    y => "os_y" );
     } elsif ( $geo_handler == 2 ) {
-        $locator = CGI::Wiki::Plugin::Locator::Grid->new(
+        $locator = Wiki::Toolkit::Plugin::Locator::Grid->new(
                                              x => "osie_x",  y => "osie_y" );
     } else {
-        $locator = CGI::Wiki::Plugin::Locator::Grid->new(
+        $locator = Wiki::Toolkit::Plugin::Locator::Grid->new(
                                              x => "easting", y => "northing" );
     }
     $wiki->register_plugin( plugin => $locator );
     $self->{locator} = $locator;
-    my $differ = CGI::Wiki::Plugin::Diff->new;
+    my $differ = Wiki::Toolkit::Plugin::Diff->new;
     $wiki->register_plugin( plugin => $differ );
     $self->{differ} = $differ;
     return $self;
@@ -69,7 +69,7 @@ sub new {
 
 =item B<wiki>
 
-An accessor, returns the underlying L<CGI::Wiki> object.
+An accessor, returns the underlying L<Wiki::Toolkit> object.
 
 =cut
 
@@ -91,7 +91,7 @@ sub config {
 
 =item B<locator>
 
-An accessor, returns the underlying L<CGI::Wiki::Plugin::Locator::UK> object.
+An accessor, returns the underlying L<Wiki::Toolkit::Plugin::Locator::UK> object.
 
 =cut
 
@@ -102,7 +102,7 @@ sub locator {
 
 =item B<differ>
 
-An accessor, returns the underlying L<CGI::Wiki::Plugin::Diff> object.
+An accessor, returns the underlying L<Wiki::Toolkit::Plugin::Diff> object.
 
 =cut
 
@@ -957,7 +957,7 @@ sub commit_node {
     }
     $metadata{host} = $ENV{REMOTE_ADDR};
 
-    # CGI::Wiki::Plugin::RSS::ModWiki wants "major_change" to be set.
+    # Wiki::Toolkit::Plugin::RSS::ModWiki wants "major_change" to be set.
     $metadata{major_change} = ( $metadata{edit_type} eq "Normal edit" )
                             ? 1
                             : 0;
@@ -1135,7 +1135,7 @@ L<http://dev.openguides.org/>
 
 =item * L<http://openguides.org/|The OpenGuides website>, with a list of all live OpenGuides installs.
 
-=item * L<CGI::Wiki>, the Wiki toolkit which does the heavy lifting for OpenGuides
+=item * L<Wiki::Toolkit>, the Wiki toolkit which does the heavy lifting for OpenGuides
 
 =back
 

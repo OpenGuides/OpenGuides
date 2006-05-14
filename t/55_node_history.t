@@ -1,4 +1,4 @@
-use CGI::Wiki::Setup::SQLite;
+use Wiki::Toolkit::Setup::SQLite;
 use OpenGuides;
 use OpenGuides::Test;
 use Test::More tests => 2;
@@ -10,8 +10,8 @@ SKIP: {
     skip "DBD::SQLite not installed - no database to test with", 2
       unless $have_sqlite;
 
-    CGI::Wiki::Setup::SQLite::cleardb( { dbname => "t/node.db" } );
-    CGI::Wiki::Setup::SQLite::setup( { dbname => "t/node.db" } );
+    Wiki::Toolkit::Setup::SQLite::cleardb( { dbname => "t/node.db" } );
+    Wiki::Toolkit::Setup::SQLite::setup( { dbname => "t/node.db" } );
     my $config = OpenGuides::Test->make_basic_config;
     $config->script_name( "mywiki.cgi" );
     $config->script_url( "http://example.com/" );

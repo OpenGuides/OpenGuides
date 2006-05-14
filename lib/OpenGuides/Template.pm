@@ -237,9 +237,9 @@ sub output {
         );
 
 Picks out things like categories, locales, phone number etc from
-EITHER the metadata hash returned by L<CGI::Wiki> OR the query
+EITHER the metadata hash returned by L<Wiki::Toolkit> OR the query
 parameters in a L<CGI> object, and packages them nicely for passing to
-templates or storing in L<CGI::Wiki> datastore.  If you supply both
+templates or storing in L<Wiki::Toolkit> datastore.  If you supply both
 C<metadata> and C<cgi_obj> then C<metadata> will take precedence, but
 don't do that.
 

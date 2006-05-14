@@ -5,9 +5,9 @@ use vars qw( $VERSION );
 $VERSION = '0.09';
 
 use Carp qw( croak );
-use CGI::Wiki;
-use CGI::Wiki::Formatter::UseMod;
-use CGI::Wiki::Plugin::RSS::Reader;
+use Wiki::Toolkit;
+use Wiki::Toolkit::Formatter::UseMod;
+use Wiki::Toolkit::Plugin::RSS::Reader;
 use URI::Escape;
 
 =head1 NAME
@@ -39,7 +39,7 @@ to OpenGuides developers.
   my $wiki = OpenGuides::Utils->make_wiki_object( config => $config );
 
 Croaks unless an C<OpenGuides::Config> object is supplied.  Returns a
-C<CGI::Wiki> object made from the given config file on success,
+C<Wiki::Toolkit> object made from the given config file on success,
 croaks if any other error occurs.
 
 The config file needs to define at least the following variables:
@@ -77,7 +77,7 @@ sub make_wiki_object {
                           sqlite   => "SQLite",
                         );
 
-    my $cgi_wiki_module = "CGI::Wiki::Store::" . $cgi_wiki_exts{$dbtype};
+    my $cgi_wiki_module = "Wiki::Toolkit::Store::" . $cgi_wiki_exts{$dbtype};
     eval "require $cgi_wiki_module";
     croak "Can't 'require' $cgi_wiki_module.\n" if $@;
 
@@ -95,18 +95,18 @@ sub make_wiki_object {
          && ( lc($config->use_plucene) eq "y"
               || $config->use_plucene == 1 )
        ) {
-        require CGI::Wiki::Search::Plucene;
-        $search = CGI::Wiki::Search::Plucene->new(
+        require Wiki::Toolkit::Search::Plucene;
+        $search = Wiki::Toolkit::Search::Plucene->new(
                                        path => $config->indexing_directory,
                                                  );
     } else {
-        require CGI::Wiki::Search::SII;
+        require Wiki::Toolkit::Search::SII;
         require Search::InvertedIndex::DB::DB_File_SplitHash;
         my $indexdb = Search::InvertedIndex::DB::DB_File_SplitHash->new(
             -map_name  => $config->indexing_directory,
             -lock_mode => "EX"
         );
-        $search = CGI::Wiki::Search::SII->new( indexdb => $indexdb );
+        $search = Wiki::Toolkit::Search::SII->new( indexdb => $indexdb );
     }
 
     # Make formatter.
@@ -118,10 +118,10 @@ sub make_wiki_object {
             qq(<form action="$search_url" method="get"><input type="text" size="20" name="search"><input type="submit" name="Go" value="Search"></form>),
         qr/\@INDEX_LINK\s+\[\[(Category|Locale)\s+([^\]|]+)\|?([^\]]+)?\]\]/ =>
             sub {
-                  # We may be being called by CGI::Wiki::Plugin::Diff,
+                  # We may be being called by Wiki::Toolkit::Plugin::Diff,
                   # which doesn't know it has to pass us $wiki - and
                   # we don't use it anyway.
-                  if ( UNIVERSAL::isa( $_[0], "CGI::Wiki" ) ) {
+                  if ( UNIVERSAL::isa( $_[0], "Wiki::Toolkit" ) ) {
                       shift; # just throw it away
                   }
                   my $link_title = $_[2] || "View all pages in $_[0] $_[1]";
@@ -131,9 +131,9 @@ sub make_wiki_object {
              sub {
                    my ($wiki, $type, $value) = @_;
 
-                   # We may be being called by CGI::Wiki::Plugin::Diff,
+                   # We may be being called by Wiki::Toolkit::Plugin::Diff,
                    # which doesn't know it has to pass us $wiki
-                   unless ( UNIVERSAL::isa( $wiki, "CGI::Wiki" ) ) {
+                   unless ( UNIVERSAL::isa( $wiki, "Wiki::Toolkit" ) ) {
                        return "(unprocessed INDEX_LIST macro)";
 		   }
 
@@ -158,10 +158,10 @@ sub make_wiki_object {
                    return $return;
                  },
 	qr/\@RSS\s+(.+)/ => sub {
-                    # We may be being called by CGI::Wiki::Plugin::Diff,
+                    # We may be being called by Wiki::Toolkit::Plugin::Diff,
                     # which doesn't know it has to pass us $wiki - and
                     # we don't use it anyway.
-                    if ( UNIVERSAL::isa( $_[0], "CGI::Wiki" ) ) {
+                    if ( UNIVERSAL::isa( $_[0], "Wiki::Toolkit" ) ) {
                         shift; # just throw it away
                     }
 
@@ -173,7 +173,7 @@ sub make_wiki_object {
                         $url = $1;
                     }
 
-                    my $rss = CGI::Wiki::Plugin::RSS::Reader->new(url => $url);
+                    my $rss = Wiki::Toolkit::Plugin::RSS::Reader->new(url => $url);
                     my @items = $rss->retrieve;
 
                     # Ten items only at this till.
@@ -195,7 +195,7 @@ sub make_wiki_object {
         },
     );
 
-    my $formatter = CGI::Wiki::Formatter::UseMod->new(
+    my $formatter = Wiki::Toolkit::Formatter::UseMod->new(
         extended_links      => 1,
         implicit_links      => 0,
         allowed_tags        => [qw(a p b strong i em pre small img table td
@@ -212,7 +212,7 @@ sub make_wiki_object {
                  search    => $search,
                  formatter => $formatter );
 
-    my $wiki = CGI::Wiki->new( %conf );
+    my $wiki = Wiki::Toolkit->new( %conf );
     return $wiki;
 }
 
