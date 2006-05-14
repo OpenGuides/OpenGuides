@@ -5,6 +5,7 @@ use strict;
 use vars qw( $VERSION );
 $VERSION = '0.01';
 
+use CGI::Wiki::Plugin::Atom;
 use CGI::Wiki::Plugin::RSS::ModWiki;
 use Time::Piece;
 use URI::Escape;
@@ -62,6 +63,7 @@ sub make_feed {
     
     my %known_types = (
                           'rss'  => 1,
+                          'atom' => 1,
                       );
                       
     croak "No feed type specified" unless $feed_type;
@@ -70,6 +72,30 @@ sub make_feed {
     if ($feed_type eq 'rss') {
         return $self->rss_maker->recent_changes(%args);
     }
+    elsif ($feed_type eq 'atom') {
+        return $self->atom_maker->recent_changes(%args);
+    }
+}
+
+sub atom_maker {
+    my $self = shift;
+  
+    unless ($self->{atom_maker}) {
+        $self->{atom_maker} = CGI::Wiki::Plugin::Atom->new(
+            wiki                => $self->{wiki},
+            site_name           => $self->{site_name},
+            site_url            => $self->{config}->script_url,
+            site_description    => $self->{site_description},
+            make_node_url       => $self->{make_node_url},
+            recent_changes_link => $self->{config}->script_url . '?action=rc',
+            atom_link           => $self->{config}->script_url . '?action=rc&format=atom',
+            software_name       => 'OpenGuides',
+            software_homepage   => 'http://openguides.org/',
+            software_version    => $self->{og_version},
+        );
+    }
+    
+    $self->{atom_maker};
 }
 
 sub rss_maker {
@@ -106,7 +132,7 @@ OpenGuides::Feed - generate data feeds for OpenGuides in various formats.
 
 =head1 DESCRIPTION
 
-Produces RSS 1.0 feeds for OpenGuides.  Distributed and 
+Produces RSS 1.0 and Atom 1.0 feeds for OpenGuides.  Distributed and 
 installed as part of the OpenGuides project, not intended for independent
 installation.  This documentation is probably only useful to OpenGuides
 developers.
@@ -150,6 +176,11 @@ OpenGuides for inclusion in the feed.
 Returns a raw L<CGI::Wiki::Plugin::RSS::ModWiki> object created with the values you
 invoked this module with.
 
+=item B<atom_maker>
+
+Returns a raw L<CGI::Wiki::Plugin::Atom> object created with the values you
+invoked this module with.
+
 =item B<make_feed>
 
     # Ten most recent changes in RSS format.
@@ -158,6 +189,15 @@ invoked this module with.
     my %args = ( items     => 10,
                  feed_type => 'rss', );
     print $rdf_writer->make_feed( %args );
+
+    # All the changes made by bob in the past week, ignoring minor edits, in Atom.
+    $args{days}               = 7;
+    $args{ignore_minor_edits  = 1;
+    $args{filter_on_metadata} => { username => "bob" };
+
+    print "Content-Type: application/atom+xml\n";
+    print "Last-Modified: " . $feed->feed_timestamp( %args ) . "\n\n";
+    print $feed->make_feed( %args );
 
 =item B<feed_timestamp>
 
@@ -175,7 +215,7 @@ whether they need to reload the feed or not.
 
 =over 4
 
-=item * L<CGI::Wiki> and L<CGI::Wiki::Plugin::RSS::ModWiki>
+=item * L<CGI::Wiki>, L<CGI::Wiki::Plugin::RSS::ModWiki> and L<CGI::Wiki::Plugin::Atom>
 
 =item * L<http://openguides.org/>
 

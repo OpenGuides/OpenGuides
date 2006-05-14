@@ -1,5 +1,9 @@
 "#" items refer to tickets. See <http://dev.openguides.org/report/9> for details.
 
+0.55    ???
+        Support for Atom feeds for RecentChanges.
+        #118 Use Wiki::Toolkit
+
 0.54    21 April 2006
         #112 Fixed website display bug introduced in 0.53.
 

@@ -156,6 +156,9 @@ sub display_node {
         $tt_vars{"rss_".lc($type)."_url"} =
                            $config->script_name . "?action=rc;format=rss;"
                            . lc($type) . "=" . lc(CGI->escape($2));
+        $tt_vars{"atom_".lc($type)."_url"} =
+                           $config->script_name . "?action=rc;format=atom;"
+                           . lc($type) . "=" . lc(CGI->escape($2));
     }
 
     my %current_data = $wiki->retrieve_node( $id );
@@ -647,8 +650,16 @@ sub list_all_versions {
                          locale             => "Hammersmith",
                      );
 
+  # All edits bob has made to pub pages in the last week in Atom format
+  $guide->display_feed(
+                         feed_type => 'atom',
+                         days      => 7,
+                         username  => "bob",
+                         category  => "Pubs",
+                     );
+
 C<feed_type> is a mandatory parameter. Supported values at present are 
-"rss".
+"rss" and "atom".
 
 As with other methods, the C<return_output> parameter can be used to
 return the output instead of printing it to STDOUT.
@@ -693,7 +704,11 @@ sub display_feed {
     
     if ($feed_type eq 'rss') {
         $output = "Content-Type: application/rdf+xml\n";
-    } else {
+    }
+    elsif ($feed_type eq 'atom') {
+        $output = "Content-Type: application/atom+xml\n";
+    }
+    else {
         croak "Unknown feed type given: $feed_type";
     }
     
