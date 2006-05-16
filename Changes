@@ -1,6 +1,6 @@
 "#" items refer to tickets. See <http://dev.openguides.org/report/9> for details.
 
-0.54_01 ???
+0.54_01 16 May 2006
         Support for Atom feeds for RecentChanges.
         #118 Use Wiki::Toolkit. NOTE this is a development snapshot and is
         not suitable for production use. It may eat your data! Tests on
