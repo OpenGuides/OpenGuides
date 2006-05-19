@@ -60,20 +60,31 @@ sub make_feed {
     my ($self, %args) = @_;
     
     my $feed_type = $args{feed_type};
+    my $feed_listing = $args{feed_listing};
     
     my %known_types = (
                           'rss'  => 1,
                           'atom' => 1,
                       );
+    my %known_listings = (
+                          'recent_changes' => 1,
+                         );
                       
     croak "No feed type specified" unless $feed_type;
     croak "Unknown feed type: $feed_type" unless $known_types{$feed_type};
 
+    croak "No feed listing specified" unless $feed_listing;
+    croak "Unknown feed listing: $feed_listing" unless $known_listings{$feed_listing};
+
     if ($feed_type eq 'rss') {
-        return $self->rss_maker->recent_changes(%args);
+        if ($feed_listing eq 'recent_changes') {
+            return $self->rss_maker->recent_changes(%args);
+        }
     }
     elsif ($feed_type eq 'atom') {
-        return $self->atom_maker->recent_changes(%args);
+        if ($feed_listing eq 'recent_changes') {
+            return $self->atom_maker->recent_changes(%args);
+        }
     }
 }
 

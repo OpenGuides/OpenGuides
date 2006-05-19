@@ -645,6 +645,7 @@ sub list_all_versions {
   # Last ten non-minor edits to Hammersmith pages in RSS 1.0 format
   $guide->display_feed(
                          feed_type          => 'rss',
+                         feed_listing       => 'recent_changes',
                          items              => 10,
                          ignore_minor_edits => 1,
                          locale             => "Hammersmith",
@@ -652,14 +653,18 @@ sub list_all_versions {
 
   # All edits bob has made to pub pages in the last week in Atom format
   $guide->display_feed(
-                         feed_type => 'atom',
-                         days      => 7,
-                         username  => "bob",
-                         category  => "Pubs",
+                         feed_type    => 'atom',
+                         feed_listing => 'recent_changes',
+                         days         => 7,
+                         username     => "bob",
+                         category     => "Pubs",
                      );
 
 C<feed_type> is a mandatory parameter. Supported values at present are 
 "rss" and "atom".
+
+C<feed_listing> is a mandatory parameter. Supported values at present 
+are "recent_changes". (More values are coming soon though!)
 
 As with other methods, the C<return_output> parameter can be used to
 return the output instead of printing it to STDOUT.
@@ -671,6 +676,9 @@ sub display_feed {
 
     my $feed_type = $args{feed_type};
     croak "No feed type given" unless $feed_type;
+
+    my $feed_listing = $args{feed_listing};
+    croak "No feed listing given" unless $feed_listing;
     
     my $return_output = $args{return_output} ? 1 : 0;
 
@@ -685,6 +693,7 @@ sub display_feed {
                        days               => $days,
                        ignore_minor_edits => $ignore_minor_edits,
                        feed_type          => $feed_type,
+                       feed_listing       => $feed_listing,
                    );
     my %filter;
     $filter{username} = $username if $username;

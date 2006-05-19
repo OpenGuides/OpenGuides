@@ -1,5 +1,11 @@
 "#" items refer to tickets. See <http://dev.openguides.org/report/9> for details.
 
+0.54_02 
+        Pass the feed_listing (currently just recent_changes) through all
+        the feed related code, rather than assuming it'll only ever be
+        recent changes. Will allow other listings of nodes to be handled
+        in the future.
+
 0.54_01 16 May 2006
         Support for Atom feeds for RecentChanges.
         #118 Use Wiki::Toolkit. NOTE this is a development snapshot and is

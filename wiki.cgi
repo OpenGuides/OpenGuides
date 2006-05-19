@@ -104,6 +104,7 @@ eval {
                            qw( feed items days ignore_minor_edits username
                                category locale );
                 $args{feed_type} = 'rss';
+                $args{feed_listing} = 'recent_changes';
                 $guide->display_feed( %args );
             } elsif ( $feed eq "chef_dan" ) {
                 display_node_rdf( node => $node );
@@ -115,6 +116,7 @@ eval {
                        qw( feed items days ignore_minor_edits username
                            category locale );
             $args{feed_type} = 'atom';
+            $args{feed_listing} = 'recent_changes';
             $guide->display_feed( %args );
         } else {
             $guide->display_node( id => 'RecentChanges' );

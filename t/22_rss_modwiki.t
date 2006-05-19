@@ -45,7 +45,7 @@ my $wiki = OpenGuides::Utils->make_wiki_object( config => $config );
 my $feed = OpenGuides::Feed->new( wiki   => $wiki,
                                   config => $config );
 
-my $rss = eval { $feed->make_feed(feed_type => 'rss'); };
+my $rss = eval { $feed->make_feed(feed_type => 'rss', feed_listing => 'recent_changes'); };
 is( $@, "", "->make_feed for rss doesn't croak" );
 
 # Now write some data, first a minor edit then a non-minor one.
@@ -99,6 +99,7 @@ ok( $wiki->node_exists( "Wombles" ), "Wombles written" );
 # Check that the minor edits can be filtered out.
 $output = $guide->display_feed(
                                feed_type          => "rss",
+                               feed_listing       => "recent_changes",
                                items              => 5,
                                username           => "bob",
                                ignore_minor_edits => 1,
