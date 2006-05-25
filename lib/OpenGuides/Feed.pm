@@ -68,6 +68,7 @@ sub make_feed {
                       );
     my %known_listings = (
                           'recent_changes' => 1,
+                          'node_all_versions' => 1,
                          );
                       
     croak "No feed type specified" unless $feed_type;
@@ -80,10 +81,16 @@ sub make_feed {
         if ($feed_listing eq 'recent_changes') {
             return $self->rss_maker->recent_changes(%args);
         }
+        elsif ($feed_listing eq 'node_all_versions') {
+            return $self->rss_maker->node_all_versions(%args);
+        }
     }
     elsif ($feed_type eq 'atom') {
         if ($feed_listing eq 'recent_changes') {
             return $self->atom_maker->recent_changes(%args);
+        }
+        elsif ($feed_listing eq 'node_all_versions') {
+            return $self->atom_maker->node_all_versions(%args);
         }
     }
 }
@@ -132,8 +139,9 @@ sub rss_maker {
 sub feed_timestamp {
     my ($self, %args) = @_;
 
-    # The timestamp methods in our feeds are equivalent, we might as well
-    # use the RSS one.
+    # Call the compatability timestamping method on the RSS Feed.
+    # People should really just pass in also_return_timestamp to the
+    #  feed method, and get the timestamp at the same time as their data
     $self->rss_maker->rss_timestamp(%args);
 }
 
@@ -161,11 +169,14 @@ developers.
                                       og_version => '1.0', ); 
 
     # Ten most recent changes in RSS format.
-    print "Content-Type: application/rdf+xml\n";
-    print "Last-Modified: " . $self->feed_timestamp( items => 10 ) . "\n\n";
     my %args = ( items     => 10,
-                 feed_type => 'rss', );
-    print $feed->make_feed( %args );
+                 feed_type => 'rss', 
+                 also_return_timestamp => 1 );
+    my ($feed_output,$feed_timestamp) = $feed->make_feed( %args );
+
+    print "Content-Type: application/rdf+xml\n";
+    print "Last-Modified: " . $feed_timestamp . "\n\n";
+    print $feed_output;
 
 =head1 METHODS
 
@@ -195,30 +206,42 @@ invoked this module with.
 =item B<make_feed>
 
     # Ten most recent changes in RSS format.
-    print "Content-Type: application/rdf+xml\n";
-    print "Last-Modified: " . $feed->feed_timestamp( items => 10 ) . "\n\n";
     my %args = ( items     => 10,
-                 feed_type => 'rss', );
+                 feed_type => 'rss',
+                 also_return_timestamp => 1 );
+    my ($feed_output,$feed_timestamp) = $rdf_writer->make_feed( %args );
+
+    print "Content-Type: application/rdf+xml\n";
+    print "Last-Modified: " . $feed_timestamp . "\n\n";
+    print $feed_output;
     print $rdf_writer->make_feed( %args );
+
 
     # All the changes made by bob in the past week, ignoring minor edits, in Atom.
     $args{days}               = 7;
     $args{ignore_minor_edits  = 1;
     $args{filter_on_metadata} => { username => "bob" };
+    $args{also_return_timestamp} => 1;
 
+    my ($feed_output,$feed_timestamp) = $rdf_writer->make_feed( %args );
     print "Content-Type: application/atom+xml\n";
-    print "Last-Modified: " . $feed->feed_timestamp( %args ) . "\n\n";
-    print $feed->make_feed( %args );
+    print "Last-Modified: " . $feed_timestamp . "\n\n";
+    print $feed_output;
 
 =item B<feed_timestamp>
 
+Instead of calling this, you should instead pass in the 'also_return_timestamp'
+option. You will then get back the feed timestamp, along with the feed output.
+
+This method will be removed in future, and currently will only return
+meaningful values if your arguments relate to recent changes.
+
     print "Last-Modified: " . $feed->feed_timestamp( %args ) . "\n\n";
 
-Returns the timestamp of the data feed in POSIX::strftime style ("Tue, 29 Feb 2000 
-12:34:56 GMT"), which is equivalent to the timestamp of the most recent item
-in the feed. Takes the same arguments as make_recentchanges_rss(). You will most 
-likely need this to print a Last-Modified HTTP header so user-agents can determine
-whether they need to reload the feed or not.
+Returns the timestamp of something in POSIX::strftime style ("Tue, 29 Feb 2000 
+12:34:56 GMT"). Takes the same arguments as make_recentchanges_rss(). 
+You will most likely need this to print a Last-Modified HTTP header so 
+user-agents can determine whether they need to reload the feed or not.
 
 =back
 

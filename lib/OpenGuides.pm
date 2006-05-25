@@ -689,11 +689,12 @@ sub display_feed {
     my $category = $args{category} || "";
     my $locale   = $args{locale}   || "";
     my %criteria = (
-                       items              => $items,
-                       days               => $days,
-                       ignore_minor_edits => $ignore_minor_edits,
-                       feed_type          => $feed_type,
-                       feed_listing       => $feed_listing,
+                       items                 => $items,
+                       days                  => $days,
+                       ignore_minor_edits    => $ignore_minor_edits,
+                       feed_type             => $feed_type,
+                       feed_listing          => $feed_listing,
+                       also_return_timestamp => 1,
                    );
     my %filter;
     $filter{username} = $username if $username;
@@ -721,9 +722,12 @@ sub display_feed {
         croak "Unknown feed type given: $feed_type";
     }
     
-    $output .= "Last-Modified: " . $feed->feed_timestamp( %criteria ) . "\n\n";
+    # Get the feed, and the timestamp, in one go
+    my ($feed_output, $feed_timestamp) = 
+        $feed->make_feed( %criteria );
 
-    $output .= $feed->make_feed( %criteria );
+    $output .= "Last-Modified: " . $feed_timestamp . "\n\n";
+    $output .= $feed_output;
 
     return $output if $return_output;
     print $output;
