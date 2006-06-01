@@ -118,6 +118,19 @@ precedence over C<return_output>.
 These two parameters exist to make testing easier; you probably don't
 want to use them in production.
 
+
+In case you're struggling to follow the code, it does the following:
+1) Processes the parameters, and bails out if it hit a problem with them
+2) If a search string was given, do a text search
+3) If distance search paramaters were given, do a distance search
+4) If no search has occured, print out the search form
+5) If an error occured, bail out
+6) If we got a single hit on a string search, redirect to it
+7) If no results were found, give an empty search results page
+8) Sort the results by either score or distance
+9) Decide which results to show, based on paging
+10) Display the appropriate page of the results
+
 =back
 
 =cut
