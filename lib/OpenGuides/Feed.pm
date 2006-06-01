@@ -62,37 +62,47 @@ sub make_feed {
     my $feed_type = $args{feed_type};
     my $feed_listing = $args{feed_listing};
     
-    my %known_types = (
-                          'rss'  => 1,
-                          'atom' => 1,
-                      );
     my %known_listings = (
                           'recent_changes' => 1,
                           'node_all_versions' => 1,
                          );
                       
-    croak "No feed type specified" unless $feed_type;
-    croak "Unknown feed type: $feed_type" unless $known_types{$feed_type};
-
     croak "No feed listing specified" unless $feed_listing;
     croak "Unknown feed listing: $feed_listing" unless $known_listings{$feed_listing};
 
-    if ($feed_type eq 'rss') {
-        if ($feed_listing eq 'recent_changes') {
-            return $self->rss_maker->recent_changes(%args);
-        }
-        elsif ($feed_listing eq 'node_all_versions') {
-            return $self->rss_maker->node_all_versions(%args);
-        }
+    # Fetch the right Wiki::Toolkit::Feeds::Listing instance to use
+    my $maker = $self->fetch_maker($feed_type);
+
+    # Call the appropriate feed listing from it
+    if ($feed_listing eq 'recent_changes') {
+        return $maker->recent_changes(%args);
     }
-    elsif ($feed_type eq 'atom') {
-        if ($feed_listing eq 'recent_changes') {
-            return $self->atom_maker->recent_changes(%args);
-        }
-        elsif ($feed_listing eq 'node_all_versions') {
-            return $self->atom_maker->node_all_versions(%args);
-        }
+    elsif ($feed_listing eq 'node_all_versions') {
+        return $maker->node_all_versions(%args);
     }
+}
+
+=item B<fetch_maker>
+For the given feed type, identify and return the maker routine for feeds
+of that type. 
+
+my $maker = $feed->fetch_maker("rss");
+my $feed_contents = maker->node_all_versions(%options);
+
+Will always return something of type Wiki::Toolkit::Feed::Listing
+=cut
+sub fetch_maker {
+    my ($self,$feed_type) = @_;
+
+    my %known_types = (
+                          'rss'  => \&atom_maker,
+                          'atom' => \&rss_maker,
+                      );
+
+    croak "No feed type specified" unless $feed_type;
+    croak "Unknown feed type: $feed_type" unless $known_types{$feed_type};
+
+    return &{$known_types{$feed_type}};
 }
 
 sub atom_maker {
