@@ -95,7 +95,16 @@ eval {
                         host     => $q->param("host") || "",
                       );
     } elsif ($action eq 'list_all_versions') {
-        $guide->list_all_versions( id => $node );
+        if($format && ($format eq "rss" || $format eq "atom")) {
+            my %args = (
+                            feed_type    => $format,
+                            feed_listing => 'node_all_versions',
+                            name         => $node
+            );
+            $guide->display_feed( %args );
+        } else {
+            $guide->list_all_versions( id => $node );
+        }
     } elsif ($action eq 'rc') {
         if ($format && $format eq 'rss') {
             my $feed = $q->param("feed");
