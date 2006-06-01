@@ -62,8 +62,10 @@ t/13_cookies.t
 t/14_recent_changes_cookies.t
 t/15_template.t
 t/16_test_tester.t
+t/17_commit_node.t
 t/21_rdf.t
-t/22_rss_modwiki.t
+t/22_feed_recent_changes.t
+t/23_feed_node_all_versions.t
 t/25_write_geo_data.t
 t/26_geo_data_search_form.t
 t/27_geo_data_edit_form.t
