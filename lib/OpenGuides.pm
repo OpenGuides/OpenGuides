@@ -682,27 +682,35 @@ sub display_feed {
     
     my $return_output = $args{return_output} ? 1 : 0;
 
-    my $items = $args{items} || "";
-    my $days  = $args{days}  || "";
-    my $ignore_minor_edits = $args{ignore_minor_edits} ? 1 : 0;
-    my $username = $args{username} || "";
-    my $category = $args{category} || "";
-    my $locale   = $args{locale}   || "";
+    # Basic criteria, whatever the feed listing type is
     my %criteria = (
-                       items                 => $items,
-                       days                  => $days,
-                       ignore_minor_edits    => $ignore_minor_edits,
                        feed_type             => $feed_type,
                        feed_listing          => $feed_listing,
                        also_return_timestamp => 1,
                    );
-    my %filter;
-    $filter{username} = $username if $username;
-    $filter{category} = $category if $category;
-    $filter{locale}   = $locale   if $locale;
-    if ( scalar keys %filter ) {
-        $criteria{filter_on_metadata} = \%filter;
+
+    # Feed listing specific criteria
+    if($feed_listing eq "recent_changes") {
+        $criteria{items} = $args{items} || "";
+        $criteria{days}  = $args{days}  || "";
+        $criteria{ignore_minor_edits} = $args{ignore_minor_edits} ? 1 : 0;
+
+        my $username = $args{username} || "";
+        my $category = $args{category} || "";
+        my $locale   = $args{locale}   || "";
+
+        my %filter;
+        $filter{username} = $username if $username;
+        $filter{category} = $category if $category;
+        $filter{locale}   = $locale   if $locale;
+        if ( scalar keys %filter ) {
+            $criteria{filter_on_metadata} = \%filter;
+        }
     }
+    elsif($feed_listing eq "node_all_versions") {
+        $criteria{name} = $args{name};
+    }
+
 
     my $feed = OpenGuides::Feed->new(
                                         wiki       => $self->wiki,
