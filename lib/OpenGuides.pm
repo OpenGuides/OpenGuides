@@ -821,7 +821,6 @@ body        { margin: 0px; }
 h1          { margin-bottom: 0px; font-style: italic; }
 h2          { margin-top: 0px; }
 #logo       { text-align: center; }
-#logo a img { border: 1px solid #000; }
 #about      { margin: 0em 0em 1em 0em; border-top: 1px solid #ddd; border-bottom: 1px solid #ddd; }
 #meta       { font-size: small; text-align: center;}
 </style>
