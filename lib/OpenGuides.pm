@@ -834,10 +834,10 @@ h2          { margin-top: 0px; }
 <div id="content">
 <div id="logo">
 <a href="http://openguides.org/"><img 
-src="http://openguides.org/img/logo.jpg" alt="OpenGuides.org"></a>
+src="http://openguides.org/img/logo.png" alt="OpenGuides"></a>
 <h1><a href="$script_name">$site_name</a></h1>
 <h2>is powered by <a href="http://openguides.org/">OpenGuides</a> -<br>
-the guides built by you.</h2>
+the guides made by you.</h2>
 <h3>version <a href="http://search.cpan.org/~dom/OpenGuides-$VERSION">$VERSION</a></h3>
 </div>
 <div id="about">
