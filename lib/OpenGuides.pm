@@ -863,7 +863,7 @@ development site</a>.
 </p>
 <p>
 Copyright &copy;2003-2006, <a href="http://openguides.org/">The OpenGuides
-Project</a>. "OpenGuides", "[The] Open Guide To..." and "The guides built by
+Project</a>. "OpenGuides", "[The] Open Guide To..." and "The guides made by
 you" are trademarks of The OpenGuides Project. Any uses on this site are made 
 with permission.
 </p>
