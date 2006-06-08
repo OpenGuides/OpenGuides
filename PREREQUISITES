@@ -1,5 +1,5 @@
-Modules required by OpenGuides 0.54_01
-======================================
+Modules required by OpenGuides 0.55
+===================================
 
 Algorithm::Diff (version 0.13 or later. Note that the latest version uses 
         .zip rather than .tar.gz and breaks some automated installs)
