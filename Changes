@@ -1,6 +1,6 @@
 "#" items refer to tickets. See <http://dev.openguides.org/report/9> for details.
 
-0.55    
+0.54_02 8 June 2006
         Pass the feed_listing (currently just recent_changes) through all
         the feed related code, rather than assuming it'll only ever be
         recent changes. Will allow other listings of nodes to be handled
