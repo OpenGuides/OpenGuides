@@ -1,12 +1,12 @@
-Modules required by OpenGuides 0.54_02
-======================================
+Modules required by OpenGuides 0.55
+===================================
 
 Algorithm::Diff (version 0.13 or later. Note that the latest version uses 
         .zip rather than .tar.gz and breaks some automated installs)
 CGI (version 2.92 or later)
 CGI::Carp
 CGI::Cookie
-Wiki::Toolkit
+Wiki::Toolkit (version 0.70 or later)
 Wiki::Toolkit::Feed::Atom
 Wiki::Toolkit::Feed::RSS
 Wiki::Toolkit::Formatter::UseMod
