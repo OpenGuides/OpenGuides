@@ -21,7 +21,7 @@ if ( $@ ) {
 
 # Which feed types do we test?
 my @feed_types = qw( rss atom );
-plan tests => 10 * scalar @feed_types;
+plan tests => 11 * scalar @feed_types;
 
 
 foreach my $feed_type (@feed_types) {
@@ -50,8 +50,12 @@ foreach my $feed_type (@feed_types) {
     my $feed = OpenGuides::Feed->new( wiki   => $wiki,
                                       config => $config );
 
-    my $rss = eval { $feed->make_feed(feed_type => $feed_type, feed_listing => 'recent_changes'); };
+    my $feed_output = eval { $feed->make_feed(feed_type => $feed_type, feed_listing => 'recent_changes'); };
     is( $@, "", "->make_feed for $feed_type doesn't croak" );
+
+    # Ensure that the feed actually contained rss/atom (a good guide
+    #  that we actually got the right feed)
+    like( $feed_output, "/$feed_type/i", "Does contain the feed type" );
 
 
     # Now write some data: 3 versions of one node, and 1 of another
