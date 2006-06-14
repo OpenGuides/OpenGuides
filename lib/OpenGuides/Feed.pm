@@ -95,8 +95,8 @@ sub fetch_maker {
     my ($self,$feed_type) = @_;
 
     my %known_types = (
-                          'rss'  => \&atom_maker,
-                          'atom' => \&rss_maker,
+                          'atom'  => \&atom_maker,
+                          'rss' => \&rss_maker,
                       );
 
     croak "No feed type specified" unless $feed_type;
