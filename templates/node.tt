@@ -3,7 +3,7 @@
 [% INCLUDE banner.tt %]
 <div id="content">
 [% INCLUDE navbar.tt %]
-<div id="maincontent">
+<div id="maincontent" class="hreview">
 [% IF oldid %]
 <div id="redirect_message">(redirected from <a href="[% full_cgi_url %]?id=[% oldid %];redirect=0">[% oldid.replace('_', ' ') %]</a>)</div>
 [% END %]
@@ -14,7 +14,7 @@
   //<![CDATA[
     var map = new GMap(document.getElementById("map"));
     map.addControl(new GSmallMapControl());
-    map.centerAndZoom(new GPoint([% longitude %], [% latitude %]), 3);
+    map.centerAndZoom(new GPoint([% wgs84_long %], [% wgs84_lat %]), 3);
     var point0 = new GPoint([% wgs84_long %], [% wgs84_lat %]);
     var marker0 = new GMarker(point0,baseIcon);
     GEvent.addListener(marker0, "click", function() {
@@ -45,7 +45,9 @@ We don't have a node called "[% node_param %]". Would you like to <a href="[% fu
 [% INCLUDE display_metadata.tt %]
 
 <!-- NODE CONTENT STARTS -->
+<div id="content_text" class="description">
 [% content %]
+</div>
 <!-- NODE CONTENT ENDS -->
 
 [% TRY %]
@@ -72,21 +74,34 @@ We don't have a node called "[% node_param %]". Would you like to <a href="[% fu
   </div>
 [% END %]
 [% IF (latitude AND longitude) OR (os_x AND os_y) OR (osie_x AND osie_y) %]
-<div id="coordinates">
+<div id="coordinates" class="geo">
 [% END %]
 [% IF os_x AND os_y %]
-  <small>OS X co-ord: [% CGI.escapeHTML(os_x) %]</small>
+  <small>OS X co-ord: 
+    <abbr class="osgb_x" title="[% CGI.escapeHTML(os_x) %]">[% CGI.escapeHTML(os_x) %]</abbr>
+  </small>
   &nbsp;&nbsp;&nbsp;
-  <small>OS Y co-ord: [% CGI.escapeHTML(os_y) %]</small>
+  <small>OS Y co-ord: 
+    <abbr class="osgb_y" title="[% CGI.escapeHTML(os_y) %]">[% CGI.escapeHTML(os_y) %]</abbr>
+  </small>
   &nbsp;&nbsp;&nbsp;
 [% ELSIF osie_x AND osie_y %]
-  <small>OS IE X co-ord: [% CGI.escapeHTML(osie_x) %]</small>
+  <small>OS IE X co-ord: 
+    <abbr class="osie_x" title="[% CGI.escapeHTML(osie_x) %]">[% CGI.escapeHTML(osie_x) %]</abbr>
+  </small>
   &nbsp;&nbsp;&nbsp;
-  <small>OS IE Y co-ord: [% CGI.escapeHTML(osie_y) %]</small>
+  <small>OS IE Y co-ord: 
+    <abbr class="osie_y" title="[% CGI.escapeHTML(osie_y) %]">[% CGI.escapeHTML(osie_y) %]</abbr>
+  </small>
   &nbsp;&nbsp;&nbsp;
 [% END %]
 [% IF latitude AND longitude %]
-  <small>(Latitude: [% latitude %] Longitude: [% longitude %])</small>
+  <small>
+    (Latitude: 
+    <abbr class="latitude" title="[% wgs84_lat %]">[% latitude %]</abbr>
+	Longitude: 
+	<abbr class="longitude" title="[% wgs84_long %]">[% longitude %]</abbr>)
+  </small>
 [% END %]
 [% IF (latitude AND longitude) OR (os_x AND os_y) OR (osie_x AND osie_y)%]
 </div>
@@ -111,7 +126,8 @@ We don't have a node called "[% node_param %]". Would you like to <a href="[% fu
     <a href="[% cgi_url %]?id=[% node_param %];version=[% version - 1 %];diffversion=[% version %]">diff</a>).
   [% END %]
 [% ELSE %]
-  This is version [% version %] (as of [% last_modified %]). 
+  This is version <span class="version">[% version %]</span> 
+  (as of [% last_modified %]). 
   <a href="[% cgi_url %]?[% node_param %]">View current version.</a> 
 [% END %]
 [% IF version AND version > 1 %]

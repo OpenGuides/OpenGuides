@@ -38,4 +38,11 @@ Note: only administrators can delete historical versions.
   <a href="[% cgi_url %]?[% node_param %]">View current revision</a>
 </p>
 
+<p>
+  This list is available as a
+  <a href="[% cgi_url %]?action=list_all_versions;format=rss;id=[% node_param %]">rss feed</a>
+  and as an
+  <a href="[% cgi_url %]?action=list_all_versions;format=atom;id=[% node_param %]">atom feed</a>.
+</p>
+
 [% INCLUDE footer.tt %]
