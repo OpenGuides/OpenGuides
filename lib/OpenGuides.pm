@@ -484,6 +484,13 @@ sub show_backlinks {
                         format => "rdf",
                     );
 
+  # RSS / Atom version (recent changes style).
+  $guide->show_index(
+                        type   => "locale",
+                        value  => "Holborn",
+                        format => "rss",
+                    );
+
   # Or return output as a string (useful for writing tests).
   $guide->show_index(
                         type          => "category",
@@ -567,6 +574,24 @@ sub show_index {
             $tt_vars{display_google_maps} = 1; # override for this page
             $template = "map_index.tt";
             
+        } elsif( $args{format} eq "rss" || $args{format} eq "atom") {
+            # They really wanted a recent changes style rss/atom feed
+            my $feed_type = $args{format};
+            my ($feed,$content_type) = $self->get_feed_and_content_type($feed_type);
+
+            # Grab the actual node data out of @nodes
+            my @node_data;
+            foreach my $node (@nodes) {
+                $node->{node_data}->{name} = $node->{name};
+                push @node_data, $node->{node_data};
+            }
+
+            my $output = "Content-Type: ".$content_type."\n";
+            $output .= $feed->build_feed_for_nodes($feed_type, @node_data);
+
+            return $output if $args{return_output};
+            print $output;
+            return;
         }
     } else {
         $template = "site_index.tt";
@@ -638,6 +663,37 @@ sub list_all_versions {
                                         );
     return $output if $return_output;
     print $output;
+}
+
+=item B<get_feed_and_content_type>
+
+Fetch the OpenGuides feed object, and the output content type, for the
+supplied feed type.
+
+Handles all the setup for the OpenGuides feed object.
+=cut
+sub get_feed_and_content_type {
+    my ($self, $feed_type) = @_;
+
+    my $feed = OpenGuides::Feed->new(
+                                        wiki       => $self->wiki,
+                                        config     => $self->config,
+                                        og_version => $VERSION,
+                                    );
+
+    my $content_type;
+    
+    if ($feed_type eq 'rss') {
+        $content_type = "application/rdf+xml";
+    }
+    elsif ($feed_type eq 'atom') {
+        $content_type = "application/atom+xml";
+    }
+    else {
+        croak "Unknown feed type given: $feed_type";
+    }
+
+    return ($feed, $content_type);
 }
 
 =item B<display_feed>
@@ -712,23 +768,10 @@ sub display_feed {
     }
 
 
-    my $feed = OpenGuides::Feed->new(
-                                        wiki       => $self->wiki,
-                                        config     => $self->config,
-                                        og_version => $VERSION,
-                                    );
+    # Get the feed object, and the content type
+    my ($feed,$content_type) = $self->get_feed_and_content_type($feed_type);
 
-    my $output;
-    
-    if ($feed_type eq 'rss') {
-        $output = "Content-Type: application/rdf+xml\n";
-    }
-    elsif ($feed_type eq 'atom') {
-        $output = "Content-Type: application/atom+xml\n";
-    }
-    else {
-        croak "Unknown feed type given: $feed_type";
-    }
+    my $output = "Content-Type: ".$content_type."\n";
     
     # Get the feed, and the timestamp, in one go
     my ($feed_output, $feed_timestamp) = 
