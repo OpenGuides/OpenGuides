@@ -30,11 +30,11 @@
 
 <p>
   This list is available as
-  <a href="[% cgi_url %]?action=index;index_type=[% type %];index_value=[% value %];format=rdf">rdf</a>,
+  <a href="[% cgi_url %]?action=index;index_type=[% criterion.type %];index_value=[% criterion.value %];format=rdf">rdf</a>,
   or as a
-  <a href="[% cgi_url %]?action=index;index_type=[% type %];index_value=[% value %];format=rss">rss feed</a>,
+  <a href="[% cgi_url %]?action=index;index_type=[% criterion.type %];index_value=[% criterion.value %];format=rss">rss feed</a>,
   or as an
-  <a href="[% cgi_url %]?action=index;index_type=[% type %];index_value=[% value %];format=atom">atom feed</a>.
+  <a href="[% cgi_url %]?action=index;index_type=[% criterion.type %];index_value=[% criterion.value %];format=atom">atom feed</a>.
 </p>
 
 [% INCLUDE footer.tt %]
