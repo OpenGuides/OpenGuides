@@ -56,6 +56,17 @@ sub _init {
     $self;
 }
 
+=item B<make_feed>
+Produce one of the standard feeds, in the requested format.
+
+
+my $feed_contents = feeds->make_feed(
+                                feed_type => 'rss',
+                                feed_listing => 'recent_changes'
+                    );
+
+Passes additional arguments through to the underlying Wiki::Toolkit::Feed
+=cut
 sub make_feed {
     my ($self, %args) = @_;
     
@@ -80,6 +91,41 @@ sub make_feed {
     elsif ($feed_listing eq 'node_all_versions') {
         return $maker->node_all_versions(%args);
     }
+}
+
+=item B<build_feed_for_nodes>
+For the given feed type, build a feed from the supplied list of nodes.
+Will figure out the feed timestamp from the newest node, and output a
+ last modified header based on this.
+
+my @nodes = $wiki->fetch_me_nodes_I_like();
+my $feed_contents = $feed->build_feed_for_nodes("rss", @nodes);
+=cut
+sub build_feed_for_nodes {
+    my ($self, $format, @nodes) = @_;
+
+    # Grab our feed maker
+    my $maker = $self->fetch_maker($format);
+
+    # Find our newest node, so we can use that for the feed timestamp
+    my $newest_node;
+    foreach my $node (@nodes) {
+        if($node->{last_modified}) {
+            if((!$newest_node) || $node->{last_modified} < $newest_node->{last_modified}) {
+                $newest_node = $node;
+            }
+        }
+    }
+
+    # Grab the timestamp, and do our header
+    my $timestamp = $maker->feed_timestamp($newest_node);
+
+    my $feed = "Last-Modified: ".$timestamp."\n\n";
+
+    # Generate the feed itself
+    $feed .= $maker->generate_node_list_feed($timestamp, @nodes);
+
+    return $feed;
 }
 
 =item B<fetch_maker>
