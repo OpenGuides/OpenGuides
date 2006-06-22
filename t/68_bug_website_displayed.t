@@ -21,6 +21,6 @@ SKIP: {
                                        id => "South Croydon Station",
                                        return_output => 1,
                                      );
-    like( $output, qr#Website:</span> <a href="http://www.example.com/">http://www.example.com/</a>#, "website correctly displayed" );
+    like( $output, qr#Website:</span> <span class="url"><a href="http://www.example.com/">http://www.example.com/</a>#, "website correctly displayed" );
 }
 
