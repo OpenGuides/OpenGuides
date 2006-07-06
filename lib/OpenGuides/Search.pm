@@ -714,6 +714,11 @@ sub process_template {
                                                config     => $self->config,
                                                og_version => $VERSION,
                                         );
+        $feed->set_feed_name_and_url_params(
+                    "Search Results for ".$tt_vars->{search_terms},
+                    "search.cgi?search=".$tt_vars->{search_terms}
+        );
+
         $output  = "Content-Type: ".$feed->default_content_type($format)."\n";
         $output .= $feed->build_mini_feed_for_nodes($format,@nodes);
     } else {

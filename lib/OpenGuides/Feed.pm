@@ -47,13 +47,35 @@ sub _init {
 
         $node_url;
       };  
-    $self->{site_name}        = $config->site_name;
-    $self->{default_city}     = $config->default_city     || "";
-    $self->{default_country}  = $config->default_country  || "";
-    $self->{site_description} = $config->site_desc        || "";
+    $self->{site_name}        = $config->site_name . " - Recent Changes";
+    $self->{default_city}     = $config->default_city      || "";
+    $self->{default_country}  = $config->default_country   || "";
+    $self->{site_description} = $config->site_desc         || "";
     $self->{og_version}       = $args{og_version};
+    $self->{html_equiv_link}  = $self->{config}->script_url . '?action=rc';
 
     $self;
+}
+
+=item B<set_feed_name_and_url_params>
+Overrides the default feed name and default feed http equivalent url.
+Useful on custom feeds, where the defaults are incorrect.
+
+   $feed->set_feed_name_and_url("Search Results", "search=pub");
+   $feed->build_mini_feed_for_nodes("rss", @search_results);
+=cut
+sub set_feed_name_and_url_params {
+    my ($self, $name, $url) = @_;
+
+    unless($url =~ /^http/) {
+        my $b_url = $self->{config}->script_url;
+        unless($url =~ /\.cgi\?/) { $b_url .= "?"; }
+        $b_url .= $url;
+        $url = $b_url;
+    }
+
+    $self->{site_name} = $self->{config}->{site_name} . " - " . $name;
+    $self->{html_equiv_link} = $url;
 }
 
 =item B<make_feed>
@@ -81,8 +103,19 @@ sub make_feed {
     croak "No feed listing specified" unless $feed_listing;
     croak "Unknown feed listing: $feed_listing" unless $known_listings{$feed_listing};
 
+
+    # Tweak any settings, as required by our feed listing
+    if ($feed_listing eq 'node_all_versions') {
+        $self->set_feed_name_and_url_params(
+                    "All versions of ".$args{'name'},
+                    "action=list_all_versions;id=".$args{'name'}
+        );
+    }
+
+
     # Fetch the right Wiki::Toolkit::Feeds::Listing instance to use
     my $maker = $self->fetch_maker($feed_type);
+
 
     # Call the appropriate feed listing from it
     if ($feed_listing eq 'recent_changes') {
@@ -210,8 +243,8 @@ sub atom_maker {
             site_url            => $self->{config}->script_url,
             site_description    => $self->{site_description},
             make_node_url       => $self->{make_node_url},
-            html_equiv_link     => $self->{config}->script_url . '?action=rc',
-            atom_link           => $self->{config}->script_url . '?action=rc&format=atom',
+            html_equiv_link     => $self->{html_equiv_link},
+            atom_link           => $self->{html_equiv_link} . ";format=atom",
             software_name       => 'OpenGuides',
             software_homepage   => 'http://openguides.org/',
             software_version    => $self->{og_version},
@@ -231,7 +264,7 @@ sub rss_maker {
             site_url            => $self->{config}->script_url,
             site_description    => $self->{site_description},
             make_node_url       => $self->{make_node_url},
-            html_equiv_link     => $self->{config}->script_url . '?action=rc',
+            html_equiv_link     => $self->{html_equiv_link},
             software_name       => 'OpenGuides',
             software_homepage   => 'http://openguides.org/',
             software_version    => $self->{og_version},

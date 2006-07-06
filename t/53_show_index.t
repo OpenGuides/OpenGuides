@@ -76,7 +76,6 @@ SKIP: {
     #like( $output, qr|<title>Category Alpha</title>|, "Right rss title" );
     my @entries = ($output =~ /(\<\/item\>)/g);
     is( 2, scalar @entries, "Right number of nodes included in rss" );
-warn($output);
 
     # Test the Atom version
     $output = eval {

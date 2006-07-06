@@ -578,6 +578,10 @@ sub show_index {
             # They really wanted a recent changes style rss/atom feed
             my $feed_type = $args{format};
             my ($feed,$content_type) = $self->get_feed_and_content_type($feed_type);
+            $feed->set_feed_name_and_url_params(
+                        "Index of $args{type} $args{value}",
+                        "action=index;index_type=$args{type};index_value=$args{value}"
+            );
 
             # Grab the actual node data out of @nodes
             my @node_data;
