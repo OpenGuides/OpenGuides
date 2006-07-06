@@ -17,11 +17,16 @@
   [% IF stylesheet %]
     <link rel="stylesheet" href="[% stylesheet %]" type="text/css" title="Stylesheet for [% site_name %]" />
   [% END %]
+  [% IF feed_base %]
+    <link rel="alternate" type="application/rss+xml" title="Page as RSS" href="[% feed_base %];format=rss" />
+    <link rel="alternate" type="application/atom+xml" title="Page as Atom" href="[% feed_base %];format=atom" />
+  [% END %]
   [% IF latitude AND longitude %]
     <meta name="ICBM" content="[% latitude %], [% longitude %]" />
     <meta name="DC.title" content="[% site_name %]" />
   [% END %]
     <link rel="alternate" type="application/rss+xml" title="[% site_name %] - Recent Changes (RSS 1.0)" href="[% full_cgi_url %]?action=rc;format=rss" />
+    <link rel="alternate" type="application/atom+xml" title="[% site_name %] - Recent Changes (Atom)" href="[% full_cgi_url %]?action=rc;format=atom" />
   [% IF deter_robots %]
     <meta name="robots" content="noindex,nofollow" />
   [% END %]

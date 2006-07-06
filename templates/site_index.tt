@@ -1,5 +1,8 @@
 [% IF criterion %]
-  [% INCLUDE header.tt page_title = "Index of $criterion.name - $site_name" %]
+  [% INCLUDE header.tt 
+      page_title = "Index of $criterion.name - $site_name"
+	  feed_base = "$cgi_url?action=index;index_type=$criterion.type;index_value=$criterion.value"
+   %]
 [% ELSE %]
   [% INCLUDE header.tt page_title = "Things within $limit of $origin - $site_name" %]
 [% END %]
