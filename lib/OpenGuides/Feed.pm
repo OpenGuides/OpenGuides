@@ -103,6 +103,28 @@ my $feed_contents = $feed->build_feed_for_nodes("rss", @nodes);
 =cut
 sub build_feed_for_nodes {
     my ($self, $format, @nodes) = @_;
+    return $self->render_feed_for_nodes($format, undef, 1, @nodes);
+}
+=item B<build_mini_feed_for_nodes>
+For the given feed type, build a mini feed (name and distance) from the 
+ supplied list of nodes.
+Will figure out the feed timestamp from the newest node, and output a
+ last modified header based on this.
+
+my @nodes = $wiki->search_near_here();
+my $feed_contents = $feed->build_mini_feed_for_nodes("rss", @nodes);
+=cut
+sub build_mini_feed_for_nodes {
+    my ($self, $format, @nodes) = @_;
+    return $self->render_feed_for_nodes($format, undef, 0, @nodes);
+}
+
+=item B<render_feed_for_nodes>
+Normally internal method to perform the appropriate building of a feed
+ based on a list of nodes.
+=cut
+sub render_feed_for_nodes {
+    my ($self, $format, $html_url, $is_full, @nodes) = @_;
 
     # Grab our feed maker
     my $maker = $self->fetch_maker($format);
@@ -123,9 +145,36 @@ sub build_feed_for_nodes {
     my $feed = "Last-Modified: ".$timestamp."\n\n";
 
     # Generate the feed itself
-    $feed .= $maker->generate_node_list_feed($timestamp, @nodes);
+    if($is_full) {
+        $feed .= $maker->generate_node_list_feed($timestamp, @nodes);
+    } else {
+        $feed .= $maker->generate_node_name_distance_feed($timestamp, @nodes);
+    }
 
     return $feed;
+}
+
+=item B<default_content_type>
+For the given feed type, return the default content type for that feed.
+
+my $content_type = $feed->default_content_type("rss");
+=cut
+sub default_content_type {
+    my ($self,$feed_type) = @_;
+
+    my $content_type;
+
+    if ($feed_type eq 'rss') {
+        $content_type = "application/rdf+xml";
+    }
+    elsif ($feed_type eq 'atom') {
+        $content_type = "application/atom+xml";
+    }
+    else {
+        croak "Unknown feed type given: $feed_type";
+    }
+
+    return $content_type;
 }
 
 =item B<fetch_maker>
@@ -161,7 +210,7 @@ sub atom_maker {
             site_url            => $self->{config}->script_url,
             site_description    => $self->{site_description},
             make_node_url       => $self->{make_node_url},
-            recent_changes_link => $self->{config}->script_url . '?action=rc',
+            html_equiv_link     => $self->{config}->script_url . '?action=rc',
             atom_link           => $self->{config}->script_url . '?action=rc&format=atom',
             software_name       => 'OpenGuides',
             software_homepage   => 'http://openguides.org/',
@@ -182,7 +231,7 @@ sub rss_maker {
             site_url            => $self->{config}->script_url,
             site_description    => $self->{site_description},
             make_node_url       => $self->{make_node_url},
-            recent_changes_link => $self->{config}->script_url . '?action=rc',
+            html_equiv_link     => $self->{config}->script_url . '?action=rc',
             software_name       => 'OpenGuides',
             software_homepage   => 'http://openguides.org/',
             software_version    => $self->{og_version},

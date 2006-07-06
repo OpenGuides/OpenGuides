@@ -681,17 +681,7 @@ sub get_feed_and_content_type {
                                         og_version => $VERSION,
                                     );
 
-    my $content_type;
-    
-    if ($feed_type eq 'rss') {
-        $content_type = "application/rdf+xml";
-    }
-    elsif ($feed_type eq 'atom') {
-        $content_type = "application/atom+xml";
-    }
-    else {
-        croak "Unknown feed type given: $feed_type";
-    }
+    my $content_type = $feed->default_content_type($feed_type);
 
     return ($feed, $content_type);
 }

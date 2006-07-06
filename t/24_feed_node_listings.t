@@ -21,9 +21,8 @@ if ( $@ ) {
 
 # Which feed types do we test?
 my @feed_types = qw( rss atom );
-plan tests => 9 * scalar @feed_types;
+plan tests => 17 * scalar @feed_types;
 
-my %content_types = (rss=>'application/rdf+xml', atom=>'application/atom+xml');
 
 foreach my $feed_type (@feed_types) {
     # Clear out the database from any previous runs.
@@ -50,7 +49,6 @@ foreach my $feed_type (@feed_types) {
 
     my $feed = OpenGuides::Feed->new( wiki   => $wiki,
                                       config => $config );
-    is( $feed->default_content_type($feed_type), $content_types{$feed_type}, "Return the right content type" );
 
     my $feed_output = eval { $feed->make_feed(feed_type => $feed_type, feed_listing => 'recent_changes'); };
     is( $@, "", "->make_feed for $feed_type doesn't croak" );
@@ -59,7 +57,8 @@ foreach my $feed_type (@feed_types) {
     #  that we actually got the right feed)
     like( $feed_output, "/$feed_type/i", "Does contain the feed type" );
 
-    # Now write some data, first a minor edit then a non-minor one.
+
+    # Now write some data: 3 versions of one node, and 1 of another
     my $guide = OpenGuides->new( config => $config );
         
     # Set up CGI parameters ready for a node write.
@@ -82,43 +81,96 @@ foreach my $feed_type (@feed_types) {
     $q->param( -name => "edit_type", -value => "Minor tidying" );
     $ENV{REMOTE_ADDR} = "127.0.0.1";
 
+    # First version of Wombats
     my $output = $guide->commit_node(
                                       return_output => 1,
                                       id => "Wombats",
                                       cgi_obj => $q,
                                     );
+    my %node = $wiki->retrieve_node(name=>"Wombats");
 
+    # Now second and third
     $q->param( -name => "edit_type", -value => "Normal edit" );
+    $q->param( -name => "checksum", -value => $node{"checksum"} );
+    $output = $guide->commit_node(
+                                      return_output => 1,
+                                      id => "Wombats",
+                                      cgi_obj => $q,
+                                    );
+
+    %node = $wiki->retrieve_node(name=>"Wombats");
+    $q->param( -name => "username", -value => "Kake" );
+    $q->param( -name => "checksum", -value => $node{"checksum"} );
+    $output = $guide->commit_node(
+                                      return_output => 1,
+                                      id => "Wombats",
+                                      cgi_obj => $q,
+                                    );
+
+    # Now a different node
+    $q->delete('checksum');
     $output = $guide->commit_node(
                                    return_output => 1,
                                    id => "Badgers",
                                    cgi_obj => $q,
                                  );
 
-    $q->param( -name => "username", -value => "Kake" );
-    $output = $guide->commit_node(
-                                   return_output => 1,
-                                   id => "Wombles",
-                                   cgi_obj => $q,
-                                 );
-
     # Check that the writes went in.
     ok( $wiki->node_exists( "Wombats" ), "Wombats written" );
     ok( $wiki->node_exists( "Badgers" ), "Badgers written" );
-    ok( $wiki->node_exists( "Wombles" ), "Wombles written" );
+    is( scalar $wiki->list_node_all_versions("Wombats"), 3, "3 Wombat versions");
+    is( scalar $wiki->list_node_all_versions("Badgers"), 1, "1 Badger version");
 
-    # Check that the minor edits can be filtered out.
-    $output = $guide->display_feed(
-                                   feed_type          => $feed_type,
-                                   feed_listing       => "recent_changes",
-                                   items              => 5,
-                                   username           => "bob",
-                                   ignore_minor_edits => 1,
-                                   return_output      => 1,
-                                 );
-    unlike( $output, qr/Wombats/, "minor edits filtered out when required" );
-    like( $output, qr/Badgers/, "but normal edits still in" );
 
-    # Check that the username parameter is taken notice of.
-    unlike( $output, qr/Wombles/, "username parameter taken note of" );
+
+    # Grab a list of all the nodes
+    my @all_names = $wiki->list_all_nodes();
+    my @all_nodes;
+    foreach my $name (@all_names) {
+        my %node = $wiki->retrieve_node(name=>$name);
+        $node{name} = $name;
+        push @all_nodes,  \%node;
+    }
+
+    # Ask build_feed_for_nodes to make a feed of these
+    my $output = $feed->build_feed_for_nodes($feed_type,@all_nodes);
+
+    like( $output, qr/<title>Wombats/, "Found wombats" );
+    like( $output, qr/<title>Badgers/, "Found badgers" );
+
+    # Check it had the extra metadata
+    if($feed_type eq "rss") {
+        like( $output, qr/<dc:date>/, "Found metadata" );
+        like( $output, qr/<modwiki:diff>/, "Found metadata" );
+        like( $output, qr/<modwiki:version>/, "Found metadata" );
+    } else {
+        like( $output, qr/<updated>/, "Found metadata" );
+        like( $output, qr/<summary>/, "Found metadata" );
+        like( $output, qr/<author>/, "Found metadata" );
+    }
+
+
+    # Grab a list of the different versions of Wombats
+    my @wombats = $wiki->list_node_all_versions("Wombats");
+
+    # Ask build_mini_feed_for_nodes to make a mini feed of these
+    $output = $feed->build_mini_feed_for_nodes($feed_type,@wombats);
+
+    like( $output, qr/<title>Wombats/, "Wombats had wombats" );
+    unlike( $output, qr/<title>Badgers/, "Wombats didn't have Badgers" );
+
+    my @wombats = $output =~ /(<title>Wombats)/g;
+    is( scalar @wombats, 3, "All 3 wombat versions found" );
+
+    # Check it was really the mini version
+
+    if($feed_type eq "rss") {
+        like( $output, qr/<link>/, "Has link" );
+        unlike( $output, qr/<dc:contributor>/, "Really mini version" );
+        unlike( $output, qr/<modwiki:history>/, "Really mini version" );
+    } else {
+        like( $output, qr/<link href=/, "Has link" );
+        unlike( $output, qr/<summary>/, "Really mini version" );
+        unlike( $output, qr/<author>/, "Really mini version" );
+    }
 }
