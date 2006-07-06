@@ -149,6 +149,7 @@ sub run {
     }
 
     my %tt_vars = (
+                   format      => $args{'vars'}->{'format'},
                    ss_version  => $VERSION,
                    ss_info_url => 'http://openguides.org/page/search_help'
                   );
@@ -693,7 +694,7 @@ sub process_params {
     return $self;
 }
 
-# thin wrapper around OpenGuides::Template
+# thin wrapper around OpenGuides::Template, or OpenGuides::Feed
 sub process_template {
     my ($self, %args) = @_;
 
@@ -701,12 +702,29 @@ sub process_template {
     $tt_vars->{not_editable} = 1;
     $tt_vars->{not_deletable} = 1;
     return %$tt_vars if $self->{return_tt_vars};
-    my $output =  OpenGuides::Template->output(
+
+    # Do we want a feed, or TT html?
+    my $output;
+    if($tt_vars->{'format'}) {
+        my $format = $tt_vars->{'format'};
+        my @nodes = @{$tt_vars->{'results'}};
+
+        my $feed = OpenGuides::Feed->new(
+                                               wiki       => $self->wiki,
+                                               config     => $self->config,
+                                               og_version => $VERSION,
+                                        );
+        $output  = "Content-Type: ".$feed->default_content_type($format)."\n";
+        $output .= $feed->build_mini_feed_for_nodes($format,@nodes);
+    } else {
+        $output =  OpenGuides::Template->output(
                                                 wiki     => $self->wiki,
                                                 config   => $self->config,
                                                 template => "search.tt",
                                                 vars     => $tt_vars,
                                               );
+    }
+
     return $output if $self->{return_output};
 
     print $output;

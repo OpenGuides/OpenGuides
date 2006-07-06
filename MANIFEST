@@ -66,6 +66,7 @@ t/17_commit_node.t
 t/21_rdf.t
 t/22_feed_recent_changes.t
 t/23_feed_node_all_versions.t
+t/24_feed_node_listings.t
 t/25_write_geo_data.t
 t/26_geo_data_search_form.t
 t/27_geo_data_edit_form.t
@@ -80,6 +81,7 @@ t/36_search_order.t
 t/37_search_summaries.t
 t/38_search_params.t
 t/39_search_form.t
+t/40_search_as_feed.t
 t/41_deletion.t
 t/51_display_node.t
 t/52_display_diffs.t
