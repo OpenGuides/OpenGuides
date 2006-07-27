@@ -1132,6 +1132,68 @@ sub delete_node {
     }
 }
 
+=item B<display_admin_interface>
+Fetch everything we need to display the admin interface, and passes it off 
+ to the template
+=cut
+sub display_admin_interface {
+    my ($self, %args) = @_;
+    my $return_tt_vars = $args{return_tt_vars} || 0;
+    my $return_output = $args{return_output} || 0;
+
+    my $wiki = $self->wiki;
+    my $formatter = $self->wiki->formatter;
+    my $script_url = $self->config->script_url;
+
+    # Grab all the nodes
+    my @all_nodes = $wiki->list_all_nodes(with_details=>1);
+    @all_nodes = sort { $a->{'name'} cmp $b->{'name'} } @all_nodes;
+
+
+    # Split into nodes, Locales and Categories
+    my @nodes;
+    my @categories;
+    my @locales;
+    for my $node (@all_nodes) {
+        # Make the URLs
+        my $node_param = uri_escape( $formatter->node_name_to_node_param( $node->{'name'} ) );
+        $node->{'view_url'} = $script_url . "?id=" . $node_param;
+        $node->{'versions_url'} = $script_url . "?action=list_all_versions;id=" . $node_param;
+        $node->{'moderation_url'} = $script_url . "?action=set_moderation;id=" . $node_param;
+
+        # Filter
+        if($node->{'name'} =~ /^Category /) {
+            $node->{'page_name'} = $node->{'name'};
+            $node->{'name'} =~ s/^Category //;
+            push @categories, $node;
+        } elsif($node->{'name'} =~ /^Locale /) {
+            $node->{'page_name'} = $node->{'name'};
+            $node->{'name'} =~ s/^Locale //;
+            push @locales, $node;
+        } else {
+            push @nodes, $node;
+        }
+    }
+
+    # Render in a template
+    my %tt_vars = (
+                      not_editable  => 1,
+                      not_deletable => 1,
+                      deter_robots  => 1,
+                      nodes => \@nodes,
+                      categories => \@categories,
+                      locales => \@locales
+                  );
+    return %tt_vars if $return_tt_vars;
+    my $output = $self->process_template(
+                                           id       => "",
+                                           template => "admin_home.tt",
+                                           tt_vars  => \%tt_vars,
+                                        );
+    return $output if $return_output;
+    print $output;
+}
+
 sub process_template {
     my ($self, %args) = @_;
     my %output_conf = (

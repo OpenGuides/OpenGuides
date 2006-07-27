@@ -1,0 +1,66 @@
+[% INCLUDE header.tt page_title = "Admin - $site_name" %]
+[% INCLUDE banner.tt %]
+<div id="content">
+[% INCLUDE navbar.tt %]
+<div id="maincontent">
+<h2>Site Administration</h2>
+<ul>
+	<li><a href="#nodes">Nodes</a></li>
+	<li><a href="#locales">Locales</a></li>
+	<li><a href="#categories">Categories</a></li>
+</ul>
+
+<a name="nodes"></a>
+<table id="nodes">
+<tr><th>Node name</th><th>Current Version</th><th>Moderation</th><th>Actions</th></tr>
+  [% FOREACH node = nodes %]
+     <tr>
+     <td><a href="[% node.view_url %]">[% node.name %]</a></td>
+     <td>[% node.version %]</td>
+     <td>[% node.moderate %]</td>
+     <td><a href="[% node.view_url %]">View</a> or
+		 <a href="[% node.versions_url %]">View all versions</a> or
+		 <a href="[% node.moderation_url %]">Set Moderation</a>
+     </td>
+     </tr>
+  [% END %]
+</table>
+
+<br /><br />
+
+<a name="locales"></a>
+<table id="locales">
+<tr><th>Locale name</th><th>Current Version</th><th>Moderation</th><th>Actions</th></tr>
+  [% FOREACH locale = locales %]
+     <tr>
+     <td><a href="[% locale.view_url %]">[% locale.name %]</a></td>
+     <td>[% locale.version %]</td>
+     <td>[% locale.moderate %]</td>
+     <td><a href="[% locale.view_url %]">View</a> or
+		 <a href="[% locale.versions_url %]">View all versions</a> or
+		 <a href="[% locale.moderation_url %]">Set Moderation</a>
+     </td>
+     </tr>
+  [% END %]
+</table>
+
+<br /><br />
+
+<a name="categories"></a>
+<table id="categories">
+<tr><th>Category name</th><th>Current Version</th><th>Moderation</th><th>Actions</th></tr>
+  [% FOREACH cat = categories %]
+     <tr>
+     <td><a href="[% cat.view_url %]">[% cat.name %]</a></td>
+     <td>[% cat.version %]</td>
+     <td>[% cat.moderate %]</td>
+     <td><a href="[% cat.view_url %]">View</a> or
+		 <a href="[% cat.versions_url %]">View all versions</a> or
+		 <a href="[% cat.moderation_url %]">Set Moderation</a>
+     </td>
+     </tr>
+  [% END %]
+</table>
+
+</div>
+[% INCLUDE footer.tt %]

@@ -27,6 +27,7 @@ lib/OpenGuides.pm
 newpage.cgi
 preferences.cgi
 search.cgi
+templates/admin_home.tt
 templates/backlink_results.tt
 templates/banner.tt
 templates/delete_confirm.tt
