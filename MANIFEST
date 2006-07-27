@@ -42,6 +42,7 @@ templates/header.tt
 templates/home_node.tt
 templates/map_index.tt
 templates/navbar.tt
+templates/needing_moderation.tt
 templates/newpage.tt
 templates/node.tt
 templates/node_history.tt

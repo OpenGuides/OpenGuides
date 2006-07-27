@@ -65,6 +65,8 @@ eval {
         $guide->show_backlinks( id => $node );
     } elsif ($action eq 'show_wanted_pages') {
         show_wanted_pages();
+    } elsif ($action eq 'show_needing_moderation') {
+        show_needing_moderation();
     } elsif ($action eq 'index') {
         $guide->show_index(
                             type   => $q->param("index_type") || "Full",
@@ -80,6 +82,20 @@ eval {
                                       id => $node,
                                       metres => $q->param("distance_in_metres")
                                     );
+    } elsif ( $action eq 'admin' ) {
+        $guide->display_admin_interface();
+    } elsif ( $action eq 'set_moderation' ) {
+        $guide->set_node_moderation(
+                             id       => $node,
+                             password => $q->param("password") || "",
+                             moderation_flag => $q->param("moderation_flat") || "",
+                           );
+    } elsif ( $action eq 'moderate' ) {
+        $guide->moderate_node(
+                             id       => $node,
+                             version  => $q->param("version") || "",
+                             password => $q->param("password") || "",
+                           );
     } elsif ( $action eq 'delete'
               and ( lc($config->enable_page_deletion) eq "y"
                     or $config->enable_page_deletion eq "1" )
@@ -366,3 +382,21 @@ sub show_wanted_pages {
                         wanted        => \@wanted } );
 }
 
+sub show_needing_moderation {
+    my @nodes = $wiki->list_unmoderated_nodes;
+
+    # Build the moderate link
+    foreach my $node (@nodes) {
+        my $node_param =
+            uri_escape($formatter->node_name_to_node_param($node->{'name'}));
+        $node->{'moderate_url'} = $script_url . "?action=moderate&id=".$node_param."&version=".$node->{'version'};
+        $node->{'diff_url'} = $script_url . "?id=".$node_param."&version=".$node->{'moderated_version'}."&diffversion=".$node->{'version'};
+    }
+
+    process_template( "needing_moderation.tt",
+                      "",
+                      { not_editable  => 1,
+                        not_deletable => 1,
+                        deter_robots  => 1,
+                        nodes        => \@nodes } );
+}

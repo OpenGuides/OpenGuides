@@ -1,0 +1,25 @@
+[% INCLUDE header.tt page_title = "Pages Needing Moderation - $site_name" %]
+[% INCLUDE banner.tt %]
+<div id="content">
+[% INCLUDE navbar.tt %]
+<div id="maincontent">
+<h2>Pages Needing Moderation</h2>
+<p>
+These are nodes which have been created/edited, but not yet moderated.
+</p>
+<table id="wanted_pages" style="width:80%">
+<tr><th>Node name</th><th>Pending Version</th><th>Latest Moderated Version</th><th>Action</th></tr>
+  [% FOREACH node = nodes %]
+     <tr>
+     <td>[% node.name %]</td>
+     <td>[% node.version %]</td>
+     <td>[% node.moderated_version %]</td>
+     <td><a href="[% node.moderate_url %]">Moderate this version</a>
+         or <a href="[% node.diff_url %]">See changes</a>
+     </td>
+     </tr>
+  [% END %]
+</table>
+
+</div>
+[% INCLUDE footer.tt %]
