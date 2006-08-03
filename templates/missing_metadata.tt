@@ -6,9 +6,10 @@
 <h2>Pages Missing Metadata</h2>
 
 <form method="get" action="wiki.cgi">
+<input type="hidden" name="action" value="show_missing_metadata" />
 <div>
 	<label for="metadata_type">Metadata Type:</label>
-	<select name="metadata_type">
+	<select name="metadata_type" id="metadata_type">
 		<option value="category">Category</option>
 		<option value="locale">Locale</option>
 		<option value="address">Address</option>
@@ -19,12 +20,28 @@
 		<option value="os_x">OS X</option>
 		<option value="os_y">OS Y</option>
 	</select>
+	<script type="text/javascript">
+		var metadata_type = document.getElementById("metadata_type");
+		for(var i=0; i<metadata_type.options.length; i++) {
+			if(metadata_type.options[i].value == '[% metadata_type %]') {
+				metadata_type.options[i].selected = true;
+			}
+		}
+	</script>
 </div>
 <div>
 	<label for="metadata_value">Metadata Value:</label>
 	<input name="metadata_value" value="[% metadata_value %]" />
 	<br />
 	<i>Optional, eg 'pub' when metadata value is Category</i>
+</div>
+<div>
+	<label for="exclude_locales">Exclude Locales:</label>
+	<input type="checkbox" name="exclude_locales" [% IF exclude_locales %]checked="true"[% END %] />
+</div>
+<div>
+	<label for="exclude_categories">Exclude Categories:</label>
+	<input type="checkbox" name="exclude_categories" [% IF exclude_categories %]checked="true"[% END %] />
 </div>
 <div>
 	<input type="submit" value="Find Nodes" />
