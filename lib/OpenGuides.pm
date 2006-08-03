@@ -986,6 +986,8 @@ sub commit_node {
         if $metadata{longitude_unmunged};
 
     # Check to make sure all the indexable nodes are created
+    # TODO: Split this off into another function
+    # TODO: Don't run this if the node requires moderation (only do it after someone moderates)
     foreach my $type (qw(Category Locale)) {
         my $lctype = lc($type);
         foreach my $index (@{$metadata{$lctype}}) {
