@@ -1132,6 +1132,87 @@ sub delete_node {
     }
 }
 
+=item B<show_missing_metadata>
+Search for nodes which don't have a certain kind of metadata. Optionally
+also excludes Locales and Categories
+=cut
+sub show_missing_metadata {
+    my ($self, %args) = @_;
+    my $return_tt_vars = $args{return_tt_vars} || 0;
+    my $return_output = $args{return_output} || 0;
+
+    my $wiki = $self->wiki;
+    my $formatter = $self->wiki->formatter;
+    my $script_url = $self->config->script_url;
+
+    my ($metadata_type, $metadata_value, $exclude_locales, $exclude_categories)
+        = @args{ qw( metadata_type metadata_value exclude_locales exclude_categories ) };
+
+    my @nodes;
+    my $done_search = 0;
+
+    # Only search if they supplied at least a metadata type
+    if($metadata_type) {
+        $done_search = 1;
+        @nodes = $wiki->list_nodes_by_missing_metadata(
+                            metadata_type => $metadata_type,
+                            metadata_value => $metadata_value,
+                            ignore_case    => 1,
+        );
+
+        # Do we need to filter some nodes out?
+        if($exclude_locales || $exclude_categories) {
+            my @all_nodes = @nodes;
+            @nodes = ();
+
+            foreach my $node (@all_nodes) {
+                if($exclude_locales && $node =~ /^Locale /) { next; }
+                if($exclude_categories && $node =~ /^Category /) { next; }
+                push @nodes, $node;
+            }
+        }
+    }
+
+    # Build nice edit etc links for our nodes
+    my @tt_nodes;
+    for my $node (@nodes) {
+        my %n;
+
+        # Make the URLs
+        my $node_param = uri_escape( $formatter->node_name_to_node_param( $node ) );
+
+        # Save into the hash
+        $n{'name'} = $node;
+        $n{'view_url'} = $script_url . "?id=" . $node_param;
+        $n{'edit_url'} = $script_url . "?id=" . $node_param . ";action=edit";
+        push @tt_nodes, \%n;
+    }
+
+    # Set up our TT variables, including the search parameters
+    my %tt_vars = (
+                      not_editable  => 1,
+                      not_deletable => 1,
+                      deter_robots  => 1,
+
+                      nodes => \@tt_nodes,
+                      done_search    => $done_search,
+                      metadata_type  => $metadata_type,
+                      metadata_value => $metadata_value,
+                      exclude_locales => $exclude_locales,
+                      exclude_categories => $exclude_categories
+                  );
+    return %tt_vars if $return_tt_vars;
+
+    # Render to the page
+    my $output = $self->process_template(
+                                           id       => "",
+                                           template => "missing_metadata.tt",
+                                           tt_vars  => \%tt_vars,
+                                        );
+    return $output if $return_output;
+    print $output;
+}
+
 =item B<display_admin_interface>
 Fetch everything we need to display the admin interface, and passes it off 
  to the template

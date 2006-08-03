@@ -42,6 +42,7 @@ templates/footer.tt
 templates/header.tt
 templates/home_node.tt
 templates/map_index.tt
+templates/missing_metadata.tt
 templates/navbar.tt
 templates/needing_moderation.tt
 templates/newpage.tt
@@ -100,5 +101,6 @@ t/66_bug_latlong_representation.t
 t/67_bug_first_version.t
 t/68_bug_website_displayed.t
 t/70_admin_home.t
+t/71_missing_metadata.t
 t/templates/15_test.tt
 wiki.cgi

@@ -8,6 +8,8 @@
 	<li><a href="#nodes">Nodes</a></li>
 	<li><a href="#locales">Locales</a></li>
 	<li><a href="#categories">Categories</a></li>
+	<li><a href="?action=show_needing_moderation">Pages Needing Moderation</a>
+	<li><a href="?action=show_missing_metadata">Pages Missing Metadata</a>
 </ul>
 
 <a name="nodes"></a>

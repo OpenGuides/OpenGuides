@@ -1,0 +1,51 @@
+[% INCLUDE header.tt page_title = "Missing Metadata - $site_name" %]
+[% INCLUDE banner.tt %]
+<div id="content">
+[% INCLUDE navbar.tt %]
+<div id="maincontent">
+<h2>Pages Missing Metadata</h2>
+
+<form method="get" action="wiki.cgi">
+<div>
+	<label for="metadata_type">Metadata Type:</label>
+	<select name="metadata_type">
+		<option value="category">Category</option>
+		<option value="locale">Locale</option>
+		<option value="address">Address</option>
+		<option value="postcode">Postcode</option>
+		<option value="phone">Telephone Number</option>
+		<option value="latitude">Latitude</option>
+		<option value="longitude">Longitude</option>
+		<option value="os_x">OS X</option>
+		<option value="os_y">OS Y</option>
+	</select>
+</div>
+<div>
+	<label for="metadata_value">Metadata Value:</label>
+	<input name="metadata_value" value="[% metadata_value %]" />
+	<br />
+	<i>Optional, eg 'pub' when metadata value is Category</i>
+</div>
+<div>
+	<input type="submit" value="Find Nodes" />
+</div>
+</form>
+
+[% IF done_search %]
+  <h3>Pages</h3>
+  <a name="nodes"></a>
+  <table id="nodes">
+  <tr><th>Node name</th><th>View</th><th>Edit</th></tr>
+    [% FOREACH node = nodes %]
+      <tr>
+       <td><a href="[% node.view_url %]">[% node.name %]</a></td>
+       <td><a href="[% node.view_url %]">view</a></td>
+       <td><a href="[% node.edit_url %]">edit</a></td>
+      </tr>
+    [% END %]
+  </table>
+[% END %]
+
+</div>
+
+[% INCLUDE footer.tt %]
