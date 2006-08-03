@@ -1132,6 +1132,81 @@ sub delete_node {
     }
 }
 
+=item B<set_node_moderation>
+
+  $guide->set_node_moderation(
+                         id       => "FAQ",
+                         password => "beer",
+                         moderation_flag => 1,
+                     );
+
+Sets the moderation needed flag on a node, either on or off.
+
+If C<password> is not supplied then a form for entering the password
+will be displayed.
+=cut
+sub set_node_moderation {
+    my ($self, %args) = @_;
+    my $node = $args{id} or croak "No node ID supplied for node moderation";
+    my $return_tt_vars = $args{return_tt_vars} || 0;
+    my $return_output = $args{return_output} || 0;
+
+    # Get the moderation flag into something sane
+    if($args{moderation_flag} eq "1" || $args{moderation_flag} eq "yes" ||
+       $args{moderation_flag} eq "on" || $args{moderation_flag} eq "true") {
+        $args{moderation_flag} = 1;
+    } else {
+        $args{moderation_flag} = 0;
+    }
+
+    # Set up the TT variables
+    my %tt_vars = (
+                      not_editable  => 1,
+                      not_deletable => 1,
+                      deter_robots  => 1,
+                      moderation_action => 'set_moderation',
+                      moderation_flag   => $args{moderation_flag},
+                      moderation_url_args => 'action=set_moderation;moderation_flag='.$args{moderation_flag},
+                  );
+
+    my $password = $args{password};
+
+    if ($password) {
+        if ($password ne $self->config->admin_pass) {
+            return %tt_vars if $return_tt_vars;
+            my $output = $self->process_template(
+                                                    id       => $node,
+                                                    template => "moderate_password_wrong.tt",
+                                                    tt_vars  => \%tt_vars,
+                                                );
+            return $output if $return_output;
+            print $output;
+        } else {
+            $self->wiki->set_node_moderation(
+                                        name    => $node,
+                                        required => $args{moderation_flag},
+                                    );
+
+            # Send back to the admin interface
+            my $script_url = $self->config->script_url;
+            my $script_name = $self->config->script_name;
+            my $q = CGI->new;
+            my $output = $q->redirect( $script_url.$script_name."?action=admin&moderation=changed" );
+            return $output if $return_output;
+            print $output;
+        }
+    } else {
+        return %tt_vars if $return_tt_vars;
+        my $output = $self->process_template(
+                                                id       => $node,
+                                                template => "moderate_confirm.tt",
+                                                tt_vars  => \%tt_vars,
+                                            );
+        return $output if $return_output;
+        print $output;
+    }
+}
+
 =item B<show_missing_metadata>
 Search for nodes which don't have a certain kind of metadata. Optionally
 also excludes Locales and Categories

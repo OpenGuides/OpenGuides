@@ -95,7 +95,7 @@ eval {
         $guide->set_node_moderation(
                              id       => $node,
                              password => $q->param("password") || "",
-                             moderation_flag => $q->param("moderation_flat") || "",
+                             moderation_flag => $q->param("moderation_flag") || "",
                            );
     } elsif ( $action eq 'moderate' ) {
         $guide->moderate_node(
