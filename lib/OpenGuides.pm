@@ -1150,7 +1150,6 @@ sub show_missing_metadata {
 
     my @nodes;
     my $done_search = 0;
-warn("Metadata type is '$metadata_type'\n");
 
     # Only search if they supplied at least a metadata type
     if($metadata_type) {
