@@ -32,7 +32,7 @@
 <div>
 	<label for="metadata_value">Metadata Value:</label>
 	<input name="metadata_value" value="[% metadata_value %]" />
-	<br />
+	&nbsp; &nbsp; &nbsp;
 	<i>Optional, eg 'pub' when metadata value is Category</i>
 </div>
 <div>
