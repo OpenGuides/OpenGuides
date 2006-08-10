@@ -1272,6 +1272,9 @@ sub moderate_node {
                   );
 
     my $password = $args{password};
+    unless($self->config->moderation_requires_password) {
+        $password = $self->config->admin_pass;
+    }
 
     if ($password) {
         if ($password ne $self->config->admin_pass) {

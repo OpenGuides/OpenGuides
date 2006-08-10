@@ -3,6 +3,7 @@
         Lots more Atom and RSS feeds, including for searching
         Admin interface
         Nodes missing metadata interface
+        Moderation support (based on Wiki::Toolkit moderation)
 
 0.56    14 June 2006
         Fix bug introduced in feed formatting where Atom feeds would be

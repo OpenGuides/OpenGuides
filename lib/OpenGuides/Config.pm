@@ -12,7 +12,7 @@ my @variables = qw(
    formatting_rules_node formatting_rules_link backlinks_in_title template_path
    custom_template_path geo_handler ellipsoid gmaps_api_key centre_long
    centre_lat default_gmaps_zoom default_gmaps_search_zoom force_wgs84
-   licence_name licence_url licence_info_url
+   licence_name licence_url licence_info_url moderation_requires_password
 );
 my @questions = map { $_ . "__qu" } @variables;
 OpenGuides::Config->mk_accessors( @variables );
