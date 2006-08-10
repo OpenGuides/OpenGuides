@@ -7,14 +7,15 @@
 <p>
 These are nodes which have been created/edited, but not yet moderated.
 </p>
-<table id="wanted_pages" style="width:80%">
+<table id="needing_moderation" style="width:90%">
 <tr><th>Node name</th><th>Pending Version</th><th>Latest Moderated Version</th><th>Action</th></tr>
   [% FOREACH node = nodes %]
      <tr>
      <td>[% node.name %]</td>
-     <td>[% node.version %]</td>
-     <td>[% node.moderated_version %]</td>
+     <td align="center">[% node.version %]</td>
+     <td align="center">[% node.moderated_version %]</td>
      <td><a href="[% node.moderate_url %]">Moderate this version</a>
+         or <a href="[% node.view_url %]">View this version</a>
          or <a href="[% node.diff_url %]">See changes</a>
      </td>
      </tr>

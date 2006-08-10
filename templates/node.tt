@@ -34,8 +34,13 @@
     <h2 class="node_name">[% node_name %]</h2>
   [% END %]
 [% ELSE %]
-  <h2>
-    <em>Historical version [% version %] of
+  <h2><em>
+  [% IF moderated %]
+    Historical
+  [% ELSE %]
+    Un-moderated
+  [% END %]
+    version [% version %] of
     <span class="node_name">[% node_name %]</span></em>
   </h2>
 [% END %]

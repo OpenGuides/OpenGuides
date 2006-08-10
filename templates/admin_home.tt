@@ -19,7 +19,7 @@
      <tr>
      <td><a href="[% node.view_url %]">[% node.name %]</a></td>
      <td>[% node.version %]</td>
-     <td>[% node.moderate %]</td>
+     <td>[% IF node.moderate %]yes[% ELSE %]no[% END %]</td>
      <td><a href="[% node.view_url %]">View</a> or
 		 <a href="[% node.versions_url %]">View all versions</a> or
 		 <a href="[% node.moderation_url %]">Set Moderation</a>

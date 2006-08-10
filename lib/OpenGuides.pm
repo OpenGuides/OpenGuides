@@ -173,6 +173,7 @@ sub display_node {
     my $raw        = $node_data{content} || " ";
     my $content    = $wiki->format($raw);
     my $modified   = $node_data{last_modified};
+    my $moderated  = $node_data{moderated};
     my %metadata   = %{$node_data{metadata}};
 
     my ($wgs84_long, $wgs84_lat) = OpenGuides::Utils->get_wgs84_coords(
@@ -199,6 +200,7 @@ sub display_node {
                    version       => $node_data{version},
                    node          => $id,
                    language      => $config->default_language,
+                   moderated     => $moderated,
                    oldid         => $oldid,
                    enable_gmaps  => 1,
                    display_google_maps => $self->get_cookie("display_google_maps"),

@@ -392,11 +392,12 @@ sub show_wanted_pages {
 sub show_needing_moderation {
     my @nodes = $wiki->list_unmoderated_nodes;
 
-    # Build the moderate link
+    # Build the moderate links
     foreach my $node (@nodes) {
         my $node_param =
             uri_escape($formatter->node_name_to_node_param($node->{'name'}));
         $node->{'moderate_url'} = $script_url . "?action=moderate&id=".$node_param."&version=".$node->{'version'};
+        $node->{'view_url'} = $script_url . "?id=".$node_param."&version=".$node->{'version'};
         $node->{'diff_url'} = $script_url . "?id=".$node_param."&version=".$node->{'moderated_version'}."&diffversion=".$node->{'version'};
     }
 
