@@ -988,29 +988,13 @@ sub commit_node {
         if $metadata{longitude_unmunged};
 
     # Check to make sure all the indexable nodes are created
-    # TODO: Split this off into another function
-    # TODO: Don't run this if the node requires moderation (only do it after someone moderates)
-    foreach my $type (qw(Category Locale)) {
-        my $lctype = lc($type);
-        foreach my $index (@{$metadata{$lctype}}) {
-            $index =~ s/(.*)/\u$1/;
-            my $node = $type . " " . $index;
-            # Uppercase the node name before checking for existence
-            $node =~ s/ (\S+)/ \u$1/g;
-            unless ( $wiki->node_exists($node) ) {
-                my $category = $type eq "Category" ? "Category" : "Locales";
-                $wiki->write_node(
-                                     $node,
-                                     "\@INDEX_LINK [[$node]]",
-                                     undef,
-                                     {
-                                         username => "Auto Create",
-                                         comment  => "Auto created $lctype stub page",
-                                         category => $category
-                                     }
-                                 );
-            }
-        }
+    # Skip this for nodes needing moderation - this occurs for them once
+    #  they've been moderated
+    unless($wiki->node_required_moderation($node)) {
+        $self->_autoCreateCategoryLocale(
+                                          id       => $node,
+                                          metadata => \%metadata
+        );
     }
     
     foreach my $var ( qw( summary username comment edit_type ) ) {
@@ -1057,6 +1041,51 @@ sub commit_node {
                                             );
         return $output if $args{return_output};
         print $output;
+    }
+}
+
+=item B<_autoCreateCategoryLocale>
+
+  $guide->_autoCreateCategoryLocale(
+                         id       => "FAQ",
+                         metadata => \%metadata,
+                     );
+
+When a new node is added, or a previously un-moderated node is moderated,
+identifies if any of its Categories or Locales are missing, and creates them.
+
+For nodes not requiring moderation, should be called on writing the node
+For nodes requiring moderation, should only be called on moderation
+=cut
+sub _autoCreateCategoryLocale {
+    my ($self, %args) = @_;
+
+    my $wiki = $self->wiki;
+    my $id = $args{'id'};
+    my %metadata = %{$args{'metadata'}};
+
+    # Check to make sure all the indexable nodes are created
+    foreach my $type (qw(Category Locale)) {
+        my $lctype = lc($type);
+        foreach my $index (@{$metadata{$lctype}}) {
+            $index =~ s/(.*)/\u$1/;
+            my $node = $type . " " . $index;
+            # Uppercase the node name before checking for existence
+            $node =~ s/ (\S+)/ \u$1/g;
+            unless ( $wiki->node_exists($node) ) {
+                my $category = $type eq "Category" ? "Category" : "Locales";
+                $wiki->write_node(
+                                     $node,
+                                     "\@INDEX_LINK [[$node]]",
+                                     undef,
+                                     {
+                                         username => "Auto Create",
+                                         comment  => "Auto created $lctype stub page",
+                                         category => $category
+                                     }
+                );
+            }
+        }
     }
 }
 
@@ -1196,6 +1225,85 @@ sub set_node_moderation {
             my $script_name = $self->config->script_name;
             my $q = CGI->new;
             my $output = $q->redirect( $script_url.$script_name."?action=admin&moderation=changed" );
+            return $output if $return_output;
+            print $output;
+        }
+    } else {
+        return %tt_vars if $return_tt_vars;
+        my $output = $self->process_template(
+                                                id       => $node,
+                                                template => "moderate_confirm.tt",
+                                                tt_vars  => \%tt_vars,
+                                            );
+        return $output if $return_output;
+        print $output;
+    }
+}
+
+=item B<moderate_node>
+
+  $guide->moderate_node(
+                         id       => "FAQ",
+                         version  => 12,
+                         password => "beer",
+                     );
+
+Marks a version of a node as moderated. Will also auto-create and Locales
+and Categories for the newly moderated version.
+
+If C<password> is not supplied then a form for entering the password
+will be displayed.
+=cut
+sub moderate_node {
+    my ($self, %args) = @_;
+    my $node = $args{id} or croak "No node ID supplied for node moderation";
+    my $version = $args{version} or croak "No node version supplied for node moderation";
+    my $return_tt_vars = $args{return_tt_vars} || 0;
+    my $return_output = $args{return_output} || 0;
+
+    # Set up the TT variables
+    my %tt_vars = (
+                      not_editable  => 1,
+                      not_deletable => 1,
+                      deter_robots  => 1,
+                      version       => $version,
+                      moderation_action => 'moderate_node',
+                      moderation_url_args => 'action=moderate_node&version='.$version
+                  );
+
+    my $password = $args{password};
+
+    if ($password) {
+        if ($password ne $self->config->admin_pass) {
+            return %tt_vars if $return_tt_vars;
+            my $output = $self->process_template(
+                                                    id       => $node,
+                                                    template => "moderate_password_wrong.tt",
+                                                    tt_vars  => \%tt_vars,
+                                                );
+            return $output if $return_output;
+            print $output;
+        } else {
+            $self->wiki->moderate_node(
+                                        name    => $node,
+                                        version => $version
+                                    );
+
+            # Create any categories or locales for it
+            my %details = $self->wiki->retrieve_node(
+                                        name    => $node,
+                                        version => $version
+                                    );
+            $self->_autoCreateCategoryLocale(
+                                          id       => $node,
+                                          metadata => $details{'metadata'}
+            );
+
+            # Send back to the admin interface
+            my $script_url = $self->config->script_url;
+            my $script_name = $self->config->script_name;
+            my $q = CGI->new;
+            my $output = $q->redirect( $script_url.$script_name."?action=admin&moderation=moderated" );
             return $output if $return_output;
             print $output;
         }
