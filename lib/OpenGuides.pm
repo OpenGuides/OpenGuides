@@ -1267,8 +1267,8 @@ sub moderate_node {
                       not_deletable => 1,
                       deter_robots  => 1,
                       version       => $version,
-                      moderation_action => 'moderate_node',
-                      moderation_url_args => 'action=moderate_node&version='.$version
+                      moderation_action => 'moderate',
+                      moderation_url_args => 'action=moderate&version='.$version
                   );
 
     my $password = $args{password};
@@ -1443,14 +1443,26 @@ sub display_admin_interface {
         }
     }
 
+    # Handle completed notice for actions
+    my $completed_action = "";
+    if($args{moderation_completed}) {
+        if($args{moderation_completed} eq "moderation") {
+            $completed_action = "Version Moderated";
+        }
+        if($args{moderation_completed} eq "changed") {
+            $completed_action = "Node Moderate Flag Changed";
+        }
+    }
+
     # Render in a template
     my %tt_vars = (
                       not_editable  => 1,
                       not_deletable => 1,
                       deter_robots  => 1,
-                      nodes => \@nodes,
+                      nodes      => \@nodes,
                       categories => \@categories,
-                      locales => \@locales
+                      locales    => \@locales,
+                      completed_action => $completed_action
                   );
     return %tt_vars if $return_tt_vars;
     my $output = $self->process_template(

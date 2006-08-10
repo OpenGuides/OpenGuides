@@ -3,6 +3,10 @@
 <div id="content">
 [% INCLUDE navbar.tt %]
 <div id="maincontent">
+[% IF completed_action %]
+	<br />
+	<div style="color: #A0C745">[% completed_action %]</div>
+[% END %]
 <h2>Site Administration</h2>
 <ul>
 	<li><a href="#nodes">Nodes</a></li>

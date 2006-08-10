@@ -83,7 +83,9 @@ eval {
                                       metres => $q->param("distance_in_metres")
                                     );
     } elsif ( $action eq 'admin' ) {
-        $guide->display_admin_interface();
+        $guide->display_admin_interface(
+                             moderation_completed => $q->param("moderation"),
+        );
     } elsif ( $action eq 'show_missing_metadata' ) {
         $guide->show_missing_metadata(
                    metadata_type  => $q->param("metadata_type") || "",
