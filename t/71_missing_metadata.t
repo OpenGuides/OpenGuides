@@ -8,7 +8,7 @@ eval { require DBD::SQLite; };
 my $have_sqlite = $@ ? 0 : 1;
 
 SKIP: {
-    skip "DBD::SQLite not installed - no database to test with", 17
+    skip "DBD::SQLite not installed - no database to test with", 26
       unless $have_sqlite;
 
     Wiki::Toolkit::Setup::SQLite::setup( { dbname => "t/node.db" } );
