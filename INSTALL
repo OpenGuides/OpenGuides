@@ -101,10 +101,8 @@ in a Perl script.
 
   "Do you want to use Plucene for searching?"
 
-From version 0.39 of OpenGuides, you have the option of using Plucene
-to index your wiki instead of Search::InvertedIndex.  If you answer
-yes to this question, you will need to make sure you have installed
-both Plucene, and Wiki::Toolkit version 0.56 or later.
+This question is no longer asked, but documentation here is retained for
+the benefit of people upgrading.
 
 If you are changing to Plucene from Search::InvertedIndex, you will
 need to do two things:

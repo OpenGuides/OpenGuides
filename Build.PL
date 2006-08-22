@@ -101,6 +101,16 @@ foreach my $var ( qw(
         next;
     }
 
+    # We don't ask this for new installs as Search::InvertedIndex is
+    # deprecated
+    if ( $var eq "use_plucene" and $existing_config->$var == 1) {
+        print "Skipping question about plucene\n";
+        push @answers, { question => $qu,
+                         variable => $var,
+                         value => 1 };
+        next;
+    }
+
     # Make sensible suggestions for template paths if we don't already
     # have them stored.  Not really a default, but a useful hint/shortcut.
     if ( $var eq "template_path" && !defined $existing_config->$var ) {
@@ -206,6 +216,8 @@ close FILE or die "Can't close wiki.conf: $!";
 ##### When updating the prereqs PLEASE REMEMBER to update PREREQUISITES.
 #####
 
+# We currently only support Plucene for new installs, but may support
+# others in future
 my $search_module = $use_plucene ? "Plucene" : "Search::InvertedIndex";
 
 # Create the build object.

@@ -36,11 +36,7 @@ File::Temp
 LWP::Simple
 Module::Build (version 0.18 or later)
 Parse::RecDescent
-(
-  Plucene
-    -- or --
-  Search::InvertedIndex
-)
+Plucene
 POSIX
 Template
 Test::MockObject (version 0.07 or later)
