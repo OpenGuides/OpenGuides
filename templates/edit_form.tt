@@ -37,7 +37,7 @@
           <table summary="Fields containing the node's main content and its category and locale listings">
             <tr>
               <td class="label"><label for="content">Content:</label></td>
-              <td><textarea name="content" id="content" rows="21" cols="70" wrap="virtual">[% content %]</textarea></td>
+              <td><textarea name="content" id="content_textarea" rows="21" cols="70" wrap="virtual">[% content %]</textarea></td>
             </tr>
             <tr>
               <td class="label"><label for="locales">Locales:<br />(one per line)</label></td>
