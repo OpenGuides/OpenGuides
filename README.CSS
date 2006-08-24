@@ -256,9 +256,12 @@ textarea#categories
     Used in: edit_conflict.tt, edit_form.tt
     Purpose: An box to enter the categories of the node
 
-textarea#content
+textarea.content
+textarea#content_textarea
     Used in: edit_conflict.tt, edit_form.tt
     Purpose: A box to enter the main conent of the node
+    Note: ID doesn't match class, as IDs have to be globally unique, and we
+           already have a div with ID content
 
 textarea#locales
     Used in: edit_conflict.tt, edit_form.tt
