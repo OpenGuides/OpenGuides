@@ -143,8 +143,19 @@ div#search_form
     Purpose: The search form at the bottom of the page
 
 div#version
-    Used it: node.tt
+    Used in: node.tt
     Purpose: Text describing the version of the node being displayed
+
+div#node_image_box
+    Used in: display_metadata.tt
+    Purpose: Hold the image for a node.
+    Note: If there is no node image, span#node_no_image will exist instead
+span#node_no_image
+    Used in: display_metadata.tt
+    Purpose: To indicate that there is no image for the node
+img#node_image
+    Used in: display_metadata.tt
+    Purpose: To display the image for a node
 
 input#address
     Used in: edit_conflict.tt, edit_form.tt
@@ -256,7 +267,6 @@ textarea#categories
     Used in: edit_conflict.tt, edit_form.tt
     Purpose: An box to enter the categories of the node
 
-textarea.content
 textarea#content_textarea
     Used in: edit_conflict.tt, edit_form.tt
     Purpose: A box to enter the main conent of the node

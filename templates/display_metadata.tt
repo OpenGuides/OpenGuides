@@ -2,6 +2,14 @@
 <!-- METADATA STARTS -->
 
 <div id="metadata" class="vcard">
+[% IF node_image %]
+	<div id="node_image_box">
+		<img id="node_image" src="[% node_image %]" alt="Picture of [% node_name %]" />
+	</div>
+[% ELSE %]
+	<span id="node_no_image" />
+[% END %]
+
   <!--- For the vcard --->
   <span class="fn" style="display:none">[% node_name %]</span>
 [% IF phone OR fax OR address OR postcode OR formatted_website_text
