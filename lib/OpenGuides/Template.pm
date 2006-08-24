@@ -320,6 +320,12 @@ sub extract_metadata_vars {
         summary                => $summary,
     );
 
+    my $node_image = $args{metadata} ? $metadata{node_image}[0]
+                                     : $q->param("node_image");
+    if ($config->enable_node_image && $node_image) {
+        $vars{node_image} = $node_image;
+    }
+
     if (exists $metadata{source}) {
         ($vars{source_site}) = $metadata{source}[0] =~ /^(.*?)(?:\?|$)/;
     }

@@ -67,6 +67,7 @@ $q->param( -name => "os_x", -value => "" );
 $q->param( -name => "os_y", -value => "" );
 $q->param( -name => "username", -value => "bob" );
 $q->param( -name => "comment", -value => "foo" );
+$q->param( -name => "node_image", -value => "image" );
 $q->param( -name => "edit_type", -value => "Minor tidying" );
 $ENV{REMOTE_ADDR} = "127.0.0.1";
 

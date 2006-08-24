@@ -13,7 +13,7 @@ my @variables = qw(
    custom_template_path geo_handler ellipsoid gmaps_api_key centre_long
    centre_lat default_gmaps_zoom default_gmaps_search_zoom force_wgs84
    licence_name licence_url licence_info_url moderation_requires_password
-   enabled_node_image enable_common_categories enable_common_locales
+   enable_node_image enable_common_categories enable_common_locales
 );
 my @questions = map { $_ . "__qu" } @variables;
 OpenGuides::Config->mk_accessors( @variables );
@@ -69,7 +69,7 @@ sub _init {
                      enable_page_deletion => 0,
                      moderation_requires_password => 1,
                      admin_pass => "Change This!",
-                     enabled_node_image => 1,
+                     enable_node_image => 1,
                      enable_common_categories => 1,
                      enable_common_locales => 1,
                      site_name => "Unconfigured OpenGuides site",
@@ -138,7 +138,7 @@ sub _init {
         moderation_requires_password => "Is the admin password required for moderating pages?",
         admin_pass => "Please specify a password for the site admin.",
         stylesheet_url => "What's the URL of the site's stylesheet?",
-        enabled_node_image => "Should nodes be allowed to have an externally hosted image?",
+        enable_node_image => "Should nodes be allowed to have an externally hosted image?",
         enable_common_categories => "Do you want a common list of categories shown on all node pages?",
         enable_common_locales => "Do you want a common list of locales shown on all node pages?",
         site_name => "What's the site called? (should be unique)",

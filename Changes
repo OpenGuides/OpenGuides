@@ -5,7 +5,7 @@
         Nodes missing metadata interface
         Moderation support (based on Wiki::Toolkit moderation)
         Four new config file options: moderation_requires_password, 
-          enabled_node_image, enable_common_categories, enable_common_locales
+          enable_node_image, enable_common_categories, enable_common_locales
         Search::InvertedIndex support is deprecated as of this release.
           Please upgrade to Plucene if you are still using it.
 

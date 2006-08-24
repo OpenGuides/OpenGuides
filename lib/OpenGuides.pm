@@ -973,7 +973,7 @@ sub commit_node {
     my %metadata = OpenGuides::Template->extract_metadata_vars(
         wiki    => $wiki,
         config  => $config,
-    cgi_obj => $q
+        cgi_obj => $q
     );
 
     delete $metadata{website} if $metadata{website} eq 'http://';

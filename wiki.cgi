@@ -264,15 +264,17 @@ sub preview_node {
     if ($wiki->verify_checksum($node, $checksum)) {
         my %tt_vars = (
             %tt_metadata_vars,
+            config                 => $config,
             content                => $q->escapeHTML($content),
             preview_html           => $wiki->format($content),
             preview_above_edit_box => get_cookie( "preview_above_edit_box" ),
             checksum               => $q->escapeHTML($checksum)
-    );
+        );
         process_template("edit_form.tt", $node, \%tt_vars);
     } else {
         my %node_data = $wiki->retrieve_node($node);
         my %tt_vars = ( checksum       => $node_data{checksum},
+                        config         => $config,
                         new_content    => $content,
                         stored_content => $node_data{content} );
         foreach my $mdvar ( keys %tt_metadata_vars ) {
@@ -312,7 +314,8 @@ sub edit_node {
     my %tt_vars = ( content         => $q->escapeHTML($content),
                     checksum        => $q->escapeHTML($checksum),
                     %metadata_vars,
-            username        => $username,
+                    config          => $config,
+                    username        => $username,
                     edit_type       => $edit_type,
                     deter_robots    => 1,
     );
