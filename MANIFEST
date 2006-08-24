@@ -30,6 +30,8 @@ search.cgi
 templates/admin_home.tt
 templates/backlink_results.tt
 templates/banner.tt
+templates/common_categories.tt
+templates/common_locales.tt
 templates/delete_confirm.tt
 templates/delete_done.tt
 templates/delete_password_wrong.tt

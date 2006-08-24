@@ -208,6 +208,14 @@ sub display_node {
                    wgs84_lat     => $wgs84_lat
                );
 
+    # Should we include a standard list of categories or locales?
+    if ($config->enable_common_categories || $config->enable_common_locales) {
+        $tt_vars{common_catloc} = 1;
+        $tt_vars{common_categories} = $config->enable_common_categories;
+        $tt_vars{common_locales} = $config->enable_common_locales;
+        $tt_vars{catloc_link} = $config->script_url . "?id=";
+    }
+
     if ( $raw =~ /^#REDIRECT\s+(.+?)\s*$/ ) {
         my $redirect = $1;
         # Strip off enclosing [[ ]] in case this is an extended link.

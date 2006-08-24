@@ -157,6 +157,42 @@ img#node_image
     Used in: display_metadata.tt
     Purpose: To display the image for a node
 
+div#common_navigation
+    Used in: node.tt
+    Purpose: Hold the common locales and categories, if enabled
+
+div#common_categories
+    Used in: common_categories.tt
+    Purpose: Hold the common categories, if enabled
+h3#common_categories_title
+    Used in: common_categories.tt
+    Purpose: Title for the common categories
+ul#common_categories_list
+    Used in: common_categories.tt
+    Purpose: Parent list for the common categories
+li.common_category
+    Used in: common_categories.tt
+    Purpose: A common category
+a.common_category_link
+    Used in: common_categories.tt
+    Purpose: A link to a common category
+
+div#common_locales
+    Used in: common_locales.tt
+    Purpose: Hold the common locales, if enabled
+h3#common_locales_title
+    Used in: common_locales.tt
+    Purpose: Title for the common locales
+ul#common_locales_list
+    Used in: common_locales.tt
+    Purpose: Parent list for the common locales
+li.common_locale
+    Used in: common_locales.tt
+    Purpose: A common locale
+a.common_locale_link
+    Used in: common_locales.tt
+    Purpose: A link to a common locale
+
 input#address
     Used in: edit_conflict.tt, edit_form.tt
     Purpose: An input field for the address of the node
