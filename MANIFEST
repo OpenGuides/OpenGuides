@@ -50,6 +50,7 @@ templates/needing_moderation.tt
 templates/newpage.tt
 templates/node.tt
 templates/node_history.tt
+templates/node_photo_notes.tt
 templates/openguides_information_boxes.tt
 templates/plain_index.tt
 templates/preferences.tt

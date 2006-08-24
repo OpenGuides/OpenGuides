@@ -61,7 +61,10 @@
 [% IF config.enable_node_image %]
             <tr>
               <td class="label"><label for="node_image">Node Image:</label></td>
-              <td><input type="text" size="50" id="node_image" name="node_image" value="[% node_image %]" /></td>
+              <td>
+                <input type="text" size="50" id="node_image" name="node_image" value="[% node_image %]" />
+                [% INCLUDE node_photo_notes.tt %]
+              </td>
             </tr>
 [% END %]
             <tr>
