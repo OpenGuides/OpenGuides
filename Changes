@@ -11,28 +11,28 @@
 
 0.56    14 June 2006
         Fix bug introduced in feed formatting where Atom feeds would be
-        produced when asked for RSS and vice versa.
+          produced when asked for RSS and vice versa.
 
 0.55    13 June 2006
         Versioned dependency on Wiki::Toolkit to avoid development
-        versions
+          versions
         Support generating feeds of a node's version listing, in addition
-        to feeds of the recent changes. For more information on OpenGuides 
-        feeds, see http://dev.openguides.org/wiki/FeedsIntro
+          to feeds of the recent changes. For more information on OpenGuides 
+          feeds, see http://dev.openguides.org/wiki/FeedsIntro
 
 0.54_02 8 June 2006
         Pass the feed_listing (currently just recent_changes) through all
-        the feed related code, rather than assuming it'll only ever be
-        recent changes. Will allow other listings of nodes to be handled
-        in the future.
+          the feed related code, rather than assuming it'll only ever be
+          recent changes. Will allow other listings of nodes to be handled
+          in the future.
 
 0.54_01 16 May 2006
         Support for Atom feeds for RecentChanges.
         #118 Use Wiki::Toolkit. NOTE this is a development snapshot and is
-        not suitable for production use. It may eat your data! Tests on
-        development mirrors of live data are highly welcomed; the underlying
-        database schema provided by Wiki::Toolkit has changed and the upgrade
-        process needs some rigorous testing.
+          not suitable for production use. It may eat your data! Tests on
+          development mirrors of live data are highly welcomed; the underlying
+          database schema provided by Wiki::Toolkit has changed and the upgrade
+          process needs some rigorous testing.
 
 0.54    21 April 2006
         #112 Fixed website display bug introduced in 0.53.
