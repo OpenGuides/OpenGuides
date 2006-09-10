@@ -1,13 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-<html lang="[% language %]">
-<head>
-  <title>[% site_name %] - Set username/preferences</title>
-  [% IF stylesheet %]
-    <link rel="stylesheet" href="[% stylesheet %]" type="text/css">
-  [% END %]
-</head>
-
-<body>
+[% INCLUDE header.tt page_title = "Set username/preferences" %]
 [% INCLUDE banner.tt %]
 <div id="content">
 [% INCLUDE navbar.tt %]

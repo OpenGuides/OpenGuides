@@ -4,7 +4,7 @@
 <div id="content">
 [% INCLUDE navbar.tt %]
 <div id="maincontent">
-<h2>Edit "[% node_name %]"</h2>
+<h2>Edit "<span class="node_name">[% node_name %]</span>"</h2>
 
 <div class="warning_text">
 Someone has committed changes to this node since you began editing.

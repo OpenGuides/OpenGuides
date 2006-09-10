@@ -1,6 +1,8 @@
 [% USE CGI %]
 <!-- METADATA STARTS -->
-
+[% IF phone OR fax OR address OR postcode OR formatted_website_text
+       OR hours_text OR map_link OR categories.size OR locales.size OR
+       node_image %]
 <div id="metadata" class="vcard">
 [% IF node_image %]
 	<div id="node_image_box">
@@ -82,5 +84,5 @@
   </ul>
 [% END %]
 </div>
-
+[% END %]
 <!-- METADATA ENDS -->

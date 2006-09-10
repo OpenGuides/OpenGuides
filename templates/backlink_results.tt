@@ -3,7 +3,7 @@
 <div id="content">
 [% INCLUDE navbar.tt %]
 <div id="maincontent">
-<h1 align=center>
+<h1>
   [% site_name %] - Backlinks to <span class="node_name">[% node_name %]</span>
 </h1>
 

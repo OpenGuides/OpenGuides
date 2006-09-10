@@ -8,6 +8,7 @@
           enable_node_image, enable_common_categories, enable_common_locales
         Search::InvertedIndex support is deprecated as of this release.
           Please upgrade to Plucene if you are still using it.
+        Tidy up some template bits
 
 0.56    14 June 2006
         Fix bug introduced in feed formatting where Atom feeds would be

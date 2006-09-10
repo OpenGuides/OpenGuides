@@ -1,8 +1,8 @@
-[% USE CGI %]
 [% INCLUDE header.tt %]
 [% INCLUDE banner.tt %]
 <div id="content">
 [% INCLUDE navbar.tt %]
+<div id="maincontent">
   <h1>
   [% site_name %] - Differences between [% right_version %] and [% left_version %] of <span class="node_name">[% node_name %]</span>
   </h1>
@@ -37,5 +37,5 @@
   <input type="submit" name="Go" value="Search" class="form_button" />
 </form>
 </p>
-
+</div>
 [% INCLUDE footer.tt %]
