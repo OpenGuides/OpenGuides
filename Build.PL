@@ -69,7 +69,7 @@ push @answers, { question => $dbtype_qu,
                  value    => $dbtype };
 
 my $install_directory; # used to suggest template paths
-my $use_plucene; # keep track of this so we know what to put in prereqs
+my $use_plucene = 1; # keep track of this so we know what to put in prereqs
 foreach my $var ( qw(
    dbname dbuser dbpass dbhost script_name
    install_directory template_path custom_template_path script_url
