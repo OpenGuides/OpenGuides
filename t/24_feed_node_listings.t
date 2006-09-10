@@ -133,7 +133,7 @@ foreach my $feed_type (@feed_types) {
     }
 
     # Ask build_feed_for_nodes to make a feed of these
-    my $output = $feed->build_feed_for_nodes($feed_type,@all_nodes);
+    $output = $feed->build_feed_for_nodes($feed_type,@all_nodes);
 
     like( $output, qr/<title>Wombats/, "Found wombats" );
     like( $output, qr/<title>Badgers/, "Found badgers" );
@@ -159,7 +159,7 @@ foreach my $feed_type (@feed_types) {
     like( $output, qr/<title>Wombats/, "Wombats had wombats" );
     unlike( $output, qr/<title>Badgers/, "Wombats didn't have Badgers" );
 
-    my @wombats = $output =~ /(<title>Wombats)/g;
+    @wombats = $output =~ /(<title>Wombats)/g;
     is( scalar @wombats, 3, "All 3 wombat versions found" );
 
     # Check it was really the mini version

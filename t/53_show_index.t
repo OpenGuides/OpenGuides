@@ -74,7 +74,7 @@ SKIP: {
           "RSS output gets content-type of application/rdf+xml" );
     like( $output, "/\<rdf\:RDF.*?http\:\/\/purl.org\/rss\//s", "Really is rss" );
     #like( $output, qr|<title>Category Alpha</title>|, "Right rss title" );
-    my @entries = ($output =~ /(\<\/item\>)/g);
+    @entries = ($output =~ /(\<\/item\>)/g);
     is( 2, scalar @entries, "Right number of nodes included in rss" );
 
     # Test the Atom version
@@ -91,6 +91,6 @@ SKIP: {
           "Atom output gets content-type of application/atom+xml" );
     like( $output, qr|<feed|, "Really is atom" );
     #like( $output, qr|<title>Category Alpha</title>|, "Right atom title" );
-    my @entries = ($output =~ /(\<entry\>)/g);
+    @entries = ($output =~ /(\<entry\>)/g);
     is( 2, scalar @entries, "Right number of nodes included in atom" );
 }

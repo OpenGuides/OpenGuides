@@ -70,7 +70,7 @@ SKIP: {
     $q->param( -name => "locales", -value => "Hello" );
     $q->param( -name => "edit_type", -value => "Normal edit" );
     $q->param( -name => "checksum", -value => $details{checksum} );
-    my $output = $guide->commit_node(
+    $output = $guide->commit_node(
                                       return_output => 1,
                                       id => "Wombats",
                                       cgi_obj => $q,
