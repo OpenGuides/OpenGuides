@@ -1424,10 +1424,8 @@ sub display_admin_interface {
     my $formatter = $self->wiki->formatter;
     my $script_name = $self->config->script_name;
 
-    # Grab all the nodes
-    my @all_nodes = $wiki->list_all_nodes(with_details=>1);
-    @all_nodes = sort { $a->{'name'} cmp $b->{'name'} } @all_nodes;
-
+    # Grab all the recent nodes
+    my @all_nodes = $wiki->list_recent_changes(last_n_changes => 100);
 
     # Split into nodes, Locales and Categories
     my @nodes;
