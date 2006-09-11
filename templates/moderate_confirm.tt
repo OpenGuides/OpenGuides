@@ -31,7 +31,7 @@ To do so, please enter the admin password. If not, you can
 [% END %]
   <strong>Password:</strong>
   <input type="password" name="password" />
-  <input type="submit" value="Action Moderation" />
+  <input type="submit" value="Go!" />
 </form>
 
 </div>

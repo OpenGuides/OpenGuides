@@ -213,7 +213,7 @@ sub display_node {
         $tt_vars{common_catloc} = 1;
         $tt_vars{common_categories} = $config->enable_common_categories;
         $tt_vars{common_locales} = $config->enable_common_locales;
-        $tt_vars{catloc_link} = $config->script_url . "?id=";
+        $tt_vars{catloc_link} = $config->script_name . "?id=";
     }
 
     if ( $raw =~ /^#REDIRECT\s+(.+?)\s*$/ ) {
@@ -1341,7 +1341,7 @@ sub show_missing_metadata {
 
     my $wiki = $self->wiki;
     my $formatter = $self->wiki->formatter;
-    my $script_url = $self->config->script_url;
+    my $script_name = $self->config->script_name;
 
     my ($metadata_type, $metadata_value, $exclude_locales, $exclude_categories)
         = @args{ qw( metadata_type metadata_value exclude_locales exclude_categories ) };
@@ -1381,8 +1381,8 @@ sub show_missing_metadata {
 
         # Save into the hash
         $n{'name'} = $node;
-        $n{'view_url'} = $script_url . "?id=" . $node_param;
-        $n{'edit_url'} = $script_url . "?id=" . $node_param . ";action=edit";
+        $n{'view_url'} = $script_name . "?id=" . $node_param;
+        $n{'edit_url'} = $script_name . "?id=" . $node_param . ";action=edit";
         push @tt_nodes, \%n;
     }
 
@@ -1422,7 +1422,7 @@ sub display_admin_interface {
 
     my $wiki = $self->wiki;
     my $formatter = $self->wiki->formatter;
-    my $script_url = $self->config->script_url;
+    my $script_name = $self->config->script_name;
 
     # Grab all the nodes
     my @all_nodes = $wiki->list_all_nodes(with_details=>1);
@@ -1436,9 +1436,11 @@ sub display_admin_interface {
     for my $node (@all_nodes) {
         # Make the URLs
         my $node_param = uri_escape( $formatter->node_name_to_node_param( $node->{'name'} ) );
-        $node->{'view_url'} = $script_url . "?id=" . $node_param;
-        $node->{'versions_url'} = $script_url . "?action=list_all_versions;id=" . $node_param;
-        $node->{'moderation_url'} = $script_url . "?action=set_moderation;id=" . $node_param;
+        $node->{'view_url'} = $script_name . "?id=" . $node_param;
+        $node->{'versions_url'} = $script_name .
+                        "?action=list_all_versions;id=" . $node_param;
+        $node->{'moderation_url'} = $script_name .
+                        "?action=set_moderation;id=" . $node_param;
 
         # Filter
         if($node->{'name'} =~ /^Category /) {
@@ -1458,10 +1460,10 @@ sub display_admin_interface {
     my $completed_action = "";
     if($args{moderation_completed}) {
         if($args{moderation_completed} eq "moderation") {
-            $completed_action = "Version Moderated";
+            $completed_action = "Version moderated";
         }
         if($args{moderation_completed} eq "changed") {
-            $completed_action = "Node Moderate Flag Changed";
+            $completed_action = "Node moderation flag changed";
         }
     }
 
