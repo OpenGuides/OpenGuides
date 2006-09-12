@@ -1432,6 +1432,9 @@ sub display_admin_interface {
     my @categories;
     my @locales;
     for my $node (@all_nodes) {
+        # Add moderation status
+        $node->{'moderate'} = $wiki->node_required_moderation($node->{'name'});
+
         # Make the URLs
         my $node_param = uri_escape( $formatter->node_name_to_node_param( $node->{'name'} ) );
         $node->{'view_url'} = $script_name . "?id=" . $node_param;
