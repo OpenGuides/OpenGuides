@@ -1,14 +1,16 @@
 "#" items refer to tickets. See <http://dev.openguides.org/report/9> for details.
 0.58    ?? September 2006
-        Tidy up some minor bugs in the new features
+        Tidy up some minor bugs in the new features.
 
 0.57    12 September 2006
-        Lots more Atom and RSS feeds, including for searching
-        Admin interface
-        Nodes missing metadata interface
-        Moderation support (based on Wiki::Toolkit moderation)
-        Please note: the above three functions should be considered unstable,
-          and may change over future releases.
+        New interfaces:
+        * Admin interface.
+        * Show nodes missing metadata.
+        * Moderate edits (based on Wiki::Toolkit moderation).
+        NOTE: these functions should be considered unstable, and may change 
+          over future releases.
+
+        Lots more Atom and RSS feeds, including for searching.
         Four new config file options: moderation_requires_password, 
           enable_node_image, enable_common_categories, enable_common_locales
         Search::InvertedIndex support is deprecated as of this release.
@@ -16,12 +18,12 @@
         Tidy up some template bits
 
 0.56    14 June 2006
-        Fix bug introduced in feed formatting where Atom feeds would be
+        Fixed bug introduced in feed formatting where Atom feeds would be
           produced when asked for RSS and vice versa.
 
 0.55    13 June 2006
         Versioned dependency on Wiki::Toolkit to avoid development
-          versions
+          versions.
         Support generating feeds of a node's version listing, in addition
           to feeds of the recent changes. For more information on OpenGuides 
           feeds, see http://dev.openguides.org/wiki/FeedsIntro
@@ -52,27 +54,27 @@
         Generate URIs for locales and contributors in RDF output.
         #107 Don't display partial http:// URL in preview.
         #93 Upgrade to new Google Maps API (for smaller javascript download)
-        #103 Fix empty Category/Locale list bug.
-        #54 Fix RSS redirection for backwards compatibility.
+        #103 Fixed empty Category/Locale list bug.
+        #54 Fixed RSS redirection for backwards compatibility.
         #79 Partial fix to help combat HTML spam
-        #56 Add licence config variables
+        #56 Added licence config variables
 
 0.52    5 March 2006
         IMPORTANT CHANGE: "supersearch.cgi" is now simply "search.cgi". If you
           have customisations to your templates, you may need to make changes
           to reflect this.
-        Rename OpenGuides::SuperSearch to OpenGuides::Search.
+        Renamed OpenGuides::SuperSearch to OpenGuides::Search.
         Use corrent content-type (application/rdf+xml) for all RDF output.
         Things with opening hours are marked as geospatial in RDF.
-        Fix missing bracket in node.tt.
-        Add custom_node template just below main content in node.tt.
+        Fixed missing bracket in node.tt.
+        Added custom_node template just below main content in node.tt.
         Google Maps support! There is a new index type,
           wiki.cgi?action=index;format=map, and maps appear in the node listings
           (the latter feature is user-configurable).
-        Fix <link> in RSS to point to RecentChanges page, not the feed itself.
+        Fixed <link> in RSS to point to RecentChanges page, not the feed itself.
         #67 Default website for a page is now http://
-        Fix mod_perl redirect bug.
-        Fix test failure with CGI.pm 3.16.
+        Fixed mod_perl redirect bug.
+        Fixed test failure with CGI.pm 3.16.
         #87 Edit on mirrored pages now goes to source site 
         #66 Locales in RDF now use dc:title, not foaf:name
 
@@ -90,22 +92,22 @@
             with a message asking if you want to create that node, rather than
             a blank page.
           * New "summary" metadata field for one-line summaries of nodes:
-            - Add summary field to RDF as dc:description.
+            - Added summary field to RDF as dc:description.
             - Show node summary in search results.
           * New "format=raw" option for outputting wiki text of a node. 
           * RSS feed now contains DOAP (http://usefulinc.com/doap) metadata.
         
         RDF bugfixes:
           * Locales, address and summary fields now XML-escaped properly.
-          * Add "address" field that was missing from the RDF node view.
+          * Added "address" field that was missing from the RDF node view.
           * Update URL for Dublin Core elements in RDF index view.
-          * Fix URL in the RSS <channel> element to point to the RSS URL,
+          * Fixed URL in the RSS <channel> element to point to the RSS URL,
             not the RecentChanges page URL.
         
         Search bugfixes:
-          * Fix bug that was breaking coordinate entry fields on search page if 
+          * Fixed bug that was breaking coordinate entry fields on search page if 
             lat/lon was being used.
-          * Fix bug in OpenGuides::SuperSearch that wasn't passing "latitude"
+          * Fixed bug in OpenGuides::SuperSearch that wasn't passing "latitude"
             and "longitude" values to the search template when a distance
             search was being done.
         
@@ -116,15 +118,15 @@
             the old page rather than the editing view.
         
         Miscellaneous bugfixes:
-          * Fix problem with newer Text::Wikiformat and blank nodes.
-          * Fix bug in navbar template that caused warnings in the tests.
+          * Fixed problem with newer Text::Wikiformat and blank nodes.
+          * Fixed bug in navbar template that caused warnings in the tests.
         
 0.50    2 October 2005
         Remove rogue ampersand that had crept into the RSS feed.
         
 0.49    24 July 2005
-        Add updated prerequisite on CGI::Wiki::Plugin::RSS::ModWiki (fixes
-        a test failure)
+        Added updated prerequisite on CGI::Wiki::Plugin::RSS::ModWiki (fixes
+          a test failure).
 
 0.48    24 July 2005
         RDF enhancements:
@@ -142,7 +144,7 @@
           * RSS feed now has correct timestamp (matching most recent item) and
             matching Last-Modified HTTP header.
         Reorder navigation bar to provide more logical groupings.
-        Add "format=plain" option for all-nodes index listing and associated
+        Added "format=plain" option for all-nodes index listing and associated
           template plain_index.tt.
         New message to appear on pages when you have been redirected
           informing you of the fact.
@@ -155,7 +157,7 @@
         Wanted pages listing now displays, and sorts by, the number of nodes
           pointing to each node.
         Prevent redirect loops.
-        Add _ to the list of forbidden characters in node names.
+        Added _ to the list of forbidden characters in node names.
 
 0.47    15 January 2005
         Fixed bug with list_all_versions for nodes with only one version.
@@ -167,16 +169,16 @@
         Made default city and country be blank; specify them if you want them.
         Missing PREREQUISITE on Plucene added.
         Added CSS id "maincontent" to exclude the navbar and footer. Misc
-        template tidying including removing old layout tables.
+          template tidying including removing old layout tables.
 
-0.46	21 December 2004
+0.46    21 December 2004
         Minor bug fixes: remove bogus edit link on index listings,
-          add missing default behaviour for geolocation
+          added missing default behaviour for geolocation.
         Update supersearch help text URL.
-        Add nofollow to robots meta tag.
+        Added nofollow to robots meta tag.
         Added new CSS class "node_name" for inline non-hyperlink references
           to node names - see README.CSS for details.
-        Fix bug with diff display on nodes containing macros.
+        Fixed bug with diff display on nodes containing macros.
         Fixed distance search paging bug.
         Fixed bug that allowed autocreation of locales and categories with
           trailing spaces in the name.
@@ -186,10 +188,10 @@
         Make it clearer in documentation that overriding factory templates
           is a risky activity.
         Update feedback details and include URL of RT queue.
-        Add missing tests to MANIFEST so they are included with the
+        Added missing tests to MANIFEST so they are included with the
           distribution.
-	
-0.45	1 December 2004
+    
+0.45    1 December 2004
         Made the geolocation stuff work worldwide.  Squeeeeeee!
         You can now choose between doing your distance calculations with
           the British National Grid, the Irish National Grid, or a UTM
@@ -208,11 +210,11 @@
         Improved the efficiency of the search.
         Fixed a couple of minor bugs in the search - note that node.tt
           and supersearch.tt have changed.
-        Change the default indexer for new installs to Plucene.	
+        Change the default indexer for new installs to Plucene.    
         Only run certain search-related tests if Plucene is installed.
 
 0.43    21 October 2004
-        Fix broken navbar changes that crept into last release.
+        Fixed broken navbar changes that crept into last release.
 
 0.42    20 October 2004
         Handle distance searching with OpenGuides::Supersearch instead of
@@ -237,7 +239,7 @@
         Added new macro - used as eg @INDEX_LIST [[Locale Fulham]]
         Also fixed the RSS reader macro - use this as eg
           @RSS http://london.openguides.org/?action=rss;username=Kake
-        More semantic markup for metadata display - see README.CSS
+        More semantic markup for metadata display - see README.CSS.
 
 0.40    18 September 2004
         Recent Changes now shows changes in the past 24 hours, past week,
@@ -267,7 +269,7 @@
 
 0.37    23 July 2004
         Fixed bug in diff view - the versions are the right way round now...
-          Fixed bug with links in historic view.  Require CGI.pm 2.92 to
+        Fixed bug with links in historic view.  Require CGI.pm 2.92 to
           avoid escapeHTML bug.
 
 0.36    13 July 2004
@@ -280,7 +282,7 @@
           use this.
 
 0.34    25 June 2004
-        Add facility to delete only certain revisions of a page - access
+        Added facility to delete only certain revisions of a page - access
           this from the node history page.
 
 0.33    20 June 2004
@@ -292,11 +294,11 @@
         Fixed template bug in display_metadata.tt that was stopping map
           links being displayed for nodes with no address data (spotted
           by Steve Jolly).
-	Removed inline style from recent_changes.tt. You will need to add
-	  the styles table#recentchanges, td.recentchanges_meta,
-	  td.recentchanges_user, td.recentchanges_node_name and
-	  td.recentchanges_comment to your stylesheets.
-	  td#map changed to td#map_link in edit_conflict.tt.
+        Removed inline style from recent_changes.tt. You will need to add
+          the styles table#recentchanges, td.recentchanges_meta,
+          td.recentchanges_user, td.recentchanges_node_name and
+          td.recentchanges_comment to your stylesheets.
+          td#map changed to td#map_link in edit_conflict.tt.
         Added searching by distance from an arbitrary point (click on
           Advanced Search).
         Internal rejigging - extracted some methods from wiki.cgi to
@@ -309,10 +311,10 @@
 
 0.32    7 June 2004
         Change auto-creating behaviour of index nodes (categories and
-	  locales): instead of being created on access they are created
-	  when the referring node is committed. This fixes compliance with
-	  RFC 2616 section 9.1.1 and prevents corrupted index nodes being
-	  created accidentally.
+          locales): instead of being created on access they are created
+          when the referring node is committed. This fixes compliance with
+          RFC 2616 section 9.1.1 and prevents corrupted index nodes being
+          created accidentally.
 
 0.31    09 May 2004
         Created a new macro to allow the embedding of RSS feeds into
@@ -355,17 +357,13 @@
           - include city and country in RDF only for spatial things.
 
         Fixed bug that prevented automatic database initialization on
-	  SQLite databases.
-
-	Doc fix for private installations.
-
-  	Removed the following characters from the list of forbidden ones in 
+          SQLite databases.
+        Doc fix for private installations.
+        Removed the following characters from the list of forbidden ones in 
           node names in newpage.cgi (a restriction which dates from all the way
           back when we were using UseModWiki): " ! $ ^ ~ @ [ ] { }
-
         Removed newlines from output of search box macro.
-
-	Reimplemented diffing using CGI::Wiki::Plugin::Diff as it seems the
+        Reimplemented diffing using CGI::Wiki::Plugin::Diff as it seems the
           change in 0.30 got lost. Removed OpenGuides::Diff.pm as we should not 
           be distributing it.
 
@@ -389,126 +387,94 @@
           navigation, under "Help" - these won't exist unless you create them 
           on your site, so at first the links serve as examples of 
           documentation you can provide.
-
         Modified preferences.cgi so that all the help links in the navbar
           can be hidden, not just the text formatting link.
-
         Fixed some HTML validation bugs.
-
-	Added multiple install and pretty URL notes to INSTALL.
-
-	Removed pubcrawl stuff from distro for now - it doesn't really work.
-
-	Changed to use CGI::Wiki::Plugin::Diff instead of OpenGuides::Diff.
+        Added multiple install and pretty URL notes to INSTALL.
+        Removed pubcrawl stuff from distro for now - it doesn't really work.
+        Changed to use CGI::Wiki::Plugin::Diff instead of OpenGuides::Diff.
 
 0.29    8 November 2003
         Expanded section in TROUBLESHOOTING about permissions problems.
-
         Diff.pm now absorbs trailing punctuation and spaces into words
           it is diffing (to give less blocky results).
-
         SuperSearch.pm change NOT to use '-' instead of '!'.
 
 0.28    1 November 2003
         Allow running sites on SQLite databases.
-
         Fixed bug with navbar prompt in Build.PL (CPAN RT #3894).
         Junked OpenGuides::Config completely to avoid database password
           leakage, and easier install (CPAN RT #3916).
 
 0.27    1 November 2003
         Fixed bug with category/locale indexing - no longer case-sensitive.
-
         Fixed bug that had the supersearch results page offering an edit link.
-
-	Revamp of search syntax to make the SuperSearch UI much more like
-	Google and Alta Vista. See the POD of SuperSearch.pm for details.
+        Revamp of search syntax to make the SuperSearch UI much more like
+          Google and Alta Vista. See the POD of SuperSearch.pm for details.
 
 0.26    9 October 2003
         Modified TROUBLESHOOTING to reflect the correct invocation for
           Module::Build to install into a private directory.
-
         Show IP address for anonymous edits.
-
         Changed CGI.pm version dependency for Dom (CPAN bug #3895).
-
         Added check to OpenGuides::SuperSearch to stop it trying to
           retrieve a nonexistent node when the search indexes have screwed up.
 
 0.25    23 September 2003
         Applied recent changes fix to front page feed as well.
-
         Search box now searches categories and locales as well as title and
           body - so for example a search on "holborn & pubs" will DTRT.
-
         NOT and phrase search tests were passing even though they shouldn't
           have been - skip them for now.
 
 0.24    8 September 2003
-        Fix to recent changes so minor changes don't mask major ones.
-
+        Fixed Recent Changes so minor changes don't mask major ones.
         Fixed supersearch.cgi to use a template instead of CGI.pm to avoid
           weird errors, also turned it into a module and added tests.
         Strip whitespace from OS co-ords before storing in database.
 
 0.23    4 August 2003
         Removed the "POST_CHOMP" option as it was messing up textareas, added
-        a test to make sure this doesn't reoccur.
+          a test to make sure this doesn't reoccur.
 
 0.22    4 August 2003
         Fixed bug with usernames containing spaces in recent changes/userstats.
-
         Try out create_makefile_pl => "passthrough" in Build.PL
-
         Minor fixes to tests to make them work with newest UseMod formatter.
-
-	Prevented "Edit this page" from showing up on category indexes.
-
-	Set TT "POST_CHOMP" option to strip unnecessary newlines from HTML.
-
+        Prevented "Edit this page" from showing up on category indexes.
+        Set TT "POST_CHOMP" option to strip unnecessary newlines from HTML.
         Fixed CPAN bug #3085 - quotes in change summary box.
-
         Added openguides_version template variable and added it to page
         footer (CPAN request 3110).
 
 0.21    17 July 2003
         We no longer autogenerate a Makefile.PL, since it doesn't pick up
-        all the questions that need to be asked.  Sorry.  Use Module::Build
-        as detailed in INSTALL, since you won't be able to get the right
-        version of Text::WikiFormat installed without it in any case.
-
+          all the questions that need to be asked.  Sorry.  Use Module::Build
+          as detailed in INSTALL, since you won't be able to get the right
+          version of Text::WikiFormat installed without it in any case.
         Added version number to CGI.pm prereq as Alex McLintock hit a
-        version that didn't have unescape.
-
+          version that didn't have unescape.
         Added a link on RecentChanges to the RSS version, and put an
-        autodiscovery tag for the RSS in the head section.
-
-	Changed diff feature to hide checksums, which aren't necessary for 
-        the user to see. Fixed a minor bug in the node history template so
-        that the diff links compare the selected version against the previous
-        one, not the original one every time.
+          autodiscovery tag for the RSS in the head section.
+        Changed diff feature to hide checksums, which aren't necessary for 
+          the user to see. Fixed a minor bug in the node history template so
+          that the diff links compare the selected version against the previous
+          one, not the original one every time.
 
 0.20    10 July 2003
         Fixed all the email addresses to openguides-dev@openguides.org.
 
 0.19    10 July 2003
         Extra checks that script_url ends in a '/'.
-
         Fixed small bug with edit conflict form - map link field was missing.
-
         Moved "content" div in a couple of templates to fix incorrect nesting. 
-
         @INDEX_LINK macros now have optional title text like so:
           @INDEX_LINK [[Category Pubs|Pubs]]
-
         Added preferences option for including or excluding text formatting
-        rules link in navbar.  Enable this by setting text_formatting_node
-        in your config file.
-
+          rules link in navbar.  Enable this by setting text_formatting_node
+          in your config file.
         Added config option for including the navbar on the home page.
-
         Implemented minor edits.
-
         Fixed cookie to persist beyond session.
 
 0.18    16 June 2003
@@ -516,102 +482,85 @@
 
 0.17    15 June 2003
         Fixed OpenGuides::Utils to take note of dbhost.
- 
         Added example stylesheet provided by the OxfordGuide team.
 
 0.16    26 May 2003
         Ivor fixed OpenGuides::Diff to diff by word instead of by character.
-
         Fixed edit conflict up so it works nicely when you click the
-        Save button as well as the Preview one.
-
+          Save button as well as the Preview one.
         Added preferences option of displaying lat/long as deg-min-sec
-        instead of decimal (requested by James).
+          instead of decimal (requested by James).
 
 0.15    18 May 2003
         Added Algorithm::Diff version dependency to prereqs, fixed bug
-        with preferences.cgi and blank script_name, fixed REDIRECT bug.
+          with preferences.cgi and blank script_name, fixed REDIRECT bug.
 
 0.14    17 May 2003
         Added "Wanted Pages" link to navbar, thanks to Simon Cozens for
-        the idea.
-
+          the idea.
         Fixed many bugs noticed by Dominic Hargreaves and other Oxonians.
-        Many thanks to Dominic for making an Oxford OpenGuides install for
-        us to find bugs in.
+          Many thanks to Dominic for making an Oxford OpenGuides install for
+          us to find bugs in.
 
 0.13    17 May 2003
         Added some more stylesheet hooks.
- 
         Tweaked OpenGuides::Diff to make it testable, added a start at tests.
-
         Lat and long now stored to only 6dp instead of millions.
-
         Added edit field for map link.
 
 0.12    14 May 2003
         Added OpenGuides::CGI to manage cookies and things, used this to
-        do more code tidying.  Added edit box position option to preferences.
+          do more code tidying.  Added edit box position option to preferences.
 
 0.11    14 May 2003
         Added newpage.cgi for an easy way to create new pages.
-
         Took loads of repeated code (for extracting and packaging metadata
-        variables) out of wiki.cgi into OpenGuides::Template.
+          variables) out of wiki.cgi into OpenGuides::Template.
 
 0.10    11 May 2003
         Added OpenGuides::Diff to provide nice diff output between
-        node versions.
-
+          node versions.
         Added OpenGuides::Template to handle Template Toolkit stuff in a
-        more testable and reusable way than just bunging it in wiki.cgi.
+          more testable and reusable way than just bunging it in wiki.cgi.
 
 0.09    10 May 2003
         Added OpenGuides::UK::PubCrawl and pubcrawl.cgi as a start at a
-        pub crawl generator.
-
+          pub crawl generator.
         Added OpenGuides::Utils to make it easier to write little standalone
-        scripts like supersearch.cgi, pubcrawl. cgi, etc.  Made wiki.cgi and
-        supersearch.cgi use it, and lost loads of duplicated code in the
-        process, hurrah.
+          scripts like supersearch.cgi, pubcrawl. cgi, etc.  Made wiki.cgi and
+          supersearch.cgi use it, and lost loads of duplicated code in the
+          process, hurrah.
 
 0.08    3 May 2003
         Added fuzzy matching capability -
           action=index;index_type=fuzzy_title_match;index_value=hollborne
-        Someone needs to write a nice search box interface for this.
-
+          Someone needs to write a nice search box interface for this.
         Fixed edit_conflict template and preview method to cope with stale
-        checksum - passes through all the metadata properly now and offers
-        a side by side comparison of what you input and what is stored.
-
+          checksum - passes through all the metadata properly now and offers
+          a side by side comparison of what you input and what is stored.
         RDF output for node is now encoding-agnostic (used to have UTF-8
-        hardcoded).  Also is now called as wiki.cgi?id=Node_Name;format=rdf
+          hardcoded).  Also is now called as wiki.cgi?id=Node_Name;format=rdf
 
 0.07    3 May 2003
         Require CGI::Wiki 0.32 to avoid bug (again a Bob find!) where
-        committing a node with metadata but no content would die.
-
+          committing a node with metadata but no content would die.
         Auto-created category/locale stub pages now added to Category Category
-        or Category Locales as appropriate.
-
+          or Category Locales as appropriate.
         Added a couple of extra allowed HTML tags to cater for existing
-        grubstreet data.
-
+          grubstreet data.
         Fixed bug in OpenGuides::RDF - it used to die if called on a
-        nonexistent node, now it returns stuff with a wiki:version of 0.
+          nonexistent node, now it returns stuff with a wiki:version of 0.
 
 0.06    2 May 2003
         Fixed supersearch.cgi so it works with MySQL as well as Postgres
-        (thanks again to Bob for finding the bug).
+          (thanks again to Bob for finding the bug).
 
 0.05    2 May 2003
         Redid the script and template installation so the script does
-        actually get called what you said it should be (code copied
-        somewhat from Siesta::Build).
-
+          actually get called what you said it should be (code copied
+          somewhat from Siesta::Build).
         Fixed the support for non-local databases/IDENT authentication.
-        I think.
-
+          I think.
         Fixed the hardcoded 'wiki.cgi' in some of the templates (thanks Bob).
 
 0.04    29 April 2003
