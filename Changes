@@ -1,4 +1,7 @@
 "#" items refer to tickets. See <http://dev.openguides.org/report/9> for details.
+0.58    ?? September 2006
+        Tidy up some minor bugs in the new features
+
 0.57    12 September 2006
         Lots more Atom and RSS feeds, including for searching
         Admin interface
