@@ -262,13 +262,15 @@ sub preview_node {
     }
 
     if ($wiki->verify_checksum($node, $checksum)) {
+        my $moderate = $wiki->node_required_moderation($node);
         my %tt_vars = (
             %tt_metadata_vars,
             config                 => $config,
             content                => $q->escapeHTML($content),
             preview_html           => $wiki->format($content),
             preview_above_edit_box => get_cookie( "preview_above_edit_box" ),
-            checksum               => $q->escapeHTML($checksum)
+            checksum               => $q->escapeHTML($checksum),
+            moderate               => $moderate
         );
         process_template("edit_form.tt", $node, \%tt_vars);
     } else {
@@ -310,6 +312,7 @@ sub edit_node {
                  metadata => $node_data{metadata} );
 
     $metadata_vars{website} ||= 'http://';
+    my $moderate = $wiki->node_required_moderation($node);
 
     my %tt_vars = ( content         => $q->escapeHTML($content),
                     checksum        => $q->escapeHTML($checksum),
@@ -317,6 +320,7 @@ sub edit_node {
                     config          => $config,
                     username        => $username,
                     edit_type       => $edit_type,
+                    moderate        => $moderate,
                     deter_robots    => 1,
     );
 

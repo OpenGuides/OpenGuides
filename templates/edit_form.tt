@@ -21,11 +21,21 @@
           [% INCLUDE custom_licence.tt %]
         [% CATCH %]
         [% END %]
+        [% IF moderate %]
+        <p>Please note that this node is moderated so your changes will not
+        appear immediately. Please be patient.</p>
+        [% END %]
       </td>
     </tr>
     <tr>
       <td align="center"><input type="submit" name="preview" value="Preview changes" class="form_button" /></td>
-      <td align="center"><input type="submit" name="Save" value="Save changes" class="form_button" /></td>
+      <td align="center">
+      [% IF moderate %]
+      <input type="submit" name="Save" value="Save changes for moderation" class="form_button" />
+      [% ELSE %]
+      <input type="submit" name="Save" value="Save changes" class="form_button" />
+      [% END %]
+      </td>
     </tr>
     <tr>
       <td colspan="2" align="center"><a href="[% cgi_url %]?[% node_param %]">(cancel edit)</a></td>
@@ -111,7 +121,13 @@
     </tr>
     <tr>
       <td align="center"><input type="submit" name="preview" value="Preview changes" class="form_button" /></td>
-      <td align="center"><input type="submit" name="Save" value="Save changes" class="form_button" /></td>
+      <td align="center">
+      [% IF moderate %]
+      <input type="submit" name="Save" value="Save changes for moderation" class="form_button" />
+      [% ELSE %]
+      <input type="submit" name="Save" value="Save changes" class="form_button" />
+      [% END %]
+      </td>
     </tr>
     <tr>
       <td colspan="2" align="center">
