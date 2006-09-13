@@ -355,6 +355,7 @@ sub display_recent_changes {
         }
         }
     }
+    $tt_vars{not_editable} = 1;
     $tt_vars{recent_changes} = \%recent_changes;
     my %processing_args = (
                             id            => $id,
