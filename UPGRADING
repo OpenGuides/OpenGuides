@@ -1,0 +1,6 @@
+0.57    Search::InvertedIndex is deprecated; please use Plucene instead
+
+0.55    Wiki::Toolkit required instead of CGI::Wiki.
+
+0.52    supersearch.cgi is now just search.cgi, so please update templates
+        as appropriate, and consider adding an HTTP to keep old links working.
