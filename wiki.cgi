@@ -408,6 +408,7 @@ sub show_needing_moderation {
         $node->{'moderate_url'} = $script_name . "?action=moderate&id=".$node_param."&version=".$node->{'version'};
         $node->{'view_url'} = $script_name . "?id=".$node_param."&version=".$node->{'version'};
         $node->{'diff_url'} = $script_name . "?id=".$node_param."&version=".$node->{'moderated_version'}."&diffversion=".$node->{'version'};
+        $node->{'delete_url'} = $script_name . "?action=delete;version=".$node->{'version'}.";id=".$node_param;
     }
 
     process_template( "needing_moderation.tt",

@@ -15,6 +15,7 @@ These are nodes which have been created/edited, but not yet moderated.
      <td align="center">[% node.version %]</td>
      <td align="center">[% node.moderated_version %]</td>
      <td><a href="[% node.moderate_url %]">Moderate this version</a>
+         or <a href="[% node.delete_url %]">Delete this version</a>
          or <a href="[% node.view_url %]">View this version</a>
          or <a href="[% node.diff_url %]">See changes</a>
      </td>
