@@ -53,7 +53,7 @@
         var center = map.getCenterLatLng();
         var link = document.getElementById('permalink');
         var zoom = map.getZoomLevel();
-        link.href = "?action=index;format=map&long="+center.x+"&lat="+center.y+"&zoom="+zoom;
+        link.href = "?action=index;format=map;long="+center.x+";lat="+center.y+";zoom="+zoom;
       }
       GEvent.addListener(map, "moveend", map_recenter );
     //]]>

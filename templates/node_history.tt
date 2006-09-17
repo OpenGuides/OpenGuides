@@ -13,16 +13,16 @@ Note: only administrators can delete historical versions.
 <ul>
 [% FOREACH revision = history %]
   <li>
-      <a href="[% cgi_url %]?id=[% node_param %]&version=[% revision.version %]">Version [% revision.version %]</a>
+      <a href="[% cgi_url %]?id=[% node_param %];version=[% revision.version %]">Version [% revision.version %]</a>
       [% IF revision.version != version %]
       (diff:
-      [% UNLESS revision.version == 1 %]<a href="[% cgi_url %]?id=[% node_param %]&version=[% revision.version - 1 %]&diffversion=[% revision.version %]">previous</a> / [% END %] 
-      <a href="[% cgi_url %]?id=[% node_param %]&version=[% revision.version %]&diffversion=[% version %]">current</a>)
+      [% UNLESS revision.version == 1 %]<a href="[% cgi_url %]?id=[% node_param %];version=[% revision.version - 1 %];diffversion=[% revision.version %]">previous</a> / [% END %] 
+      <a href="[% cgi_url %]?id=[% node_param %];version=[% revision.version %];diffversion=[% version %]">current</a>)
       [% END %] 
       .....
       [% revision.modified %]
       [% IF revision.username %]
-        by <a href="[% cgi_url %]?username=[% revision.username %]&action=userstats">[% revision.username %]</a>
+        by <a href="[% cgi_url %]?username=[% revision.username %];action=userstats">[% revision.username %]</a>
       [% END %]
       [% IF revision.comment %]
         <b>[[% revision.comment %]]</b>

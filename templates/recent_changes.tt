@@ -24,7 +24,7 @@
         <td class="recentchanges_node_name"><a href="[% node.url %]">[% node.name %]</a></td>
         <td class="recentchanges_meta">
           [% IF node.version > 1 %]
-            (<a href="[% cgi_url %]?id=[% node.name %]&version=[% node.version - 1 %]&diffversion=[% node.version %]">diff</a>)
+            (<a href="[% cgi_url %]?id=[% node.name %];version=[% node.version - 1 %];diffversion=[% node.version %]">diff</a>)
             (<a href="[% cgi_url %]?action=list_all_versions;id=[% node.name %]">history</a>) 
           [% ELSE %]
             (new page)

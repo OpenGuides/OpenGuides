@@ -80,7 +80,7 @@
       <p>
       Matches [% first_num %] - [% last_num %] of [% total_num %]. 
       [% IF (first_num > 20) %]
-        <a href="search.cgi?search=[% search_terms %]&next=[% first_num - 21 %]">Previous 20 results</a> 
+        <a href="search.cgi?search=[% search_terms %];next=[% first_num - 21 %]">Previous 20 results</a> 
       [% END %] 
       [% IF ((first_num > 20) and next_page_startpos) %]
       / 

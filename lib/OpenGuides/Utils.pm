@@ -204,7 +204,7 @@ sub make_wiki_object {
         macros              => \%macros,
         pass_wiki_to_macros => 1,
         node_prefix         => "$script_name?",
-        edit_prefix         => "$script_name?action=edit&id=",
+        edit_prefix         => "$script_name?action=edit;id=",
         munge_urls          => 1,
     );
 

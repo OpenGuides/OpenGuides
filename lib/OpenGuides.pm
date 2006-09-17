@@ -1233,7 +1233,7 @@ sub set_node_moderation {
             my $script_url = $self->config->script_url;
             my $script_name = $self->config->script_name;
             my $q = CGI->new;
-            my $output = $q->redirect( $script_url.$script_name."?action=admin&moderation=changed" );
+            my $output = $q->redirect( $script_url.$script_name."?action=admin;moderation=changed" );
             return $output if $return_output;
             print $output;
         }
@@ -1277,7 +1277,7 @@ sub moderate_node {
                       deter_robots  => 1,
                       version       => $version,
                       moderation_action => 'moderate',
-                      moderation_url_args => 'action=moderate&version='.$version
+                      moderation_url_args => 'action=moderate;version='.$version
                   );
 
     my $password = $args{password};
@@ -1315,7 +1315,7 @@ sub moderate_node {
             my $script_url = $self->config->script_url;
             my $script_name = $self->config->script_name;
             my $q = CGI->new;
-            my $output = $q->redirect( $script_url.$script_name."?action=admin&moderation=moderated" );
+            my $output = $q->redirect( $script_url.$script_name."?action=admin;moderation=moderated" );
             return $output if $return_output;
             print $output;
         }
