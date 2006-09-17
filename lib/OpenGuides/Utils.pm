@@ -235,21 +235,61 @@ sub get_wgs84_coords {
                                            $args{config})
        or croak "No longitude supplied to get_wgs84_coords";
     croak "geo_handler not defined!" unless $config->geo_handler;
+
     if ($config->force_wgs84) {
         # Only as a rough approximation, good enough for large scale guides
         return ($longitude, $latitude);
-    } elsif ($config->geo_handler == 1) {
-        # Do conversion here
+    }
+
+    # If we don't have a lat and long, return undef right away
+    unless($args{longitude} || $args{latitude}) {
         return undef;
+    }
+
+    # Try to load a provider of Helmert Transforms
+    my $helmert;
+    # First up, try the MySociety Geo::HelmertTransform
+    unless($helmert) {
+        eval {
+            require Geo::HelmertTransform;
+            $helmert = sub($$$) {
+                my ($datum,$oldlat,$oldlong) = @_;
+                my $datum_helper = Geo::HelmertTransform::datum($datum);
+                my $wgs84_helper = Geo::HelmertTransform::datum('WGS84');
+                unless($datum_helper) {
+                    croak("No convertion helper for datum '$datum'");
+                    return undef;
+                }
+
+                my ($lat,$long,$h) = 
+                    Geo::HelmertTransform::convert_datum($datum_helper,$wgs84_helper,$oldlat,$oldlong,0);
+                return ($long,$lat);
+            };
+        };
+    }
+    # Next, try .....
+    unless($helmert) {
+        eval {
+        };
+    }
+    # Give up, return undef
+    unless($helmert) {
+       return undef; 
+    }
+    
+
+    if ($config->geo_handler == 1) {
+        # Do conversion here
+        return &$helmert('Airy1830',$latitude,$longitude);
     } elsif ($config->geo_handler == 2) {
         # Do conversion here
-        return undef;
+        return &$helmert('Airy1830Modified',$latitude,$longitude);
     } elsif ($config->geo_handler == 3) {
         if ($config->ellipsoid eq "WGS-84") {
             return ($longitude, $latitude);
         } else {
             # Do conversion here
-            return undef;
+            return &$helmert($config->ellipsoid,$latitude,$longitude);
         }
     } else {
         croak "Invalid geo_handler config option $config->geo_handler";
