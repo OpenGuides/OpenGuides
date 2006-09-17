@@ -561,6 +561,25 @@ sub show_index {
                             param     => $formatter->node_name_to_node_param($_) }
                         } sort @selnodes;
 
+    # Convert the lat+long to WGS84 as required
+    for(my $i=0; $i<scalar @nodes;$i++) {
+        my $node = $nodes[$i];
+        if($node) {
+            my %metadata = %{$node->{node_data}->{metadata}};
+            my ($wgs84_long, $wgs84_lat);
+            eval {
+                ($wgs84_long, $wgs84_lat) = OpenGuides::Utils->get_wgs84_coords(
+                                      longitude => $metadata{longitude}[0],
+                                      latitude => $metadata{latitude}[0],
+                                      config => $self->config);
+            };
+            warn $@." on ".$metadata{latitude}[0]." ".$metadata{longitude}[0] if $@;
+
+            push @{$nodes[$i]->{node_data}->{metadata}->{wgs84_long}}, $wgs84_long;
+            push @{$nodes[$i]->{node_data}->{metadata}->{wgs84_lat}},  $wgs84_lat;
+        }
+    }
+
     $tt_vars{nodes} = \@nodes;
 
     my ($template, %conf);

@@ -254,8 +254,8 @@ sub get_wgs84_coords {
             require Geo::HelmertTransform;
             $helmert = sub($$$) {
                 my ($datum,$oldlat,$oldlong) = @_;
-                my $datum_helper = Geo::HelmertTransform::datum($datum);
-                my $wgs84_helper = Geo::HelmertTransform::datum('WGS84');
+                my $datum_helper = new Geo::HelmertTransform::Datum(Name=>$datum);
+                my $wgs84_helper = new Geo::HelmertTransform::Datum(Name=>'WGS84');
                 unless($datum_helper) {
                     croak("No convertion helper for datum '$datum'");
                     return undef;

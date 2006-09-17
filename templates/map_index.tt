@@ -37,7 +37,7 @@
         [% IF metadata.latitude.list.first AND metadata.longitude.list.first %]
         [% NEXT IF metadata.latitude.list.first.match('m') %]
         [% NEXT IF metadata.longitude.list.first.match('m') %]
-          var point[% i %] = new GPoint([% metadata.longitude.list.first %], [% metadata.latitude.list.first %]); 
+          var point[% i %] = new GPoint([% metadata.wgs84_long.list.first %], [% metadata.wgs84_lat.list.first %]); 
           var marker[% i %] = new GMarker(point[% i %],baseIcon);
           [% IF metadata.source %]
             [% source_url = metadata.source.list.first.match('^(.*?)\?(?:\?|$)').first %]

@@ -4,7 +4,7 @@ use OpenGuides;
 use OpenGuides::Test;
 use Test::More;
 
-plan tests => 4;
+plan tests => 6;
 
 # Clear out the database from any previous runs.
 unlink "t/node.db";
@@ -34,7 +34,7 @@ is( $wgs_lat, $latitude,
 eval{ require Geo::HelmertTransform; };
 my $have_helmert = $@ ? 0 : 1;
 SKIP : {
-    skip "Geo::HelmertTransform not installed - can't do transforms", 2
+    skip "Geo::HelmertTransform not installed - can't do transforms", 4
         unless $have_helmert;
 
     $config->force_wgs84(0);
@@ -56,6 +56,18 @@ SKIP : {
     $wgs84_lon = int($wgs84_lon * $fivedp)/$fivedp;
     $wgs84_lat = int($wgs84_lat * $fivedp)/$fivedp;
 
+    is( $wgs_long, $wgs84_lon,
+        "get_wgs84_coords does Airy1830 -> WGS84 convertion properly");
+    is( $wgs_lat, $wgs84_lat,
+        "get_wgs84_coords does Airy1830 -> WGS84 convertion properly");
+
+    # Call it again, check we get the same result
+    ($wgs_long, $wgs_lat) = OpenGuides::Utils->get_wgs84_coords(
+                                                     longitude => $longitude,
+                                                     latitude => $latitude,
+                                                     config => $config);
+    $wgs_long = int($wgs_long * $fivedp)/$fivedp;
+    $wgs_lat  = int($wgs_lat  * $fivedp)/$fivedp;
     is( $wgs_long, $wgs84_lon,
         "get_wgs84_coords does Airy1830 -> WGS84 convertion properly");
     is( $wgs_lat, $wgs84_lat,
