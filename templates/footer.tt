@@ -27,11 +27,9 @@
       [% IF licence_name %]
         This work is licensed under the 
         [% IF licence_url %]
-           <a href="[% licence_url %]">
-        [% END %]
-        [% licence_name %]
-        [% IF licence_url %]
-           </a>
+           <a href="[% licence_url %]">[% licence_name %]</a>
+		[% ELSE %]
+			[% licence_name %]
         [% END %]
         licence
         [% IF licence_info_url %]
