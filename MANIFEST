@@ -72,6 +72,7 @@ t/14_recent_changes_cookies.t
 t/15_template.t
 t/16_test_tester.t
 t/17_commit_node.t
+t/18_http_headers.t
 t/21_rdf.t
 t/22_feed_recent_changes.t
 t/23_feed_node_all_versions.t

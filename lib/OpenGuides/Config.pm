@@ -8,7 +8,8 @@ my @variables = qw(
    dbtype dbname dbuser dbpass dbhost script_name install_directory script_url
    custom_lib_path use_plucene indexing_directory enable_page_deletion
    admin_pass stylesheet_url site_name navbar_on_home_page home_name
-   site_desc default_city default_country contact_email default_language
+   site_desc default_city default_country contact_email 
+   default_language http_charset
    formatting_rules_node formatting_rules_link backlinks_in_title template_path
    custom_template_path geo_handler ellipsoid gmaps_api_key centre_long
    centre_lat default_gmaps_zoom default_gmaps_search_zoom force_wgs84
@@ -79,6 +80,7 @@ sub _init {
                      default_city => "",
                      default_country => "",
                      default_language => "en",
+                     http_charset => "",
                      formatting_rules_node => "Text Formatting Examples",
                      formatting_rules_link => "http://openguides.org/page/text_formatting",
                      backlinks_in_title => 0,
@@ -149,6 +151,7 @@ sub _init {
         default_country => "What country is the site based in?",
         contact_email => "Contact email address for the site administrator?",
         default_language => "What language will the site be in? (Please give an ISO language code.)",
+        http_charset => "What character set should we put in the http headers? (This won't change the character set internally, just what it's reported as). Leave blank for none to be sent",
         formatting_rules_node => "What's the name of the node or page to use for the text formatting rules link (this is by default an external document, but if you make formatting_rules_link empty, it will be a wiki node instead",
 	formatting_rules_link => "What URL do you want to use for the text formatting rules (leave blank to use a wiki node instead)?",
         backlinks_in_title => "Make node titles link to node backlinks (C2 style)?",
@@ -237,6 +240,8 @@ sub script_url {
 =item * default_country (default: C<United Kingdom>)
 
 =item * default_language (default: C<en>)
+
+=item * http_charset
 
 =item * contact_email
 
