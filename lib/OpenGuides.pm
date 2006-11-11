@@ -81,7 +81,7 @@ sub new {
             }
         }
         my $ping = Wiki::Toolkit::Plugin::Ping->new(
-            node_to_url => $self->{config}->script_name . '?$node',
+            node_to_url => $self->{config}->{script_url} . $self->{config}->{script_name} . '?$node',
             services => \%services
         );
         $wiki->register_plugin( plugin => $ping );
