@@ -9,7 +9,7 @@ my @variables = qw(
    custom_lib_path use_plucene indexing_directory enable_page_deletion
    admin_pass stylesheet_url site_name navbar_on_home_page home_name
    site_desc default_city default_country contact_email 
-   default_language http_charset
+   default_language http_charset ping_services
    formatting_rules_node formatting_rules_link backlinks_in_title template_path
    custom_template_path geo_handler ellipsoid gmaps_api_key centre_long
    centre_lat default_gmaps_zoom default_gmaps_search_zoom force_wgs84
@@ -73,6 +73,7 @@ sub _init {
                      enable_node_image => 1,
                      enable_common_categories => 0,
                      enable_common_locales => 0,
+                     ping_services => "",
                      site_name => "Unconfigured OpenGuides site",
                      navbar_on_home_page => 1,
                      home_name => "Home",
@@ -143,6 +144,7 @@ sub _init {
         enable_node_image => "Should nodes be allowed to have an externally hosted image?",
         enable_common_categories => "Do you want a common list of categories shown on all node pages?",
         enable_common_locales => "Do you want a common list of locales shown on all node pages?",
+        ping_services => "Which services do you wish to ping whenever you write a page? Can be pingerati, geourl, or both",
         site_name => "What's the site called? (should be unique)",
         navbar_on_home_page => "Do you want the navigation bar included on the home page?",
         home_name => "What should the home page of the wiki be called?",

@@ -111,5 +111,6 @@ t/70_admin_home.t
 t/71_missing_metadata.t
 t/72_node_moderation.t
 t/73_toggle_moderation.t
+t/74_ping_plugin.t
 t/templates/15_test.tt
 wiki.cgi

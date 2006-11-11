@@ -47,6 +47,7 @@ sub new {
     my $wiki = OpenGuides::Utils->make_wiki_object( config => $args{config} );
     $self->{wiki} = $wiki;
     $self->{config} = $args{config};
+
     my $geo_handler = $self->config->geo_handler;
     my $locator;
     if ( $geo_handler == 1 ) {
@@ -61,9 +62,31 @@ sub new {
     }
     $wiki->register_plugin( plugin => $locator );
     $self->{locator} = $locator;
+
     my $differ = Wiki::Toolkit::Plugin::Diff->new;
     $wiki->register_plugin( plugin => $differ );
     $self->{differ} = $differ;
+
+    if($self->config->ping_services) {
+        use Wiki::Toolkit::Plugin::Ping;
+
+        my @ws = split(/\s*,\s*/, $self->config->ping_services);
+        my %well_known = Wiki::Toolkit::Plugin::Ping->well_known;
+        my %services;
+        foreach my $s (@ws) {
+            if($well_known{$s}) {
+                $services{$s} = $well_known{$s};
+            } else {
+                warn("Ignoring unknown ping service '$s'");
+            }
+        }
+        my $ping = Wiki::Toolkit::Plugin::Ping->new(
+            node_to_url => $self->{config}->script_name . '?$node',
+            services => \%services
+        );
+        $wiki->register_plugin( plugin => $ping );
+    }
+
     return $self;
 }
 
