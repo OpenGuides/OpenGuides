@@ -68,7 +68,7 @@ sub new {
     $self->{differ} = $differ;
 
     if($self->config->ping_services) {
-        use Wiki::Toolkit::Plugin::Ping;
+        require Wiki::Toolkit::Plugin::Ping;
 
         my @ws = split(/\s*,\s*/, $self->config->ping_services);
         my %well_known = Wiki::Toolkit::Plugin::Ping->well_known;
