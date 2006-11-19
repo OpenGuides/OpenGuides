@@ -54,7 +54,7 @@ SKIP: {
 
     ok($guide, "Made the guide OK");
 
-    my @plugins = @{ $guide->wiki->{_registered_plugins} };
+    @plugins = @{ $guide->wiki->{_registered_plugins} };
     is( scalar @plugins, 3, "Has plugin now" );
     ok( $plugins[2]->isa( "Wiki::Toolkit::Plugin" ), "Right plugin" );
     ok( $plugins[2]->isa( "Wiki::Toolkit::Plugin::Ping" ), "Right plugin" );
@@ -63,6 +63,6 @@ SKIP: {
     my %services = $plugins[2]->services;
     my @snames = sort keys %services;
     is( scalar @snames, 2, "Has 2 services as expected" );
-    is( @snames[0], "geourl", "Right service" );
-    is( @snames[1], "pingerati", "Right service" );
+    is( $snames[0], "geourl", "Right service" );
+    is( $snames[1], "pingerati", "Right service" );
 }
