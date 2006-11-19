@@ -33,6 +33,7 @@ File::Temp
     -- or --
   Geo::Coordinates::UTM
 )
+Geo::HelmertTransform
 LWP::Simple
 Module::Build (version 0.18 or later)
 Parse::RecDescent

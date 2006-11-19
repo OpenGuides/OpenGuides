@@ -249,6 +249,7 @@ my $build = OpenGuides::Build->new(
         'File::Spec::Functions'               => 0,
         'File::Temp'                          => 0,
         'Geography::NationalGrid'             => 0,
+        'Geo::HelmertTransform'               => 0,
         'LWP::Simple'                         => 0,
         'Parse::RecDescent'                   => 0,
         $search_module                        => 0,

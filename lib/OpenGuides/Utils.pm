@@ -254,6 +254,9 @@ sub get_wgs84_coords {
             require Geo::HelmertTransform;
             $helmert = sub($$$) {
                 my ($datum,$oldlat,$oldlong) = @_;
+                if ($datum eq 'Airy') {
+                    $datum = 'Airy1830';
+                }
                 my $datum_helper = new Geo::HelmertTransform::Datum(Name=>$datum);
                 my $wgs84_helper = new Geo::HelmertTransform::Datum(Name=>'WGS84');
                 unless($datum_helper) {
