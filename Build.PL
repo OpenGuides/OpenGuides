@@ -72,6 +72,7 @@ push @answers, { question => $dbtype_qu,
 
 my $install_directory; # used to suggest template paths
 my $use_plucene = 1; # keep track of this so we know what to put in prereqs
+my $centre_lat = ''; # contains centre lat derived from Google Maps URL
 foreach my $var ( qw(
    dbname dbuser dbpass dbhost script_name
    install_directory template_path custom_template_path script_url
@@ -127,6 +128,12 @@ foreach my $var ( qw(
         $def .= "custom-templates";
     }
 
+    # If a Google Maps URL was provided last time we know the centre_lat
+    if ( $var eq 'centre_lat' && $centre_lat ) {
+        $val = $centre_lat;
+        next;
+    }    
+
     # Here is where we actually ask the questions.
     unless ( $skip_config ) {
         if ( $type eq "y_n" ) {
@@ -137,6 +144,16 @@ foreach my $var ( qw(
             $val = Module::Build->y_n("\n$qu ", $def);
         } else {
             $val = Module::Build->prompt("\n$qu ", $def);
+        }
+    }
+
+    # Allow user to use a Google Maps URL rather than enter lat/long by hand.
+    # We assume centre_long is being asked for first; ensure so in big list above.
+    if ( $var eq 'centre_long' ) {
+        if ( $val =~ /ll=([-\d.]+),([-\d.]+)/ ) {
+            print "Got a Google Maps URL with centre long,lat: [$1, $2]\n";
+            $val = $1;
+            $centre_lat = $2;
         }
     }
 

@@ -204,8 +204,10 @@ are installing. See README.GMAPS for more information.
   "What is the longitude of the centre point of a map to draw for your guide?"
   "What is the latitude of the centre point of a map to draw for your guide?"
 
-It's probably a good idea to pick some notionally central point for your 
-guide. For example, Carfax for Oxford, Charing Cross for London.
+It's probably a good idea to pick some notionally central point for your
+guide. For example, Carfax for Oxford, Charing Cross for London. As a
+convenience, you may paste in a Google Maps URL for the centre longitude
+question and the (long,lat) will be parsed out from the URL.
 
   "What default zoom level shall we use for Google Maps?"
   "What default zoom level shall we use for Google Maps in the search results?"

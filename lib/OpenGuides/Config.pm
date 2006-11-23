@@ -159,7 +159,7 @@ sub _init {
         backlinks_in_title => "Make node titles link to node backlinks (C2 style)?",
         ellipsoid => "Which ellipsoid do you want to use? (eg 'Airy', 'WGS-84')",
         gmaps_api_key => "Do you have a Google Maps API key to use with this guide? If you enter it here the Google Maps functionality will be automatically enabled.",
-        centre_long => "What is the longitude of the centre point of a map to draw for your guide? (This question can be ignored if you aren't using Google Maps)",
+        centre_long => "What is the longitude of the centre point of a map to draw for your guide? (This question can be ignored if you aren't using Google Maps). You may paste in a Google Maps URL here (hint: copy URL from 'Link to this page')",
         centre_lat => "What is the latitude of the centre point of a map to draw for your guide? (This question can be ignored if you aren't using Google Maps)",
         default_gmaps_zoom => "What default zoom level shall we use for Google Maps? (This question can be ignored if you aren't using Google Maps)",
         default_gmaps_search_zoom => "What default zoom level shall we use for Google Maps in the search results? (This question can be ignored if you aren't using Google Maps)",
