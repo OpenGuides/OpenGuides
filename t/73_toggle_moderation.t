@@ -109,6 +109,6 @@ SKIP: {
                                 password => $guide->config->admin_pass,
                                 return_output => 1
     );
-    like($output, qr|Location: http://example.com/wiki.cgi?action=admin;moderation=changed|, "Right location");
+    like($output, qr|Location: http://example.com/wiki.cgi\?action=admin;moderation=changed|, "Right location");
     like($output, qr|Status: 302 Moved|, "Right status");
 }
