@@ -5,11 +5,13 @@
        node_image %]
 <div id="metadata" class="vcard">
 [% IF node_image %]
-	<div id="node_image_box">
-		<img id="node_image" src="[% node_image %]" alt="Picture of [% node_name %]" />
-	</div>
+  <div id="node_image_box">
+    [% IF website %]<a href="[% website %]">[% END %]
+      <img id="node_image" src="[% node_image %]" alt="Picture of [% node_name %]" />
+    [% IF website %]</a>[% END %]
+  </div>
 [% ELSE %]
-	<span id="node_no_image" />
+  <span id="node_no_image" />
 [% END %]
 
   <!--- For the vcard --->
