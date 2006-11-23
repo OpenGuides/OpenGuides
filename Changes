@@ -2,7 +2,7 @@
 0.58    ?? September 2006
         Tidy up some minor bugs in the new features.
         Add RDF autodiscovery link to nodes' <head> section.
-        Add UPGRADING file which summarises inmportant information for people
+        Add UPGRADING file which summarises important information for people
         upgrading.
         Add an optional new config parameter, http_charset, which will set
          an explict charset http header on all responses.
