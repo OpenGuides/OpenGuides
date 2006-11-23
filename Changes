@@ -8,7 +8,7 @@
          an explict charset http header on all responses.
         Add an optional new config parameter, ping_services, which is a list
          of services (defined in Wiki::Toolkit::Plugin::Ping) to ping when
-         a node is written. Allows you to ping pingerati etc on changes
+         a node is written. Allows you to ping pingerati etc on changes.
 
 0.57    12 September 2006
         New interfaces:
