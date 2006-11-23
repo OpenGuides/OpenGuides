@@ -266,6 +266,7 @@ my $build = OpenGuides::Build->new(
     recommends => {
         'DBD::SQLite'         => 0, # for testing
         'Test::HTML::Content' => 0, # for testing, oddly enough
+        'Wiki::Toolkit::Plugin::Ping' => 0,
     },
     dynamic_config => 1,
     create_makefile_pl => "passthrough"

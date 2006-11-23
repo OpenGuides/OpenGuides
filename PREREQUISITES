@@ -1,4 +1,4 @@
-Modules required by OpenGuides 0.56
+Modules required by OpenGuides 0.58
 ===================================
 
 Algorithm::Diff (version 0.13 or later. Note that the latest version uses 
@@ -44,3 +44,7 @@ Test::MockObject (version 0.07 or later)
 Time::Piece
 URI::Escape
 XML::RSS
+
+Optional prerequisites (OpenGuides will work without these, but not
+all functionality will be available)
+Wiki::Toolkit::Plugin::Ping
