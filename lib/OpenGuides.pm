@@ -1598,14 +1598,14 @@ L<http://dev.openguides.org/>
 =head1 FEEDBACK
 
 If you have a question, a bug report, or a patch, or you're interested
-in joining the development team, please contact openguides-dev@openguides.org
+in joining the development team, please contact openguides-dev@lists.openguides.org
 (moderated mailing list, will reach all current developers but you'll have
 to wait for your post to be approved) or file a bug report at
 L<http://dev.openguides.org/>
 
 =head1 AUTHOR
 
-The OpenGuides Project (openguides-dev@openguides.org)
+The OpenGuides Project (openguides-dev@lists.openguides.org)
 
 =head1 COPYRIGHT
 
