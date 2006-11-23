@@ -249,7 +249,6 @@ my $build = OpenGuides::Build->new(
         'File::Spec::Functions'               => 0,
         'File::Temp'                          => 0,
         'Geography::NationalGrid'             => 0,
-        'Geo::HelmertTransform'               => 0,
         'LWP::Simple'                         => 0,
         'Parse::RecDescent'                   => 0,
         $search_module                        => 0,
@@ -266,7 +265,10 @@ my $build = OpenGuides::Build->new(
     recommends => {
         'DBD::SQLite'         => 0, # for testing
         'Test::HTML::Content' => 0, # for testing, oddly enough
-        'Wiki::Toolkit::Plugin::Ping' => 0,
+        'Wiki::Toolkit::Plugin::Ping' => 0, # for pinging external services
+        'Geo::HelmertTransform'  => 0,      # for correct WGS84 lat/long
+                                            # when using grid systems
+
     },
     dynamic_config => 1,
     create_makefile_pl => "passthrough"

@@ -33,7 +33,6 @@ File::Temp
     -- or --
   Geo::Coordinates::UTM
 )
-Geo::HelmertTransform
 LWP::Simple
 Module::Build (version 0.18 or later)
 Parse::RecDescent
@@ -48,3 +47,4 @@ XML::RSS
 Optional prerequisites (OpenGuides will work without these, but not
 all functionality will be available)
 Wiki::Toolkit::Plugin::Ping
+Geo::HelmertTransform
