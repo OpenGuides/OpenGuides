@@ -64,6 +64,7 @@ sub make_basic_config {
                      custom_template_path => "./custom-templates",
                      home_name            => "Home",
                      geo_handler          => 1,
+                     force_wgs84          => 1,
                    }
     );
 
