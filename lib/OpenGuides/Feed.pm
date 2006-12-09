@@ -166,7 +166,7 @@ sub render_feed_for_nodes {
     my $newest_node;
     foreach my $node (@nodes) {
         if($node->{last_modified}) {
-            if((!$newest_node) || ($node->{last_modified} lt $newest_node->{last_modified})) {
+            if((!$newest_node) || ($node->{last_modified} gt $newest_node->{last_modified})) {
                 $newest_node = $node;
             }
         }

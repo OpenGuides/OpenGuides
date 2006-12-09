@@ -827,8 +827,9 @@ sub display_feed {
     # Get the feed, and the timestamp, in one go
     my ($feed_output, $feed_timestamp) = 
         $feed->make_feed( %criteria );
-
-    $output .= "Last-Modified: " . $feed_timestamp . "\n\n";
+    my $maker = $feed->fetch_maker($feed_type);
+ 
+    $output .= "Last-Modified: " . ($maker->parse_feed_timestamp($feed_timestamp))->strftime('%a, %d %b %Y %H:%M:%S +0000') . "\n\n";
     $output .= $feed_output;
 
     return $output if $return_output;
