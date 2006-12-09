@@ -195,8 +195,11 @@ sub display_node {
     my %node_data = $wiki->retrieve_node( %criteria );
 
     # Fixes passing undefined values to Text::Wikiformat if node doesn't exist.
-    my $raw        = $node_data{content} || " ";
-    my $content    = $wiki->format($raw);
+    my $content = '';
+    if ($node_data{content}) {
+        $content    = $wiki->format($node_data{content});
+    }
+
     my $modified   = $node_data{last_modified};
     my $moderated  = $node_data{moderated};
     my %metadata   = %{$node_data{metadata}};
@@ -206,9 +209,9 @@ sub display_node {
                                         latitude => $metadata{latitude}[0],
                                         config => $config);
     if ($args{format} && $args{format} eq 'raw') {
-      print "Content-Type: text/plain\n\n";
-      print $raw;
-      return 0;
+        print "Content-Type: text/plain\n\n";
+        print $node_data{content};
+        return 0;
     }
    
     my %metadata_vars = OpenGuides::Template->extract_metadata_vars(
@@ -240,8 +243,8 @@ sub display_node {
         $tt_vars{common_locales} = $config->enable_common_locales;
         $tt_vars{catloc_link} = $config->script_name . "?id=";
     }
-
-    if ( $raw =~ /^#REDIRECT\s+(.+?)\s*$/ ) {
+    
+    if ( $node_data{content} && $node_data{content} =~ /^#REDIRECT\s+(.+?)\s*$/ ) {
         my $redirect = $1;
         # Strip off enclosing [[ ]] in case this is an extended link.
         $redirect =~ s/^\[\[//;
