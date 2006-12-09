@@ -96,23 +96,36 @@ SKIP: {
 
 
     # Test the map version
+    # They will need a Helmert Transform provider for this to work
     $config->gmaps_api_key("yes I have one");
     $config->geo_handler(1);
     $config->force_wgs84(0);
-    $output = eval {
-        $guide->show_index(
-                            return_output => 1,
-                            format        => "map",
-                          );
-    };
-    is( $@, "", "->show_index doesn't die when asked for map" );
-    like( $output, qr|Content-Type: text/html|,
-          "Map output gets content-type of text/html" );
-    like( $output, qr|new GMap|, "Really is google map" );
-    my @points = ($output =~ /point\d+ = (new GPoint\(.*?, .*?\))/g);
-    is( 1, scalar @points, "Right number of nodes included on map" );
 
-    # -1.259687,51.754813
-    like( $points[0], qr|51.75481|, "Has latitude");
-    like( $points[0], qr|-1.25968|, "Has longitude");
+    my $has_helmert = 0;
+    eval {
+        use OpenGuides::Utils;
+        $has_helmert = OpenGuides::Utils->get_wgs84_coords(latitude=>1,longitude=>1,config=>$config);
+    };
+
+    SKIP: {
+        skip "No Helmert Transform provider installed, can't test geo stuff", 6
+          unless $has_helmert;
+
+        $output = eval {
+            $guide->show_index(
+                                return_output => 1,
+                                format        => "map",
+                              );
+        };
+        is( $@, "", "->show_index doesn't die when asked for map" );
+        like( $output, qr|Content-Type: text/html|,
+              "Map output gets content-type of text/html" );
+        like( $output, qr|new GMap|, "Really is google map" );
+        my @points = ($output =~ /point\d+ = (new GPoint\(.*?, .*?\))/g);
+        is( 1, scalar @points, "Right number of nodes included on map" );
+
+        # -1.259687,51.754813
+        like( $points[0], qr|51.75481|, "Has latitude");
+        like( $points[0], qr|-1.25968|, "Has longitude");
+    }
 }
