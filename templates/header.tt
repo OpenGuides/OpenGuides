@@ -18,6 +18,14 @@
   [% IF summary %]
     <meta name="description" content="[% summary %]" />
   [% END %]
+  [% IF (categories.size AND categories.size > 0)
+     OR (locales.size AND locales.size > 0) %]
+    <meta name="keywords" content="[% IF categories.size AND
+categories.size > 0 %][% FOREACH category = categories %][%
+category.name %][%- ", " %][% END %][% END %][% IF locales.size AND
+locales.size > 0 %][% FOREACH locale = locales %][% locale.name %][%-
+", " UNLESS loop.last %][% END %][% END %]" />
+  [% END %]
   [% IF stylesheet %]
     <link rel="stylesheet" href="[% stylesheet %]" type="text/css" title="Stylesheet for [% site_name %]" />
   [% END %]
