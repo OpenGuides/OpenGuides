@@ -21,7 +21,7 @@ if ( $@ ) {
 
 # Which feed types do we test?
 my @feed_types = qw( rss atom );
-plan tests => 11 * scalar @feed_types;
+plan tests => 14 * scalar @feed_types;
 
 
 foreach my $feed_type (@feed_types) {
@@ -40,7 +40,8 @@ foreach my $feed_type (@feed_types) {
                      site_name          => "Test Site",
                      template_path      => "./templates",
                      home_name          => "Home",
-                     use_plucene        => 1
+                     use_plucene        => 1,
+                     http_charset       => "UTF-8"
                    }
     );
 
@@ -143,4 +144,9 @@ foreach my $feed_type (@feed_types) {
 
     my @wombats = $output =~ /(<title>Wombats)/g;
     is( scalar @wombats, 3, "All 3 wombat versions found" );
+
+    # Check the content type and charset
+    like( $output, qr/Content-Type: /, "Has content type" );
+    like( $output, qr/$feed_type/, "Which is the right one" );
+    like( $output, qr/charset=UTF-8/, "And a charset" );
 }

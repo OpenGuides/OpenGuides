@@ -818,7 +818,11 @@ sub display_feed {
     # Get the feed object, and the content type
     my ($feed,$content_type) = $self->get_feed_and_content_type($feed_type);
 
-    my $output = "Content-Type: ".$content_type."\n";
+    my $output = "Content-Type: ".$content_type;
+    if($self->config->http_charset) {
+        $output .= "; charset=".$self->config->http_charset;
+    }
+    $output .= "\n";
     
     # Get the feed, and the timestamp, in one go
     my ($feed_output, $feed_timestamp) = 

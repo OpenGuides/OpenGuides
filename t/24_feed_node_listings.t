@@ -40,7 +40,8 @@ foreach my $feed_type (@feed_types) {
                      site_name          => "Test Site",
                      template_path      => "./templates",
                      home_name          => "Home",
-                     use_plucene        => 1
+                     use_plucene        => 1,
+                     http_charset       => "UTF-8"
                    }
     );
 
