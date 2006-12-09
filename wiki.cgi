@@ -40,6 +40,13 @@ eval {
     my $node = $q->param('id') || $q->param('title') || $q->param('keywords') || "";
     $node = $formatter->node_param_to_node_name( $node );
 
+    # If we did a post, then CGI->param probably hasn't fully de-escaped,
+    #  in the same way as a get would've done
+    if($q->request_method() eq "POST") {
+        $node = uri_unescape($node);
+    }
+
+    # Grab our common parameters
     my $action       = $q->param('action')  || 'display';
     my $commit       = $q->param('Save')    || 0;
     my $preview      = $q->param('preview') || 0;
