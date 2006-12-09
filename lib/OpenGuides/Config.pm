@@ -5,7 +5,8 @@ use Config::Tiny;
 
 use base qw( Class::Accessor );
 my @variables = qw(
-   dbtype dbname dbuser dbpass dbhost script_name install_directory script_url
+   dbtype dbname dbuser dbpass dbhost dbencoding
+   script_name install_directory script_url
    custom_lib_path use_plucene indexing_directory enable_page_deletion
    admin_pass stylesheet_url site_name navbar_on_home_page home_name
    site_desc default_city default_country contact_email 
@@ -129,6 +130,7 @@ sub _init {
         dbuser => "...the database user that can access that database?",
         dbpass => "...the password that they use to access the database?",
         dbhost => "...the machine that the database is hosted on? (blank if local)",
+        dbencoding => "...the encoding that your database uses? (blank if default)",
         script_name => "What do you want the script to be called?",
         install_directory => "What directory should I install it in?",
         template_path => "What directory should I install the templates in?",
@@ -200,6 +202,8 @@ the config file.
 =item * dbpass
 
 =item * dbhost
+
+=item * dbencoding
 
 =item * script_name (default: C<wiki.cgi>)
 

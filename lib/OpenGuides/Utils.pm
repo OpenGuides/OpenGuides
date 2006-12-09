@@ -83,10 +83,11 @@ sub make_wiki_object {
 
     # Make store.
     my $store = $cgi_wiki_module->new(
-        dbname => $config->dbname,
-        dbuser => $config->dbuser,
-        dbpass => $config->dbpass,
-        dbhost => $config->dbhost,
+        dbname  => $config->dbname,
+        dbuser  => $config->dbuser,
+        dbpass  => $config->dbpass,
+        dbhost  => $config->dbhost,
+        charset => $config->dbencoding,
     );
 
     # Make search.
