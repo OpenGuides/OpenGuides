@@ -1440,7 +1440,9 @@ sub show_missing_metadata {
                       metadata_type  => $metadata_type,
                       metadata_value => $metadata_value,
                       exclude_locales => $exclude_locales,
-                      exclude_categories => $exclude_categories
+                      exclude_categories => $exclude_categories,
+
+                      script_name => $script_name
                   );
     return %tt_vars if $return_tt_vars;
 

@@ -5,7 +5,7 @@
 <div id="maincontent">
 <h2>Pages Missing Metadata</h2>
 
-<form method="get" action="wiki.cgi">
+<form method="get" action="[% script_name %]">
 <input type="hidden" name="action" value="show_missing_metadata" />
 <div>
 	<label for="metadata_type">Metadata Type:</label>
