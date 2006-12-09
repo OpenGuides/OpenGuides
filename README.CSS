@@ -318,5 +318,9 @@ div#redirect_message
     Purpose: A short message indicating that your reached a node via a redirect
 
 table#wanted_pages
-    Used in:  wanted_pages.tt
+    Used in: wanted_pages.tt
     Purpose: A list of all unlinked nodes
+
+div#banner
+    Used in: node.tt
+    Purpose: A one-line summary of what the node is
