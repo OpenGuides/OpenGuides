@@ -248,6 +248,7 @@ sub atom_maker {
             software_name       => 'OpenGuides',
             software_homepage   => 'http://openguides.org/',
             software_version    => $self->{og_version},
+            encoding            => $self->{config}->http_charset,
         );
     }
     
@@ -268,6 +269,7 @@ sub rss_maker {
             software_name       => 'OpenGuides',
             software_homepage   => 'http://openguides.org/',
             software_version    => $self->{og_version},
+            encoding            => $self->{config}->http_charset,
         );
     }
     

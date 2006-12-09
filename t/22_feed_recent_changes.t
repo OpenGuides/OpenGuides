@@ -21,7 +21,7 @@ if ( $@ ) {
 
 # Which feed types do we test?
 my @feed_types = qw( rss atom );
-plan tests => 9 * scalar @feed_types;
+plan tests => 10 * scalar @feed_types;
 
 my %content_types = (rss=>'application/rdf+xml', atom=>'application/atom+xml');
 
@@ -41,7 +41,8 @@ foreach my $feed_type (@feed_types) {
                      site_name          => "Test Site",
                      template_path      => "./templates",
                      home_name          => "Home",
-                     use_plucene        => 1
+                     use_plucene        => 1,
+                     http_charset       => "UTF-7",
                    }
     );
 
@@ -58,6 +59,9 @@ foreach my $feed_type (@feed_types) {
     # Ensure that the feed actually contained rss/atom (a good guide
     #  that we actually got the right feed)
     like( $feed_output, "/$feed_type/i", "Does contain the feed type" );
+
+    # Check the XML
+    like( $feed_output, qr/<?xml version="1.0" encoding="UTF-7"/, "Right XML type and encoding" );
 
     # Now write some data, first a minor edit then a non-minor one.
     my $guide = OpenGuides->new( config => $config );
