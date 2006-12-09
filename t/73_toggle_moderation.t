@@ -2,13 +2,13 @@ use strict;
 use Wiki::Toolkit::Setup::SQLite;
 use OpenGuides;
 use OpenGuides::Test;
-use Test::More tests => 12;
+use Test::More tests => 14;
 
 eval { require DBD::SQLite; };
 my $have_sqlite = $@ ? 0 : 1;
 
 SKIP: {
-    skip "DBD::SQLite not installed - no database to test with", 12
+    skip "DBD::SQLite not installed - no database to test with", 14
       unless $have_sqlite;
 
     Wiki::Toolkit::Setup::SQLite::setup( { dbname => "t/node.db" } );
@@ -110,5 +110,15 @@ SKIP: {
                                 return_output => 1
     );
     like($output, qr|Location: http://example.com/wiki.cgi\?action=admin;moderation=changed|, "Right location");
+    like($output, qr|Status: 302|, "Right status");
+
+    # And again, but this time with a made up node
+    $output = $guide->set_node_moderation(
+                                id => "THIS PAGE DOES NOT EXIST",
+                                moderation_flag => 0,
+                                password => $guide->config->admin_pass,
+                                return_output => 1
+    );
+    like($output, qr|Location: http://example.com/wiki.cgi\?action=admin;moderation=unknown_node|, "Right location");
     like($output, qr|Status: 302|, "Right status");
 }

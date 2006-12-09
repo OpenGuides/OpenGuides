@@ -1266,16 +1266,21 @@ sub set_node_moderation {
             return $output if $return_output;
             print $output;
         } else {
-            $self->wiki->set_node_moderation(
+            my $worked = $self->wiki->set_node_moderation(
                                         name    => $node,
                                         required => $args{moderation_flag},
-                                    );
+                         );
+            my $moderation_flag = "changed";
+            unless($worked) {
+                $moderation_flag = "unknown_node";
+                warn("Tried to set moderation status on node '$node', which doesn't exist");
+            }
 
             # Send back to the admin interface
             my $script_url = $self->config->script_url;
             my $script_name = $self->config->script_name;
             my $q = CGI->new;
-            my $output = $q->redirect( $script_url.$script_name."?action=admin;moderation=changed" );
+            my $output = $q->redirect( $script_url.$script_name."?action=admin;moderation=".$moderation_flag );
             return $output if $return_output;
             print $output;
         }
@@ -1510,6 +1515,9 @@ sub display_admin_interface {
         }
         if($args{moderation_completed} eq "changed") {
             $completed_action = "Node moderation flag changed";
+        }
+        if($args{moderation_completed} eq "unknown_node") {
+            $completed_action = "Node moderation flag not changed, node not known";
         }
     }
 
