@@ -171,6 +171,8 @@ sub display_node {
 
     my %tt_vars;
 
+    $tt_vars{home_name} = $self->config->home_name;
+    
     if ( $id =~ /^(Category|Locale) (.*)$/ ) {
         my $type = $1;
         $tt_vars{is_indexable_node} = 1;
