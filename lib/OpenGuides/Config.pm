@@ -104,7 +104,7 @@ sub _init {
     if ( $args{file} ) {
         my $read_config = Config::Tiny->read( $args{file} ) or
             croak "Cannot read config file '$args{file}': " . $Config::Tiny::errstr;
-        %stored = $read_config->{_};
+        %stored = %{$read_config->{_}};
     } elsif ( $args{vars} ) {
         %stored = %{ $args{vars} };
     }
@@ -119,6 +119,7 @@ sub _init {
         if ( $self->can( $var ) ) { # handle any garbage in file gracefully
             $self->$var( $stored{$var} );
 	} else {
+		use Data::Dumper; die Dumper \%stored;
             warn "Don't know what to do with variable '$var'";
         }
     }
