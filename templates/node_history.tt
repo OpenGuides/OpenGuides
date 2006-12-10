@@ -11,24 +11,51 @@
 Note: only administrators can delete historical versions.
 </p>
 <ul>
+[%
+  months.1 = 'January';
+  months.2 = 'February';
+  months.3 = 'March';
+  months.4 = 'April';
+  months.5 = 'May';
+  months.6 = 'June';
+  months.7 = 'July';
+  months.8 = 'August';
+  months.9 = 'September';
+  months.10 = 'October';
+  months.11 = 'November';
+  months.12 = 'December';
+%]
 [% FOREACH revision = history %]
+[%
+  matches = revision.modified.match('(\d\d\d\d)-(\d\d)-(\d\d) (\d\d:\d\d:\d\d)');
+  year  = matches.0;
+  month = matches.1;
+  day   = matches.2;
+  time  = matches.3;
+  month = month.remove('^0');
+  revision.date = "$time, $day " _ months.$month _ " $year"
+%]
   <li>
-      <a href="[% cgi_url %]?id=[% node_param %];version=[% revision.version %]">Version [% revision.version %]</a>
       [% IF revision.version != version %]
-      (diff:
-      [% UNLESS revision.version == 1 %]<a href="[% cgi_url %]?id=[% node_param %];version=[% revision.version - 1 %];diffversion=[% revision.version %]">previous</a> / [% END %] 
-      <a href="[% cgi_url %]?id=[% node_param %];version=[% revision.version %];diffversion=[% version %]">current</a>)
+      (<a href="[% cgi_url %]?id=[% node_param %]&version=[% revision.version %]&diffversion=[% version %]">cur</a>)
+      [% ELSE %]
+      (cur)
+      [% END %]
+      [% IF revision.version == 1 %]
+      (last)
+      [% ELSE %]
+      (<a href="[% cgi_url %]?id=[% node_param %]&version=[% revision.version - 1 %]&diffversion=[% revision.version %]">last</a>)
       [% END %] 
-      .....
-      [% revision.modified %]
+      &nbsp;&nbsp;&nbsp;
+      <a href="[% cgi_url %]?id=[% node_param %]&version=[% revision.version %]">[% revision.date %]</a>&nbsp;&nbsp;
       [% IF revision.username %]
-        by <a href="[% cgi_url %]?username=[% revision.username %];action=userstats">[% revision.username %]</a>
+      <a href="[% cgi_url %]?username=[% revision.username %]&action=userstats">[% revision.username %]</a>
       [% END %]
       [% IF revision.comment %]
-        <b>[[% revision.comment %]]</b>
+        &nbsp;&nbsp;<i>([% revision.comment %])</i>
       [% END %]
       [% IF enable_page_deletion %]
-        [<a href="[% full_cgi_url %]?id=[% node_param %];version=[% revision.version %];action=delete">delete</a>]
+        &nbsp;&nbsp;<small>[<a href="[% full_cgi_url %]?id=[% node_param %];version=[% revision.version %];action=delete">delete</a>]</small>
       [% END %]
   </li>
 [% END %]

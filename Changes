@@ -2,6 +2,8 @@
 0.58    ?? November 2006
         Tidy up some minor bugs in the new features.
         Add RDF autodiscovery link to nodes' <head> section.
+        Redesign node history view along lines of that used by MediaWiki
+          (http://www.mediawiki.org/) for clarity.
         Add UPGRADING file which summarises important information for people
         upgrading.
         Add an optional new config parameter, http_charset, which will set
