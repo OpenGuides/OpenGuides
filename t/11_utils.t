@@ -2,13 +2,21 @@ use strict;
 use Wiki::Toolkit::Setup::SQLite;
 use OpenGuides::Config;
 use OpenGuides::Utils;
-use Test::More tests => 7;
+use Test::More tests => 8;
 
 eval { my $wiki = OpenGuides::Utils->make_wiki_object; };
 ok( $@, "->make_wiki_object croaks if no config param supplied" );
 
 eval { my $wiki = OpenGuides::Utils->make_wiki_object( config => "foo" ); };
 ok( $@, "...and if config param isn't an OpenGuides::Config object" );
+
+eval {
+    my $wiki = OpenGuides::Utils->make_wiki_object(
+        config => OpenGuides::Config->new( file => 'fake' )
+    );
+};
+
+like( $@, qr/File 'fake' does not exist/, '...and Config::Tiny errors are reported');
 
 eval { require DBD::SQLite; };
 my $have_sqlite = $@ ? 0 : 1;

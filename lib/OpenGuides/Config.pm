@@ -1,6 +1,7 @@
 package OpenGuides::Config;
 use strict;
 
+use Carp qw( croak );
 use Config::Tiny;
 
 use base qw( Class::Accessor );
@@ -102,8 +103,8 @@ sub _init {
     my %stored;
     if ( $args{file} ) {
         my $read_config = Config::Tiny->read( $args{file} ) or
-            warn "Cannot read config file $args{file}";
-        %stored = $read_config ? %{ $read_config->{_} } : ();
+            croak "Cannot read config file '$args{file}': " . $Config::Tiny::errstr;
+        %stored = $read_config->{_};
     } elsif ( $args{vars} ) {
         %stored = %{ $args{vars} };
     }
@@ -157,7 +158,7 @@ sub _init {
         default_language => "What language will the site be in? (Please give an ISO language code.)",
         http_charset => "What character set should we put in the http headers? (This won't change the character set internally, just what it's reported as). Leave blank for none to be sent",
         formatting_rules_node => "What's the name of the node or page to use for the text formatting rules link (this is by default an external document, but if you make formatting_rules_link empty, it will be a wiki node instead",
-	formatting_rules_link => "What URL do you want to use for the text formatting rules (leave blank to use a wiki node instead)?",
+        formatting_rules_link => "What URL do you want to use for the text formatting rules (leave blank to use a wiki node instead)?",
         backlinks_in_title => "Make node titles link to node backlinks (C2 style)?",
         ellipsoid => "Which ellipsoid do you want to use? (eg 'Airy', 'WGS-84')",
         gmaps_api_key => "Do you have a Google Maps API key to use with this guide? If you enter it here the Google Maps functionality will be automatically enabled.",
