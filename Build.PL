@@ -19,7 +19,20 @@ EOF
 my $continue = Module::Build->y_n("Continue with install?", "y");
 exit 0 unless $continue;
 
-my $existing_config = OpenGuides::Config->new( file => "wiki.conf" );
+my $existing_config_file = 'wiki.conf';
+my $existing_config;
+
+if (-f $existing_config_file) {
+    $existing_config = OpenGuides::Config->new(file => $existing_config_file);
+} else {
+    print <<EOF;
+No existing configuration file found; assuming this is a new install.
+If this is not correct, you should press Ctrl-C now, and copy your current
+wiki.conf into the current directory before re-running Build.PL.
+
+EOF
+    $existing_config = OpenGuides::Config->new();
+}
 
 my %yn_vars = map { $_ => 1 }
    qw(use_plucene enable_page_deletion navbar_on_home_page backlinks_in_title
