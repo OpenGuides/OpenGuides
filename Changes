@@ -5,12 +5,12 @@
         Redesign node history view along lines of that used by MediaWiki
           (http://www.mediawiki.org/) for clarity.
         Add UPGRADING file which summarises important information for people
-        upgrading.
+          upgrading.
         Add an optional new config parameter, http_charset, which will set
-         an explicit charset http header on all responses.
+          an explicit charset http header on all responses.
         Add an optional new config parameter, ping_services, which is a list
-         of services (defined in Wiki::Toolkit::Plugin::Ping) to ping when
-         a node is written. Allows you to ping pingerati etc on changes.
+          of services (defined in Wiki::Toolkit::Plugin::Ping) to ping when
+          a node is written. Allows you to ping pingerati etc on changes.
 
 0.57    12 September 2006
         New interfaces:
