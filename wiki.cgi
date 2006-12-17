@@ -37,12 +37,13 @@ eval {
 
     # Note $q->param('keywords') gives you the entire param string.
     # We need this to do URLs like foo.com/wiki.cgi?This_Page
-    my $node = $q->param('id') || $q->param('title') || $q->param('keywords') || "";
+    my $node = $q->param('id') || $q->param('title') || $q->param('keywords') || '';
     $node = $formatter->node_param_to_node_name( $node );
 
     # If we did a post, then CGI->param probably hasn't fully de-escaped,
     #  in the same way as a get would've done
-    if($q->request_method() eq "POST") {
+    my $request_method = $q->request_method() || '';
+    if($request_method eq 'POST') {
         $node = uri_unescape($node);
     }
 
