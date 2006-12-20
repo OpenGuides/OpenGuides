@@ -1,7 +1,12 @@
 "#" items refer to tickets. See <http://dev.openguides.org/report/9> for details.
-0.58    ?? November 2006
+
+More detailed changelogs can be found at
+http://dev.openguides.org/log/trunk
+
+0.58    20 December 2006
         Tidy up some minor bugs in the new features.
         Add RDF autodiscovery link to nodes' <head> section.
+        Added more data to RDF output
         Redesign node history view along lines of that used by MediaWiki
           (http://www.mediawiki.org/) for clarity.
         Add UPGRADING file which summarises important information for people
@@ -11,6 +16,14 @@
         Add an optional new config parameter, ping_services, which is a list
           of services (defined in Wiki::Toolkit::Plugin::Ping) to ping when
           a node is written. Allows you to ping pingerati etc on changes.
+        Helmert Transforms, so that British National grid users can have 
+        accurate Google Maps tie-ins.
+        dbencoding config variable to tell OpenGuides what charset your
+          database encoding is.
+        As a consequence declare the charset correctly in the XML feeds.
+        Other minor UI improvements
+        Redesigned node history view a la MediaWiki for greater clarity.
+        
 
 0.57    12 September 2006
         New interfaces:
