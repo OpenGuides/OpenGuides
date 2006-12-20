@@ -27,8 +27,7 @@ if (-f $existing_config_file) {
 } else {
     print <<EOF;
 No existing configuration file found; assuming this is a new install.
-If this is not correct, you should press Ctrl-C now, and copy your current
-wiki.conf into the current directory before re-running Build.PL.
+See the message above if this isn't correct.
 
 EOF
     $existing_config = OpenGuides::Config->new();
