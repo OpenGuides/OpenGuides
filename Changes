@@ -3,7 +3,7 @@
 More detailed changelogs can be found at
 http://dev.openguides.org/log/trunk
 
-0.58    20 December 2006
+0.58    21 December 2006
         Tidy up some minor bugs in the new features.
         Add RDF autodiscovery link to nodes' <head> section.
         Added more data to RDF output
