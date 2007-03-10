@@ -23,8 +23,8 @@
     <p>
       Powered by <a href="[% full_cgi_url%]?action=about">OpenGuides [% openguides_version %]</a>.
     </p>
-    <p>
-      [% IF licence_name %]
+    [% IF licence_name %]
+      <p>
         This work is licensed under the 
         [% IF licence_url %]
            <a href="[% licence_url %]">[% licence_name %]</a>
@@ -35,7 +35,8 @@
         [% IF licence_info_url %]
            (<a href="[% licence_info_url %]">more info</a>)
         [% END %]
-      [% END %]
+      </p>
+    [% END %]
   [% END %]
 
 </div>
