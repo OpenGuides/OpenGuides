@@ -1140,7 +1140,7 @@ sub _autoCreateCategoryLocale {
             $index =~ s/(.*)/\u$1/;
             my $node = $type . " " . $index;
             # Uppercase the node name before checking for existence
-            $node =~ s/ (\S+)/ \u$1/g;
+            $node = $wiki->formatter->_do_freeupper( $node );
             unless ( $wiki->node_exists($node) ) {
                 my $category = $type eq "Category" ? "Category" : "Locales";
                 $wiki->write_node(
