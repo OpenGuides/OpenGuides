@@ -25,7 +25,7 @@ div.navbar_item
     Purpose: Defines an item in the navigation bar
 
 div.warning_text
-    Used in: edit_conflict.tt
+    Used in: edit_form.tt
     Purpose: Warns the user that there is an edit conflict
 
 input.form_button
@@ -60,12 +60,12 @@ span.hidden
 
 span.node_name
     Used in: backlink_results.tt delete_confirm.tt delete_done.tt
-             differences.tt node_history.tt, edit_conflict.tt
+             differences.tt node_history.tt
     Purpose: Inlines a node name in a snippet of explanatory text,
              without linking to it.
 
 td.label
-    Used in: edit_conflict.tt, edit_form.tt
+    Used in: edit_form.tt
     Purpose: Defines a label for a field
 
 td.recentchanges_comment
@@ -98,7 +98,7 @@ div#banner
 div#content
 div#maincontent
     Used in: backlink_results.tt, delete_confirm.tt, delete_done.tt,
-	     delete_password_wrong.tt, edit_conflict.tt, edit_form.tt,
+	     delete_password_wrong.tt, edit_form.tt,
 	     home_node.tt, newpage.tt, node.tt, node_history.tt, preferences.tt,
 	     recent_changes.tt, search_results.tt, site_index.tt,
 	     search.tt, userstats.tt, wanted_pages.tt, differences.tt
@@ -194,7 +194,7 @@ a.common_locale_link
     Purpose: A link to a common locale
 
 input#address
-    Used in: edit_conflict.tt, edit_form.tt
+    Used in: edit_form.tt
     Purpose: An input field for the address of the node
 
 input#comment
@@ -202,7 +202,7 @@ input#comment
     Purpose: An input field for the comment about the change made
 
 input#fax
-    Used in: edit_conflict.tt, edit_form.tt
+    Used in: edit_form.tt
     Purpose: An input field for the fax number of the node
 
 input#geocache
@@ -215,7 +215,7 @@ input#go
     Purpose: A standard button
 
 input#hours
-    Used in: edit_conflit.tt, edit_form.tt
+    Used in: edit_form.tt
     Purpose: An input field for the opening hours of a node
     
 input#latlong
@@ -224,7 +224,7 @@ input#latlong
              longitude
 
 input#map_link
-    Used in: edit_conflict.tt, edit_form.tt
+    Used in: edit_form.tt
     Purpose: An input field for the map link of the node
 
 input#nav_search
@@ -237,11 +237,11 @@ input#omit_help
              help links
 
 input#os_x
-    Used in: edit_conflict.tt, edit_form.tt
+    Used in: edit_form.tt
     Purpose: An input field for the OS X coordinate of the node
 
 input#os_y
-    Used in: edit_conflict.tt, edit_form.tt
+    Used in: edit_form.tt
     Purpose: An input field for the OS Y coordinate of the node
 
 input#pagename
@@ -249,11 +249,11 @@ input#pagename
     Purpose: An input field for choosing the name of a new page
 
 input#phone
-    Used in: edit_conflict.tt, edit_form.tt
+    Used in: edit_form.tt
     Purpose: An input field for the telephone number of the node
 
 input#postcode
-    Used in: edit_conflict.tt, edit_form.tt
+    Used in: edit_form.tt
     Purpose: An input field for the postcode of the node
 	
 input#preview_above
@@ -283,7 +283,7 @@ input#username
     Purpose: An input field for entering the username making changes
 
 input#website
-    Used in: edit_conflict.tt, edit_form.tt
+    Used in: edit_form.tt
     Purpose: An input field for the web site of the node
 
 select#distance
@@ -300,17 +300,17 @@ table#recentchanges
     Purpose: The main display table of the recent changes page
 
 textarea#categories
-    Used in: edit_conflict.tt, edit_form.tt
+    Used in: edit_form.tt
     Purpose: An box to enter the categories of the node
 
 textarea#content_textarea
-    Used in: edit_conflict.tt, edit_form.tt
+    Used in: edit_form.tt
     Purpose: A box to enter the main conent of the node
     Note: ID doesn't match class, as IDs have to be globally unique, and we
            already have a div with ID content
 
 textarea#locales
-    Used in: edit_conflict.tt, edit_form.tt
+    Used in: edit_form.tt
     Purpose: A box to enter the locales of the node
 
 div#redirect_message

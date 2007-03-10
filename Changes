@@ -3,6 +3,16 @@
 More detailed changelogs can be found at
 http://dev.openguides.org/log/trunk
 
+0.59    
+        Move preview_node() and edit_node() from wiki.cgi into OpenGuides.pm
+        Remove edit_conflict.tt - use edit_form.tt instead to reduce
+          duplication.
+        Make sure to always pass the config object into the templates.
+        Add some extra test utilities to OpenGuides::Test
+        Write tests for and fix:
+          #48 (Edit conflict page erroneously converts lat/lon to os_x, os_y).
+          #173 (edit conflict form doesn't let you edit everything).
+
 0.58    21 December 2006
         Tidy up some minor bugs in the new features.
         Add RDF autodiscovery link to nodes' <head> section.

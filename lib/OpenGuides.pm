@@ -320,6 +320,124 @@ sub display_node {
     }
 }
 
+=item B<display_edit_form>
+
+  $guide->display_edit_form(
+                             id => "Vivat Bacchus",
+                           );
+
+Display an edit form for the specified node.  As with other methods, the
+C<return_output> parameter can be used to return the output instead of
+printing it to STDOUT.
+
+=cut
+
+sub display_edit_form {
+    my ($self, %args) = @_;
+    my $return_output = $args{return_output} || 0;
+    my $config = $self->config;
+    my $wiki = $self->wiki;
+    my $node = $args{id};
+    my %node_data = $wiki->retrieve_node($node);
+    my ($content, $checksum) = @node_data{ qw( content checksum ) };
+    my %cookie_data = OpenGuides::CGI->get_prefs_from_cookie(config=>$config);
+
+    my $username = $self->get_cookie( "username" );
+    my $edit_type = $self->get_cookie( "default_edit_type" ) eq "normal"
+                        ? "Normal edit"
+                        : "Minor tidying";
+
+    my %metadata_vars = OpenGuides::Template->extract_metadata_vars(
+                             wiki     => $wiki,
+                             config   => $config,
+                 metadata => $node_data{metadata} );
+
+    $metadata_vars{website} ||= 'http://';
+    my $moderate = $wiki->node_required_moderation($node);
+
+    my %tt_vars = ( content         => CGI->escapeHTML($content),
+                    checksum        => CGI->escapeHTML($checksum),
+                    %metadata_vars,
+                    config          => $config,
+                    username        => $username,
+                    edit_type       => $edit_type,
+                    moderate        => $moderate,
+                    deter_robots    => 1,
+    );
+
+    my $output = $self->process_template(
+                                          id            => $node,
+                                          template      => "edit_form.tt",
+                                          tt_vars       => \%tt_vars,
+                                        );
+    return $output if $return_output;
+    print $output;
+}
+
+=item B<preview_edit>
+
+  $guide->display_edit_form(
+                             id      => "Vivat Bacchus",
+                             cgi_obj => $q,
+                           );
+
+Preview the edited version of the specified node.  As with other methods, the
+C<return_output> parameter can be used to return the output instead of
+printing it to STDOUT.
+
+=cut
+
+sub preview_edit {
+    my ($self, %args) = @_;
+    my $node = $args{id};
+    my $q = $args{cgi_obj};
+    my $return_output = $args{return_output};
+    my $wiki = $self->wiki;
+    my $config = $self->config;
+
+    my $content  = $q->param('content');
+    $content     =~ s/\r\n/\n/gs;
+    my $checksum = $q->param('checksum');
+
+    my %new_metadata = OpenGuides::Template->extract_metadata_vars(
+                                               wiki                 => $wiki,
+                                               config               => $config,
+                                               cgi_obj              => $q,
+                                               set_coord_field_vars => 1,
+    );
+    foreach my $var ( qw( username comment edit_type ) ) {
+        $new_metadata{$var} = $q->escapeHTML($q->param($var));
+    }
+
+    if ($wiki->verify_checksum($node, $checksum)) {
+        my $moderate = $wiki->node_required_moderation($node);
+        my %tt_vars = (
+            %new_metadata,
+            config                 => $config,
+            content                => $q->escapeHTML($content),
+            preview_html           => $wiki->format($content),
+            preview_above_edit_box => $self->get_cookie(
+                                                   "preview_above_edit_box" ),
+            checksum               => $q->escapeHTML($checksum),
+            moderate               => $moderate
+        );
+        my $output = process_template(
+                                       id => $node,
+                                       template => "edit_form.tt",
+                                       tt_vars => \%tt_vars,
+                                     );
+        return $output if $args{return_output};
+        print $output;
+    } else {
+        return $self->_handle_edit_conflict(
+                                             id            => $node,
+                                             content       => $content,
+                                             new_metadata  => \%new_metadata,
+                                             return_output => $return_output,
+                                           );
+    }
+}
+
 =item B<display_recent_changes>  
 
   $guide->display_recent_changes;
@@ -1039,22 +1157,22 @@ sub commit_node {
     $content =~ s/\r\n/\n/gs;
     my $checksum = $q->param("checksum");
 
-    my %metadata = OpenGuides::Template->extract_metadata_vars(
+    my %new_metadata = OpenGuides::Template->extract_metadata_vars(
         wiki    => $wiki,
         config  => $config,
         cgi_obj => $q
     );
 
-    delete $metadata{website} if $metadata{website} eq 'http://';
+    delete $new_metadata{website} if $new_metadata{website} eq 'http://';
 
-    $metadata{opening_hours_text} = $q->param("hours_text") || "";
+    $new_metadata{opening_hours_text} = $q->param("hours_text") || "";
 
     # Pick out the unmunged versions of lat/long if they're set.
     # (If they're not, it means they weren't munged in the first place.)
-    $metadata{latitude} = delete $metadata{latitude_unmunged}
-        if $metadata{latitude_unmunged};
-    $metadata{longitude} = delete $metadata{longitude_unmunged}
-        if $metadata{longitude_unmunged};
+    $new_metadata{latitude} = delete $new_metadata{latitude_unmunged}
+        if $new_metadata{latitude_unmunged};
+    $new_metadata{longitude} = delete $new_metadata{longitude_unmunged}
+        if $new_metadata{longitude_unmunged};
 
     # Check to make sure all the indexable nodes are created
     # Skip this for nodes needing moderation - this occurs for them once
@@ -1062,55 +1180,93 @@ sub commit_node {
     unless($wiki->node_required_moderation($node)) {
         $self->_autoCreateCategoryLocale(
                                           id       => $node,
-                                          metadata => \%metadata
+                                          metadata => \%new_metadata
         );
     }
     
     foreach my $var ( qw( summary username comment edit_type ) ) {
-        $metadata{$var} = $q->param($var) || "";
+        $new_metadata{$var} = $q->param($var) || "";
     }
-    $metadata{host} = $ENV{REMOTE_ADDR};
+    $new_metadata{host} = $ENV{REMOTE_ADDR};
 
     # Wiki::Toolkit::Plugin::RSS::ModWiki wants "major_change" to be set.
-    $metadata{major_change} = ( $metadata{edit_type} eq "Normal edit" )
-                            ? 1
-                            : 0;
+    $new_metadata{major_change} = ( $new_metadata{edit_type} eq "Normal edit" )
+                                    ? 1
+                                    : 0;
 
-    my $written = $wiki->write_node($node, $content, $checksum, \%metadata );
+    my $written = $wiki->write_node( $node, $content, $checksum,
+                                     \%new_metadata );
 
     if ($written) {
         my $output = $self->redirect_to_node($node);
         return $output if $return_output;
         print $output;
     } else {
-        my %node_data = $wiki->retrieve_node($node);
-        my %tt_vars = ( checksum       => $node_data{checksum},
-                        new_content    => $content,
-                        stored_content => $node_data{content} );
-        foreach my $mdvar ( keys %metadata ) {
-            if ($mdvar eq "locales") {
-                $tt_vars{"stored_$mdvar"} = $node_data{metadata}{locale};
-                $tt_vars{"new_$mdvar"}    = $metadata{locale};
-            } elsif ($mdvar eq "categories") {
-                $tt_vars{"stored_$mdvar"} = $node_data{metadata}{category};
-                $tt_vars{"new_$mdvar"}    = $metadata{category};
-            } elsif ($mdvar eq "username" or $mdvar eq "comment"
-                      or $mdvar eq "edit_type" ) {
-                $tt_vars{$mdvar} = $metadata{$mdvar};
-            } else {
-                $tt_vars{"stored_$mdvar"} = $node_data{metadata}{$mdvar}[0];
-                $tt_vars{"new_$mdvar"}    = $metadata{$mdvar};
-            }
-        }
-        return %tt_vars if $args{return_tt_vars};
-        my $output = $self->process_template(
-                                              id       => $node,
-                                              template => "edit_conflict.tt",
-                                              tt_vars  => \%tt_vars,
-                                            );
-        return $output if $args{return_output};
-        print $output;
+        return $self->_handle_edit_conflict(
+                                             id            => $node,
+                                             content       => $content,
+                                             new_metadata  => \%new_metadata,
+                                             return_output => $return_output,
+                                           );
     }
+}
+
+sub _handle_edit_conflict {
+    my ($self, %args) = @_;
+    my $return_output = $args{return_output} || 0;
+    my $config = $self->config;
+    my $wiki = $self->wiki;
+    my $node = $args{id};
+    my $content = $args{content};
+    my %new_metadata = %{$args{new_metadata}};
+
+    my %node_data = $wiki->retrieve_node($node);
+    my %tt_vars = ( checksum       => $node_data{checksum},
+                    new_content    => $content,
+                    content        => $node_data{content} );
+    my %old_metadata = OpenGuides::Template->extract_metadata_vars(
+                                           wiki     => $wiki,
+                                           config   => $config,
+                                           metadata => $node_data{metadata} );
+    # Make sure we look at all variables.
+    my @tmp = (keys %new_metadata, keys %old_metadata );
+    my %tmp_hash = map { $_ => 1; } @tmp;
+    my @all_vars = keys %tmp_hash;
+
+    foreach my $mdvar ( keys %new_metadata ) {
+        if ($mdvar eq "locales") {
+            $tt_vars{$mdvar} = $old_metadata{locales};
+            $tt_vars{"new_$mdvar"} = $new_metadata{locale};
+        } elsif ($mdvar eq "categories") {
+            $tt_vars{$mdvar} = $old_metadata{categories};
+            $tt_vars{"new_$mdvar"} = $new_metadata{category};
+        } elsif ($mdvar eq "username" or $mdvar eq "comment"
+                  or $mdvar eq "edit_type" ) {
+            $tt_vars{$mdvar} = $new_metadata{$mdvar};
+        } else {
+            $tt_vars{$mdvar} = $old_metadata{$mdvar};
+            $tt_vars{"new_$mdvar"} = $new_metadata{$mdvar};
+        }
+    }
+
+    $tt_vars{coord_field_1} = $old_metadata{coord_field_1};
+    $tt_vars{coord_field_2} = $old_metadata{coord_field_2};
+    $tt_vars{coord_field_1_value} = $old_metadata{coord_field_1_value};
+    $tt_vars{coord_field_2_value} = $old_metadata{coord_field_2_value};
+    $tt_vars{"new_coord_field_1_value"}
+                                = $new_metadata{$old_metadata{coord_field_1}};
+    $tt_vars{"new_coord_field_2_value"}
+                                = $new_metadata{$old_metadata{coord_field_2}};
+
+    $tt_vars{conflict} = 1;
+    return %tt_vars if $args{return_tt_vars};
+    my $output = $self->process_template(
+                                          id       => $node,
+                                          template => "edit_form.tt",
+                                          tt_vars  => \%tt_vars,
+                                        );
+    return $output if $args{return_output};
+    print $output;
 }
 
 =item B<_autoCreateCategoryLocale>

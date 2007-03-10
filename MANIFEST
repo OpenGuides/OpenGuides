@@ -38,7 +38,6 @@ templates/delete_done.tt
 templates/delete_password_wrong.tt
 templates/differences.tt
 templates/display_metadata.tt
-templates/edit_conflict.tt
 templates/edit_form.tt
 templates/error.tt
 templates/footer.tt
@@ -94,6 +93,7 @@ t/38_search_params.t
 t/39_search_form.t
 t/40_search_as_feed.t
 t/41_deletion.t
+t/42_edit_conflict.t
 t/51_display_node.t
 t/52_display_diffs.t
 t/53_show_index.t

@@ -92,6 +92,34 @@ C<categories>, C<locales>, C<os_x>, C<os_y>, C<osie_x>, C<osie_y>,
 C<latitude>, C<longitude>.  You should supply them exactly as they
 would come from a CGI form, eg lines in a textarea are separated by C<\r\n>.
 
+This method will automatically grab the checksum from the database, so
+even if the node already exists your data will still be written.  If you
+don't want this behaviour (for example, if you're testing edit conflicts)
+then pass in a true value to the C<omit_checksum> parameter:
+
+  OpenGuides::Test->write_data(
+                                guide         => $guide,
+                                node          => "Crabtree Tavern",
+                                omit_checksum => 1,
+                              );
+
+If you want to grab the output, pass a true value to C<return_output>:
+
+  my $output = OpenGuides::Test->write_data(
+                                             guide        => $guide,
+                                             node         => "Crabtree Tavern",
+                                             return_output => 1,
+                                           );
+
+Similarly, if you pass a true value to C<return_tt_vars>, the return value
+will be the variables which would have been passed to the template for output:
+
+  my %vars = OpenGuides::Test->write_data(
+                                             guide        => $guide,
+                                             node         => "Crabtree Tavern",
+                                             return_tt_vars => 1,
+                                           );
+
 =cut
 
 sub write_data {
@@ -122,17 +150,32 @@ sub write_data {
     $ENV{REMOTE_ADDR} = "127.0.0.1";
     
     # Get the checksum of the current contents if necessary.
-    my $wiki = $args{guide}->wiki;
-    if ( $wiki->node_exists( $args{node} ) ) {
-        my %data = $wiki->retrieve_node( $args{node} );
-        $q->param( -name => "checksum", -value => $data{checksum} );
+    unless ( $args{omit_checksum} ) {
+        my $wiki = $args{guide}->wiki;
+        if ( $wiki->node_exists( $args{node} ) ) {
+            my %data = $wiki->retrieve_node( $args{node} );
+            $q->param( -name => "checksum", -value => $data{checksum} );
+        }
     }
-
-    $args{guide}->commit_node(
-                               return_output => 1,
-                               id => $args{node},
-                               cgi_obj => $q,
-                             );
+ 
+    if ( $args{return_output} ) {
+        return $args{guide}->commit_node(
+                                          return_output => 1,
+                                          id => $args{node},
+                                          cgi_obj => $q,
+                                        );
+    } elsif ( $args{return_tt_vars} ) {
+        return $args{guide}->commit_node(
+                                          return_tt_vars => 1,
+                                          id => $args{node},
+                                          cgi_obj => $q,
+                                        );
+    } else {
+        $args{guide}->commit_node(
+                                   id => $args{node},
+                                   cgi_obj => $q,
+                                 );
+    }
 }
 
 =back

@@ -64,9 +64,12 @@ eval {
                              cgi_obj => $q,
                            );
     } elsif ($preview) {
-        preview_node($node);
+        $guide->preview_edit(
+                              id      => $node,
+                              cgi_obj => $q,
+                            );
     } elsif ($action eq 'edit') {
-        edit_node($node);
+        $guide->display_edit_form( id => $node );
     } elsif ($action eq 'search') {
         do_search($search_terms);
     } elsif ($action eq 'show_backlinks') {
@@ -251,88 +254,6 @@ sub show_userstats {
                     host            => $host,
                   );
     process_template("userstats.tt", "", \%tt_vars);
-}
-
-sub preview_node {
-    my $node = shift;
-    my $content  = $q->param('content');
-    $content     =~ s/\r\n/\n/gs;
-    my $checksum = $q->param('checksum');
-
-    my %tt_metadata_vars = OpenGuides::Template->extract_metadata_vars(
-                                               wiki                 => $wiki,
-                           config               => $config,
-                           cgi_obj              => $q,
-                                               set_coord_field_vars => 1,
-    );
-    foreach my $var ( qw( username comment edit_type ) ) {
-        $tt_metadata_vars{$var} = $q->escapeHTML($q->param($var));
-    }
-
-    if ($wiki->verify_checksum($node, $checksum)) {
-        my $moderate = $wiki->node_required_moderation($node);
-        my %tt_vars = (
-            %tt_metadata_vars,
-            config                 => $config,
-            content                => $q->escapeHTML($content),
-            preview_html           => $wiki->format($content),
-            preview_above_edit_box => get_cookie( "preview_above_edit_box" ),
-            checksum               => $q->escapeHTML($checksum),
-            moderate               => $moderate
-        );
-        process_template("edit_form.tt", $node, \%tt_vars);
-    } else {
-        my %node_data = $wiki->retrieve_node($node);
-        my %tt_vars = ( checksum       => $node_data{checksum},
-                        config         => $config,
-                        new_content    => $content,
-                        stored_content => $node_data{content} );
-        foreach my $mdvar ( keys %tt_metadata_vars ) {
-            if ($mdvar eq "locales") {
-                $tt_vars{"stored_$mdvar"} = $node_data{metadata}{locale};
-                $tt_vars{"new_$mdvar"}    = $tt_metadata_vars{locale};
-            } elsif ($mdvar eq "categories") {
-                $tt_vars{"stored_$mdvar"} = $node_data{metadata}{category};
-                $tt_vars{"new_$mdvar"}    = $tt_metadata_vars{category};
-            } elsif ($mdvar eq "username" or $mdvar eq "comment"
-                      or $mdvar eq "edit_type" ) {
-                $tt_vars{$mdvar} = $tt_metadata_vars{$mdvar};
-            } else {
-                $tt_vars{"stored_$mdvar"} = $node_data{metadata}{$mdvar}[0];
-                $tt_vars{"new_$mdvar"}    = $tt_metadata_vars{$mdvar};
-            }
-        }
-        process_template("edit_conflict.tt", $node, \%tt_vars);
-    }
-}
-
-sub edit_node {
-    my $node = shift;
-    my %node_data = $wiki->retrieve_node($node);
-    my ($content, $checksum) = @node_data{ qw( content checksum ) };
-    my $username = get_cookie( "username" );
-    my $edit_type = get_cookie( "default_edit_type" ) eq "normal" ?
-                        "Normal edit" : "Minor tidying";
-
-    my %metadata_vars = OpenGuides::Template->extract_metadata_vars(
-                             wiki     => $wiki,
-                             config   => $config,
-                 metadata => $node_data{metadata} );
-
-    $metadata_vars{website} ||= 'http://';
-    my $moderate = $wiki->node_required_moderation($node);
-
-    my %tt_vars = ( content         => $q->escapeHTML($content),
-                    checksum        => $q->escapeHTML($checksum),
-                    %metadata_vars,
-                    config          => $config,
-                    username        => $username,
-                    edit_type       => $edit_type,
-                    moderate        => $moderate,
-                    deter_robots    => 1,
-    );
-
-    process_template("edit_form.tt", $node, \%tt_vars);
 }
 
 sub get_cookie {

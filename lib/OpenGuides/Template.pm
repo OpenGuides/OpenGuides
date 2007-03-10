@@ -146,6 +146,7 @@ sub output {
     }
 
     my $tt_vars = {
+        config                => $config,
         site_name             => $config->site_name,
         cgi_url               => $script_name,
         full_cgi_url          => $script_url . $script_name,
