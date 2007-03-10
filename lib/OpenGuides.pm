@@ -68,23 +68,31 @@ sub new {
     $self->{differ} = $differ;
 
     if($self->config->ping_services) {
-        require Wiki::Toolkit::Plugin::Ping;
+        eval {
+            require Wiki::Toolkit::Plugin::Ping;
+        };
 
-        my @ws = split(/\s*,\s*/, $self->config->ping_services);
-        my %well_known = Wiki::Toolkit::Plugin::Ping->well_known;
-        my %services;
-        foreach my $s (@ws) {
-            if($well_known{$s}) {
-                $services{$s} = $well_known{$s};
-            } else {
-                warn("Ignoring unknown ping service '$s'");
+        if ( $@ ) {
+            warn "You asked for some ping services, but can't find "
+                 . "Wiki::Toolkit::Plugin::Ping";
+        } else {
+            my @ws = split(/\s*,\s*/, $self->config->ping_services);
+            my %well_known = Wiki::Toolkit::Plugin::Ping->well_known;
+            my %services;
+            foreach my $s (@ws) {
+                if($well_known{$s}) {
+                    $services{$s} = $well_known{$s};
+                } else {
+                    warn("Ignoring unknown ping service '$s'");
+                }
             }
+            my $ping = Wiki::Toolkit::Plugin::Ping->new(
+                node_to_url => $self->{config}->{script_url}
+                               . $self->{config}->{script_name} . '?$node',
+                services => \%services
+            );
+            $wiki->register_plugin( plugin => $ping );
         }
-        my $ping = Wiki::Toolkit::Plugin::Ping->new(
-            node_to_url => $self->{config}->{script_url} . $self->{config}->{script_name} . '?$node',
-            services => \%services
-        );
-        $wiki->register_plugin( plugin => $ping );
     }
 
     return $self;
