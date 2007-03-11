@@ -859,7 +859,9 @@ Fetch the OpenGuides feed object, and the output content type, for the
 supplied feed type.
 
 Handles all the setup for the OpenGuides feed object.
+
 =cut
+
 sub get_feed_and_content_type {
     my ($self, $feed_type) = @_;
 
@@ -1441,7 +1443,9 @@ Sets the moderation needed flag on a node, either on or off.
 
 If C<password> is not supplied then a form for entering the password
 will be displayed.
+
 =cut
+
 sub set_node_moderation {
     my ($self, %args) = @_;
     my $node = $args{id} or croak "No node ID supplied for node moderation";
@@ -1522,7 +1526,9 @@ and Categories for the newly moderated version.
 
 If C<password> is not supplied then a form for entering the password
 will be displayed.
+
 =cut
+
 sub moderate_node {
     my ($self, %args) = @_;
     my $node = $args{id} or croak "No node ID supplied for node moderation";
@@ -1592,9 +1598,12 @@ sub moderate_node {
 }
 
 =item B<show_missing_metadata>
+
 Search for nodes which don't have a certain kind of metadata. Optionally
 also excludes Locales and Categories
+
 =cut
+
 sub show_missing_metadata {
     my ($self, %args) = @_;
     my $return_tt_vars = $args{return_tt_vars} || 0;
@@ -1675,9 +1684,12 @@ sub show_missing_metadata {
 }
 
 =item B<display_admin_interface>
+
 Fetch everything we need to display the admin interface, and passes it off 
  to the template
+
 =cut
+
 sub display_admin_interface {
     my ($self, %args) = @_;
     my $return_tt_vars = $args{return_tt_vars} || 0;
