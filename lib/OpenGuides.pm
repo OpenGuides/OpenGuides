@@ -421,11 +421,11 @@ sub preview_edit {
             checksum               => $q->escapeHTML($checksum),
             moderate               => $moderate
         );
-        my $output = process_template(
-                                       id => $node,
-                                       template => "edit_form.tt",
-                                       tt_vars => \%tt_vars,
-                                     );
+        my $output = $self->process_template(
+                                              id       => $node,
+                                              template => "edit_form.tt",
+                                              tt_vars  => \%tt_vars,
+                                            );
         return $output if $args{return_output};
         print $output;
     } else {
