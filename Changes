@@ -9,6 +9,7 @@ http://dev.openguides.org/log/trunk
           duplication.
         Make sure to always pass the config object into the templates.
         Add some extra test utilities to OpenGuides::Test
+        Allow Guide admins to control the content of autocreated nodes (#47).
         Write tests for and fix:
           #48 (Edit conflict page erroneously converts lat/lon to os_x, os_y).
           #173 (edit conflict form doesn't let you edit everything).

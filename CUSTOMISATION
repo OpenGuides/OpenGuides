@@ -32,6 +32,18 @@ The custom templates currently supported are:
  - custom_node.tt
    Will be included just below the main wiki content in node.tt.
 
+ - custom_autocreate_content.tt
+   You can control the text that gets put into the content field of any
+   autocreated category/locale nodes by putting it in this template.
+   The following TT variables will be available to the template:
+     - [% index_type %]
+       e.g. "Category" - note that the first letter is capitalised
+     - [% index_value %]
+       e.g. "Vegan-friendly" - capitalisation just as typed in the edit form
+     - [% node_name %] 
+       e.g. "Category Vegan-Friendly" - the full, "official" name of the
+       autocreated node
+
 Requests for further custom inserts are welcomed.
 
 If you include your own versions of other (non custom_) templates in

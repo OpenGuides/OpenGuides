@@ -1279,9 +1279,29 @@ sub _handle_edit_conflict {
 When a new node is added, or a previously un-moderated node is moderated,
 identifies if any of its Categories or Locales are missing, and creates them.
 
+Guide admins can control the text that gets put into the content field of the
+autocreated node by putting it in custom_autocreate_content.tt in their custom
+templates directory.  The following TT variables will be available to the
+template:
+
+=over
+
+=item * index_type (e.g. C<Category>)
+
+=item * index_value (e.g. C<Vegan-friendly>)
+
+=item * node_name (e.g. C<Category Vegan-Friendly>)
+
+=back
+
+(Note capitalisation - index_value is what they typed in to the form, and
+node_name is the fully free-upper-ed name of the autocreated node.)
+
 For nodes not requiring moderation, should be called on writing the node
 For nodes requiring moderation, should only be called on moderation
+
 =cut
+
 sub _autoCreateCategoryLocale {
     my ($self, %args) = @_;
 
@@ -1290,6 +1310,12 @@ sub _autoCreateCategoryLocale {
     my %metadata = %{$args{'metadata'}};
 
     # Check to make sure all the indexable nodes are created
+    my $config = $self->config;
+    my $template_path = $config->template_path;
+    my $custom_template_path = $config->custom_template_path || "";
+    my $tt = Template->new( { INCLUDE_PATH =>
+                                  "$custom_template_path:$template_path" } );
+
     foreach my $type (qw(Category Locale)) {
         my $lctype = lc($type);
         foreach my $index (@{$metadata{$lctype}}) {
@@ -1299,9 +1325,22 @@ sub _autoCreateCategoryLocale {
             $node = $wiki->formatter->_do_freeupper( $node );
             unless ( $wiki->node_exists($node) ) {
                 my $category = $type eq "Category" ? "Category" : "Locales";
+                # Try to get the autocreated content from a custom template;
+                # if we fail, use some default text.
+                my $blurb;
+                my %tt_vars = (
+                                index_type  => $type,
+                                index_value => $index,
+                                node_name   => $node,
+                              );
+                my $ok = $tt->process( "custom_autocreate_content.tt",
+                                       \%tt_vars, \$blurb );
+                if ( !$ok ) {
+                    $blurb = "\@INDEX_LINK [[$node]]";
+                }
                 $wiki->write_node(
                                      $node,
-                                     "\@INDEX_LINK [[$node]]",
+                                     $blurb,
                                      undef,
                                      {
                                          username => "Auto Create",
