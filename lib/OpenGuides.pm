@@ -376,10 +376,10 @@ sub display_edit_form {
 
 =item B<preview_edit>
 
-  $guide->display_edit_form(
-                             id      => "Vivat Bacchus",
-                             cgi_obj => $q,
-                           );
+  $guide->preview_edit(
+                        id      => "Vivat Bacchus",
+                        cgi_obj => $q,
+                      );
 
 Preview the edited version of the specified node.  As with other methods, the
 C<return_output> parameter can be used to return the output instead of
