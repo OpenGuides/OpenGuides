@@ -158,6 +158,21 @@ sub make_wiki_object {
 	           }
                    return $return;
                  },
+        qr/\@MAP_LINK\s+\[\[(Category|Locale)\s+([^\]|]+)\|?([^\]]+)?\]\]/ =>
+                sub {
+                      if ( UNIVERSAL::isa( $_[0], "Wiki::Toolkit" ) ) {
+                          shift; # don't need $wiki
+                      }
+                      my $link_title = $_[2]
+                                       || "View map of pages in $_[0] $_[1]";
+                      return qq(<a href="$script_name?action=index;format=map;index_type=) . uri_escape(lc($_[0])) . qq(;index_value=) . uri_escape($_[1]) . qq(">$link_title</a>);
+                },
+        qr/\@INCLUDE_NODE\s+\[\[([^\]|]+)\]\]/ => 
+            sub {
+                  my ($wiki, $node) = @_;
+                  my %node_data = $wiki->retrieve_node( $node );
+                  return $node_data{content};
+                },
 	qr/\@RSS\s+(.+)/ => sub {
                     # We may be being called by Wiki::Toolkit::Plugin::Diff,
                     # which doesn't know it has to pass us $wiki - and
