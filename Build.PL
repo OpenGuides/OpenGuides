@@ -1,10 +1,14 @@
 use strict;
 use lib "lib";
-use OpenGuides::Build;
-use OpenGuides::Config;
 use Data::Dumper;
 
-eval "use Config::Tiny";
+eval {
+    require Config::Tiny;
+    # OpenGuides::Build and OpenGuides::Config both use Config::Tiny.
+    require OpenGuides::Build;
+    require OpenGuides::Config;
+};
+
 die "Config::Tiny is required to configure this application.\n" if $@;
 
 print <<EOF;

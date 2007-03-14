@@ -13,6 +13,8 @@ http://dev.openguides.org/log/trunk
         Write tests for and fix:
           #48 (Edit conflict page erroneously converts lat/lon to os_x, os_y).
           #173 (edit conflict form doesn't let you edit everything).
+        Fix:
+          #184 (Build.PL doesn't treat the absence of Config::Tiny gracefully.)
 
 0.58    21 December 2006
         Tidy up some minor bugs in the new features.
