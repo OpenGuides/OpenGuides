@@ -10,6 +10,8 @@ http://dev.openguides.org/log/trunk
         Make sure to always pass the config object into the templates.
         Add some extra test utilities to OpenGuides::Test
         Allow Guide admins to control the content of autocreated nodes (#47).
+        Let people add name of copyright holder, licence URL, and info page
+          URL for node images (#179).
         Write tests for and fix:
           #48 (Edit conflict page erroneously converts lat/lon to os_x, os_y).
           #173 (edit conflict form doesn't let you edit everything).

@@ -156,6 +156,10 @@ span#node_no_image
 img#node_image
     Used in: display_metadata.tt
     Purpose: To display the image for a node
+div#node_image_copyright
+    Used in: display_metadata.tt
+    Purpose: To display the name of the copyright holder of a node image, and
+             optionally a link to the licence we're using it under.
 
 div#common_navigation
     Used in: node.tt

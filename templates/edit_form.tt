@@ -88,18 +88,10 @@
         <fieldset>
           <legend>Metadata (optional)</legend>
           <table summary="Form for entering metadata about the subject of this node">
-[% IF config.enable_node_image %]
-            <tr>
-              <td class="label"><label for="node_image">URL to node Image:</label></td>
-              <td>
-                <input type="text" size="50" id="node_image" name="node_image" value="[% node_image %]" />
-                [% INCLUDE node_photo_notes.tt %]
-              </td>
-              [% IF conflict %]
-                <td>[% CGI.escapeHTML(new_node_image) %]</td>
-              [% END %]
-            </tr>
-[% END %]
+            [% IF config.enable_node_image %]
+              [% INCLUDE node_image_fields.tt %]
+            [% END %]
+
             <tr>
               <td class="label"><label for="phone">Phone:</label></td>
               <td><input type="text" size="50" id="phone" name="phone" value="[% phone %]" /></td>

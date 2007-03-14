@@ -325,10 +325,13 @@ sub extract_metadata_vars {
         summary                => $summary,
     );
 
-    my $node_image = $args{metadata} ? $metadata{node_image}[0]
-                                     : $q->param("node_image");
-    if ($config->enable_node_image && $node_image) {
-        $vars{node_image} = $node_image;
+    if ($config->enable_node_image ) {
+        foreach my $key ( qw( node_image node_image_licence node_image_url
+                              node_image_copyright ) ) {
+            my $value = $args{metadata} ? $metadata{$key}[0]
+                                        : $q->param( $key );
+            $vars{$key} = $value if $value;
+        }
     }
 
     if (exists $metadata{source}) {

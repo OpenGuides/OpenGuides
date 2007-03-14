@@ -339,6 +339,7 @@ $build->{config}{__templates}         = [
                       "newpage.tt",
                       "node.tt",
                       "node_history.tt",
+                      "node_image_fields.tt",
                       "node_photo_notes.tt",
                       "openguides_information_boxes.tt",
                       "preferences.tt",

@@ -167,8 +167,10 @@ sub write_data {
 
 You can supply values for the following keys: C<content>,
 C<categories>, C<locales>, C<os_x>, C<os_y>, C<osie_x>, C<osie_y>,
-C<latitude>, C<longitude>, C<summary>.  You should supply them exactly as they
-would come from a CGI form, eg lines in a textarea are separated by C<\r\n>.
+C<latitude>, C<longitude>, C<summary>, C<node_image>, C<node_image_licence>,
+C<node_image_copyright>, C<node_image_url>.  You should supply them exactly
+as they would come from a CGI form, eg lines in a textarea are separated
+by C<\r\n>.
 
 =cut
 
@@ -181,6 +183,13 @@ sub make_cgi_object {
     $q->param( -name => "content", -value => $args{content} || "foo" );
     $q->param( -name => "categories", -value => $args{categories} || "" );
     $q->param( -name => "locales", -value => $args{locales} || "" );
+    $q->param( -name => "node_image", -value => $args{node_image} || "" );
+    $q->param( -name => "node_image_licence",
+               -value => $args{node_image_licence} || "" );
+    $q->param( -name => "node_image_copyright",
+               -value => $args{node_image_copyright} || "" );
+    $q->param( -name => "node_image_url",
+               -value => $args{node_image_url} || "" );
     $q->param( -name => "phone", -value => "" );
     $q->param( -name => "fax", -value => "" );
     $q->param( -name => "website", -value => "" );
