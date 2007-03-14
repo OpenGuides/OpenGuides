@@ -87,10 +87,10 @@ sub make_basic_config {
                                 categories => "Pubs\r\nPub Food",
                               );
 
-You can supply values for the following keys: C<content>,
-C<categories>, C<locales>, C<os_x>, C<os_y>, C<osie_x>, C<osie_y>,
-C<latitude>, C<longitude>.  You should supply them exactly as they
-would come from a CGI form, eg lines in a textarea are separated by C<\r\n>.
+This method calls the C<make_cgi_object> method to make its CGI
+object; you can supply values for any key mentioned there.  You should
+supply them exactly as they would come from a CGI form, eg lines in a
+textarea are separated by C<\r\n>.
 
 This method will automatically grab the checksum from the database, so
 even if the node already exists your data will still be written.  If you
@@ -125,6 +125,56 @@ will be the variables which would have been passed to the template for output:
 sub write_data {
     my ($class, %args) = @_;
 
+    my $guide = delete $args{guide};
+    my $node  = delete $args{node};
+
+    my $q = $class->make_cgi_object( %args );
+    
+    # Get the checksum of the current contents if necessary.
+    unless ( $args{omit_checksum} ) {
+        my $wiki = $guide->wiki;
+        if ( $wiki->node_exists( $node ) ) {
+            my %data = $wiki->retrieve_node( $node );
+            $q->param( -name => "checksum", -value => $data{checksum} );
+        }
+    }
+ 
+    if ( $args{return_output} ) {
+        return $guide->commit_node(
+                                          return_output => 1,
+                                          id => $node,
+                                          cgi_obj => $q,
+                                        );
+    } elsif ( $args{return_tt_vars} ) {
+        return $guide->commit_node(
+                                          return_tt_vars => 1,
+                                          id => $node,
+                                          cgi_obj => $q,
+                                        );
+    } else {
+        $guide->commit_node(
+                                   id => $node,
+                                   cgi_obj => $q,
+                                 );
+    }
+}
+
+=over 4
+
+=item B<make_cgi_object>
+
+  my $q = OpenGuides::Test->make_cgi_object;
+
+You can supply values for the following keys: C<content>,
+C<categories>, C<locales>, C<os_x>, C<os_y>, C<osie_x>, C<osie_y>,
+C<latitude>, C<longitude>, C<summary>.  You should supply them exactly as they
+would come from a CGI form, eg lines in a textarea are separated by C<\r\n>.
+
+=cut
+
+sub make_cgi_object {
+    my ( $class, %args ) = @_;
+
     # Set up CGI parameters ready for a node write.
     # Most of these are in here to avoid uninitialised value warnings.
     my $q = CGI->new( "" );
@@ -144,38 +194,13 @@ sub write_data {
     $q->param( -name => "osie_y", -value => $args{osie_y} || "" );
     $q->param( -name => "latitude", -value => $args{latitude} || "" );
     $q->param( -name => "longitude", -value => $args{longitude} || "" );
+    $q->param( -name => "summary", -value => $args{summary} || "" );
     $q->param( -name => "username", -value => "Kake" );
     $q->param( -name => "comment", -value => "foo" );
     $q->param( -name => "edit_type", -value => "Normal edit" );
     $ENV{REMOTE_ADDR} = "127.0.0.1";
-    
-    # Get the checksum of the current contents if necessary.
-    unless ( $args{omit_checksum} ) {
-        my $wiki = $args{guide}->wiki;
-        if ( $wiki->node_exists( $args{node} ) ) {
-            my %data = $wiki->retrieve_node( $args{node} );
-            $q->param( -name => "checksum", -value => $data{checksum} );
-        }
-    }
- 
-    if ( $args{return_output} ) {
-        return $args{guide}->commit_node(
-                                          return_output => 1,
-                                          id => $args{node},
-                                          cgi_obj => $q,
-                                        );
-    } elsif ( $args{return_tt_vars} ) {
-        return $args{guide}->commit_node(
-                                          return_tt_vars => 1,
-                                          id => $args{node},
-                                          cgi_obj => $q,
-                                        );
-    } else {
-        $args{guide}->commit_node(
-                                   id => $args{node},
-                                   cgi_obj => $q,
-                                 );
-    }
+
+    return $q;
 }
 
 =back

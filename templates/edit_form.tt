@@ -14,6 +14,9 @@
 
 [% IF preview_html AND preview_above_edit_box %]
   <h2>Preview</h2>
+  [% IF summary %]
+    <div id="summary">[% summary %]</div>
+  [% END %]
   [% INCLUDE display_metadata.tt %]
   [% preview_html %]
   <br clear="all" />
@@ -185,6 +188,9 @@
 
 [% IF preview_html AND NOT preview_above_edit_box %]
   <h2>Preview</h2>
+  [% IF summary %]
+    <div id="summary">[% summary %]</div>
+  [% END %]
   [% INCLUDE display_metadata.tt %]
   [% preview_html %]
   <br clear="all" />
