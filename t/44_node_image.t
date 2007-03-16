@@ -1,7 +1,6 @@
 use strict;
 use OpenGuides;
 use OpenGuides::Test;
-use Test::HTML::Content;
 use Test::More;
 use Wiki::Toolkit::Setup::SQLite;
 

@@ -1,7 +1,6 @@
 use strict;
 use OpenGuides;
 use OpenGuides::Test;
-use Test::HTML::Content;
 use Test::More;
 use Wiki::Toolkit::Setup::SQLite;
 
@@ -46,4 +45,5 @@ my $output = $guide->preview_edit(
 # Strip Content-Type header to stop Test::HTML::Content getting confused.
 $output =~ s/^Content-Type.*[\r\n]+//m;
 
-text_ok( $output, "I am a summary.", "Summary shows up in preview." );
+Test::HTML::Content::text_ok( $output, "I am a summary.",
+                              "Summary shows up in preview." );
