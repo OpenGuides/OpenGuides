@@ -48,6 +48,13 @@ templates/missing_metadata.tt
 templates/moderate_confirm.tt
 templates/moderate_password_wrong.tt
 templates/navbar.tt
+templates/navbar_help.tt
+templates/navbar_home_link.tt
+templates/navbar_options.tt
+templates/navbar_revision_info.tt
+templates/navbar_search.tt
+templates/navbar_this_page.tt
+templates/navbar_tools.tt
 templates/needing_moderation.tt
 templates/newpage.tt
 templates/node.tt

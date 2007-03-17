@@ -1,78 +1,11 @@
 <div id="navbar">
 
-  [% UNLESS node_param == 'Home' %]
-  <div class="navbar_site_name"><a href="[% full_cgi_url %]">[% site_name %]</a></div>
-  [% END %]
-
-  <div class="navbar_group_title">Tools:</div>
-
-  <ul>
-    <li><a href="[% full_cgi_url %]?action=rc">Recent Changes</a></li>
-    <li><a href="newpage.cgi">Create New Page</a></li>
-    <li><a href="[% full_cgi_url %]?action=random">Random Page</a></li>
-    <li><a href="[% full_cgi_url %]?action=show_wanted_pages">Wanted Pages</a></li>
-    [% IF geocache_link AND latitude AND longitude %]
-      <li><a href="http://www.geocaching.com/seek/nearest_cache.asp?origin_lat=[% latitude %];origin_long=[% longitude %]">Look for nearby geocaches</a></li>
-    [% END %]
-  </ul>
-
-  [% UNLESS omit_help_links %]
-
-  <div class="navbar_group_title">Help:</div>
-
-  <ul>
-    <li><a href="[% full_cgi_url %]?FAQ">FAQ</a></li>
-    <li><a href="[% full_cgi_url %]?How_To_Get_Started">How To Get Started</a></li>
-    [% IF formatting_rules_link %]
-      <li><a href="[% formatting_rules_link %]">[% formatting_rules_node %]</a></li>
-    [% END %]
-    <li><a href="[% full_cgi_url %]?Wiki_Etiquette">Wiki Etiquette</a></li>
-  </ul>
-
-  [% END %]
-
-  <div class="navbar_group_title">Options:</div>
-
-  <ul>
-    <li><a href="preferences.cgi">Set username/prefs</a></li>
-  </ul>
-
-  <div class="navbar_group_title">Search:</div>
-
-  <ul>
-    <li>
-      <form method="post" action="search.cgi" enctype="application/x-www-form-urlencoded">
-        <input type="hidden" name="action" value="search" />
-        <input type="text" size="15" name="search" id="nav_search" value="Search text" onfocus="this.value=''" /> <label for="nav_search" class="hidden">Search text</label>
-        <input type="submit" value="Go" class="form_button" />
-      </form>
-    </li>
-    <li><a href="search.cgi">Advanced Search</a></li>
-  </ul>
-
-  [% UNLESS not_editable %]
-    <div class="navbar_group_title">This page:</div>
-
-    <ul>
-      <li><a class="edit_page_link" href="[% source_site or full_cgi_url %]?id=[% node_param %];action=edit">Edit this page</a></li>
-      <li><a href="[% cgi_url %]?action=show_backlinks;id=[% node_param %]">Show pages linking here</a></li>
-      [% IF version AND version > 1 %]
-        <li><a href="[% cgi_url %]?action=list_all_versions;id=[% node_param %]">List all revisions</a></li> 
-      [% END %]
-        <li><a href="[% cgi_url %]?id=[% node_param %];format=rdf">RDF/XML version</a></li>
-      [% IF enable_page_deletion %]
-        <li><a href="[% full_cgi_url %]?id=[% node_param %];action=delete">Delete (admin only)</a></li>
-      [% END %]
-    </ul>
-
-    <div class="navbar_revision">
-      [% IF current %]
-        Revision [% version %]. Last edited [% last_modified %].
-      [% ELSE %]
-        This is revision [% version %] (as of [% last_modified %]).<br />
-        <a href="[% cgi_url %]?[% node_param %]">View current version.</a>
-      [% END %]
-    </div>
-  [% END %]
+  [% INCLUDE navbar_home_link.tt %]
+  [% INCLUDE navbar_tools.tt %]
+  [% INCLUDE navbar_help.tt %]
+  [% INCLUDE navbar_options.tt %]
+  [% INCLUDE navbar_search.tt %]
+  [% INCLUDE navbar_this_page.tt %]
+  [% INCLUDE navbar_revision_info.tt %]
 
 </div>

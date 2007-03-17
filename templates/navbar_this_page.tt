@@ -1,0 +1,16 @@
+[% UNLESS not_editable %]
+  <div class="navbar_group_title">This page:</div>
+
+  <ul>
+    <li><a class="edit_page_link" href="[% source_site or full_cgi_url %]?id=[% node_param %];action=edit">Edit this page</a></li>
+    <li><a href="[% cgi_url %]?action=show_backlinks;id=[% node_param %]">Show pages linking here</a></li>
+    [% IF version AND version > 1 %]
+      <li><a href="[% cgi_url %]?action=list_all_versions;id=[% node_param %]">List all revisions</a></li> 
+    [% END %]
+    <li><a href="[% cgi_url %]?id=[% node_param %];format=rdf">RDF/XML version</a></li>
+    [% IF enable_page_deletion %]
+      <li><a href="[% full_cgi_url %]?id=[% node_param %];action=delete">Delete (admin only)</a></li>
+    [% END %]
+  </ul>
+
+[% END %]

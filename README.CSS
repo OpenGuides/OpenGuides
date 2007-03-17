@@ -8,20 +8,20 @@ a.home_link
     Used in: search_results.tt
     Purpose: Link to the home page of the site, in the search results page
 
-div.edit_page_link
-    Used in: navbar.tt
+a.edit_page_link
+    Used in: navbar_this_page.tt
     Purpose: Link to the edit page function, in the navbar
 
 div.navbar_group
-    Used in: navbar.tt
+    Used in: navbar_*.tt
     Purpose: Defines a related set of navigation bar functions
 
 div.navbar_group_title
-    Used in: navbar.tt
+    Used in: navbar_*.tt
     Purpose: Titles a related set of navigation bar functions
 
 div.navbar_item
-    Used in: navbar.tt
+    Used in: navbar_*.tt
     Purpose: Defines an item in the navigation bar
 
 div.warning_text
@@ -29,12 +29,12 @@ div.warning_text
     Purpose: Warns the user that there is an edit conflict
 
 input.form_button
-    Used in: differences.tt, edit_form.tt, footer.tt, navbar.tt, newpage.tt,
-	     node.tt, preferences.tt, search.tt
+    Used in: differences.tt, edit_form.tt, footer.tt, navbar_search.tt,
+             newpage.tt, node.tt, preferences.tt, search.tt
     Purpose: A standard form button
 
 label.hidden
-    Used in: navbar.tt
+    Used in: navbar_search.tt
     Purpose: A label for the search box that will be hidden for users with
              a CSS-conforming user agent
 
@@ -53,8 +53,8 @@ h2.node_name
     Used in: node.tt
     Purpose: Displays the node name
 
-span.hidden
-    Used in: navbar.tt
+input.hidden
+    Used in: navbar_search.tt
     Purpose: Defines content that will be hidden for users with a
              CSS-conforming user agent
 
@@ -129,6 +129,26 @@ div#metadata
 div#navbar
     Used in: navbar.tt
     Purpose: The navigation bar
+
+div#navbar_current_version_link
+    Used in: navbar_revision_info.tt
+    Purpose: Display a link to the current version when showing a historical
+    version of an editable node.
+
+div#navbar_last_edited
+    Used in: navbar_revision_info.tt
+    Purpose: Display the last edited time when showing the current version of
+    an editable node.
+
+div#navbar_this_revision_info
+    Used in: navbar_revision_info.tt
+    Purpose: Display the version number and edit time when showing a historical
+    version of an editable node.
+
+div#navbar_version
+    Used in: navbar_revision_info.tt
+    Purpose: Display the version number when showing the current version of
+    an editable node.
 
 div#rdf_link
     Used in: node.tt
@@ -238,7 +258,7 @@ input#map_link
     Purpose: An input field for the map link of the node
 
 input#nav_search
-    Used in: navbar.tt
+    Used in: navbar_search.tt
     Purpose: The search input portion of the navigation bar
 
 input#omit_help

@@ -1,0 +1,5 @@
+<div class="navbar_group_title">Options:</div>
+
+<ul>
+  <li><a href="preferences.cgi">Set username/prefs</a></li>
+</ul>
