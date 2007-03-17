@@ -138,6 +138,12 @@ div#recent
     Used in: home_node.tt
     Purpose: Recent changes summary box on the home node
 
+div#home_page_edit_link
+    Used in: home_node.tt
+    Purpose: "Edit this page" link on the home node - only displayed if neither
+    the navbar or the recent changes box are shown, since both those divs also
+    contain an edit link.
+
 div#search_form
     Used in: footer.tt
     Purpose: The search form at the bottom of the page

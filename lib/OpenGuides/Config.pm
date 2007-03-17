@@ -9,7 +9,8 @@ my @variables = qw(
    dbtype dbname dbuser dbpass dbhost dbencoding
    script_name install_directory script_url
    custom_lib_path use_plucene indexing_directory enable_page_deletion
-   admin_pass stylesheet_url site_name navbar_on_home_page home_name
+   admin_pass stylesheet_url site_name navbar_on_home_page
+   recent_changes_on_home_page home_name
    site_desc default_city default_country contact_email 
    default_language http_charset ping_services
    formatting_rules_node formatting_rules_link backlinks_in_title template_path
@@ -78,6 +79,7 @@ sub _init {
                      ping_services => "",
                      site_name => "Unconfigured OpenGuides site",
                      navbar_on_home_page => 1,
+                     recent_changes_on_home_page => 1,
                      home_name => "Home",
                      site_desc => "A default configuration of OpenGuides",
                      default_city => "",
@@ -151,6 +153,8 @@ sub _init {
         ping_services => "Which services do you wish to ping whenever you write a page? Can be pingerati, geourl, or both",
         site_name => "What's the site called? (should be unique)",
         navbar_on_home_page => "Do you want the navigation bar included on the home page?",
+        recent_changes_on_home_page => "Do you want the ten most recent "
+          . "changes included on the home page?",
         home_name => "What should the home page of the wiki be called?",
         site_desc => "How would you describe the site?",
         default_city => "What city is the site based in?",
@@ -239,6 +243,8 @@ sub script_url {
 
 =item * navbar_on_home_page (default: true)
 
+=item * recent_changes_on_home_page (default: true)
+
 =item * home_name (default: C<Home>)
 
 =item * site_desc (default: C<A default configuration of OpenGuides>)
@@ -289,7 +295,7 @@ The OpenGuides Project (openguides-dev@lists.openguides.org)
 
 =head1 COPYRIGHT
 
-     Copyright (C) 2004-2006 The OpenGuides Project.  All Rights Reserved.
+     Copyright (C) 2004-2007 The OpenGuides Project.  All Rights Reserved.
 
 The OpenGuides distribution is free software; you can redistribute it
 and/or modify it under the same terms as Perl itself.

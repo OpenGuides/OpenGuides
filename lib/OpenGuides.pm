@@ -284,22 +284,27 @@ sub display_node {
     if ($id eq "RecentChanges") {
         $self->display_recent_changes(%args);
     } elsif ( $id eq $self->config->home_name ) {
-        my @recent = $wiki->list_recent_changes(
-            last_n_changes => 10,
-            metadata_was   => { edit_type => "Normal edit" },
-        );
-        @recent = map {
-                          {
+        if ( $self->config->recent_changes_on_home_page ) {
+            my @recent = $wiki->list_recent_changes(
+                last_n_changes => 10,
+                metadata_was   => { edit_type => "Normal edit" },
+            );
+            @recent = map {
+                            {
                               name          => CGI->escapeHTML($_->{name}),
-                              last_modified => CGI->escapeHTML($_->{last_modified}),
+                              last_modified =>
+                                  CGI->escapeHTML($_->{last_modified}),
                               version       => CGI->escapeHTML($_->{version}),
-                              comment       => CGI->escapeHTML($_->{metadata}{comment}[0]),
-                              username      => CGI->escapeHTML($_->{metadata}{username}[0]),
+                              comment       =>
+                                  CGI->escapeHTML($_->{metadata}{comment}[0]),
+                              username      =>
+                                  CGI->escapeHTML($_->{metadata}{username}[0]),
                               url           => $config->script_name . "?"
-                                               . CGI->escape($wiki->formatter->node_name_to_node_param($_->{name}))
-                          }
-                      } @recent;
-        $tt_vars{recent_changes} = \@recent;
+                                             . CGI->escape($wiki->formatter->node_name_to_node_param($_->{name}))
+                            }
+                          } @recent;
+            $tt_vars{recent_changes} = \@recent;
+        }
         return %tt_vars if $args{return_tt_vars};
         my $output = $self->process_template(
                                                 id            => $id,

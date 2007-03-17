@@ -40,7 +40,7 @@ EOF
 my %yn_vars = map { $_ => 1 }
    qw(use_plucene enable_page_deletion navbar_on_home_page backlinks_in_title
       moderation_requires_password enable_node_image enable_common_categories
-      enable_common_locales);
+      enable_common_locales recent_changes_on_home_page);
 
 my $skip_config = Module::Build->y_n("Skip OpenGuides configuration?", "n");
 if ( $skip_config ) {
@@ -93,7 +93,8 @@ foreach my $var ( qw(
    dbname dbuser dbpass dbhost script_name
    install_directory template_path custom_template_path script_url
    custom_lib_path use_plucene indexing_directory enable_page_deletion
-   admin_pass stylesheet_url site_name navbar_on_home_page home_name
+   admin_pass stylesheet_url site_name navbar_on_home_page
+   recent_changes_on_home_page home_name
    site_desc default_city default_country contact_email default_language
    formatting_rules_node backlinks_in_title gmaps_api_key centre_long
    centre_lat default_gmaps_zoom default_gmaps_search_zoom force_wgs84

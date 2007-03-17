@@ -12,6 +12,7 @@ http://dev.openguides.org/log/trunk
         Allow Guide admins to control the content of autocreated nodes (#47).
         Let people add name of copyright holder, licence URL, and info page
           URL for node images (#179).
+        Add config option to omit recent changes from home page.
         Write tests for and fix:
           #48 (Edit conflict page erroneously converts lat/lon to os_x, os_y).
           #173 (edit conflict form doesn't let you edit everything).
