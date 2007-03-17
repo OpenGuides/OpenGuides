@@ -168,9 +168,9 @@ sub write_data {
 You can supply values for the following keys: C<content>,
 C<categories>, C<locales>, C<os_x>, C<os_y>, C<osie_x>, C<osie_y>,
 C<latitude>, C<longitude>, C<summary>, C<node_image>, C<node_image_licence>,
-C<node_image_copyright>, C<node_image_url>.  You should supply them exactly
-as they would come from a CGI form, eg lines in a textarea are separated
-by C<\r\n>.
+C<node_image_copyright>, C<node_image_url>, C<username>, C<comment>,
+C<edit_type>.  You should supply them exactly as they would come from a CGI
+form, eg lines in a textarea are separated by C<\r\n>.
 
 =cut
 
@@ -204,9 +204,10 @@ sub make_cgi_object {
     $q->param( -name => "latitude", -value => $args{latitude} || "" );
     $q->param( -name => "longitude", -value => $args{longitude} || "" );
     $q->param( -name => "summary", -value => $args{summary} || "" );
-    $q->param( -name => "username", -value => "Kake" );
-    $q->param( -name => "comment", -value => "foo" );
-    $q->param( -name => "edit_type", -value => "Normal edit" );
+    $q->param( -name => "username", -value => $args{username} || "TestUser" );
+    $q->param( -name => "comment", -value => $args{comment} || "A comment." );
+    $q->param( -name => "edit_type",
+               -value => $args{edit_type} || "Normal edit" );
     $ENV{REMOTE_ADDR} = "127.0.0.1";
 
     return $q;
