@@ -2,15 +2,17 @@ use strict;
 use Wiki::Toolkit::Setup::SQLite;
 use OpenGuides;
 use OpenGuides::Test;
-use Test::More tests => 10;
+use Test::More;
 
 eval { require DBD::SQLite; };
-my $have_sqlite = $@ ? 0 : 1;
+
+if ($@) {
+    plan skip_all => "DBD::SQLite not installed - no database to test with";
+} else {
+    plan tests => 10;
+}
 
 SKIP: {
-    skip "DBD::SQLite not installed - no database to test with", 10
-      unless $have_sqlite;
-
     # Clear out the database from any previous runs.
     unlink "t/node.db";
     unlink <t/indexes/*>;

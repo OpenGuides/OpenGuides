@@ -5,15 +5,17 @@ use OpenGuides::RDF;
 use OpenGuides::Utils;
 use OpenGuides::Test;
 use URI::Escape;
-use Test::More tests => 24;
+use Test::More;
 
 eval { require DBD::SQLite; };
-my $have_sqlite = $@ ? 0 : 1;
+
+if ($@) {
+    plan skip_all => "DBD::SQLite not installed - no database to test with";
+} else {
+    plan tests => 24;
+}
 
 SKIP: {
-    skip "DBD::SQLite not installed - no database to test with", 24
-        unless $have_sqlite;
-
     Wiki::Toolkit::Setup::SQLite::setup( { dbname => "t/node.db" } );
     my $config = OpenGuides::Config->new(
         vars => {
