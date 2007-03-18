@@ -49,7 +49,7 @@ $config = OpenGuides::Test->make_basic_config;
 $config->recent_changes_on_home_page( 1 );
 $guide = OpenGuides->new( config => $config );
 
-my $output = $guide->display_node(
+$output = $guide->display_node(
                                    id            => $config->home_name,
                                    return_output => 1,
                                  );
@@ -67,7 +67,7 @@ $config->recent_changes_on_home_page( 0 );
 $config->navbar_on_home_page( 0 );
 $guide = OpenGuides->new( config => $config );
 
-my $output = $guide->display_node(
+$output = $guide->display_node(
                                    id            => $config->home_name,
                                    return_output => 1,
                                  );

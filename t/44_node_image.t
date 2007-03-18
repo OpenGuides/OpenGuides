@@ -125,7 +125,7 @@ Test::HTML::Content::tag_ok( $output, "input",
                              "...ditto node_image_url" );
 
 # Make sure they're displayed when a page is viewed.
-my $output = $guide->display_node(
+$output = $guide->display_node(
                                    id            => "Red Lion",
                                    return_output => 1,
                                  );
