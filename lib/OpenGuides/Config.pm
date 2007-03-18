@@ -1,17 +1,18 @@
 package OpenGuides::Config;
 use strict;
+use warnings;
 
 use Carp qw( croak );
 use Config::Tiny;
 
 use base qw( Class::Accessor );
 my @variables = qw(
-   dbtype dbname dbuser dbpass dbhost dbencoding
+   dbtype dbname dbuser dbpass dbport dbhost dbencoding
    script_name install_directory script_url
    custom_lib_path use_plucene indexing_directory enable_page_deletion
    admin_pass stylesheet_url site_name navbar_on_home_page
    recent_changes_on_home_page home_name
-   site_desc default_city default_country contact_email 
+   site_desc default_city default_country contact_email
    default_language http_charset ping_services
    formatting_rules_node formatting_rules_link backlinks_in_title template_path
    custom_template_path geo_handler ellipsoid gmaps_api_key centre_long
@@ -121,7 +122,6 @@ sub _init {
         if ( $self->can( $var ) ) { # handle any garbage in file gracefully
             $self->$var( $stored{$var} );
 	} else {
-		use Data::Dumper; die Dumper \%stored;
             warn "Don't know what to do with variable '$var'";
         }
     }
@@ -134,6 +134,7 @@ sub _init {
         dbuser => "...the database user that can access that database?",
         dbpass => "...the password that they use to access the database?",
         dbhost => "...the machine that the database is hosted on? (blank if local)",
+        dbport => "...the port the database is listening on? (blank if default)",
         dbencoding => "...the encoding that your database uses? (blank if default)",
         script_name => "What do you want the script to be called?",
         install_directory => "What directory should I install it in?",
@@ -153,8 +154,7 @@ sub _init {
         ping_services => "Which services do you wish to ping whenever you write a page? Can be pingerati, geourl, or both",
         site_name => "What's the site called? (should be unique)",
         navbar_on_home_page => "Do you want the navigation bar included on the home page?",
-        recent_changes_on_home_page => "Do you want the ten most recent "
-          . "changes included on the home page?",
+        recent_changes_on_home_page => "Do you want the ten most recent changes included on the home page?",
         home_name => "What should the home page of the wiki be called?",
         site_desc => "How would you describe the site?",
         default_city => "What city is the site based in?",
@@ -208,6 +208,8 @@ the config file.
 =item * dbpass
 
 =item * dbhost
+
+=item * dbport
 
 =item * dbencoding
 

@@ -87,6 +87,7 @@ sub make_wiki_object {
         dbuser  => $config->dbuser,
         dbpass  => $config->dbpass,
         dbhost  => $config->dbhost,
+        dbport  => $config->dbport,
         charset => $config->dbencoding,
     );
 
