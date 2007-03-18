@@ -5,7 +5,7 @@ use OpenGuides::RDF;
 use OpenGuides::Utils;
 use OpenGuides::Test;
 use URI::Escape;
-use Test::More tests => 27;
+use Test::More tests => 24;
 
 eval { require DBD::SQLite; };
 my $have_sqlite = $@ ? 0 : 1;
