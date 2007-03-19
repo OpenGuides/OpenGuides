@@ -135,6 +135,13 @@ div#navbar
     Used in: navbar.tt
     Purpose: The navigation bar
 
+div#navbar_categories
+    Used in: navbar_categories.tt
+    Purpose: Display the common categories, if enabled.
+div#navbar_locales
+    Used in: navbar_locales.tt
+    Purpose: Display the common locales, if enabled.
+
 div#navbar_current_version_link
     Used in: navbar_revision_info.tt
     Purpose: Display a link to the current version when showing a historical
@@ -191,42 +198,6 @@ div#node_image_copyright
     Used in: display_metadata.tt
     Purpose: To display the name of the copyright holder of a node image, and
              optionally a link to the licence we're using it under.
-
-div#common_navigation
-    Used in: node.tt
-    Purpose: Hold the common locales and categories, if enabled
-
-div#common_categories
-    Used in: common_categories.tt
-    Purpose: Hold the common categories, if enabled
-h3#common_categories_title
-    Used in: common_categories.tt
-    Purpose: Title for the common categories
-ul#common_categories_list
-    Used in: common_categories.tt
-    Purpose: Parent list for the common categories
-li.common_category
-    Used in: common_categories.tt
-    Purpose: A common category
-a.common_category_link
-    Used in: common_categories.tt
-    Purpose: A link to a common category
-
-div#common_locales
-    Used in: common_locales.tt
-    Purpose: Hold the common locales, if enabled
-h3#common_locales_title
-    Used in: common_locales.tt
-    Purpose: Title for the common locales
-ul#common_locales_list
-    Used in: common_locales.tt
-    Purpose: Parent list for the common locales
-li.common_locale
-    Used in: common_locales.tt
-    Purpose: A common locale
-a.common_locale_link
-    Used in: common_locales.tt
-    Purpose: A link to a common locale
 
 input#address
     Used in: edit_form.tt

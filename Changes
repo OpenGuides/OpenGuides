@@ -15,6 +15,7 @@ http://dev.openguides.org/log/trunk
         Add config option to omit recent changes from home page.
         Split out "modules" from navbar.tt into separate templates navbar_*.tt
           to make it easier for people to change the order in a custom template
+        Move common categories/locales into navbar.
         Write tests for and fix:
           #48 (Edit conflict page erroneously converts lat/lon to os_x, os_y).
           #173 (edit conflict form doesn't let you edit everything).

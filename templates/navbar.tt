@@ -6,6 +6,8 @@
   [% INCLUDE navbar_options.tt %]
   [% INCLUDE navbar_search.tt %]
   [% INCLUDE navbar_this_page.tt %]
+  [% INCLUDE navbar_categories.tt %]
+  [% INCLUDE navbar_locales.tt %]
   [% INCLUDE navbar_revision_info.tt %]
 
 </div>
