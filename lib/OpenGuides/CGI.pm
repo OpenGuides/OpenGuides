@@ -155,17 +155,40 @@ sub get_prefs_from_cookie {
     if ( $cookies{$cookie_name} ) {
         %data = $cookies{$cookie_name}->value; # call ->value in list context
     }
-    return ( username                   => $data{user}       || "Anonymous",
-             include_geocache_link      => $data{gclink}     || 0,
-             preview_above_edit_box     => $data{prevab}     || 0,
-             latlong_traditional        => $data{lltrad}     || 0,
-             omit_help_links            => $data{omithlplks} || 0,
-             show_minor_edits_in_rc     => $data{rcmined}    || 0,
-             default_edit_type          => $data{defedit}    || "normal",
-             cookie_expires             => $data{exp}        || "month",
-             track_recent_changes_views => $data{trackrc}    || 0,
-             display_google_maps        => $data{gmaps}      || 1
-           );
+    my %defaults = (
+                     username                   => "Anonymous",
+                     include_geocache_link      => 0,
+                     preview_above_edit_box     => 0,
+                     latlong_traditional        => 0,
+                     omit_help_links            => 0,
+                     show_minor_edits_in_rc     => 0,
+                     default_edit_type          => "normal",
+                     cookie_expires             => "month",
+                     track_recent_changes_views => 0,
+                     display_google_maps        => 1,
+                   );
+    my %long_forms = (
+                       user       => "username",
+                       gclink     => "include_geocache_link",
+                       prevab     => "preview_above_edit_box",
+                       lltrad     => "latlong_traditional",
+                       omithlplks => "omit_help_links",
+                       rcmined    => "show_minor_edits_in_rc",
+                       defedit    => "default_edit_type",
+                       exp        => "cookie_expires",
+                       trackrc    => "track_recent_changes_views",
+                       gmaps      => "display_google_maps",
+                     );
+    my %return;
+    foreach my $key ( keys %long_forms ) {
+        my $long_key = $long_forms{$key};
+        if ( defined $data{$key} ) {
+            $return{$long_key} = $data{$key};
+        } else {
+            $return{$long_key} = $defaults{$long_key};
+        }
+    }
+    return %return;
 }
 
 

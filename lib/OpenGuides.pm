@@ -239,10 +239,14 @@ sub display_node {
                    moderated     => $moderated,
                    oldid         => $oldid,
                    enable_gmaps  => 1,
-                   display_google_maps => $self->get_cookie("display_google_maps"),
                    wgs84_long    => $wgs84_long,
                    wgs84_lat     => $wgs84_lat
                );
+
+    if ( $config->show_gmap_in_node_display
+           && $self->get_cookie( "display_google_maps" ) ) {
+        $tt_vars{display_google_maps} = 1;
+    }
 
     # Should we include a standard list of categories or locales?
     if ($config->enable_common_categories || $config->enable_common_locales) {

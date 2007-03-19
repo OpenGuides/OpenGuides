@@ -3,7 +3,7 @@ use OpenGuides::Config;
 use OpenGuides::CGI;
 use Time::Piece;
 use Time::Seconds;
-use Test::More tests => 20;
+use Test::More tests => 27;
 
 eval { OpenGuides::CGI->make_prefs_cookie; };
 ok( $@, "->make_prefs_cookie dies if no config object supplied" );
@@ -16,18 +16,20 @@ my $config = OpenGuides::Config->new( vars => { site_name => "Test Site" } );
 eval { OpenGuides::CGI->make_prefs_cookie( config => $config ); };
 is( $@, "", "...but not if it is" );
 
+# Use nonsense values here to make sure the test is a good one regardless
+# of defaults - can't do this for cookie_expires, unfortunately.
 my $cookie = OpenGuides::CGI->make_prefs_cookie(
     config                     => $config,
-    username                   => "Kake",
-    include_geocache_link      => 1,
-    preview_above_edit_box     => 1,
-    latlong_traditional        => 1,
-    omit_help_links            => 1,
-    show_minor_edits_in_rc     => 1,
-    default_edit_type          => "tidying",
+    username                   => "un_pref",
+    include_geocache_link      => "gc_pref",
+    preview_above_edit_box     => "pv_pref",
+    latlong_traditional        => "ll_pref",
+    omit_help_links            => "hl_pref",
+    show_minor_edits_in_rc     => "me_pref",
+    default_edit_type          => "et_pref",
     cookie_expires             => "never",
-    track_recent_changes_views => 1,
-    display_google_maps => 1
+    track_recent_changes_views => "rc_pref",
+    display_google_maps        => "gm_pref",
 );
 isa_ok( $cookie, "CGI::Cookie", "->make_prefs_cookie returns a cookie" );
 
@@ -54,17 +56,42 @@ eval { OpenGuides::CGI->get_prefs_from_cookie( config => $config ); };
 is( $@, "", "...but not if it is" );
 
 my %prefs = OpenGuides::CGI->get_prefs_from_cookie( config => $config );
-is( $prefs{username}, "Kake",
-    "get_prefs_from_cookie can find username" );
-is( $prefs{include_geocache_link}, 1, "...and geocache prefs" );
-is( $prefs{preview_above_edit_box}, 1, "...and preview prefs" );
-is( $prefs{latlong_traditional}, 1, "...and latlong prefs" );
-is( $prefs{omit_help_links}, 1, "...and help link prefs" );
-is( $prefs{show_minor_edits_in_rc}, 1, "...and minor edits prefs" );
-is( $prefs{default_edit_type}, "tidying", "...and default edit prefs" );
+is( $prefs{username}, "un_pref", "get_prefs_from_cookie can find username" );
+is( $prefs{include_geocache_link}, "gc_pref", "...and geocache prefs" );
+is( $prefs{preview_above_edit_box}, "pv_pref", "...and preview prefs" );
+is( $prefs{latlong_traditional}, "ll_pref", "...and latlong prefs" );
+is( $prefs{omit_help_links}, "hl_pref", "...and help link prefs" );
+is( $prefs{show_minor_edits_in_rc}, "me_pref", "...and minor edits prefs" );
+is( $prefs{default_edit_type}, "et_pref", "...and default edit prefs" );
 is( $prefs{cookie_expires}, "never", "...and requested cookie expiry" );
-ok( $prefs{track_recent_changes_views}, "...and recent changes tracking" );
-is( $prefs{display_google_maps}, 1, "...and Google Maps display preference" );
+is( $prefs{track_recent_changes_views}, "rc_pref",
+                                     "...and recent changes tracking" );
+is( $prefs{display_google_maps}, "gm_pref",
+                                     "...and Google Maps display preference" );
+
+# Now make sure that true/false preferences are taken account of when
+# they're false.
+$cookie = OpenGuides::CGI->make_prefs_cookie(
+    config                     => $config,
+    include_geocache_link      => 0,
+    preview_above_edit_box     => 0,
+    latlong_traditional        => 0,
+    omit_help_links            => 0,
+    show_minor_edits_in_rc     => 0,
+    track_recent_changes_views => 0,
+    display_google_maps        => 0,
+);
+
+$ENV{HTTP_COOKIE} = $cookie;
+
+%prefs = OpenGuides::CGI->get_prefs_from_cookie( config => $config );
+ok( !$prefs{include_geocache_link}, "geocache prefs taken note of when false");
+ok( !$prefs{preview_above_edit_box}, "...and preview prefs" );
+ok( !$prefs{latlong_traditional}, "...and latlong prefs" );
+ok( !$prefs{omit_help_links}, "...and help link prefs" );
+ok( !$prefs{show_minor_edits_in_rc}, "...and minor edits prefs" );
+ok( !$prefs{track_recent_changes_views}, "...and recent changes prefs" );
+ok( !$prefs{display_google_maps}, "...and Google Maps prefs" );
 
 # Check that cookie parsing fails nicely if no cookie set.
 delete $ENV{HTTP_COOKIE};

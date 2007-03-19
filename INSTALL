@@ -219,6 +219,12 @@ question and the (long,lat) will be parsed out from the URL.
 
 The defaults are probably appropriate in most cases.
 
+  "Would you like to display a Google Map on every node that has geodata?"
+
+Answer "y" or "n".  Note that an answer of "y" will only take effect if you've
+supplied a Google Maps API key above.  Note further that users can choose to
+turn this off in their preferences.
+ 
   "Forcibly treat stored lat/long data as if they used the WGS84 ellipsoid?"
 
 Default this answer if you don't know what it means.
