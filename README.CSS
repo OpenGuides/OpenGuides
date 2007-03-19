@@ -118,6 +118,11 @@ div#footer
     Used in: footer.tt
     Purpose: The bottom portion of the page
 
+div#footer_delete_link
+    Used in: footer.tt
+    Purpose: Display a "delete this page" link in the footer, if the page is
+    editable, and if page deletion is switched on.
+
 div#header
     Used in: search_results.tt
     Purpose: The first part of the page, containing the site name

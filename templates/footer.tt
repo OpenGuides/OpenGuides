@@ -10,7 +10,9 @@
 <div id="footer">
   [% BLOCK delete_link %]
     [% IF enable_page_deletion AND NOT not_deletable %]
-      <a href="[% full_cgi_url %]?id=[% node_param %];action=delete">Delete page</a> (admins only)
+      <div id="footer_delete_link">
+        <a href="[% full_cgi_url %]?id=[% node_param %];action=delete">Delete page</a> (admins only)
+      </div>
     [% END %]
   [% END %]
 
