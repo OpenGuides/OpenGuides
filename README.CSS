@@ -138,9 +138,25 @@ div#navbar
 div#navbar_categories
     Used in: navbar_categories.tt
     Purpose: Display the common categories, if enabled.
+div#navbar_help
+    Used in: navbar_help.tt
+    Purpose: Display help links, if user has them turned on.
 div#navbar_locales
     Used in: navbar_locales.tt
     Purpose: Display the common locales, if enabled.
+div#navbar_options
+    Used in: navbar_options.tt
+    Purpose: Display links to options such as "Set username/prefs".
+div#navbar_search
+    Used in: navbar_search.tt
+    Purpose: Display search box and link to advanced search.
+div#navbar_this_page
+    Used in: navbar_this_page.tt
+    Purpose: Display links to this-page stuff such as "Edit this page", if
+    the current page is an editable one.
+div#navbar_tools
+    Used in: navbar_tools.tt
+    Purpose: Display links to tools such as "Recent Changes", "Random Page".
 
 div#navbar_current_version_link
     Used in: navbar_revision_info.tt

@@ -1,11 +1,12 @@
-<div class="navbar_group_title">Tools:</div>
-
-<ul>
-  <li><a href="[% full_cgi_url %]?action=rc">Recent Changes</a></li>
-  <li><a href="newpage.cgi">Create New Page</a></li>
-  <li><a href="[% full_cgi_url %]?action=random">Random Page</a></li>
-  <li><a href="[% full_cgi_url %]?action=show_wanted_pages">Wanted Pages</a></li>
-  [% IF geocache_link AND latitude AND longitude %]
-    <li><a href="http://www.geocaching.com/seek/nearest_cache.asp?origin_lat=[% latitude %];origin_long=[% longitude %]">Look for nearby geocaches</a></li>
-  [% END %]
-</ul>
+<div id="navbar_tools">
+  <div class="navbar_group_title">Tools:</div>
+  <ul>
+    <li><a href="[% full_cgi_url %]?action=rc">Recent Changes</a></li>
+    <li><a href="newpage.cgi">Create New Page</a></li>
+    <li><a href="[% full_cgi_url %]?action=random">Random Page</a></li>
+    <li><a href="[% full_cgi_url %]?action=show_wanted_pages">Wanted Pages</a></li>
+    [% IF geocache_link AND latitude AND longitude %]
+      <li><a href="http://www.geocaching.com/seek/nearest_cache.asp?origin_lat=[% latitude %];origin_long=[% longitude %]">Look for nearby geocaches</a></li>
+    [% END %]
+  </ul>
+</div>
