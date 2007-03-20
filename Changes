@@ -18,6 +18,8 @@ http://dev.openguides.org/log/trunk
         Move common categories/locales into navbar.
         Add config option to suppress inline maps on geotagged nodes.
         Fix preferences to take notice of users turning off inline Google maps.
+        Fix "Link to this page" on index maps to remember the map type and
+          the thing it's indexing (#190).
         Write tests for and fix:
           #48 (Edit conflict page erroneously converts lat/lon to os_x, os_y).
           #173 (edit conflict form doesn't let you edit everything).

@@ -760,6 +760,7 @@ sub show_index {
             $tt_vars{zoom} = $q->param('zoom') || '';
             $tt_vars{lat} = $q->param('lat') || '';
             $tt_vars{long} = $q->param('long') || '';
+            $tt_vars{map_type} = $q->param('map_type') || '';
             $tt_vars{centre_long} = $self->config->centre_long;
             $tt_vars{centre_lat} = $self->config->centre_lat;
             $tt_vars{default_gmaps_zoom} = $self->config->default_gmaps_zoom;

@@ -1,4 +1,4 @@
-[% INCLUDE header.tt page_title = "Map of all nodes" %]
+[% INCLUDE header.tt page_title = criterion.name || "Map of all nodes" %]
 [% INCLUDE banner.tt %]
 <div id="content">
 <a href="" id="permalink">Link to this page</a>
@@ -29,6 +29,11 @@
       map.addControl(new GLargeMapControl());
       map.addControl(new GMapTypeControl());
       map.centerAndZoom(new GPoint([% IF long %][% long %][% ELSE %][% centre_long %][% END %],[% IF lat %][% lat %][% ELSE %][% centre_lat %][% END %]), [% IF zoom %][% zoom %][% ELSE %][% default_gmaps_zoom %][% END %]);
+      [% IF map_type == "satellite" %]
+        map.setMapType( G_SATELLITE_TYPE );
+      [% ELSIF map_type == "hybrid" %]
+        map.setMapType( G_HYBRID_TYPE );
+      [% END %]
 
       [% i = 0 %]
       [% FOREACH node = nodes %]
@@ -49,13 +54,23 @@
           map.addOverlay(marker[% i %]); 
         [% END %]
       [% END %]
-      function map_recenter() {
+      function map_change() {
         var center = map.getCenterLatLng();
         var link = document.getElementById('permalink');
         var zoom = map.getZoomLevel();
-        link.href = "?action=index;format=map;long="+center.x+";lat="+center.y+";zoom="+zoom;
+        var type = map.getCurrentMapType();
+        var map_type;
+        if ( type == G_SATELLITE_TYPE ) {
+          map_type = "satellite";
+        } else if ( type == G_HYBRID_TYPE ) {
+          map_type = "hybrid";
+        } else {
+          map_type = "";
       }
-      GEvent.addListener(map, "moveend", map_recenter );
+      link.href = "?action=index;format=map;long="+center.x+";lat="+center.y+";zoom="+zoom+";map_type="+map_type[% IF criterion.type %][% IF criterion.value %]+";index_type="+encodeURIComponent("[% criterion.type %]")+";index_value="+encodeURIComponent("[% criterion.value %]")[% END %][% END %];
+      }
+      GEvent.addListener(map, "moveend", map_change );
+      GEvent.addListener(map, "maptypechanged", map_change );
     //]]>
   </script>
 [% ELSE %]
