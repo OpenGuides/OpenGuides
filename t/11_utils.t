@@ -18,11 +18,17 @@ eval {
 
 like( $@, qr/File 'fake' does not exist/, '...and Config::Tiny errors are reported');
 
+my $have_sqlite = 1;
+my $sqlite_error;
+
 eval { require DBD::SQLite; };
-my $have_sqlite = $@ ? 0 : 1;
+if ( $@ ) {
+    ($sqlite_error) = $@ =~ /^(.*?)\n/;
+    $have_sqlite = 0;
+}
 
 SKIP: {
-    skip "DBD::SQLite not installed - no database to test with", 5
+    skip "DBD::SQLite could not be used - no database to test with. ($sqlite_error)", 5
       unless $have_sqlite;
 
     # Clear out the database from any previous runs.

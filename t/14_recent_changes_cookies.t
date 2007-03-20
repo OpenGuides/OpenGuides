@@ -50,11 +50,17 @@ eval { OpenGuides::CGI->get_last_recent_changes_visit_from_cookie( config => $co
 is( $@, "", "->get_last_recent_changes_visit_from_cookie doesn't die if no cookie set" );
 
 # Now test that the prefs option is taken note of.
+my $have_sqlite = 1;
+my $sqlite_error;   
+
 eval { require DBD::SQLite; };
-my $have_sqlite = $@ ? 0 : 1;
+if ( $@ ) {
+    ($sqlite_error) = $@ =~ /^(.*?)\n/;
+    $have_sqlite = 0;
+}
 
 SKIP: {
-    skip "DBD::SQLite not installed - no database to test with", 2
+    skip "DBD::SQLite could not be used - no database to test with. ($sqlite_error)", 2
       unless $have_sqlite;
 
     Wiki::Toolkit::Setup::SQLite::setup( { dbname => "t/node.db" } );
