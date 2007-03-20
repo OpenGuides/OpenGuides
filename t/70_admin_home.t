@@ -10,7 +10,7 @@ if ( $@ ) {
     plan skip_all => "DBD::SQLite could not be used - no database to test with ($error)";
 } 
 
-plan tests => 13;
+plan tests => 12;
 
 Wiki::Toolkit::Setup::SQLite::setup( { dbname => "t/node.db" } );
 my $config = OpenGuides::Test->make_basic_config;
@@ -54,8 +54,9 @@ is( scalar @{$ttvars{'nodes'}}, 2, "Right number of nodes" );
 is( scalar @{$ttvars{'locales'}}, 1, "Right number of locales" );
 is( scalar @{$ttvars{'categories'}}, 0, "Right number of categories" );
 
-is( $ttvars{'nodes'}->[0]->{name}, "Test Page", "Right nodes" );
-is( $ttvars{'nodes'}->[1]->{name}, "Test Page 2", "Right nodes" );
+my @node_names = map { $_->{name}; } @{$ttvars{nodes}};
+is_deeply( [ sort @node_names ], [ "Test Page", "Test Page 2" ],
+           "Right nodes" );
 is( $ttvars{'locales'}->[0]->{name}, "Bar", "Right locale, right name" );
 
 # Test the normal, HTML version
