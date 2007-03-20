@@ -2,7 +2,7 @@ use strict;
 use Wiki::Toolkit::Setup::SQLite;
 use OpenGuides;
 use OpenGuides::Test;
-use Test::More tests => 13;
+use Test::More;
 
 eval { require DBD::SQLite; };
 if ( $@ ) {

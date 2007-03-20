@@ -2,7 +2,7 @@ use strict;
 use Wiki::Toolkit::Setup::SQLite;
 use OpenGuides::Config;
 use OpenGuides;
-use Test::More tests => 7;
+use Test::More;
 
 eval { require DBD::SQLite; };
 my $have_sqlite = $@ ? 0 : 1;
