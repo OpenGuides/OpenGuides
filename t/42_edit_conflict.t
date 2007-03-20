@@ -6,14 +6,13 @@ use Wiki::Toolkit::Setup::SQLite;
 
 eval { require DBD::SQLite; };
 if ( $@ ) {
-    plan skip_all => "DBD::SQLite not installed - no database to test with";
-    exit 0;
+    my ($error) = $@ =~ /^(.*?)\n/;
+    plan skip_all => "DBD::SQLite could not be used - no database to test with ($error)";
 }
 
 eval { require Test::HTML::Content; };
 if ( $@ ) {
     plan skip_all => "Test::HTML::Content not installed";
-    exit 0;
 }
 
 plan tests => 16;

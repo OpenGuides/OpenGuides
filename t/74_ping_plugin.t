@@ -6,10 +6,11 @@ use Test::More;
 
 eval { require DBD::SQLite; };
 if ( $@ ) {
-  plan skip_all => "DBD::SQLite not installed - no database to test with";
-} else {
-  plan tests => 11;
+    my ($error) = $@ =~ /^(.*?)\n/;
+    plan skip_all => "DBD::SQLite could not be used - no database to test with ($error)";
 }
+
+plan tests => 11;
 
 eval { require Wiki::Toolkit::Plugin::Ping; };
 my $have_ping = $@ ? 0 : 1;

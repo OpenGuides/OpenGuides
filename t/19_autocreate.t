@@ -6,10 +6,11 @@ use Test::More;
 
 eval { require DBD::SQLite; };
 if ( $@ ) {
-    plan skip_all => "DBD::SQLite not installed - no database to test with";
-} else {
-    plan tests => 4;
+    my ($error) = $@ =~ /^(.*?)\n/;
+    plan skip_all => "DBD::SQLite could not be used - no database to test with. ($error)";
 }
+
+plan tests => 4;
 
 my $config = OpenGuides::Test->make_basic_config;
 $config->custom_template_path( cwd . "/t/templates/" );

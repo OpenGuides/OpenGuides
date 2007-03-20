@@ -7,8 +7,8 @@ use Test::More;
 
 eval { require DBD::SQLite; };
 if ( $@ ) {
-    plan skip_all => "DBD::SQLite not installed";
-    exit 0;
+    my ($error) = $@ =~ /^(.*?)\n/;
+    plan skip_all => "DBD::SQLite could not be used - no database to test with ($error)";
 }
 
 plan tests => 3;

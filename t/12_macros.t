@@ -6,11 +6,12 @@ use Test::More;
 
 eval { require DBD::SQLite; };
 
-if ($@) {
-    plan skip_all => "DBD::SQLite not installed - no database to test with";
-} else {
-    plan tests => 10;
+if ( $@ ) {
+    my ($error) = $@ =~ /^(.*?)\n/;
+    plan skip_all => "DBD::SQLite could not be used - no database to test with. ($error)";
 }
+
+plan tests => 10;
 
 SKIP: {
     # Clear out the database from any previous runs.
