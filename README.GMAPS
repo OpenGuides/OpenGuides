@@ -23,14 +23,15 @@ the values in your database will almost certainly correspond to points on
 Google Maps. If so, simply change the "ellipsoid" configuration variable
 to "WGS-84" if it's not already set to this, and your maps will display.
 
-If you are using the British Grid system things are more complicated and this
-support is incomplete. If you set the configuration variable force_wgs84
-to 1, maps will display, but points will be offset from where they should
-be, normally by about 50 metres. This is because the British Grid uses a
-different ellipsoid from Google Maps. We plan to integrate conversion
-routines to fix this in a future release. In the meantime, if you
-advertise the maps you must make users aware of this flaw and tell them
-not to try and "correct" location data!
+If you are using the British Grid system things are more complicated.
+To display accurate maps, you need to have the optional perl module
+Geo::HelmertTransform installed (libgeo-helmerttransform-perl in Debian).
+If this isn't possible, you can still get Google Maps to display by setting
+the configuration variable force_wgs84 to 1, but points will be offset from
+where they should be, normally by about 50 metres. This is because the
+British Grid uses a different ellipsoid from Google Maps. This is not
+recommended; if you do so, you must make users aware of the flaw and tell
+them not to try and "correct" location data!
 
 You may be unlucky enough to be using the UTM input modes (ie not British
 or Irish National Grid) but have data entered in a mixture of formats.
