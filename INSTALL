@@ -237,6 +237,18 @@ turn this off in their preferences.
 
 Default this answer if you don't know what it means.
 
+  "Do you have a Google Analytics key to use with this guide?"
+
+If you'd like to use Google Analytics to track the traffic on your guide,
+visit http://www.google.com/analytics/ to sign up for a key.  The answer to
+this question is the string in quotes in the HTML fragment they ask you to
+paste into your HTML, something along the lines of _uacct = "UA-1234567-1"
+- it's the UA-1234567-1 part that you need to put in here.  If you've
+forgotten your key, go to Analytics Settings, click "Edit" under Settings,
+then click "Check Status" in the top right-hand corner of the box with grey
+stripes.
+
+
   "What licence will you use for the guide?"
 
 We strongly recommend that you think at the outset about the licence your

@@ -107,6 +107,7 @@ t/44_node_image.t
 t/45_home_recent_changes.t
 t/46_map_in_node_display.t
 t/47_navbar_placement.t
+t/48_google_analytics.t
 t/51_display_node.t
 t/52_display_diffs.t
 t/53_show_index.t

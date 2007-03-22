@@ -16,7 +16,7 @@ my @variables = qw(
    default_language http_charset ping_services
    formatting_rules_node formatting_rules_link backlinks_in_title template_path
    custom_template_path geo_handler ellipsoid gmaps_api_key centre_long
-   show_gmap_in_node_display
+   show_gmap_in_node_display google_analytics_key
    centre_lat default_gmaps_zoom default_gmaps_search_zoom force_wgs84
    licence_name licence_url licence_info_url moderation_requires_password
    enable_node_image enable_common_categories enable_common_locales
@@ -177,6 +177,7 @@ sub _init {
         default_gmaps_search_zoom => "What default zoom level shall we use for Google Maps in the search results? (This question can be ignored if you aren't using Google Maps)",
         show_gmap_in_node_display => "Would you like to display a Google Map on every node that has geodata? (This question can be ignored if you aren't using Google Maps)",
         force_wgs84 => "Forcibly treat stored lat/long data as if they used the WGS84 ellipsoid?",
+        google_analytics_key => "Do you have a Google Analytics key to use with this guide? If you enter it here, then Google Analytics functionality will be automatically enabled.",
         licence_name => "What licence will you use for the guide?",
         licence_url => "What is the URL to your licence?",
         licence_info_url => "What is the URL to your local page about your licensing policy?"
@@ -291,6 +292,8 @@ sub script_url {
 =item * show_gmap_in_node_display
 
 =item * force_wgs84
+
+=item * google_analytics_key
 
 =item * licence_name
 
