@@ -16,6 +16,8 @@ http://dev.openguides.org/log/trunk
         Split out "modules" from navbar.tt into separate templates navbar_*.tt
           to make it easier for people to change the order in a custom template
         Move common categories/locales into navbar.
+        Add a new div to wrap the entire body; also, use header.tt in
+          home_node.tt instead of copy/paste.
         Add config option to suppress inline maps on geotagged nodes.
         Fix preferences to take notice of users turning off inline Google maps.
         Fix "Link to this page" on index maps to remember the map type and

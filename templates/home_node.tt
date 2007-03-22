@@ -1,19 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-[% USE CGI %]
-<html>
-<head>
-  <title>[% node_name %] - [% site_name %]</title>
-  [% IF contact_email %]
-    <link rev=made href="mailto:[% contact_email %]">
-  [% END %]
-  [% IF summary %]
-    <meta name="description" content="[% summary %]">
-  [% END %]
-  [% IF stylesheet %]
-    <link rel="stylesheet" href="[% stylesheet %]" type="text/css">
-  [% END %]
-</head>
-<body>
+[% INCLUDE header.tt %]
 
 [% INCLUDE banner.tt %]
 

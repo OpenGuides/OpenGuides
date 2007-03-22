@@ -95,6 +95,10 @@ div#banner
     Used in: banner.tt
     Purpose: The site banner/title
 
+div#body
+    Used in: header.tt
+    Purpose: Wrap the entire body of the page.
+
 div#content
 div#maincontent
     Used in: backlink_results.tt, delete_confirm.tt, delete_done.tt,
