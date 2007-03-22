@@ -157,6 +157,14 @@ Answer "y" or "n".
 Answer "y" or "n".
 
 
+  "Do you want the content to appear above the navbar in the HTML?"
+
+Answer "y" or "n".  The default is "n", for reasons of backwards
+compatibility with existing stylesheets, but the recommended answer is
+"y", as this will help search engines to find the most relevant parts
+of your pages.
+
+
   "What should the home page of the wiki be called?"
   "How would you describe the wiki?"
 

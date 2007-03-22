@@ -4,7 +4,7 @@
 
 <div id="content">
 
-[% IF navbar_on_home_page %]
+[% IF navbar_on_home_page AND !config.content_above_navbar_in_html %]
   [% INCLUDE navbar.tt %]
 [% END %]
 
@@ -48,4 +48,9 @@
   [% content %]
 
 </div>
+
+[% IF navbar_on_home_page AND config.content_above_navbar_in_html %]
+  [% INCLUDE navbar.tt %]
+[% END %]
+
 [% INCLUDE footer.tt %]

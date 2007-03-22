@@ -2,7 +2,9 @@
 [% INCLUDE header.tt %]
 [% INCLUDE banner.tt %]
 <div id="content">
-[% INCLUDE navbar.tt %]
+[% IF !config.content_above_navbar_in_html %]
+  [% INCLUDE navbar.tt %]
+[% END %]
 <div id="maincontent" class="hreview">
 [% IF oldid %]
 <div id="redirect_message">(redirected from <a href="[% full_cgi_url %]?id=[% oldid %];redirect=0">[% oldid.replace('_', ' ') %]</a>)</div>
@@ -142,5 +144,9 @@ versions.</a>
 </div>
 [% END %]
 </div>
+
+[% IF config.content_above_navbar_in_html %]
+  [% INCLUDE navbar.tt %]
+[% END %]
 
 [% INCLUDE footer.tt %]
