@@ -11,6 +11,9 @@ The names of all custom templates will be prefixed with custom_.
 
 The custom templates currently supported are:
 
+ - custom_header.tt
+   Will be included at the very end of the <head> element on every page.
+
  - custom_licence.tt
    Will be included at the top of the page editing form.
 

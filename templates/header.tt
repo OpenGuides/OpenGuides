@@ -45,6 +45,12 @@ locales.size > 0 %][% FOREACH locale = locales %][% locale.name %][%-
   [% IF enable_gmaps AND display_google_maps AND gmaps_api_key %]
     <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=[% gmaps_api_key %]" type="text/javascript"></script>
   [% END %]
+
+  [% TRY %]
+    [% INCLUDE custom_header.tt %]
+  [% CATCH %]
+  [% END %]
+
 </head>
 <body>
   <div id="body">
