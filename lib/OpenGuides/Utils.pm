@@ -71,18 +71,18 @@ sub make_wiki_object {
     # Require in the right database module.
     my $dbtype = $config->dbtype;
 
-    my %cgi_wiki_exts = (
+    my %wiki_toolkit_exts = (
                           postgres => "Pg",
 		          mysql    => "MySQL",
                           sqlite   => "SQLite",
                         );
 
-    my $cgi_wiki_module = "Wiki::Toolkit::Store::" . $cgi_wiki_exts{$dbtype};
-    eval "require $cgi_wiki_module";
-    croak "Can't 'require' $cgi_wiki_module.\n" if $@;
+    my $wiki_toolkit_module = "Wiki::Toolkit::Store::" . $wiki_toolkit_exts{$dbtype};
+    eval "require $wiki_toolkit_module";
+    croak "Can't 'require' $wiki_toolkit_module.\n" if $@;
 
     # Make store.
-    my $store = $cgi_wiki_module->new(
+    my $store = $wiki_toolkit_module->new(
         dbname  => $config->dbname,
         dbuser  => $config->dbuser,
         dbpass  => $config->dbpass,
