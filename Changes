@@ -15,7 +15,6 @@ http://dev.openguides.org/log/trunk
         Add config option to omit recent changes from home page.
         Split out "modules" from navbar.tt into separate templates navbar_*.tt
           to make it easier for people to change the order in a custom template
-        Move common categories/locales into navbar.
         Add a new div to wrap the entire body; also, use header.tt in
           home_node.tt instead of copy/paste.
         Add a new div for the atom/RSS feed links on the recent changes page.
