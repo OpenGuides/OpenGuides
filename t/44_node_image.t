@@ -15,7 +15,7 @@ if ( $@ ) {
     plan skip_all => "Test::HTML::Content not installed.";
 }
 
-plan tests => 28;
+plan tests => 30;
 
 my ( $config, $guide, $wiki );
 
@@ -186,3 +186,23 @@ Test::HTML::Content::text_ok( $output, "NotKakeNo",
                               "...as does new node_image_copyright value" );
 Test::HTML::Content::text_ok( $output, "http://eg.com/~kake/",
                               "...as does new node_image_url value" );
+
+# Write node with node_image field consisting only of whitespace, make
+# sure it gets stripped.
+OpenGuides::Test->write_data(
+                              guide => $guide,
+                              node  => "Angel and Greyhound",
+                              node_image => " ",
+                            );
+%node_data = $wiki->retrieve_node( "Angel and Greyhound" );
+#use Data::Dumper; print Dumper \%node_data;
+ok( !$node_data{metadata}{node_image},
+    "node_image of whitespace only isn't saved to database" );
+
+$output = $guide->display_node(
+                                id            => "Angel and Greyhound",
+                                return_output => 1,
+                              );
+$output =~ s/^Content-Type.*[\r\n]+//m;
+Test::HTML::Content::no_tag( $output, "img" => { id => "node_image" },
+                             "...or displayed on page" );

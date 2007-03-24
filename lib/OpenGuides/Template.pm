@@ -330,6 +330,10 @@ sub extract_metadata_vars {
                               node_image_copyright ) ) {
             my $value = $args{metadata} ? $metadata{$key}[0]
                                         : $q->param( $key );
+            if ( $value ) {
+                $value =~ s/^\s+//g;
+                $value =~ s/\s+$//g;
+            }
             $vars{$key} = $value if $value;
         }
     }
