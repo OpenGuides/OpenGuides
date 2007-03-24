@@ -1,3 +1,8 @@
+0.59    Some CSS was altered; you should check and update your stylesheets.
+        See README.CSS for details.
+
+0.58    No major changes
+
 0.57    Search::InvertedIndex is deprecated; please use Plucene instead.
 
 0.55    Wiki::Toolkit required instead of CGI::Wiki.
