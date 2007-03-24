@@ -8,7 +8,7 @@ a.home_link
     Used in: search_results.tt
     Purpose: Link to the home page of the site, in the search results page
 
-a.edit_page_link
+a.edit_page_link (was div.edit_page_link)
     Used in: navbar_this_page.tt
     Purpose: Link to the edit page function, in the navbar
 
@@ -33,7 +33,7 @@ input.form_button
              newpage.tt, node.tt, preferences.tt, search.tt
     Purpose: A standard form button
 
-label.hidden
+label.hidden (was span.hidden)
     Used in: navbar_search.tt
     Purpose: A label for the search box that will be hidden for users with
              a CSS-conforming user agent
