@@ -16,7 +16,7 @@ if ( $@ ) {
     exit 0;
 }
 
-plan tests => 9;
+plan tests => 12;
 
 # NB These tests don't actually test the placement - but they do test that
 # we get at least one navbar where appropriate.  Better tests would be better.
@@ -123,5 +123,31 @@ $output = $guide->display_node(
                               );
 $output =~ s/^Content-Type.*[\r\n]+//m;
 Test::HTML::Content::no_tag( $output, "div", { id => "navbar" },
+                         "...ditto if content_above_navbar_in_html set to 1" );
+
+# Make sure navbar appears on recent changes.
+$config = OpenGuides::Test->make_basic_config; # get a fresh config
+$guide = OpenGuides->new( config => $config ); # make sure the guide sees it
+$output = $guide->display_recent_changes(
+                                          return_output => 1,
+                                        );
+$output =~ s/^Content-Type.*[\r\n]+//m;
+Test::HTML::Content::tag_ok( $output, "div", { id => "navbar" },
+                             "navbar appears on recent changes" );
+
+$config->content_above_navbar_in_html( 0 );
+$output = $guide->display_recent_changes(
+                                          return_output => 1,
+                                        );
+$output =~ s/^Content-Type.*[\r\n]+//m;
+Test::HTML::Content::tag_ok( $output, "div", { id => "navbar" },
+                         "...ditto if content_above_navbar_in_html set to 0" );
+
+$config->content_above_navbar_in_html( 1 );
+$output = $guide->display_recent_changes(
+                                          return_output => 1,
+                                        );
+$output =~ s/^Content-Type.*[\r\n]+//m;
+Test::HTML::Content::tag_ok( $output, "div", { id => "navbar" },
                          "...ditto if content_above_navbar_in_html set to 1" );
 

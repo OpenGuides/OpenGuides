@@ -196,6 +196,10 @@ div#home_page_edit_link
     the navbar or the recent changes box are shown, since both those divs also
     contain an edit link.
 
+div#recent_changes_feeds
+    Used in: recent_changes.tt
+    Purpose: Display links to atom/RSS feeds of the recent changes.
+
 div#search_form
     Used in: footer.tt
     Purpose: The search form at the bottom of the page

@@ -18,6 +18,7 @@ http://dev.openguides.org/log/trunk
         Move common categories/locales into navbar.
         Add a new div to wrap the entire body; also, use header.tt in
           home_node.tt instead of copy/paste.
+        Add a new div for the atom/RSS feed links on the recent changes page.
         Add config option to place content above navbar in HTML.
         Add config option to suppress inline maps on geotagged nodes.
         Add support for custom template to add to page <head> (#191).
