@@ -95,7 +95,7 @@ div#banner
     Used in: banner.tt
     Purpose: The site banner/title
 
-div#body
+div#body_wrapper
     Used in: header.tt
     Purpose: Wrap the entire body of the page.
 

@@ -53,7 +53,7 @@ locales.size > 0 %][% FOREACH locale = locales %][% locale.name %][%-
 
 </head>
 <body>
-  <div id="body">
+  <div id="body_wrapper">
   [% IF enable_gmaps AND display_google_maps AND gmaps_api_key %]
     <script defer="defer" type="text/javascript">
       //<![CDATA[
