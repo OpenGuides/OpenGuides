@@ -31,8 +31,6 @@ search.cgi
 templates/admin_home.tt
 templates/backlink_results.tt
 templates/banner.tt
-templates/common_categories.tt
-templates/common_locales.tt
 templates/delete_confirm.tt
 templates/delete_done.tt
 templates/delete_password_wrong.tt
@@ -48,8 +46,10 @@ templates/missing_metadata.tt
 templates/moderate_confirm.tt
 templates/moderate_password_wrong.tt
 templates/navbar.tt
+templates/navbar_categories.tt
 templates/navbar_help.tt
 templates/navbar_home_link.tt
+templates/navbar_locales.tt
 templates/navbar_options.tt
 templates/navbar_revision_info.tt
 templates/navbar_search.tt
