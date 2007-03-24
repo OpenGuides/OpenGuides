@@ -217,41 +217,24 @@ div#node_image_copyright
     Purpose: To display the name of the copyright holder of a node image, and
              optionally a link to the licence we're using it under.
 
-div#common_navigation
-    Used in: node.tt
+div#navbar_common_navigation
+    Used in: navbar.tt
     Purpose: Hold the common locales and categories, if enabled
-
-div#common_categories
-    Used in: common_categories.tt
-    Purpose: Hold the common categories, if enabled
-h3#common_categories_title
-    Used in: common_categories.tt
-    Purpose: Title for the common categories
-ul#common_categories_list
-    Used in: common_categories.tt
-    Purpose: Parent list for the common categories
-li.common_category
-    Used in: common_categories.tt
-    Purpose: A common category
-a.common_category_link
-    Used in: common_categories.tt
-    Purpose: A link to a common category
-
-div#common_locales
-    Used in: common_locales.tt
+div#navbar_locales
+    Used in: navbar_locales.tt
     Purpose: Hold the common locales, if enabled
-h3#common_locales_title
-    Used in: common_locales.tt
-    Purpose: Title for the common locales
-ul#common_locales_list
-    Used in: common_locales.tt
-    Purpose: Parent list for the common locales
-li.common_locale
-    Used in: common_locales.tt
-    Purpose: A common locale
-a.common_locale_link
-    Used in: common_locales.tt
-    Purpose: A link to a common locale
+div#navbar_categories
+    Used in: navbar_categories.tt
+    Purpose: Hold the common categories, if enabled
+div#navbar_group_title
+    Used in: navbar_categories.tt, navbar_locales.tt
+    Purpose: Title for the common categories / locales
+ul#navbar_group
+    Used in: navbar_categories.tt, navbar_locales.tt
+    Purpose: Parent list for the common categories / locales
+#navbar_group > li
+    Used in: navbar_categories.tt, navbar_locales.tt
+    Purpose: A common category / locale
 
 input#address
     Used in: edit_form.tt

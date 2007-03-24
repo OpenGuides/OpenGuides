@@ -1,8 +1,0 @@
-<div id="common_categories">
-	<h3 id="common_categories_title">Categories</h3>
-	<ul id="common_categories_list">
-	[% FOREACH cat = [ 'Cafes', 'Coffee Shops', 'Pubs', 'Restaurants', 'Supermarkets', 'Cinemas', 'Theatres' ] %]
-		<li class="common_category"><a class="common_category_link" href="[% catloc_link %][% cat %]">[% cat %]</a></li>
-	[% END %]
-	</ul>
-</div>

@@ -149,15 +149,4 @@ versions.</a>
   [% INCLUDE navbar.tt %]
 [% END %]
 
-[% IF common_catloc %]
-<div id="common_navigation">
-  [% IF common_categories %]
-    [% INCLUDE common_categories.tt %]
-  [% END %]
-  [% IF common_locales %]
-    [% INCLUDE common_locales.tt %]
-  [% END %]
-</div>
-[% END %]
-
 [% INCLUDE footer.tt %]
