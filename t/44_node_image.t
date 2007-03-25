@@ -138,7 +138,7 @@ Test::HTML::Content::tag_ok( $output, "img",
 Test::HTML::Content::tag_ok( $output, "a",
                              { href => "http://example.com/bar/" },
                              "...ditto node_image_licence" );
-Test::HTML::Content::text_ok( $output, "Kake L Pugh",
+Test::HTML::Content::text_ok( $output, qr/Kake L Pugh/,
                               "...ditto node_image_copyright" );
 Test::HTML::Content::tag_ok( $output, "a",
                              { href => "http://example.com/~kake/" },
@@ -195,7 +195,6 @@ OpenGuides::Test->write_data(
                               node_image => " ",
                             );
 %node_data = $wiki->retrieve_node( "Angel and Greyhound" );
-#use Data::Dumper; print Dumper \%node_data;
 ok( !$node_data{metadata}{node_image},
     "node_image of whitespace only isn't saved to database" );
 
