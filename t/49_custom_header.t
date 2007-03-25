@@ -29,6 +29,11 @@ foreach my $del_node ( $wiki->list_all_nodes ) {
     $wiki->delete_node( $del_node ) or die "Can't delete $del_node";
 }
 
+# Make sure the tmp directory exists
+eval {
+    mkdir cwd . "/t/templates/tmp";
+};
+
 # Make sure we don't die if there's no custom header template.
 eval {
     unlink cwd . "/t/templates/tmp/custom_header.tt";
