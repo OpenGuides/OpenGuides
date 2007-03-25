@@ -1,5 +1,6 @@
 0.59    Some CSS was altered; you should check and update your stylesheets.
         See README.CSS for details.
+        Common categories and locales were moved within the navbar
 
 0.58    No major changes
 
