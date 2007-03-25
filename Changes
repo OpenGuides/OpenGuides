@@ -3,6 +3,9 @@
 More detailed changelogs can be found at
 http://dev.openguides.org/log/trunk
 
+0.60
+        Bugfix: uninitialized variable warning in script_url
+
 0.59    25 March 2007
         Move preview_node() and edit_node() from wiki.cgi into OpenGuides.pm
         Remove edit_conflict.tt - use edit_form.tt instead to reduce

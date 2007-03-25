@@ -231,7 +231,7 @@ sub script_url {
     my $self = shift;
     # See perldoc Class::Accessor - can't just use SUPER.
     my $url = $self->_script_url_accessor( @_ );
-    $url .= "/" unless $url =~ /\/$/;
+    $url .= "/" unless (defined $url && $url =~ /\/$/);
     return $url;
 }
 
