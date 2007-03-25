@@ -554,7 +554,7 @@ The OpenGuides Project (openguides-dev@lists.openguides.org)
 
 =head1 COPYRIGHT
 
-  Copyright (C) 2003-2005 The OpenGuides Project.  All Rights Reserved.
+  Copyright (C) 2003-2007 The OpenGuides Project.  All Rights Reserved.
 
 This module is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself.
