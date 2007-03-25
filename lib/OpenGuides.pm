@@ -1725,7 +1725,7 @@ sub revert_user_interface {
     # Grab everything they've touched, ever
     my @user_edits = $self->wiki->list_recent_changes(
                             since => 1,
-                            metadata_is => { $type => $value },
+                            metadata_was => { $type => $value },
     );
 
     if ($password) {
@@ -1743,7 +1743,7 @@ sub revert_user_interface {
             # Grab new list
             @user_edits = $self->wiki->list_recent_changes(
                             since => 1,
-                            metadata_is => { $type => $value },
+                            metadata_was => { $type => $value },
             );
         }
     } else {

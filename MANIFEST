@@ -29,6 +29,7 @@ newpage.cgi
 preferences.cgi
 search.cgi
 templates/admin_home.tt
+templates/admin_revert_user.tt
 templates/backlink_results.tt
 templates/banner.tt
 templates/delete_confirm.tt
@@ -128,5 +129,6 @@ t/71_missing_metadata.t
 t/72_node_moderation.t
 t/73_toggle_moderation.t
 t/74_ping_plugin.t
+t/75_revert_user.t
 t/templates/15_test.tt
 wiki.cgi
