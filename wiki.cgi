@@ -97,6 +97,12 @@ eval {
         $guide->display_admin_interface(
                              moderation_completed => $q->param("moderation"),
         );
+    } elsif ( $action eq 'revert_user' ) {
+        $guide->revert_user_interface(
+                        username => $q->param("username") || "",
+                        host     => $q->param("host") || "",
+                        password => $q->param("password") || "",
+        );
     } elsif ( $action eq 'show_missing_metadata' ) {
         $guide->show_missing_metadata(
                    metadata_type  => $q->param("metadata_type") || "",

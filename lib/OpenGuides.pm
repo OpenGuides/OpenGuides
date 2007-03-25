@@ -1693,6 +1693,89 @@ sub show_missing_metadata {
     print $output;
 }
 
+=item B<revert_user_interface>
+
+If C<password> is not supplied then a form for entering the password
+will be displayed, along with a list of all the edits the user made.
+
+If the password is given, will delete all of these versions.
+=cut
+sub revert_user_interface {
+    my ($self, %args) = @_;
+
+    my $password = $args{password} || '';
+    my $return_tt_vars = $args{return_tt_vars} || 0;
+    my $return_output = $args{return_output} || 0;
+
+    my $wiki = $self->wiki;
+    my $formatter = $self->wiki->formatter;
+    my $script_name = $self->config->script_name;
+
+    my ($type,$value);
+    if($args{'username'}) {
+        ($type,$value) = ('username', $args{'username'});
+    }
+    if($args{'host'}) {
+        ($type,$value) = ('host', $args{'host'});
+    }
+    unless($type && $value) {
+        croak("One of username or host must be given");
+    }
+
+    # Grab everything they've touched, ever
+    my @user_edits = $self->wiki->list_recent_changes(
+                            since => 1,
+                            metadata_is => { $type => $value },
+    );
+
+    if ($password) {
+        if ($password ne $self->config->admin_pass) {
+            croak("Bad password supplied");
+        } else {
+            # Delete all these versions
+            foreach my $edit (@user_edits) {
+                $self->wiki->delete_node(
+                                name => $edit->{name},
+                                version => $edit->{version},
+                );
+            }
+
+            # Grab new list
+            @user_edits = $self->wiki->list_recent_changes(
+                            since => 1,
+                            metadata_is => { $type => $value },
+            );
+        }
+    } else {
+        # Don't do anything
+    }
+
+    # Set up our TT variables, including the search parameters
+    my %tt_vars = (
+                      not_editable  => 1,
+                      not_deletable => 1,
+                      deter_robots  => 1,
+
+                      edits          => \@user_edits,
+                      username       => $args{username},
+                      host           => $args{host},
+                      by_type        => $type,
+                      by             => $value,
+
+                      script_name => $script_name
+                  );
+    return %tt_vars if $return_tt_vars;
+
+    # Render to the page
+    my $output = $self->process_template(
+                                           id       => "",
+                                           template => "admin_revert_user.tt",
+                                           tt_vars  => \%tt_vars,
+                                        );
+    return $output if $return_output;
+    print $output;
+}
+
 =item B<display_admin_interface>
 
 Fetch everything we need to display the admin interface, and passes it off 
@@ -1727,6 +1810,8 @@ sub display_admin_interface {
                         "?action=list_all_versions;id=" . $node_param;
         $node->{'moderation_url'} = $script_name .
                         "?action=set_moderation;id=" . $node_param;
+        $node->{'revert_user_url'} = $script_name . "?action=revert_user" .
+                        ";username=".$node->{metadata}->{username}->[0];
 
         # Filter
         if($node->{'name'} =~ /^Category /) {

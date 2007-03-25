@@ -20,12 +20,16 @@
 
 <a name="nodes"></a>
 <table id="nodes">
-<tr><th>Node name</th><th>Current Version</th><th>Last modified</th><th>Moderation</th><th>Actions</th></tr>
+<tr><th>Node name</th><th>Current Version</th><th>Last modified</th><th>By</th><th>Moderation</th><th>Actions</th></tr>
   [% FOREACH node = nodes %]
      <tr>
      <td class="admin_name"><a href="[% node.view_url %]">[% node.name %]</a></td>
      <td class="admin_version">[% node.version %]</td>
      <td class="admin_lastmode">[% node.last_modified %]</td>
+     <td class="admin_lastmodby">
+         [% node.metadata.username.0 %]
+         <a href="[% node.revert_user_url %]">(revert all)</a>
+     </td>
      <td class="admin_moderate">[% IF node.moderate %]yes[% ELSE %]no[% END %]</td>
      <td class="admin_action">
          <a href="[% node.versions_url %]">View all versions</a> or
