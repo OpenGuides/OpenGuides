@@ -319,10 +319,9 @@ $build->{config}{__extra_scripts}     =
                         "newpage.cgi" ];
 $build->{config}{__templates}         = [
                       "admin_home.tt",
+                      "admin_revert_user.tt",
                       "backlink_results.tt",
                       "banner.tt",
-                      "common_categories.tt",
-                      "common_locales.tt",
                       "delete_confirm.tt",
                       "delete_done.tt",
                       "delete_password_wrong.tt",
@@ -338,6 +337,8 @@ $build->{config}{__templates}         = [
                       "moderate_confirm.tt",
                       "moderate_password_wrong.tt",
                       "navbar.tt",
+                      "navbar_categories.tt",
+                      "navbar_locales.tt",
                       "navbar_help.tt",
                       "navbar_home_link.tt",
                       "navbar_options.tt",
