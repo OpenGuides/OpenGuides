@@ -205,10 +205,14 @@ sub output {
     my $output;
     $tt->process( $args{template}, $tt_vars, \$output );
 
+    my $contact_email = $config->contact_email;
+    
     $output ||= qq(<html><head><title>ERROR</title></head><body><p>
-                   Failed to process template: )
-              . $tt->error
-              . qq(</p></body></html>);
+    Sorry!  Something went wrong.  Please contact the site administrator 
+    at <a href="mailto:$contact_email">$contact_email</a> and quote the
+    following error message:</p><blockquote>Failed to process template: )
+        . $tt->error
+        . qq(</blockquote></body></html>);
 
     return $header . $output;
 }
