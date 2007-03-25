@@ -19,7 +19,7 @@ if ( $@ ) {
 plan tests => 2;
 
 my $config = OpenGuides::Test->make_basic_config;
-$config->custom_template_path( cwd . "/t/templates/" );
+$config->custom_template_path( cwd . "/t/templates/tmp/" );
 my $guide = OpenGuides->new( config => $config );
 my $wiki = $guide->wiki;
 
@@ -31,7 +31,7 @@ foreach my $del_node ( $wiki->list_all_nodes ) {
 
 # Make sure we don't die if there's no custom header template.
 eval {
-    unlink cwd . "/t/templates/custom_header.tt";
+    unlink cwd . "/t/templates/tmp/custom_header.tt";
 };
 eval {
     $guide->display_node( id => $config->home_name, return_output => 1 );
@@ -39,7 +39,7 @@ eval {
 ok( !$@, "node display OK if no custom header template" );
 
 # Write a custom template to add stuff to header.
-open( FILE, ">", cwd . "/t/templates/custom_header.tt" )
+open( FILE, ">", cwd . "/t/templates/tmp/custom_header.tt" )
   or die $!;
 print FILE <<EOF;
 <meta name="foo" content="bar" />
