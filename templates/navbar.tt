@@ -6,7 +6,7 @@
   [% INCLUDE navbar_options.tt %]
   [% INCLUDE navbar_search.tt %]
   [% INCLUDE navbar_this_page.tt %]
- <div id="navbar_common_navigation">
+ <div id="navbar_starting_points">
   [% INCLUDE navbar_categories.tt %]
   [% INCLUDE navbar_locales.tt %]
  </div>

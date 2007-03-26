@@ -217,7 +217,7 @@ div#node_image_copyright
     Purpose: To display the name of the copyright holder of a node image, and
              optionally a link to the licence we're using it under.
 
-div#navbar_common_navigation
+div#navbar_starting_points
     Used in: navbar.tt
     Purpose: Hold the common locales and categories, if enabled
 div#navbar_locales
