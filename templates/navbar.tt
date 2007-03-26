@@ -1,3 +1,4 @@
+<div id="navbar_parent">
 <div id="navbar">
 
   [% INCLUDE navbar_home_link.tt %]
@@ -12,4 +13,5 @@
  </div>
   [% INCLUDE navbar_revision_info.tt %]
 
+</div>
 </div>
