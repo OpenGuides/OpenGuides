@@ -253,7 +253,8 @@ sub display_node {
         $tt_vars{common_catloc} = 1;
         $tt_vars{common_categories} = $config->enable_common_categories;
         $tt_vars{common_locales} = $config->enable_common_locales;
-        $tt_vars{catloc_link} = $config->script_name . "?id=";
+        $tt_vars{catloc_link} = $config->script_url . $config->script_name
+                                . "?id=";
     }
     
     if ( $node_data{content} && $node_data{content} =~ /^#REDIRECT\s+(.+?)\s*$/ ) {

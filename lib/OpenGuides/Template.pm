@@ -149,6 +149,7 @@ sub output {
         config                => $config,
         site_name             => $config->site_name,
         cgi_url               => $script_name,
+        script_url            => $script_url,
         full_cgi_url          => $script_url . $script_name,
         contact_email         => $config->contact_email,
         stylesheet            => $config->stylesheet_url,
