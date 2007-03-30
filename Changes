@@ -4,6 +4,8 @@ More detailed changelogs can be found at
 http://dev.openguides.org/log/trunk
 
 0.60
+        Use full URLs for all links in navbar, so people can INCLUDE navbar.tt
+          in their own scripts.  (May revisit this later using "base href".)
         Bugfix: uninitialized variable warning in script_url
         Bugfix: Make sure clean target works
 
