@@ -12,6 +12,18 @@ a.edit_page_link (was div.edit_page_link)
     Used in: navbar_this_page.tt
     Purpose: Link to the edit page function, in the navbar
 
+div.disallowed_characters_note
+    Used in: newpage.tt
+    Purpose: Contains text explaining that some characters aren't allowed in
+             node names, and a list of such characters.
+div.disallowed_characters_text
+    Used in: newpage.tt
+    Purpose: Contains text explaining that some characters aren't allowed in
+             node names.
+div.disallowed_characters
+    Used in: newpage.tt
+    Purpose: Contains a list of characters that aren't allowed in node names.
+
 div.navbar_group
     Used in: navbar_*.tt
     Purpose: Defines a related set of navigation bar functions
@@ -112,6 +124,11 @@ div#maincontent
 div#coordinates
     Used in: node.tt
     Purpose: The physical coordinates of the node
+
+div#create_new_page
+    Used in: newpage.tt
+    Purpose: Contains the form for typing in the new page name, and the note
+             about disallowed characters.
 
 div#find_within_distance
     Used in: node.tt
@@ -242,6 +259,10 @@ ul#navbar_group
 #navbar_group > li
     Used in: navbar_categories.tt, navbar_locales.tt
     Purpose: A common category / locale
+
+form#new_page_form
+    Used in: newpage.tt
+    Purpose: The form for typing in the new page name.
 
 input#address
     Used in: edit_form.tt
