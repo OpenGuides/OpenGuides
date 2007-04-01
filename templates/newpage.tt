@@ -1,22 +1,31 @@
 [%- USE CGI -%]
 [% INCLUDE header.tt page_title = "Create a new page - $site_name" %]
 [% INCLUDE banner.tt %]
+
 <div id="content">
-[% INCLUDE navbar.tt %]
-<div id="maincontent">
+  [% INCLUDE navbar.tt %]
+  <div id="maincontent">
 
-<form action="newpage.cgi" method="POST">
-<label for="pagename">Enter the name of the page to make:</label><br />
-<input type="text" size="50" name="pagename" id="pagename" value="New page name" />
-<input type="submit" value="Go" id="go" class="form_button" />
-<input type="hidden" name="action" value="makepage" />
+    <div id="create_new_page">
+      <form action="newpage.cgi" id="new_page_form" method="POST">
+        <label for="pagename">Enter the name of the page to make:</label>
+        <input type="text" size="50" name="pagename" id="pagename"
+         value="New page name" />
+        <input type="submit" value="Go" id="go" class="form_button" />
+        <input type="hidden" name="action" value="makepage" />
+      </form>
 
-<p>Note: you may not use the following characters in page names:<br />
-<strong>
-  [% FOREACH naughty = disallowed_chars %]
-    [% CGI.escapeHTML(naughty) %]
-  [% END %]
-</strong>
-</form>
-</div>
+      <div class="disallowed_characters_note">
+        <div class="disallowed_characters_text">
+          Note: you may not use the following characters in page names:
+        </div>
+        <div class="disallowed_characters">
+          [% FOREACH naughty = disallowed_chars %]
+            [% CGI.escapeHTML(naughty) %]
+          [% END %]
+        </div>
+      </div>
+    </div>
+
+  </div>
 [% INCLUDE footer.tt %]
