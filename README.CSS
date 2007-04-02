@@ -400,6 +400,10 @@ select#edit_type
     Used in: openguides_information_boxes.tt
     Purpose: A selection of whether the change is minor or major
 
+select#metadata_type
+    Used in: missing_metadata.tt
+    Purpose: Display a list of the types of metadata we may wish to check for.
+
 table#categories
     Used in: admin_home.tt
     Purpose: Display recently edited categories.
@@ -408,9 +412,16 @@ table#locales
     Used in: admin_home.tt
     Purpose: Display recently edited locales.
 
+table#needing_moderation
+    Used in: needing_moderation.tt
+    Purpose: Display nodes which have edits pending moderation.
+
 table#nodes
     Used in: admin_home.tt
     Purpose: Display recently edited nodes.
+
+    Also used in: missing_metadata.tt
+    Purpose: Display nodes which are missing some metadata.
 
 table#recentchanges
     Used in: recent_changes.tt
