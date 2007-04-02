@@ -12,6 +12,10 @@ a.edit_page_link (was div.edit_page_link)
     Used in: navbar_this_page.tt
     Purpose: Link to the edit page function, in the navbar
 
+div.admin_completed_action
+    Used in: admin_home.tt
+    Purpose: Display a message confirming the action just taken.
+
 div.disallowed_characters_note
     Used in: newpage.tt
     Purpose: Contains text explaining that some characters aren't allowed in
@@ -75,6 +79,36 @@ span.node_name
              differences.tt node_history.tt
     Purpose: Inlines a node name in a snippet of explanatory text,
              without linking to it.
+
+td.admin_action
+    Used in: admin_home.tt
+    Purpose: Display possible actions for a node, locale, or category in
+             the "recently edited" table.
+
+td.admin_lastmodby
+    Used in: admin_home.tt
+    Purpose: Display username of the last person to edit a node, locale, or
+             category in the "recently edited" table.
+
+td.admin_lastmode
+    Used in: admin_home.tt
+    Purpose: Display the last-modified time of a node, locale, or category in
+             the "recently edited" table.
+
+td.admin_moderate
+    Used in: admin_home.tt
+    Purpose: Display the moderation status of a node, locale, or category in
+             the "recently edited" table.
+
+td.admin_name
+    Used in: admin_home.tt
+    Purpose: Display the name of a node, locale, or category in the
+             "recently edited" table.
+
+td.admin_version
+    Used in: admin_home.tt
+    Purpose: Display the version number of a node, locale, or category in the
+             "recently edited" table.
 
 td.label
     Used in: edit_form.tt
@@ -365,6 +399,18 @@ select#distance
 select#edit_type
     Used in: openguides_information_boxes.tt
     Purpose: A selection of whether the change is minor or major
+
+table#categories
+    Used in: admin_home.tt
+    Purpose: Display recently edited categories.
+
+table#locales
+    Used in: admin_home.tt
+    Purpose: Display recently edited locales.
+
+table#nodes
+    Used in: admin_home.tt
+    Purpose: Display recently edited nodes.
 
 table#recentchanges
     Used in: recent_changes.tt
