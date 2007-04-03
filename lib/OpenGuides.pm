@@ -330,6 +330,25 @@ sub display_node {
     }
 }
 
+=item B<display_random_page>
+
+  $guide->display_random_page;
+
+Display a random page.  As with other methods, the
+C<return_output> parameter can be used to return the output instead of
+printing it to STDOUT.
+
+=cut
+
+sub display_random_page {
+    my ( $self, %args ) = @_;
+    my @nodes = $self->wiki->list_all_nodes();
+    my $node = $nodes[ rand @nodes ];
+    my $output = $self->redirect_to_node( $node );
+    return $output if $args{return_output};
+    print $output;
+}
+
 =item B<display_edit_form>
 
   $guide->display_edit_form(
