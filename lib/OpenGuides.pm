@@ -342,7 +342,38 @@ printing it to STDOUT.
 
 sub display_random_page {
     my ( $self, %args ) = @_;
-    my @nodes = $self->wiki->list_all_nodes();
+    my $wiki = $self->wiki;
+    my $config = $self->config;
+
+    my @nodes = $wiki->list_all_nodes();
+
+    my $omit_cats = $config->random_page_omits_categories;
+    my $omit_locs = $config->random_page_omits_locales;
+
+    if ( $omit_cats || $omit_locs ) {
+        my %all_nodes = map { $_ => $_ } @nodes;
+        if ( $omit_cats ) {
+            my @cats = $wiki->list_nodes_by_metadata(
+                                                  metadata_type  => "category",
+                                                  metadata_value => "category",
+                                                  ignore_case => 1,
+            );
+            foreach my $omit ( @cats ) {
+                delete $all_nodes{$omit};
+            }
+        }
+        if ( $omit_locs ) {
+            my @locs = $wiki->list_nodes_by_metadata(
+                                                  metadata_type  => "category",
+                                                  metadata_value => "locales",
+                                                  ignore_case => 1,
+            );
+            foreach my $omit ( @locs ) {
+                delete $all_nodes{$omit};
+            }
+        }
+        @nodes = keys %all_nodes;
+    }
     my $node = $nodes[ rand @nodes ];
     my $output = $self->redirect_to_node( $node );
     return $output if $args{return_output};

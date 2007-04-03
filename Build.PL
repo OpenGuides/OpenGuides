@@ -41,6 +41,7 @@ my %yn_vars = map { $_ => 1 }
    qw(use_plucene enable_page_deletion navbar_on_home_page backlinks_in_title
       moderation_requires_password enable_node_image enable_common_categories
       enable_common_locales recent_changes_on_home_page
+      random_page_omits_locales random_page_omits_categories
       content_above_navbar_in_html show_gmap_in_node_display);
 
 my $skip_config = Module::Build->y_n("Skip OpenGuides configuration?", "n");
@@ -95,7 +96,8 @@ foreach my $var ( qw(
    install_directory template_path custom_template_path script_url
    custom_lib_path use_plucene indexing_directory enable_page_deletion
    admin_pass stylesheet_url site_name navbar_on_home_page
-   recent_changes_on_home_page content_above_navbar_in_html home_name
+   recent_changes_on_home_page random_page_omits_locales
+   random_page_omits_categories content_above_navbar_in_html home_name
    site_desc default_city default_country contact_email default_language
    formatting_rules_node backlinks_in_title gmaps_api_key centre_long
    centre_lat show_gmap_in_node_display default_gmaps_zoom

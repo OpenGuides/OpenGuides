@@ -11,7 +11,8 @@ my @variables = qw(
    script_name install_directory script_url
    custom_lib_path use_plucene indexing_directory enable_page_deletion
    admin_pass stylesheet_url site_name navbar_on_home_page
-   recent_changes_on_home_page content_above_navbar_in_html home_name
+   recent_changes_on_home_page random_page_omits_locales
+   random_page_omits_categories content_above_navbar_in_html home_name
    site_desc default_city default_country contact_email
    default_language http_charset ping_services
    formatting_rules_node formatting_rules_link backlinks_in_title template_path
@@ -82,6 +83,8 @@ sub _init {
                      site_name => "Unconfigured OpenGuides site",
                      navbar_on_home_page => 1,
                      recent_changes_on_home_page => 1,
+                     random_page_omits_locales => 0,
+                     random_page_omits_categories => 0,
                      content_above_navbar_in_html => 0,
                      home_name => "Home",
                      site_desc => "A default configuration of OpenGuides",
@@ -158,6 +161,8 @@ sub _init {
         site_name => "What's the site called? (should be unique)",
         navbar_on_home_page => "Do you want the navigation bar included on the home page?",
         recent_changes_on_home_page => "Do you want the ten most recent changes included on the home page?",
+        random_page_omits_locales => "Do you want the \"Random Page\" link to avoid returning a locale page?",
+        random_page_omits_categories => "Do you want the \"Random Page\" link to avoid returning a category page?",
         content_above_navbar_in_html => "Do you want the content to appear above the navbar in the HTML?",
         home_name => "What should the home page of the wiki be called?",
         site_desc => "How would you describe the site?",
@@ -252,6 +257,10 @@ sub script_url {
 =item * navbar_on_home_page (default: true)
 
 =item * recent_changes_on_home_page (default: true)
+
+=item * random_page_omits_locales (default: false)
+
+=item * random_page_omits_categories (default: false)
 
 =item * content_above_navbar_in_html (default: false)
 

@@ -6,6 +6,8 @@ http://dev.openguides.org/log/trunk
 0.60
         Move random page functionality from wiki.cgi into OpenGuides.pm and
           add some tests.
+        Add config options to let admins omit category and/or locale pages
+          from the list of pages that can be returned by the Random Page link.
         Use full URLs for all links in navbar, so people can INCLUDE navbar.tt
           in their own scripts.  (May revisit this later using "base href".)
         Added some stylesheet hooks to newpage.tt; see README.CSS for details.
