@@ -8,6 +8,8 @@ $VERSION = '0.09';
 use Time::Piece;
 use URI::Escape;
 use Carp 'croak';
+use HTML::Entities qw( encode_entities_numeric );
+use Template;
 
 sub new {
     my ($class, @args) = @_;
@@ -58,158 +60,101 @@ sub emit_rdfxml {
     my ($self, %args) = @_;
 
     my $node_name = $args{node};
+    my $config = $self->{config};
     my $wiki = $self->{wiki};
+    my $formatter = $wiki->formatter;
 
-    my %node_data          = $wiki->retrieve_node( $node_name );
-    my $phone              = $node_data{metadata}{phone}[0]              || '';
-    my $fax                = $node_data{metadata}{fax}[0]                || '';
-    my $website            = $node_data{metadata}{website}[0]            || '';
-    my $opening_hours_text = $node_data{metadata}{opening_hours_text}[0] || '';
-    my $address            = $node_data{metadata}{address}[0]            || '';
-    my $postcode           = $node_data{metadata}{postcode}[0]           || '';
-    my $city               = $node_data{metadata}{city}[0]               || $self->{default_city};
-    my $country            = $node_data{metadata}{country}[0]            || $self->{default_country};
-    my $latitude           = $node_data{metadata}{latitude}[0]           || '';
-    my $longitude          = $node_data{metadata}{longitude}[0]          || '';
-    my $version            = $node_data{version};
-    my $username           = $node_data{metadata}{username}[0]           || '';
-    my $os_x               = $node_data{metadata}{os_x}[0]               || '';
-    my $os_y               = $node_data{metadata}{os_y}[0]               || '';
-    my @categories         = @{ $node_data{metadata}{category} || [] };
-    my @locales            = @{ $node_data{metadata}{locale} || [] };
-    my $summary            = $node_data{metadata}{summary}[0]            || '';
+    my %node_data = $wiki->retrieve_node( $node_name );
+    my %metadata = %{ $node_data{metadata} };
+    my %tt_vars = (
+                    node_name  => $node_name,
+                    version    => $node_data{version},
+                    site_name  => $self->{site_name},
+                    site_desc  => $self->{site_description},
+                    og_version => $self->{og_version},
+                  );
 
-    # replace any errant characters in data to prevent illegal XML
-    foreach ($phone, $fax, $website, $opening_hours_text, $address, $postcode, 
-             $city, $country, $latitude, $longitude, $version, $os_x, $os_y, 
-             @categories, @locales, $summary)
-    {
-      if ($_)
-      {
-        $_ =~ s/&/&amp;/g;
-        $_ =~ s/</&lt;/g;
-        $_ =~ s/>/&gt;/g;
-      }
+    my %defaults = (
+                     city => $self->{default_city},
+                     country => $self->{default_country},
+                   );
+
+    foreach my $var ( qw( phone fax website opening_hours_text address
+                          postcode city country latitude longitude username
+                          os_x os_y summary ) ) {
+        my $val = $metadata{$var}[0] || $defaults{$var} || "";
+        $tt_vars{$var} = $val;
     }
+
     
-    my ($is_geospatial, $objType);
+    my @cats = @{ $metadata{category} || [] };
+    @cats = map { { name => $_ } } @cats;
+    $tt_vars{categories} = \@cats;
 
-    if ($os_x || $os_y || $latitude || $longitude || $address || $postcode || @locales || $opening_hours_text) {
-        $is_geospatial = 1;
-        $objType    = 'geo:SpatialThing';
-    } else {
-        $objType = 'rdf:Description';
+    my @locs = @{ $metadata{locale} || [] };
+    @locs = map {
+                  {
+                    name => $_,
+                    id   => $formatter->node_name_to_node_param( $_ ),
+                  }
+                } @locs;
+    $tt_vars{locales} = \@locs;
+
+    # Check for geospatialness and define container object as appropriate.
+    my $is_geospatial;
+    foreach my $var ( qw( os_x os_y latitude longitude address postcode
+                          opening_hours_text ) ) {
+        $is_geospatial = 1 if $tt_vars{$var};
     }
 
+    $is_geospatial = 1 if scalar @locs;
+
+    $tt_vars{obj_type} = $is_geospatial ? "geo:SpatialThing"
+                                        : "rdf:Description";
+    $tt_vars{is_geospatial} = $is_geospatial;
+
+    # Timestamp of last edited.
     my $timestamp = $node_data{last_modified};
-    
-    # Make a Time::Piece object.
-    my $timestamp_fmt = $Wiki::Toolkit::Store::Database::timestamp_fmt;
-
     if ( $timestamp ) {
+        # Make a Time::Piece object in order to canonicalise time.  I think.
+        my $timestamp_fmt = $Wiki::Toolkit::Store::Database::timestamp_fmt;
         my $time   = Time::Piece->strptime($timestamp, $timestamp_fmt);
-        $timestamp = $time->strftime("%Y-%m-%dT%H:%M:%S");
+        $tt_vars{timestamp} = $time->strftime("%Y-%m-%dT%H:%M:%S");
     }
 
-    my $user_id = $username;
-    $user_id =~ s/ /_/g;
+    $tt_vars{user_id} = $tt_vars{username};
+    $tt_vars{user_id} =~ s/\s/_/g;
     
-    my $url               = $self->{make_node_url}->( $node_name, $version );
-    my $version_indpt_url = $self->{make_node_url}->( $node_name );
-    my $rdf = qq{<?xml version="1.0"?>
-<rdf:RDF
-  xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-  xmlns:dc="http://purl.org/dc/elements/1.1/"
-  xmlns:dcterms="http://purl.org/dc/terms/"
-  xmlns:foaf="http://xmlns.com/foaf/0.1/"
-  xmlns:wiki="http://purl.org/rss/1.0/modules/wiki/"
-  xmlns:chefmoz="http://chefmoz.org/rdf/elements/1.0/"
-  xmlns:wn="http://xmlns.com/wordnet/1.6/"
-  xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#"
-  xmlns:os="http://downlode.org/rdf/os/0.1/"
-  xmlns:owl="http://www.w3.org/2002/07/owl#"
-  xmlns="http://www.w3.org/2000/10/swap/pim/contact#"
->
+    $tt_vars{node_uri} = $self->{make_node_url}->( $node_name );
+    $tt_vars{node_uri_with_version}
+                            = $self->{make_node_url}->( $node_name,
+                                                        $tt_vars{version} );
 
-  <rdf:Description rdf:about="">
-    <dc:title>} . $self->{site_name} . qq{: $node_name</dc:title>
-    <dc:date>$timestamp</dc:date>
-    <dcterms:modified>$timestamp</dcterms:modified>
-
-    <dc:contributor>
-      <foaf:Person rdf:ID="$user_id">
-        <foaf:nick>$username</foaf:nick>
-      </foaf:Person>
-    </dc:contributor>
-
-    <dc:source rdf:resource="$version_indpt_url" />
-    <wiki:version>$version</wiki:version>
-    <foaf:topic rdf:resource="#obj" />
-  </rdf:Description>
-
-  <$objType rdf:ID="obj" dc:title="$node_name">
-};
-    $rdf .= "    <dc:description>$summary</dc:description>\n" if $summary;
-
-    $rdf .= "\n    <!-- categories -->\n\n" if @categories;
-    $rdf .= "    <dc:subject>$_</dc:subject>\n" foreach @categories;
-    
-    if ($is_geospatial)
-    {
-      $rdf .= "\n    <!-- address and geospatial data -->\n\n";
-      $rdf .= "    <address>$address</address>\n"        if $address;
-      $rdf .= "    <city>$city</city>\n"                 if $city;
-      $rdf .= "    <postalCode>$postcode</postalCode>\n" if $postcode;
-      $rdf .= "    <country>$country</country>\n"        if $country;
-
-    foreach (@locales)
-    { 
-      my $locale_id = $_;
-      $locale_id =~ s/ /_/g;
-   
-      $rdf .= qq{
-    <foaf:based_near>
-      <wn:Neighborhood rdf:ID="$locale_id">
-        <dc:title>$_</dc:title>
-      </wn:Neighborhood>
-    </foaf:based_near>\n};
+    # Should probably be moved into OpenGuides::Utils.
+    if ($node_data{content} =~ /^\#REDIRECT \[\[(.*?)]\]$/) {
+        my $redirect = $1;
+        $tt_vars{redirect} = $config->script_url . $config->script_name
+                             . "?id="
+                             . $formatter->node_name_to_node_param( $redirect )
+                             . ";format=rdf#obj";
     }
-    
-      if ( $latitude && $longitude ) {
-          $rdf .= qq{
-    <geo:lat>$latitude</geo:lat>
-    <geo:long>$longitude</geo:long>\n};
-      }
 
-      if ( $os_x && $os_y ) {
-          $rdf .= qq{
-    <os:x>$os_x</os:x>
-    <os:y>$os_y</os:y>};
-      }
+    # Escape stuff!
+    foreach my $var ( keys %tt_vars ) {
+        if ( $tt_vars{$var} ) {
+            $tt_vars{$var} = encode_entities_numeric( $tt_vars{$var} );
+        }
     }
-    
-    $rdf .= "\n\n    <!-- contact information -->\n\n" if ($phone || $fax || $website || $opening_hours_text);
-    $rdf .= "    <phone>$phone</phone>\n"                              if $phone;
-    $rdf .= "    <fax>$fax</fax>\n"                                    if $fax;
-    $rdf .= "    <foaf:homepage rdf:resource=\"$website\" />\n"        if $website;
-    $rdf .= "    <chefmoz:Hours>$opening_hours_text</chefmoz:Hours>\n" if $opening_hours_text;
 
-    if ($node_data{content} =~ /^\#REDIRECT \[\[(.*?)]\]$/)
-    {
-      my $redirect = $1;
-      
-      $rdf .= qq{    <owl:sameAs rdf:resource="} . $self->{config}->script_url
-      . uri_escape($self->{config}->script_name) . '?id='
-      . uri_escape($wiki->formatter->node_name_to_node_param($redirect))
-      . ';format=rdf#obj';
-      $rdf .= qq{" />\n};
-    }
-    
-    $rdf .= qq{  </$objType>
-</rdf:RDF>
+    # OK, we've set all our template variables; now process the template.
+    my $template_path = $config->template_path;
+    my $custom_template_path = $config->custom_template_path || "";
+    my $tt = Template->new( {
+                    INCLUDE_PATH => "$custom_template_path:$template_path" } );
 
-};
-
+    my $rdf;
+    $tt->process( "node_rdf.tt", \%tt_vars, \$rdf );
+    $rdf ||= "ERROR: " . $tt->error;
     return $rdf;
 }
 

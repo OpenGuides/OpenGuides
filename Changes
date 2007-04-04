@@ -4,6 +4,10 @@ More detailed changelogs can be found at
 http://dev.openguides.org/log/trunk
 
 0.60
+        Move node RDF generation from inline to node_rdf.tt and replace
+          home-grown escaping with encode_entities_numeric from HTML::Entities
+          (technically this is an added dependency, but we already require
+          the package it comes in, via Wiki::Toolkit::Formatter::UseMod).
         Move random page functionality from wiki.cgi into OpenGuides.pm and
           add some tests.
         Add config options to let admins omit category and/or locale pages

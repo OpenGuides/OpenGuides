@@ -1,0 +1,103 @@
+<?xml version="1.0"?>
+<rdf:RDF
+  xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+  xmlns:dc="http://purl.org/dc/elements/1.1/"
+  xmlns:dcterms="http://purl.org/dc/terms/"
+  xmlns:foaf="http://xmlns.com/foaf/0.1/"
+  xmlns:wiki="http://purl.org/rss/1.0/modules/wiki/"
+  xmlns:chefmoz="http://chefmoz.org/rdf/elements/1.0/"
+  xmlns:wn="http://xmlns.com/wordnet/1.6/"
+  xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#"
+  xmlns:os="http://downlode.org/rdf/os/0.1/"
+  xmlns:owl="http://www.w3.org/2002/07/owl#"
+  xmlns="http://www.w3.org/2000/10/swap/pim/contact#"
+>
+
+  <rdf:Description rdf:about="">
+    <dc:title>[% site_name %]: [% node_name %]</dc:title>
+    <dc:date>[% timestamp %]</dc:date>
+    <dcterms:modified>[% timestamp %]</dcterms:modified>
+
+    <dc:contributor>
+      <foaf:Person rdf:ID="[% user_id %]">
+        <foaf:nick>[% username %]</foaf:nick>
+      </foaf:Person>
+    </dc:contributor>
+
+    <dc:source rdf:resource="[% node_uri %]" />
+    <wiki:version>[% version %]</wiki:version>
+    <foaf:topic rdf:resource="#obj" />
+  </rdf:Description>
+
+  <[% obj_type %] rdf:ID="obj" dc:title="[% node_name %]">
+
+    [% IF summary %]
+      <dc:description>[% summary %]</dc:description>
+    [% END %]
+
+    [% IF categories %]
+      <!-- categories -->
+
+      [% FOREACH category = categories %]
+        <dc:subject>[% category.name %]</dc:subject>
+      [% END %]
+    [% END %]
+
+    [% IF is_geospatial %]
+      <!-- address and geospatial data -->
+
+      [% IF address %]
+        <address>[% address %]</address>
+      [% END %]
+      [% IF city %]
+        <city>[% city %]</city>
+      [% END %]
+      [% IF postcode %]
+        <postalCode>[% postcode %]</postalCode>
+      [% END %]
+      [% IF country %]
+        <country>[% country %]</country>
+      [% END %]
+
+      [% FOREACH locale = locales %]
+        <foaf:based_near>
+          <wn:Neighborhood rdf:ID="[% locale.id %]">
+            <dc:title>[% locale.name %]</dc:title>
+          </wn:Neighborhood>
+        </foaf:based_near>
+      [% END %]
+
+      [% IF latitude AND longitude %]
+        <geo:lat>[% latitude %]</geo:lat>
+        <geo:long>[% longitude %]</geo:long>
+      [% END %]
+
+      [% IF os_x AND os_y %]
+        <os:x>[% os_x %]</os:x>
+        <os:y>[% os_y %]</os:y>
+      [% END %]
+
+    [% END %]
+
+    [% IF phone OR fax OR website OR opening_hours_text %]
+      <!-- contact information -->
+      [% IF phone %]
+        <phone>[% phone %]</phone>
+      [% END %]
+      [% IF fax %]
+        <fax>[% fax %]</fax>
+      [% END %]
+      [% IF website %]
+        <foaf:homepage rdf:resource="[% website %]" />
+      [% END %]
+      [% IF opening_hours_text %]
+        <chefmoz:Hours>[% opening_hours_text %]</chefmoz:Hours>
+      [% END %]
+    [% END %]
+
+    [% IF redirect %]
+      <owl:sameAs rdf:resource="[% redirect %]" />
+    [% END %]
+
+  </[% obj_type %]>
+</rdf:RDF>

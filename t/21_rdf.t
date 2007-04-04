@@ -18,18 +18,13 @@ if ( $@ ) {
 plan tests => 27;
 
 Wiki::Toolkit::Setup::SQLite::setup( { dbname => "t/node.db" } );
-my $config = OpenGuides::Config->new(
-    vars => {
-                dbtype             => "sqlite",
-                dbname             => "t/node.db",
-                indexing_directory => "t/indexes",
-                script_url         => "http://wiki.example.com/",
-                script_name        => "mywiki.cgi",
-                site_name          => "Wiki::Toolkit Test Site",
-                default_city       => "London",
-                default_country    => "United Kingdom",
-            }
-);
+my $config = OpenGuides::Test->make_basic_config;
+$config->script_url( "http://wiki.example.com/" );
+$config->script_name( "mywiki.cgi" );
+$config->site_name( "Wiki::Toolkit Test Site" );
+$config->default_city( "London" );
+$config->default_country( "United Kingdom" );
+
 eval { require Wiki::Toolkit::Search::Plucene; };
 if ( $@ ) { $config->use_plucene ( 0 ) };
 
