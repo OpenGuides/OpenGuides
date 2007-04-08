@@ -10,7 +10,8 @@
       <form action="newpage.cgi" id="new_page_form" method="POST">
         <label for="pagename">Enter the name of the page to make:</label>
         <input type="text" size="50" name="pagename" id="pagename"
-         value="New page name" />
+         value="New page name"
+         onfocus="if ( this.value == 'New page name' ) { this.value = '' }" />
         <input type="submit" value="Go" id="go" class="form_button" />
         <input type="hidden" name="action" value="makepage" />
       </form>

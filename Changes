@@ -4,6 +4,9 @@ More detailed changelogs can be found at
 http://dev.openguides.org/log/trunk
 
 0.60
+        Add JavaScript to the Create New Page page so the prefilled
+          "New page name" disappears when you click in the field (it doesn't
+          make anything other than "New page name" diappear).
         Move node RDF generation from inline to node_rdf.tt and replace
           home-grown escaping with encode_entities_numeric from HTML::Entities
           (technically this is an added dependency, but we already require
