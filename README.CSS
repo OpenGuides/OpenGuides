@@ -28,6 +28,48 @@ div.disallowed_characters
     Used in: newpage.tt
     Purpose: Contains a list of characters that aren't allowed in node names.
 
+div.edit_form_actions
+    Used in: edit_form_actions.tt
+    Purpose: Contains widgets for previewing, cancelling, and committing an
+             edit.
+div.preview_edit
+    Used in: edit_form_actions.tt
+    Purpose: Contains a button for previewing an edit.
+div.cancel_edit
+    Used in: edit_form_actions.tt
+    Purpose: Contains a link for cancelling an edit.
+div.commit_edit
+    Used in: edit_form_actions.tt
+    Purpose: Contains a button for committing an edit.
+
+div.edit_form_group
+    Used in: edit_form.tt openguides_information_boxes.tt node_image_fields.tt
+    Purpose: Handles a single type of data (e.g. locales, phone number,
+             latitude, etc) in the edit form.  Contains a label, an
+             input/select/textarea, and a space where any edit conflict will
+             be flagged up.
+div.edit_box
+    Used in: edit_form.tt openguides_information_boxes.tt node_image_fields.tt
+    Purpose: Contains a input, select, or textarea.
+div.conflict_group
+    Used in: edit_form.tt node_image_fields.tt
+    Purpose: Contains a label and details of an edit conflict for a single
+             type of data.
+div.conflict_box
+    Used in: edit_form.tt node_image_fields.tt
+    Purpose: Contains details of an edit conflict for a single type of data.
+
+div.licence_and_moderation_notes
+    Used in: edit_form.tt
+    Purpose: Contains a description of the guide's licence and details of any
+             moderation of the current node.
+div.licence_notes
+    Used in: edit_form.tt
+    Purpose: Contains a description of the guide's licence.
+div.moderation_warning
+    Used in: edit_form.tt
+    Purpose: Contains details of any moderation of the current node.
+
 div.navbar_group
     Used in: navbar_*.tt
     Purpose: Defines a related set of navigation bar functions
@@ -293,6 +335,23 @@ ul#navbar_group
 #navbar_group > li
     Used in: navbar_categories.tt, navbar_locales.tt
     Purpose: A common category / locale
+
+fieldset#additional_information
+    Used in: edit_form.tt
+    Purpose: Contains input fields for phone, address, geodata, etc.
+
+fieldset#main_information
+    Used in: edit_form.tt
+    Purpose: Contains input fields for content, categories, locales, and
+             page summary.
+
+fieldset#node_image_fields
+    Used in: node_image_fields.tt
+    Purpose: contains input fields for node image, copyright, etc.
+
+fieldset#openguides_information
+    Used in: openguides_information_boxes.tt
+    Purpose: Contains input widgets for username, comment, and edit type.
 
 form#new_page_form
     Used in: newpage.tt

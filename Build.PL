@@ -332,6 +332,7 @@ $build->{config}{__templates}         = [
                       "differences.tt",
                       "display_metadata.tt",
                       "edit_form.tt",
+                      "edit_form_actions.tt",
                       "error.tt",
                       "footer.tt",
                       "header.tt",

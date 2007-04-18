@@ -4,6 +4,15 @@ More detailed changelogs can be found at
 http://dev.openguides.org/log/trunk
 
 0.60
+        Rewrote the HTML of the edit page to use <div>s rather than tables.
+          Note that you will probably want to provide at least basic styling
+          for these classes.  As part of this, added a new template,
+          edit_form_actions.tt
+        Moved node image boxes below phone/address/etc on the edit form, and
+          moved summary field from openguides information section into main
+          section.
+        Made div#maincontent on the edit form wrap the preview view only, not
+          the whole form.
         Add JavaScript to the Create New Page page so the prefilled
           "New page name" disappears when you click in the field (it doesn't
           make anything other than "New page name" diappear).
