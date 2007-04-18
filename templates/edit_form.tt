@@ -2,7 +2,7 @@
 [% INCLUDE header.tt page_title = "Edit $node_name - $site_name" %]
 <div id="content">
 
-  <h1 align="center">Edit &quot;[% node_name %]&quot;</h1>
+  <h1 class="edit_form_title">Edit &quot;[% node_name %]&quot;</h1>
 
   [% IF conflict %]
     <div class="warning_text">

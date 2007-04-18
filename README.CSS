@@ -86,6 +86,10 @@ div.warning_text
     Used in: edit_form.tt
     Purpose: Warns the user that there is an edit conflict
 
+h1.edit_form_title
+    Used in: edit_form.tt
+    Purpose: Display the main heading on the edit form - e.g. Edit "My Node"
+
 input.form_button
     Used in: differences.tt, edit_form.tt, footer.tt, navbar_search.tt,
              newpage.tt, node.tt, preferences.tt, search.tt
