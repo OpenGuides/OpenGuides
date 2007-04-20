@@ -13,6 +13,7 @@ http://dev.openguides.org/log/trunk
           section.
         Made div#maincontent on the edit form wrap the preview view only, not
           the whole form.
+        Added links to the "revision N" and "Last edited" text in the navbar.
         Add JavaScript to the Create New Page page so the prefilled
           "New page name" disappears when you click in the field (it doesn't
           make anything other than "New page name" diappear).
