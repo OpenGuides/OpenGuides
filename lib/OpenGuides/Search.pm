@@ -169,7 +169,7 @@ sub run {
     $self->{return_tt_vars} = $args{return_tt_vars} || 0;
 
     my $want_raw;
-    if ( $args{format} && $args{format} eq "raw" ) {
+    if ( $args{vars}{format} && $args{vars}{format} eq "raw" ) {
         $want_raw = 1;
     }
 

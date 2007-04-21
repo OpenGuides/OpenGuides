@@ -23,10 +23,10 @@ my $search = OpenGuides::Search->new( config => $config );
 
 my %results;
 
-%results = $search->run( format => "raw" );
+%results = $search->run( vars => { format => "raw" } );
 is_deeply( \%results, { },
            "raw search returns empty hash if no criteria supplied" );
-%results = $search->run( vars => { search => "banananana" }, format => "raw" );
+%results = $search->run( vars => { search => "banananana", format => "raw" } );
 is_deeply( \%results, { },
            "raw search returns empty hash if no hits on search string" );
 
@@ -53,7 +53,7 @@ OpenGuides::Test->write_data( guide => $guide,
                               os_y => 140000,
                             );
 
-%results = $search->run( vars => { search => "arms" }, format => "raw" );
+%results = $search->run( vars => { search => "arms", format => "raw" } );
 is_deeply( [ sort keys %results ], [ "Blacksmiths Arms", "Carpenters Arms" ],
            "raw search on single word finds the right nodes" );
 my %ba = %{$results{"Blacksmiths Arms"}};
@@ -66,8 +66,12 @@ ok( !$ba{distance}, "...no distance returned" );
 
 # Now try a distance search.
 %results = $search->run(
-    vars => { os_dist => 1000, os_x => 500200, os_y => 150000 },
-    format => "raw" );
+                         vars => {
+                                   os_dist => 1000,
+                                   os_x    => 500200,
+                                   os_y    => 150000,
+                                   format  => "raw",
+                                 } );
 is_deeply( [ sort keys %results ], [ "Blacksmiths Arms", "Red Lion" ],
            "raw distance search finds the right nodes" );
 my %rl = %{$results{"Red Lion"}};
