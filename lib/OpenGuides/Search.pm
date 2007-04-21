@@ -118,6 +118,34 @@ precedence over C<return_output>.
 These two parameters exist to make testing easier; you probably don't
 want to use them in production.
 
+You can also request just the raw search results:
+
+  my %results = $search->run(
+                              os_x    => 528864,
+                              os_y    => 180797,
+                              os_dist => 750,
+                              format  => "raw",
+                            );
+
+Results are returned as a hash, keyed on the page name.  All results
+are returned, not just the first C<page>.  The values in the hash are
+hashes themselves, with the following key/value pairs:
+
+=over 4
+
+=item * name
+
+=item * wgs84_lat - WGS-84 latitude
+
+=item * wgs84_long - WGS-84 longitude
+
+=item * summary
+
+=item * distance - distance (in metres) from origin, if origin exists
+
+=item * score - relevance to search string, if search string exists; higher score means more relevance
+
+=back
 
 In case you're struggling to follow the code, it does the following:
 1) Processes the parameters, and bails out if it hit a problem with them
@@ -139,6 +167,11 @@ sub run {
     my ($self, %args) = @_;
     $self->{return_output}  = $args{return_output}  || 0;
     $self->{return_tt_vars} = $args{return_tt_vars} || 0;
+
+    my $want_raw;
+    if ( $args{format} && $args{format} eq "raw" ) {
+        $want_raw = 1;
+    }
 
     $self->process_params( $args{vars} );
     if ( $self->{error} ) {
@@ -184,9 +217,14 @@ sub run {
         $self->run_distance_search;
     }
 
-    # If we're not doing a search then just print the search form.
-    unless ( $doing_search ) {
-        return $self->process_template( tt_vars => \%tt_vars );
+    # If we're not doing a search then just print the search form (or return
+    # an empty hash if we were asked for raw results).
+    if ( !$doing_search ) {
+        if ( $want_raw ) {
+            return ( );
+        } else {
+            return $self->process_template( tt_vars => \%tt_vars );
+        }
     }
 
     # At this point either $self->{error} or $self->{results} will be filled.
@@ -207,6 +245,22 @@ sub run {
     #                  }
 
     my %results_hash = %{ $self->{results} || [] };
+
+    # If we were asked for just the raw results, return them now, after
+    # grabbing additional info.
+    if ( $want_raw ) {
+        foreach my $node ( keys %results_hash ) {
+            my %data = $self->wiki->retrieve_node( $node );
+            $results_hash{$node}{summary} = $data{metadata}{summary}[0];
+            my $lat  = $data{metadata}{latitude}[0];
+            my $long = $data{metadata}{longitude}[0];
+            my ( $wgs84_lat, $wgs84_long ) = OpenGuides::Utils->get_wgs84_coords( latitude => $lat, longitude => $long, config => $self->config );
+            $results_hash{$node}{wgs84_lat} = $wgs84_lat;
+            $results_hash{$node}{wgs84_long} = $wgs84_long;
+        }
+        return %results_hash;
+    }
+
     my @results = values %results_hash;
     my $numres = scalar @results;
 
@@ -604,6 +658,7 @@ sub process_params {
     delete $self->{y};
     delete $self->{distance_in_metres};
     delete $self->{search_string};
+    delete $self->{results};
 
     # Strip out any non-digits from distance and OS co-ords.
     foreach my $param ( qw( os_x os_y osie_x osie_y

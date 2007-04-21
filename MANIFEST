@@ -92,6 +92,7 @@ t/25_write_geo_data.t
 t/26_geo_data_search_form.t
 t/27_geo_data_edit_form.t
 t/28_wgs84_coords.t
+t/30_search_raw.t
 t/31_search.t
 t/32_search_simple_metadata.t
 t/33_search_advanced_search.t
