@@ -4,6 +4,8 @@ More detailed changelogs can be found at
 http://dev.openguides.org/log/trunk
 
 0.60
+        Fixed bug in OpenGuides::Feed - HTML equivalent link now works even
+          if your script_name isn't blank.
         Rewrote the HTML of the edit page to use <div>s rather than tables.
           Note that you will probably want to provide at least basic styling
           for these classes.  As part of this, added a new template,

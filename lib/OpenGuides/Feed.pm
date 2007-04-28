@@ -11,6 +11,11 @@ use Time::Piece;
 use URI::Escape;
 use Carp 'croak';
 
+use base qw( Class::Accessor );
+# Add more here if we need them - this one added for testing purposes.
+my @variables = qw( html_equiv_link );
+OpenGuides::Feed->mk_accessors( @variables );
+
 sub new {
     my ($class, @args) = @_;
     my $self = {};
@@ -52,7 +57,8 @@ sub _init {
     $self->{default_country}  = $config->default_country   || "";
     $self->{site_description} = $config->site_desc         || "";
     $self->{og_version}       = $args{og_version};
-    $self->{html_equiv_link}  = $self->{config}->script_url . '?action=rc';
+    $self->{html_equiv_link}  = $self->{config}->script_url
+                                . $self->{config}->script_name . '?action=rc';
 
     $self;
 }
