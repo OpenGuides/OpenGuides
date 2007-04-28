@@ -67,6 +67,7 @@ templates/node_rdf.tt
 templates/openguides_information_boxes.tt
 templates/plain_index.tt
 templates/preferences.tt
+templates/random_page_failure.tt
 templates/rdf_index.tt
 templates/recent_changes.tt
 templates/search_results.tt

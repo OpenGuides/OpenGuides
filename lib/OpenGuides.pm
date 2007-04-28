@@ -334,9 +334,21 @@ sub display_node {
 
   $guide->display_random_page;
 
-Display a random page.  As with other methods, the
-C<return_output> parameter can be used to return the output instead of
-printing it to STDOUT.
+Display a random page.  As with other methods, the C<return_output>
+parameter can be used to return the output instead of printing it to STDOUT.
+You can also restrict it to a given category and/or locale by supplying
+appropriate parameters:
+
+  $guide->display_random_page(
+                               category => "pubs",
+                               locale   => "bermondsey",
+                             );
+
+The values of these parameters are case-insensitive.
+
+You can make sure this method never returns pages that are themselves
+categories and/or locales by setting C<random_page_omits_categories>
+and/or C<random_page_omits_locales> in your wiki.conf.
 
 =cut
 
@@ -345,7 +357,38 @@ sub display_random_page {
     my $wiki = $self->wiki;
     my $config = $self->config;
 
-    my @nodes = $wiki->list_all_nodes();
+    my ( @catnodes, @locnodes, @nodes );
+    if ( $args{category} ) {
+        @catnodes = $wiki->list_nodes_by_metadata(
+            metadata_type  => "category",
+            metadata_value => $args{category},
+            ignore_case    => 1,
+        );
+    }
+    if ( $args{locale} ) {
+        @locnodes = $wiki->list_nodes_by_metadata(
+            metadata_type  => "locale",
+            metadata_value => $args{locale},
+            ignore_case    => 1,
+        );
+    }
+
+    if ( $args{category} && $args{locale} ) {
+        # If we have both category and locale, return the intersection.
+        my %count;
+        foreach my $node ( @catnodes, @locnodes ) {
+            $count{$node}++;
+        }
+        foreach my $node ( keys %count ) {
+            push @nodes, $node if $count{$node} > 1;
+        }
+    } elsif ( $args{category} ) {
+        @nodes = @catnodes;
+    } elsif ( $args{locale} ) {
+        @nodes = @locnodes;
+    } else {
+        @nodes = $wiki->list_all_nodes();
+    }
 
     my $omit_cats = $config->random_page_omits_categories;
     my $omit_locs = $config->random_page_omits_locales;
@@ -375,7 +418,22 @@ sub display_random_page {
         @nodes = keys %all_nodes;
     }
     my $node = $nodes[ rand @nodes ];
-    my $output = $self->redirect_to_node( $node );
+    my $output;
+
+    if ( $node ) {
+        $output = $self->redirect_to_node( $node );
+    } else {
+        my %tt_vars = (
+                        category => $args{category},
+                        locale   => $args{locale},
+                      );
+        $output = OpenGuides::Template->output(
+            wiki     => $wiki,
+            config   => $config,
+            template => "random_page_failure.tt",
+            vars     => \%tt_vars,
+        );
+    }
     return $output if $args{return_output};
     print $output;
 }

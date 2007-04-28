@@ -360,6 +360,7 @@ $build->{config}{__templates}         = [
                       "node_rdf.tt",
                       "openguides_information_boxes.tt",
                       "preferences.tt",
+                      "random_page_failure.tt",
                       "rdf_index.tt",
                       "recent_changes.tt",
                       "search_results.tt",

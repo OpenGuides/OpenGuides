@@ -85,7 +85,10 @@ eval {
                             format => $format,
                           );
     } elsif ($action eq 'random') {
-        print $guide->display_random_page;
+        print $guide->display_random_page(
+                            category => $q->param( "category" ) || "",
+                            locale   => $q->param( "locale" ) || "",
+                                         );
     } elsif ($action eq 'find_within_distance') {
         $guide->find_within_distance(
                                       id => $node,

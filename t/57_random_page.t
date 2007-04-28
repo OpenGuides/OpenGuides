@@ -10,7 +10,7 @@ if ( $@ ) {
     plan skip_all => "DBD::SQLite could not be used - no database to test with ($error)";
 }
 
-plan tests => 4;
+plan tests => 8;
 
 my ( $config, $guide, $wiki );
 
@@ -85,6 +85,63 @@ $node = get_node_from_output( $output );
 print "# Random node chosen: $node\n";
 isnt( $node, "Category Pubs", "category nodes not picked up as random page "
                        . "(this test may sometimes pass when it shouldn't)" );
+
+# Now make sure we can pick things up from specific categories/locales if asked
+refresh_db();
+$config = OpenGuides::Test->make_basic_config;
+$guide = OpenGuides->new( config => $config );
+
+OpenGuides::Test->write_data(
+                              guide         => $guide,
+                              node          => "Red Lion",
+                              locales       => "Hammersmith",
+                              categories    => "Pubs",
+                              return_output => 1,
+                            );
+OpenGuides::Test->write_data(
+                              guide         => $guide,
+                              node          => "Poppy Hana",
+                              locales       => "Bermondsey",
+                              categories    => "Restaurants",
+                              return_output => 1,
+                            );
+$output = $guide->display_random_page( category => "Pubs",
+                                       return_output => 1 );
+$node = get_node_from_output( $output );
+print "# Random node chosen: $node\n";
+is( $node, "Red Lion", "can ask for a random pub "
+                       . "(this test may sometimes pass when it shouldn't)" );
+
+$output = $guide->display_random_page( locale => "Bermondsey",
+                                       return_output => 1 );
+$node = get_node_from_output( $output );
+print "# Random node chosen: $node\n";
+is( $node, "Poppy Hana", "can ask for a random thing in Bermondsey "
+                       . "(this test may sometimes pass when it shouldn't)" );
+
+OpenGuides::Test->write_data(
+                              guide         => $guide,
+                              node          => "Stanley Arms",
+                              locales       => "Bermondsey",
+                              categories    => "Pubs",
+                              return_output => 1,
+                            );
+$output = $guide->display_random_page( locale => "Bermondsey",
+                                       category => "Pubs",
+                                       return_output => 1
+                                      );
+$node = get_node_from_output( $output );
+print "# Random node chosen: $node\n";
+is( $node, "Stanley Arms", "can ask for a random pub in Bermondsey "
+                       . "(this test may sometimes pass when it shouldn't)" );
+
+
+$output = $guide->display_random_page( locale => "Islington",
+                                       category => "Cinemas",
+                                       return_output => 1
+                                     );
+unlike( $output, qr/Status: 302/,
+       "don't get a redirect if we ask for category/locale with no pages in" );
 
 sub refresh_db {
     unlink "t/node.db";

@@ -168,6 +168,23 @@ sub make_wiki_object {
                                        || "View map of pages in $_[0] $_[1]";
                       return qq(<a href="$script_name?action=index;format=map;index_type=) . uri_escape(lc($_[0])) . qq(;index_value=) . uri_escape($_[1]) . qq(">$link_title</a>);
                 },
+        qr/\@RANDOM_PAGE_LINK(?:\s+\[\[(Category|Locale)\s+([^\]|]+)\|?([^\]]+)?\]\])?/ =>
+                sub {
+                      if ( UNIVERSAL::isa( $_[0], "Wiki::Toolkit" ) ) {
+                          shift; # don't need $wiki
+                      }
+                      my ( $type, $value, $link_title ) = @_;
+                      my $link = "$script_name?action=random";
+
+                      if ( $type && $value ) {
+                          $link .= ";" . lc( uri_escape( $type ) ) . "="
+                                . lc( uri_escape( $value ) );
+                          $link_title ||= "View a random page in $type $value";
+                      } else {
+                          $link_title ||= "View a random page on this guide";
+                      }
+                      return qq(<a href="$link">$link_title</a>);
+                },
         qr/\@INCLUDE_NODE\s+\[\[([^\]|]+)\]\]/ => 
             sub {
                   my ($wiki, $node) = @_;

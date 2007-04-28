@@ -4,6 +4,10 @@ More detailed changelogs can be found at
 http://dev.openguides.org/log/trunk
 
 0.60
+        Added new parameters to action=random - you can now supply category
+          and/or locale to get a random page chosen from that category/locale.
+        To go with this, added a new macro:
+          @RANDOM_PAGE_LINK [[Category Pubs|View a random pub]]
         Fixed bug in OpenGuides::Feed - HTML equivalent link now works even
           if your script_name isn't blank.
         Rewrote the HTML of the edit page to use <div>s rather than tables.

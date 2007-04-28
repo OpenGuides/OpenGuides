@@ -11,7 +11,7 @@ if ( $@ ) {
     plan skip_all => "DBD::SQLite could not be used - no database to test with. ($error)";
 }
 
-plan tests => 10;
+plan tests => 15;
 
 SKIP: {
     # Clear out the database from any previous runs.
@@ -88,11 +88,13 @@ SKIP: {
                                   guide   => $guide,
                                   node    => "Test 1",
                                   content => "\@MAP_LINK [[Category Foo]]",
+                                  return_output => 1,
                                 );
     OpenGuides::Test->write_data(
                                   guide   => $guide,
                                   node    => "Test 2",
                                   content => "\@MAP_LINK [[Category Foo|Map]]",
+                                  return_output => 1,
                                 );
     $output = $guide->display_node(
                                     return_output => 1,
@@ -106,17 +108,89 @@ SKIP: {
                                   );
     like( $output, qr/>Map<\/a>/, "...and can be overridden" );
 
+    # Test @RANDOM_PAGE_LINK
+    OpenGuides::Test->write_data(
+                                  guide   => $guide,
+                                  node    => "Test Random",
+                                  content => "\@RANDOM_PAGE_LINK",
+                                  return_output => 1,
+                                );
+    $output = $guide->display_node(
+                                    return_output => 1,
+                                    id            => "Test Random",
+                                  );
+    like( $output, qr/View a random page on this guide/,
+          "\@RANDOM_PAGE_LINK has right default link text" );
+
+    # Not sure yet how to let people override link text in the above.  TODO.
+
+    OpenGuides::Test->write_data(
+                                  guide   => $guide,
+                                  node    => "Test Random",
+                                  content => "\@RANDOM_PAGE_LINK "
+                                             . "[[Category Pubs]]",
+                                  return_output => 1,
+                                );
+    $output = $guide->display_node(
+                                    return_output => 1,
+                                    id            => "Test Random",
+                                  );
+    like( $output, qr/View a random page in Category Pubs/,
+          "\@RANDOM_PAGE_LINK has right default link text for categories" );
+    OpenGuides::Test->write_data(
+                                  guide   => $guide,
+                                  node    => "Test Random",
+                                  content => "\@RANDOM_PAGE_LINK "
+                                             . "[[Category Pubs|Random pub]]",
+                                  return_output => 1,
+                                );
+    $output = $guide->display_node(
+                                    return_output => 1,
+                                    id            => "Test Random",
+                                  );
+    like( $output, qr/>Random pub<\/a>/, "...and can be overridden" );
+
+    OpenGuides::Test->write_data(
+                                  guide   => $guide,
+                                  node    => "Test Random",
+                                  content => "\@RANDOM_PAGE_LINK "
+                                             . "[[Locale Fulham]]",
+                                  return_output => 1,
+                                );
+    $output = $guide->display_node(
+                                    return_output => 1,
+                                    id            => "Test Random",
+                                  );
+    like( $output, qr/View a random page in Locale Fulham/,
+          "\@RANDOM_PAGE_LINK has right default link text for categories" );
+    OpenGuides::Test->write_data(
+                                  guide   => $guide,
+                                  node    => "Test Random",
+                                  content => "\@RANDOM_PAGE_LINK "
+                                             . "[[Locale Fulham|"
+                                             . "Random thing in Fulham]]",
+                                  return_output => 1,
+                                );
+    $output = $guide->display_node(
+                                    return_output => 1,
+                                    id            => "Test Random",
+                                  );
+    like( $output, qr/>Random thing in Fulham<\/a>/,
+          "...and can be overridden" );
+
     # Test @INCLUDE_NODE
     OpenGuides::Test->write_data(
                                   guide   => $guide,
                                   node    => "Test 1",
                                   content => "Hello, I am Test 1!\r\n"
                                              . "\@INCLUDE_NODE [[Test 2]]",
+                                  return_output => 1,
                                 );
     OpenGuides::Test->write_data(
                                   guide   => $guide,
                                   node    => "Test 2",
                                   content => "Hello, I am Test 2!",
+                                  return_output => 1,
                                 );
     $output = $guide->display_node(
                                     return_output => 1,
