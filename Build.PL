@@ -119,7 +119,8 @@ foreach my $var ( qw(
     if ( $dbtype eq "sqlite" and
          ( $var eq "dbuser" or $var eq "dbpass" or $var eq "dbhost" )
        ) {
-        print "$var not relevant for SQLite... skipping...\n";
+        print "$var not relevant for SQLite... skipping...\n"
+            unless $skip_config;
         push @answers, { question => $qu,
                             variable => $var,
                          value    => "not-used" };
@@ -129,7 +130,8 @@ foreach my $var ( qw(
     # We don't ask this for new installs as Search::InvertedIndex is
     # deprecated
     if ( $var eq "use_plucene" and $existing_config->$var == 1) {
-        print "Skipping question about plucene\n";
+        print "Skipping question about plucene\n"
+            unless $skip_config;
         push @answers, { question => $qu,
                          variable => $var,
                          value => 1 };
