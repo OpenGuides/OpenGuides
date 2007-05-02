@@ -59,8 +59,8 @@ sub ACTION_install_extras {
     my $template_path        = $config->template_path;
     my $custom_template_path = $config->custom_template_path;
     my $custom_lib_path      = $config->custom_lib_path;
-    my @extra_scripts        = @{ $self->{config}{__extra_scripts} };
-    my @templates            = @{ $self->{config}{__templates} };
+    my @extra_scripts        = @{ $self->config_data( "__extra_scripts" ) };
+    my @templates            = @{ $self->config_data( "__templates" ) };
 
     print "Installing scripts to $install_directory:\n";
     # Allow for blank script_name - assume "index.cgi".
@@ -161,9 +161,18 @@ sub add_custom_lib_path {
     my $content = <$fh>;
     close $fh or die $!;
     $content =~ s|use strict;|use strict\;\nuse lib qw( $lib_path )\;|s;
+
+    # Make sure we can write to the file before we try to (see perldoc -f stat)
+    my @file_info = stat( $copy );
+    my $orig_mode = $file_info[2] & 07777;
+    chmod( $orig_mode | 0222, $copy )
+        or warn "Couldn't make $copy writeable: $!";
     open $fh, ">$copy" or die $!;
     print $fh $content;
     close $fh or die $!;
+    chmod( $orig_mode, $copy )
+        or warn "Couldn't restore permissions on $copy: $!";
+
     return 1;
 }
 

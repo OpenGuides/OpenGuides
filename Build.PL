@@ -265,6 +265,7 @@ my $search_module = $use_plucene ? "Plucene" : "Search::InvertedIndex";
 my $build = OpenGuides::Build->new(
     sign => 1,
     dist_name => "OpenGuides",
+    module_name => "OpenGuides",
     dist_version_from => "wiki.cgi",
     license => "perl",
     requires => {
@@ -299,7 +300,7 @@ my $build = OpenGuides::Build->new(
         'XML::RSS'                            => 0,
         },
     build_requires => {
-        'Module::Build' => '0.18', # earlier doesn't install script files
+        'Module::Build' => '0.26', # API change for accessing config data
         },
     recommends => {
         'DBD::SQLite'         => 0, # for testing
@@ -318,10 +319,10 @@ $build->add_to_cleanup( "t/node.db" );
 $build->add_to_cleanup( "t/templates/tmp/" );
 
 # Tell OpenGuides::Build which additional scripts and templates to install.
-$build->{config}{__extra_scripts}     = 
+$build->config_data( __extra_scripts => 
                       [ "wiki.conf", "preferences.cgi", "search.cgi",
-                        "newpage.cgi" ];
-$build->{config}{__templates}         = [
+                        "newpage.cgi" ] );
+$build->config_data( __templates     => [
                       "admin_home.tt",
                       "admin_revert_user.tt",
                       "backlink_results.tt",
@@ -368,7 +369,7 @@ $build->{config}{__templates}         = [
                       "search.tt",
                       "userstats.tt",
                       "wanted_pages.tt"
-    ];
+    ] );
 
 # Finally write the build script.
 $build->create_build_script;

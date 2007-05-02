@@ -4,6 +4,7 @@ More detailed changelogs can be found at
 http://dev.openguides.org/log/trunk
 
 0.60
+        Upgraded Module::Build requirement to cope with API change.
         Added new parameters to action=random - you can now supply category
           and/or locale to get a random page chosen from that category/locale.
         To go with this, added a new macro:
