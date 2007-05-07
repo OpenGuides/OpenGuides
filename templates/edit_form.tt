@@ -367,4 +367,4 @@
     <br clear="all" />
   [% END %]
 
-[% INCLUDE footer.tt %]
+[% INCLUDE footer.tt omit_footer_search_form = 1 %]

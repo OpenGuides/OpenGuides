@@ -4,6 +4,7 @@ More detailed changelogs can be found at
 http://dev.openguides.org/log/trunk
 
 0.60
+        Removed footer search from edit page (shouldn't have been there).
         Upgraded Module::Build requirement to cope with API change.
         Added new parameters to action=random - you can now supply category
           and/or locale to get a random page chosen from that category/locale.
