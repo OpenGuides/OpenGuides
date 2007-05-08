@@ -58,6 +58,8 @@ SKIP: {
          . "failure", 2
         if $have_ping;
     eval {
+        # Suppress warnings; we expect them.
+        local $SIG{__WARN__} = sub { };
         $guide = OpenGuides->new( config => $config );
     };
     ok( !$@, "Guide creation doesn't die if we ask for ping_services but "
