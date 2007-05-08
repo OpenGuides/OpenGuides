@@ -304,11 +304,6 @@ sub get_wgs84_coords {
             };
         };
     }
-    # Next, try .....
-    unless($helmert) {
-        eval {
-        };
-    }
     # Give up, return undef
     unless($helmert) {
        return undef; 
