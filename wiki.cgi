@@ -4,7 +4,7 @@ use strict;
 use warnings;
 
 use vars qw( $VERSION );
-$VERSION = '0.59';
+$VERSION = '0.60';
 
 use CGI qw/:standard/;
 use CGI::Carp qw(croak);
