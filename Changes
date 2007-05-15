@@ -3,6 +3,10 @@
 More detailed changelogs can be found at
 http://dev.openguides.org/log/trunk
 
+0.61
+        Added extra "edit this page" link next to the node name; if you don't
+          want it, add div#title_edit_link {display:none;} to your stylesheet.
+
 0.60    13 May 2007
         Removed footer search from edit page (shouldn't have been there).
         Upgraded Module::Build requirement to cope with API change.

@@ -280,6 +280,10 @@ div#navbar_version
     Purpose: Display the version number when showing the current version of
     an editable node.
 
+div#node_title
+    Used in: node.tt
+    Purpose: Display the node name and an "edit this page" link.
+
 div#rdf_link
     Used in: node.tt
     Purpose: Link to an RDF version of the node
@@ -301,6 +305,10 @@ div#recent_changes_feeds
 div#search_form
     Used in: footer.tt
     Purpose: The search form at the bottom of the page
+
+div#title_edit_link
+    Used in: node.tt
+    Purpose: Display an "edit this page" link near the node name.
 
 div#version
     Used in: node.tt
