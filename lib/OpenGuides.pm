@@ -1240,6 +1240,15 @@ As with other methods, parameters C<return_tt_vars> and
 C<return_output> can be used to return these things instead of
 printing the output to STDOUT.
 
+If you have specified the C<spam_detector_module> option in your
+C<wiki.conf>, this method will attempt to call the <looks_like_spam>
+method of that module to determine whether the edit is spam.  If this
+method returns true, then the C<spam_detected.tt> template will be
+used to display an error message.
+
+The C<looks_like_spam> method will be passed a datastructure containing
+content and metadata.
+
 The geographical data that you should provide in the L<CGI> object
 depends on the handler you chose in C<wiki.conf>.
 
@@ -1295,16 +1304,6 @@ sub commit_node {
     $new_metadata{longitude} = delete $new_metadata{longitude_unmunged}
         if $new_metadata{longitude_unmunged};
 
-    # Check to make sure all the indexable nodes are created
-    # Skip this for nodes needing moderation - this occurs for them once
-    #  they've been moderated
-    unless($wiki->node_required_moderation($node)) {
-        $self->_autoCreateCategoryLocale(
-                                          id       => $node,
-                                          metadata => \%new_metadata
-        );
-    }
-    
     foreach my $var ( qw( summary username comment edit_type ) ) {
         $new_metadata{$var} = $q->param($var) || "";
     }
@@ -1315,6 +1314,44 @@ sub commit_node {
                                     ? 1
                                     : 0;
 
+    # If we can, check to see if this edit looks like spam.
+    my $spam_detector = $config->spam_detector_module;
+    my $is_spam;
+    if ( $spam_detector ) {
+        eval {
+            eval "require $spam_detector";
+            $is_spam = $spam_detector->looks_like_spam(
+                node    => $node,
+                content => $content,
+                metadata => \%new_metadata,
+            );
+        };
+    }
+
+    if ( $is_spam ) {
+        my $output = OpenGuides::Template->output(
+            wiki     => $self->wiki,
+            config   => $config,
+            template => "spam_detected.tt",
+            vars     => {
+                          not_editable => 1,
+                        },
+        );
+        return $output if $return_output;
+        print $output;
+        return;
+    }
+
+    # Check to make sure all the indexable nodes are created
+    # Skip this for nodes needing moderation - this occurs for them once
+    #  they've been moderated
+    unless($wiki->node_required_moderation($node)) {
+        $self->_autoCreateCategoryLocale(
+                                          id       => $node,
+                                          metadata => \%new_metadata
+        );
+    }
+    
     my $written = $wiki->write_node( $node, $content, $checksum,
                                      \%new_metadata );
 

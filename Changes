@@ -4,6 +4,8 @@ More detailed changelogs can be found at
 http://dev.openguides.org/log/trunk
 
 0.61
+        Added experimental support for local spam detection modules; see the
+          commit_node method in "perldoc OpenGuides" for details.
         Added extra "edit this page" link next to the node name; if you don't
           want it, add div#title_edit_link {display:none;} to your stylesheet.
 

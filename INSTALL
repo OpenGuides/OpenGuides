@@ -277,6 +277,12 @@ http://creativecommons.org/licenses/by-sa/2.5/
 You should probably include a page on your wiki about your local licensing
 policy, but you can leave this blank for now if you don't have one yet.
 
+  "What module would you like to use for spam detection? (optional)"
+
+The module you choose should have a method called "looks_like_spam", which
+accepts a hash with content and metadata as keys, and returns true or false
+to the question of whether the edit should be considered to be spam. 
+
   "Distance calculation methods available are:
       1) British National Grid
       2) Irish National Grid

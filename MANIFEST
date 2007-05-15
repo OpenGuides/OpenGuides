@@ -73,6 +73,7 @@ templates/recent_changes.tt
 templates/search_results.tt
 templates/site_index.tt
 templates/search.tt
+templates/spam_detected.tt
 templates/userstats.tt
 templates/wanted_pages.tt
 t/01_load.t
@@ -136,5 +137,6 @@ t/72_node_moderation.t
 t/73_toggle_moderation.t
 t/74_ping_plugin.t
 t/75_revert_user.t
+t/76_detect_spam.t
 t/templates/15_test.tt
 wiki.cgi

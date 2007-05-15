@@ -21,6 +21,7 @@ my @variables = qw(
    centre_lat default_gmaps_zoom default_gmaps_search_zoom force_wgs84
    licence_name licence_url licence_info_url moderation_requires_password
    enable_node_image enable_common_categories enable_common_locales
+   spam_detector_module
 );
 my @questions = map { $_ . "__qu" } @variables;
 OpenGuides::Config->mk_accessors( @variables );
@@ -105,7 +106,8 @@ sub _init {
                      force_wgs84 => 0,
                      licence_name => "",
                      licence_url => "",
-                     licence_info_url => ""
+                     licence_info_url => "",
+                     spam_detector_module => "",
                    );
 
     # See if we already have some config variables set.
@@ -185,7 +187,8 @@ sub _init {
         google_analytics_key => "Do you have a Google Analytics key to use with this guide? If you enter it here, then Google Analytics functionality will be automatically enabled.",
         licence_name => "What licence will you use for the guide?",
         licence_url => "What is the URL to your licence?",
-        licence_info_url => "What is the URL to your local page about your licensing policy?"
+        licence_info_url => "What is the URL to your local page about your licensing policy?",
+        spam_detector_module => "What module would you like to use for spam detection? (optional)",
     );
 
     foreach my $var ( keys %questions ) {
@@ -309,6 +312,8 @@ sub script_url {
 =item * licence_url
 
 =item * licence_info_url
+
+=item * spam_detector_module
 
 =back
 
