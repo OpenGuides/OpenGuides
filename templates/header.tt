@@ -33,9 +33,9 @@ locales.size > 0 %][% FOREACH locale = locales %][% locale.name %][%-
     <link rel="alternate" type="application/rss+xml" title="Page as RSS" href="[% feed_base %];format=rss" />
     <link rel="alternate" type="application/atom+xml" title="Page as Atom" href="[% feed_base %];format=atom" />
   [% END %]
-  [% IF latitude AND longitude %]
-    <meta name="ICBM" content="[% latitude %], [% longitude %]" />
-    <meta name="geo.position" content="[% latitude %], [% longitude %]" />
+  [% IF wgs84_lat AND wgs84_long %]
+    <meta name="ICBM" content="[% wgs84_lat %], [% wgs84_long %]" />
+    <meta name="geo.position" content="[% wgs84_lat %], [% wgs84_long %]" />
   [% END %]
     <link rel="alternate" type="application/rss+xml" title="[% site_name %] - Recent Changes (RSS 1.0)" href="[% full_cgi_url %]?action=rc;format=rss" />
     <link rel="alternate" type="application/atom+xml" title="[% site_name %] - Recent Changes (Atom)" href="[% full_cgi_url %]?action=rc;format=atom" />
