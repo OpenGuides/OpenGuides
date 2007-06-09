@@ -781,6 +781,9 @@ sub show_backlinks {
                         return_output => 1,
                     );
 
+If either the C<type> or the C<value> parameter is omitted, then all pages
+will be returned.
+
 =cut
 
 sub show_index {
@@ -906,7 +909,6 @@ sub show_index {
 
     %conf = (
                 %conf,
-                node        => "$args{type} index", # KLUDGE
                 template    => $template,
                 tt_vars     => \%tt_vars,
             );
