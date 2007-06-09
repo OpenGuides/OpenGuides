@@ -67,9 +67,9 @@
         </foaf:based_near>
       [% END %]
 
-      [% IF latitude AND longitude %]
-        <geo:lat>[% latitude %]</geo:lat>
-        <geo:long>[% longitude %]</geo:long>
+      [% IF wgs84_lat AND wgs84_long %]
+        <geo:lat>[% wgs84_lat %]</geo:lat>
+        <geo:long>[% wgs84_long %]</geo:long>
       [% END %]
 
       [% IF os_x AND os_y %]
