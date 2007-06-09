@@ -66,7 +66,7 @@
       <label for="track_recent_changes_views">Track my visits to Recent Changes and offer me a link for &#8220;changes since I last viewed Recent Changes&#8221;.</label>
     </p>
 
-    [% IF gmaps_api_key %]
+    [% IF gmaps_api_key AND config.show_gmap_in_node_display %]
       <p>
         [% IF display_google_maps %]
           <input type="checkbox" id="display_google_maps" name="display_google_maps" value="1" checked="1" />
@@ -152,7 +152,7 @@
     [% UNLESS track_recent_changes_views %] not [% END %]
   be tracked.</p>
 
-  [% IF gmaps_api_key %]
+  [% IF gmaps_api_key AND config.show_gmap_in_node_display %]
     <p>Google Maps will
       [% UNLESS display_google_maps %] not [% END %]
     be displayed.</p>

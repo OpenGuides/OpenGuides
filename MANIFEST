@@ -122,6 +122,7 @@ t/55_node_history.t
 t/56_diffs_with_macros.t
 t/57_random_page.t
 t/58_recent_changes_navbar.t
+t/59_preferences.t
 t/61_bug_textareas.t
 t/62_bug_trailing_whitespace.t
 t/63_bug_map_link_no_address.t
