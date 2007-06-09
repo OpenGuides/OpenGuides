@@ -2,47 +2,38 @@ use strict;
 use Cwd;
 use CGI::Cookie;
 use Wiki::Toolkit::Formatter::UseMod;
-use OpenGuides::Config;
+use OpenGuides;
 use OpenGuides::Template;
-use Test::MockObject;
+use OpenGuides::Test;
 use Test::More tests => 28;
 
-my $config = OpenGuides::Config->new(
-       vars => {
-                 template_path         => cwd . '/t/templates',
-                 site_name             => 'Wiki::Toolkit Test Site',
-                 script_url            => 'http://wiki.example.com/',
-                 script_name           => 'mywiki.cgi',
-                 default_country       => 'United Kingdom',
-                 default_city          => 'London',
-                 contact_email         => 'wiki@example.com',
-                 stylesheet_url        => 'http://wiki.example.com/styles.css',
-                 home_name             => 'Home Page',
-                 formatting_rules_node => 'Rules',
-                 formatting_rules_link => '',
-               }
-);
+my $config = OpenGuides::Test->make_basic_config;
+$config->template_path( cwd . "/t/templates" );
+$config->site_name( "Wiki::Toolkit Test Site" );
+$config->script_url( "http://wiki.example.com/" );
+$config->script_name( "mywiki.cgi" );
+$config->contact_email( 'wiki@example.com' );
+$config->stylesheet_url( "http://wiki.example.com/styles.css" );
+$config->home_name( "Home Page" );
+$config->formatting_rules_node( "Rules" );
+$config->formatting_rules_link( "" );
 
-# White box testing - we know that OpenGuides::Template only actually uses
-# the node_name_to_node_param method of the formatter component of the wiki
-# object passed in, and I CBA to make a proper wiki object here.
-my $fake_wiki = Test::MockObject->new;
-$fake_wiki->mock("formatter",
-                 sub { return Wiki::Toolkit::Formatter::UseMod->new( munge_urls => 1 ); } );
+my $guide = OpenGuides->new( config => $config );
+my $wiki = $guide->wiki;
 
-eval { OpenGuides::Template->output( wiki   => $fake_wiki,
+eval { OpenGuides::Template->output( wiki   => $wiki,
                                      config => $config ); };
 ok( $@, "->output croaks if no template file supplied" );
 
 eval {
-    OpenGuides::Template->output( wiki     => $fake_wiki,
+    OpenGuides::Template->output( wiki     => $wiki,
                                   config   => $config,
                                   template => "15_test.tt" );
 };
 is( $@, "", "...but not if one is" );
 
 my $output = OpenGuides::Template->output(
-    wiki     => $fake_wiki,
+    wiki     => $wiki,
     config   => $config,
     template => "15_test.tt",
     vars     => { foo => "bar" }
@@ -52,7 +43,7 @@ like( $output, qr/^Content-Type: text\/html/,
 like( $output, qr/FOO: bar/, "variables substituted" );
 
 $output = OpenGuides::Template->output(
-    wiki         => $fake_wiki,
+    wiki         => $wiki,
     config       => $config,
     template     => "15_test.tt",
     content_type => ""
@@ -61,7 +52,7 @@ unlike( $output, qr/^Content-Type: text\/html/,
         "Content-Type header omitted if content_type arg explicitly blank" );
 
 $output = OpenGuides::Template->output(
-    wiki     => $fake_wiki,
+    wiki     => $wiki,
     config   => $config,
     template => "15_idonotexist.tt"
 );
@@ -69,7 +60,7 @@ like( $output, qr/Failed to process template/, "fails nice on TT error" );
 
 # Test TT variables are auto-set from config.
 $output = OpenGuides::Template->output(
-    wiki     => $fake_wiki,
+    wiki     => $wiki,
     config   => $config,
     template => "15_test.tt"
 );
@@ -93,7 +84,7 @@ like( $output, qr/OPENGUIDES VERSION: 0\.\d\d/,
 
 # Test TT variables auto-set from node name.
 $output = OpenGuides::Template->output(
-    wiki     => $fake_wiki,
+    wiki     => $wiki,
     config   => $config,
     node     => "Test Node",
     template => "15_test.tt"
@@ -105,7 +96,7 @@ like( $output, qr/NODE PARAM: Test_Node/, "node_param var set" );
 # Test that cookies go in.
 my $cookie = CGI::Cookie->new( -name => "x", -value => "y" );
 $output = OpenGuides::Template->output(
-    wiki     => $fake_wiki,
+    wiki     => $wiki,
     config   => $config,
     template => "15_test.tt",
     cookies  => $cookie
@@ -124,7 +115,7 @@ $config = OpenGuides::Config->new(
                }
 );
 $output = OpenGuides::Template->output(
-    wiki     => $fake_wiki,
+    wiki     => $wiki,
     config   => $config,
     template => "15_test.tt"
 );
@@ -141,7 +132,7 @@ $config = OpenGuides::Config->new(
                }
 );
 $output = OpenGuides::Template->output(
-    wiki     => $fake_wiki,
+    wiki     => $wiki,
     config   => $config,
     template => "15_test.tt"
 );
@@ -159,7 +150,7 @@ $config = OpenGuides::Config->new(
                }
 );
 $output = OpenGuides::Template->output(
-    wiki     => $fake_wiki,
+    wiki     => $wiki,
     config   => $config,
     template => "15_test.tt"
 );
@@ -173,7 +164,7 @@ $cookie = OpenGuides::CGI->make_prefs_cookie(
 );
 $ENV{HTTP_COOKIE} = $cookie;
 $output = OpenGuides::Template->output(
-    wiki     => $fake_wiki,
+    wiki     => $wiki,
     config   => $config,
     template => "15_test.tt"
 );
@@ -182,7 +173,7 @@ like( $output, qr/FORMATTING RULES LINK: /,
 
 # Test that explicitly supplied vars override vars in cookie.
 $output = OpenGuides::Template->output(
-    wiki     => $fake_wiki,
+    wiki     => $wiki,
     config   => $config,
     template => "15_test.tt",
     vars     => { omit_formatting_link => "fish" },
@@ -201,7 +192,7 @@ $config = OpenGuides::Config->new(
 );
 
 $output = OpenGuides::Template->output(
-    wiki     => $fake_wiki,
+    wiki     => $wiki,
     config   => $config,
     template => "15_test.tt",
 );
@@ -210,7 +201,7 @@ like( $output, qr/ENABLE PAGE DELETION: 0/,
 
 $config->enable_page_deletion( "n" );
 $output = OpenGuides::Template->output(
-    wiki     => $fake_wiki,
+    wiki     => $wiki,
     config   => $config,
     template => "15_test.tt",
 );
@@ -219,7 +210,7 @@ like( $output, qr/ENABLE PAGE DELETION: 0/,
 
 $config->enable_page_deletion( "y" );
 $output = OpenGuides::Template->output(
-    wiki     => $fake_wiki,
+    wiki     => $wiki,
     config   => $config,
     template => "15_test.tt",
 );
@@ -228,7 +219,7 @@ like( $output, qr/ENABLE PAGE DELETION: 1/,
 
 $config->enable_page_deletion( 0 );
 $output = OpenGuides::Template->output(
-    wiki     => $fake_wiki,
+    wiki     => $wiki,
     config   => $config,
     template => "15_test.tt",
 );
@@ -237,7 +228,7 @@ like( $output, qr/ENABLE PAGE DELETION: 0/,
 
 $config->enable_page_deletion( 1 );
 $output = OpenGuides::Template->output(
-    wiki     => $fake_wiki,
+    wiki     => $wiki,
     config   => $config,
     template => "15_test.tt",
 );
