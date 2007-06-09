@@ -56,11 +56,11 @@ to OpenGuides developers.
 Returns everything you need to send to STDOUT, including the
 Content-Type: header. Croaks unless C<template> is supplied.
 
-The variables supplied in C<vars> are passed through to the template
-specified.  Additional Template Toolkit variables are automatically
-set and passed through as well, as described below.  B<Note:>
-variables set in C<vars> will over-ride any variables of the same name
-in the config object or the user cookies.
+The config object and variables supplied in C<vars> are passed through
+to the template specified.  Additional Template Toolkit variables are
+automatically set and passed through as well, as described below.
+B<Note:> variables set in C<vars> will over-ride any variables of the
+same name in the config object or the user cookies.
 
 =over
 
