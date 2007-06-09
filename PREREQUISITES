@@ -6,7 +6,7 @@ Algorithm::Diff (version 0.13 or later. Note that the latest version uses
 CGI (version 2.92 or later)
 CGI::Carp
 CGI::Cookie
-Wiki::Toolkit (version 0.73 or later)
+Wiki::Toolkit (version 0.74 or later)
 Wiki::Toolkit::Feed::Atom
 Wiki::Toolkit::Feed::RSS
 Wiki::Toolkit::Formatter::UseMod

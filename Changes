@@ -10,6 +10,7 @@ http://dev.openguides.org/log/trunk
           want it, add div#title_edit_link {display:none;} to your stylesheet.
         Removed dependency on Test::MockObject.
         Remove misleading CSS examples
+        Support alternative database ports
 
 0.60    13 May 2007
         Removed footer search from edit page (shouldn't have been there).

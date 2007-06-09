@@ -92,7 +92,7 @@ my $install_directory; # used to suggest template paths
 my $use_plucene = 1; # keep track of this so we know what to put in prereqs
 my $centre_lat = ''; # contains centre lat derived from Google Maps URL
 foreach my $var ( qw(
-   dbname dbuser dbpass dbhost script_name
+   dbname dbuser dbpass dbhost dbport script_name
    install_directory template_path custom_template_path script_url
    custom_lib_path use_plucene indexing_directory enable_page_deletion
    admin_pass stylesheet_url site_name navbar_on_home_page
@@ -118,7 +118,8 @@ foreach my $var ( qw(
     }
 
     if ( $dbtype eq "sqlite" and
-         ( $var eq "dbuser" or $var eq "dbpass" or $var eq "dbhost" )
+         ( $var eq "dbuser" or $var eq "dbpass" or $var eq "dbhost" or
+           $var eq "dbport")
        ) {
         print "$var not relevant for SQLite... skipping...\n"
             unless $skip_config;
@@ -276,7 +277,7 @@ my $build = OpenGuides::Build->new(
         'CGI'                                 => '2.92',  # avoid escapeHTML bug
         'CGI::Carp'                           => 0,
         'CGI::Cookie'                         => 0,
-        'Wiki::Toolkit'                       => '0.73',
+        'Wiki::Toolkit'                       => '0.74',  # for dbport
         'Wiki::Toolkit::Feed::Atom'           => 0,
         'Wiki::Toolkit::Feed::RSS'            => 0,
         'Wiki::Toolkit::Formatter::UseMod'    => 0,
