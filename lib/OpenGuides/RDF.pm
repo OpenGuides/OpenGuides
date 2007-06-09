@@ -113,6 +113,15 @@ sub emit_rdfxml {
                                         : "rdf:Description";
     $tt_vars{is_geospatial} = $is_geospatial;
 
+    # Fix up lat and long.
+    eval {
+           @tt_vars{ qw( wgs84_long wgs84_lat ) } =
+               OpenGuides::Utils->get_wgs84_coords(
+                                             longitude => $tt_vars{longitude},
+                                             latitude  => $tt_vars{latitude},
+                                             config    => $config );
+    };
+
     # Timestamp of last edited.
     my $timestamp = $node_data{last_modified};
     if ( $timestamp ) {
