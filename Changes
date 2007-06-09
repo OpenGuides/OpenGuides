@@ -8,6 +8,7 @@ http://dev.openguides.org/log/trunk
           commit_node method in "perldoc OpenGuides" for details.
         Added extra "edit this page" link next to the node name; if you don't
           want it, add div#title_edit_link {display:none;} to your stylesheet.
+        Removed dependency on Test::MockObject.
 
 0.60    13 May 2007
         Removed footer search from edit page (shouldn't have been there).

@@ -297,7 +297,6 @@ my $build = OpenGuides::Build->new(
         $search_module                        => 0,
         'POSIX'                               => 0,
         'Template'                            => '2.15', # for hash.delete and string.remove vmethods
-        'Test::MockObject'                    => '0.07', # earlier doesn't use 'mock'
         'Time::Piece'                         => 0,
         'URI::Escape'                         => 0,
         'XML::RSS'                            => 0,
