@@ -12,9 +12,7 @@ README.GMAPS
 SIGNATURE
 TROUBLESHOOTING
 UPGRADING
-examples/london.css
 examples/reindex.pl
-examples/vegan-oxford.css
 lib/OpenGuides/Build.pm
 lib/OpenGuides/CGI.pm
 lib/OpenGuides/Config.pm
