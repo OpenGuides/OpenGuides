@@ -30,15 +30,24 @@ if ( $action eq "makepage" ) {
 }
 
 sub show_form {
+    my %tt_vars = (
+                    not_editable     => 1,
+                    not_deletable    => 1,
+                    deter_robots     => 1,
+                    disallowed_chars => \@badchars,
+                    pagename         => $pagename,
+                  );
+    if ($config->enable_common_categories || $config->enable_common_locales) {
+        $tt_vars{common_catloc} = 1;
+        $tt_vars{common_categories} = $config->enable_common_categories;
+        $tt_vars{common_locales} = $config->enable_common_locales;
+        $tt_vars{catloc_link} = $config->script_url . $config->script_name
+                                . "?id=";
+    }
     print OpenGuides::Template->output( wiki     => $wiki,
 					config   => $config,
 					template => "newpage.tt",
-					vars     => {
-					    not_editable     => 1,
-                                            not_deletable    => 1,
-                                            deter_robots     => 1,
-				       	    disallowed_chars => \@badchars,
-                                            pagename         => $pagename }
+					vars     => \%tt_vars,
     );
 }
 
