@@ -31,17 +31,17 @@
 </div>
 <div>
 	<label for="metadata_value">Metadata Value:</label>
-	<input name="metadata_value" value="[% metadata_value %]" />
+	<input name="metadata_value" id="metadata_value" value="[% metadata_value %]" />
 	&nbsp; &nbsp; &nbsp;
 	<i>Optional, eg 'pub' when metadata value is Category</i>
 </div>
 <div>
 	<label for="exclude_locales">Exclude Locales:</label>
-	<input type="checkbox" name="exclude_locales" [% IF exclude_locales %]checked="true"[% END %] />
+	<input type="checkbox" name="exclude_locales" id="exclude_locales" [% IF exclude_locales %]checked="true"[% END %] />
 </div>
 <div>
 	<label for="exclude_categories">Exclude Categories:</label>
-	<input type="checkbox" name="exclude_categories" [% IF exclude_categories %]checked="true"[% END %] />
+	<input type="checkbox" name="exclude_categories" id="exclude_categories" [% IF exclude_categories %]checked="true"[% END %] />
 </div>
 <div>
 	<input type="submit" value="Find Nodes" />

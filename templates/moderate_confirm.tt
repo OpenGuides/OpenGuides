@@ -24,13 +24,13 @@ To do so, please enter the admin password. If not, you can
   <input type="hidden" name="id" value="[% node_param %]" />
 [% IF moderation_action == 'set_moderation' %]
   <label for="moderation_flag">Moderation Required:</label>
-  <input type="checkbox" name="moderation_flag" [% IF moderation_flag %]checked="yes"[% END %] />
+  <input type="checkbox" name="moderation_flag" id="moderation_flag" [% IF moderation_flag %]checked="yes"[% END %] />
   <br />
 [% ELSE %]
   <input type="hidden" name="version" value="[% version %]" />
 [% END %]
-  <strong>Password:</strong>
-  <input type="password" name="password" />
+  <strong><label for="password">Password:</label></strong>
+  <input type="password" name="password" id="password" />
   <input type="submit" value="Go!" />
 </form>
 

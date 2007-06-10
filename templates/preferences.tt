@@ -79,7 +79,7 @@
 
     <p>
       <label for="default_edit_type">Default edit type:</label>
-      <select name="default_edit_type">
+      <select name="default_edit_type" id="default_edit_type">
         [% IF default_edit_type == 'normal' %]
           <option value="normal" selected="1">Normal edit</option>
           <option value="tidying">Minor tidying</option>
@@ -92,7 +92,7 @@
 
     <p>
       <label for="cookie_expires">Preferences expire:</label>
-      <select name="cookie_expires">
+      <select name="cookie_expires" id="cookie_expires">
         [% IF cookie_expires == 'never' %]
           <option value="month">in one month</option>
           <option value="year">in one year</option>

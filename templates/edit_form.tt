@@ -47,7 +47,7 @@
       <legend>Main information</legend>
 
       <div class="edit_form_group" id="content_group">
-        <label for="content">
+        <label for="content_textarea">
           [% IF conflict %]
             Current content:
           [% ELSE %]
