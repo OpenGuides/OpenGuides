@@ -15,7 +15,7 @@ if ( $@ ) {
     plan skip_all => "DBD::SQLite could not be used - no database to test with. ($error)";
 }
 
-plan tests => 27;
+plan tests => 28;
 
 Wiki::Toolkit::Setup::SQLite::setup( { dbname => "t/node.db" } );
 my $config = OpenGuides::Test->make_basic_config;
@@ -56,6 +56,7 @@ $wiki->write_node( "Calthorpe Arms",
         opening_hours_text => "test hours",
         latitude           => "51.524193",
         longitude          => "-0.114436",
+        map_link           => "http://pubsite.com/calthorpe/get_there.htm",
         summary            => "a nice pub",
     }
 );
@@ -80,6 +81,10 @@ like( $rdfxml, qr|<foaf:homepage rdf:resource="test website" />|, "picks up webs
 like( $rdfxml,
     qr|<dc:title>Wiki::Toolkit Test Site: Calthorpe Arms</dc:title>|,
     "sets the title correctly" );
+
+like( $rdfxml,
+    qr|<os:map_link rdf:resource="http://pubsite.com/calthorpe/get_there.htm" />|,
+    "includes map link" );
 
 like( $rdfxml, qr|<foaf:Person rdf:ID="Kake">|,
     "last username to edit used as contributor" );

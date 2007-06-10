@@ -77,6 +77,10 @@
         <os:y>[% os_y %]</os:y>
       [% END %]
 
+      [% IF map_link %]
+        <os:map_link rdf:resource="[% map_link %]" />
+      [% END %]
+
     [% END %]
 
     [% IF phone OR fax OR website OR opening_hours_text %]

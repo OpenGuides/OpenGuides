@@ -81,7 +81,7 @@ sub emit_rdfxml {
 
     foreach my $var ( qw( phone fax website opening_hours_text address
                           postcode city country latitude longitude username
-                          os_x os_y summary ) ) {
+                          os_x os_y summary map_link ) ) {
         my $val = $metadata{$var}[0] || $defaults{$var} || "";
         $tt_vars{$var} = $val;
     }
@@ -103,7 +103,7 @@ sub emit_rdfxml {
     # Check for geospatialness and define container object as appropriate.
     my $is_geospatial;
     foreach my $var ( qw( os_x os_y latitude longitude address postcode
-                          opening_hours_text ) ) {
+                          opening_hours_text map_link ) ) {
         $is_geospatial = 1 if $tt_vars{$var};
     }
 
