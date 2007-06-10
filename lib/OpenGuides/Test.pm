@@ -165,12 +165,14 @@ sub write_data {
 
   my $q = OpenGuides::Test->make_cgi_object;
 
-You can supply values for the following keys: C<content>,
-C<categories>, C<locales>, C<os_x>, C<os_y>, C<osie_x>, C<osie_y>,
-C<latitude>, C<longitude>, C<summary>, C<node_image>, C<node_image_licence>,
-C<node_image_copyright>, C<node_image_url>, C<username>, C<comment>,
-C<edit_type>.  You should supply them exactly as they would come from a CGI
-form, eg lines in a textarea are separated by C<\r\n>.
+You can supply values for the following keys: C<content>, C<categories>,
+C<locales>, C<node_image>, C<node_image_licence>,
+C<node_image_copyright>, C<node_image_url>, C<phone>, C<fax>,
+C<website>, C<hours_text>, C<address>, C<postcode>, C<map_link>,
+C<os_x>, C<os_y>, C<osie_x>, C<osie_y>, C<latitude>, C<longitude>,
+C<summary>, C<username>, C<comment>, C<edit_type>.  You should supply
+them exactly as they would come from a CGI form, eg lines in a textarea
+are separated by C<\r\n>.
 
 =cut
 
@@ -180,34 +182,16 @@ sub make_cgi_object {
     # Set up CGI parameters ready for a node write.
     # Most of these are in here to avoid uninitialised value warnings.
     my $q = CGI->new( "" );
-    $q->param( -name => "content", -value => $args{content} || "foo" );
-    $q->param( -name => "categories", -value => $args{categories} || "" );
-    $q->param( -name => "locales", -value => $args{locales} || "" );
-    $q->param( -name => "node_image", -value => $args{node_image} || "" );
-    $q->param( -name => "node_image_licence",
-               -value => $args{node_image_licence} || "" );
-    $q->param( -name => "node_image_copyright",
-               -value => $args{node_image_copyright} || "" );
-    $q->param( -name => "node_image_url",
-               -value => $args{node_image_url} || "" );
-    $q->param( -name => "phone", -value => "" );
-    $q->param( -name => "fax", -value => "" );
-    $q->param( -name => "website", -value => "" );
-    $q->param( -name => "hours_text", -value => "" );
-    $q->param( -name => "address", -value => "" );
-    $q->param( -name => "postcode", -value => "" );
-    $q->param( -name => "map_link", -value => "" );
-    $q->param( -name => "os_x", -value => $args{os_x} || "" );
-    $q->param( -name => "os_y", -value => $args{os_y} || "" );
-    $q->param( -name => "osie_x", -value => $args{osie_x} || "" );
-    $q->param( -name => "osie_y", -value => $args{osie_y} || "" );
-    $q->param( -name => "latitude", -value => $args{latitude} || "" );
-    $q->param( -name => "longitude", -value => $args{longitude} || "" );
-    $q->param( -name => "summary", -value => $args{summary} || "" );
-    $q->param( -name => "username", -value => $args{username} || "TestUser" );
-    $q->param( -name => "comment", -value => $args{comment} || "A comment." );
-    $q->param( -name => "edit_type",
-               -value => $args{edit_type} || "Normal edit" );
+    $args{content} ||= "foo";
+    $args{edit_type} ||= "Normal edit";
+    for my $param ( qw( content categories locales node_image node_image_licence
+                        node_image_copyright node_image_url phone fax website
+                        hours_text address postcode map_link os_x os_y osie_x osie_y
+                        latitude longitude summary username comment edit_type
+                      )
+                  ) {
+        $q->param( -name => $param, -value => $args{$param} || "" );
+    }
     $ENV{REMOTE_ADDR} = "127.0.0.1";
 
     return $q;

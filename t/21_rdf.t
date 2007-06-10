@@ -29,7 +29,8 @@ eval { require Wiki::Toolkit::Search::Plucene; };
 if ( $@ ) { $config->use_plucene ( 0 ) };
 
 
-my $wiki = OpenGuides::Utils->make_wiki_object( config => $config );
+my $guide = OpenGuides->new( config => $config );
+my $wiki = $guide->wiki;
 
 # Clear out the database from any previous runs.
 foreach my $del_node ( $wiki->list_all_nodes ) {
@@ -43,21 +44,20 @@ is( $@, "", "'new' doesn't croak if wiki and config objects supplied" );
 isa_ok( $rdf_writer, "OpenGuides::RDF" );
 
 # Test the data for a node that exists.
-$wiki->write_node( "Calthorpe Arms",
-    "CAMRA-approved pub near King's Cross",
-    undef,
-    {
+OpenGuides::Test->write_data(
+        guide              => $guide,
+        node               => "Calthorpe Arms",
+        content            => "CAMRA-approved pub near King's Cross",
         comment            => "Stub page, please update!",
         username           => "Kake",
         postcode           => "WC1X 8JR",
-        locale             => [ "Bloomsbury", "St Pancras" ],
+        locales            => "Bloomsbury\r\nSt Pancras",
         phone              => "test phone number",
         website            => "test website",
-        opening_hours_text => "test hours",
+        hours_text         => "test hours",
         latitude           => "51.524193",
         longitude          => "-0.114436",
         summary            => "a nice pub",
-    }
 );
 
 my $rdfxml = $rdf_writer->emit_rdfxml( node => "Calthorpe Arms" );
@@ -105,7 +105,7 @@ unlike( $rdfxml, qr|<dc:date>1970|, "hasn't defaulted to the epoch" );
 $config = OpenGuides::Test->make_basic_config;
 $config->default_city( "" );
 $config->default_country( "" );
-my $guide = OpenGuides->new( config => $config );
+$guide = OpenGuides->new( config => $config );
 OpenGuides::Test->write_data(
                                 guide => $guide,
                                 node  => "Star Tavern",
