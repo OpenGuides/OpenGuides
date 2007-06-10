@@ -8,7 +8,7 @@
   xmlns:chefmoz="http://chefmoz.org/rdf/elements/1.0/"
   xmlns:wn="http://xmlns.com/wordnet/1.6/"
   xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#"
-  xmlns:os="http://downlode.org/rdf/os/0.1/"
+  xmlns:os="http://downlode.org/Code/RDF/Ordnance_Survey/schema/1#"
   xmlns:owl="http://www.w3.org/2002/07/owl#"
   xmlns="http://www.w3.org/2000/10/swap/pim/contact#"
 >
