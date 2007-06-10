@@ -9,7 +9,7 @@ eval {
     require OpenGuides::Config;
 };
 
-die "Config::Tiny is required to configure this application.\n" if $@;
+die "Problem loading OpenGuides module or a missing module\n\n$@.\n" if $@;
 
 print <<EOF;
 
