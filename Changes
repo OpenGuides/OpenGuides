@@ -16,7 +16,6 @@ http://dev.openguides.org/log/trunk
         Respect redirect=0 (#104).
         If an unknown action is supplied to wiki.cgi, redirect to
           action=display (partial fix for #102)
-        Include <os:map_link> in node RDF (fixes #26).
 
 0.60    13 May 2007
         Removed footer search from edit page (shouldn't have been there).
