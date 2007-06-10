@@ -29,19 +29,26 @@ foreach my $del_node ( $wiki->list_all_nodes ) {
 
 
 # Add 3 different pages, one of which with two versions
-$wiki->write_node( "Test Page", "foo", undef,
-                   { category => "Alpha" } )
-  or die "Couldn't write node";
-$wiki->write_node( "Test Page 2", "foo", undef,
-                   { category => "Alpha" } )
-  or die "Couldn't write node";
-$wiki->write_node( "Locale Bar", "foo", undef,
-                   { category => "Locales" } )
-  or die "Couldn't write locale";
-my %data = $wiki->retrieve_node( "Locale Bar" );
-$wiki->write_node( "Locale Bar", "foo version 2", $data{checksum},
-                   { category => "Locales" } )
-  or die "Couldn't write locale for the 2nd time";
+OpenGuides::Test->write_data(
+     guide         => $guide,
+     node          => "Test Page", 
+     categories    => "Alpha",
+     return_output => 1  );
+OpenGuides::Test->write_data(
+      guide        => $guide,
+      node         =>  "Test Page 2", 
+      categories    => "Alpha",
+      return_output => 1  );
+OpenGuides::Test->write_data(
+      guide      => $guide,
+      node       =>  "Locale Bar", 
+      categories  => "Locales",
+      return_output => 1  );
+OpenGuides::Test->write_data(
+      guide      => $guide,
+      node       =>  "Locale Bar", 
+      categories  => "Locales",
+     return_output => 1  );
 
 
 # Test the tt vars
@@ -52,7 +59,7 @@ is( $@, "", "->display_admin_interface doesn't die" );
 
 is( scalar @{$ttvars{'nodes'}}, 2, "Right number of nodes" );
 is( scalar @{$ttvars{'locales'}}, 1, "Right number of locales" );
-is( scalar @{$ttvars{'categories'}}, 0, "Right number of categories" );
+is( scalar @{$ttvars{'categories'}}, 2, "Right number of categories" );
 
 my @node_names = map { $_->{name}; } @{$ttvars{nodes}};
 is_deeply( [ sort @node_names ], [ "Test Page", "Test Page 2" ],
