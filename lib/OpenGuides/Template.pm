@@ -109,6 +109,8 @@ If C<node> is supplied:
 Content-Type: defaults to C<text/html> and is omitted if the
 C<content_type> arg is explicitly set to the blank string.
 
+The HTTP response code may be explictly set with the C<http_status> arg.
+
 =cut
 
 sub output {
@@ -180,18 +182,30 @@ sub output {
     $tt_vars = { %$tt_vars, %{ $args{vars} || {} } };
 
     my $header = "";
-    unless ( defined $args{content_type} and $args{content_type} eq "" ) {
-        my $content_type;
-        if ($args{content_type}) {
-            $content_type = $args{content_type};
+    my %cgi_header_args;
+
+    if ( defined $args{content_type} and $args{content_type} eq "" ) {
+        $cgi_header_args{'-type'} = '';
+    } else {
+        if ( $args{content_type} ) {
+            $cgi_header_args{'-type'} = $args{content_type};
         } else {
-            $content_type = "text/html";
+            $cgi_header_args{'-type'} = "text/html";
         }
-        if ($tt_vars->{http_charset}) {
-            $content_type .= "; charset=".$tt_vars->{http_charset};
+        if ( $tt_vars->{http_charset} ) {
+            $cgi_header_args{'-type'} .= "; charset=".$tt_vars->{http_charset};
         }
-        $header = CGI::header( -type => $content_type, -cookie => $args{cookies} );
+        # XXX should possibly not be inside this block, but retaining
+        # existing functionality for now. See
+        # http://dev.openguides.org/ticket/220
+        $cgi_header_args{'-cookie'} = $args{cookies};
     }
+
+    if ( $args{http_status} ) {
+        $cgi_header_args{'-status'} = $args{http_status};
+    }
+
+    $header = CGI::header( %cgi_header_args );
 
     # vile hack
     my %field_vars = OpenGuides::Template->extract_metadata_vars(

@@ -114,6 +114,7 @@ t/46_map_in_node_display.t
 t/47_navbar_placement.t
 t/48_google_analytics.t
 t/49_custom_header.t
+t/50_http_response_codes.t
 t/51_display_node.t
 t/52_display_diffs.t
 t/53_show_index.t
