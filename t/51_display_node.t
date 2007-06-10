@@ -12,7 +12,7 @@ if ( $@ ) {
     plan skip_all => "DBD::SQLite could not be used - no database to test with ($error)";
 }
 
-plan tests => 7;
+plan tests => 9;
 
 Wiki::Toolkit::Setup::SQLite::setup( { dbname => "t/node.db" } );
 my $config = OpenGuides::Config->new(
@@ -47,3 +47,14 @@ like( $output, qr/My\s+Home\s+Page/, "...and defaults to the home node, and take
 like( $output, qr{\Q<a href="wiki.cgi?action=edit;id=My_Home_Page"\E>Edit\s+this\s+page</a>}, "...and home page has an edit link" );
 my %tt_vars = $guide->display_node( return_tt_vars => 1 );
 ok( defined $tt_vars{recent_changes}, "...and recent_changes is set for the home node even if we have changed its name" );
+
+$wiki->write_node( 'Redirect Test', '#REDIRECT Test Page', undef );
+
+$output = $guide->display_node( id => 'Redirect Test', return_output => 1 );
+
+like( $output, qr{^\QLocation: http://example.com/wiki.cgi?id=Test_Page;oldid=Redirect_Test}ms,
+      '#REDIRECT redirects correctly' );
+
+$output = $guide->display_node( id => 'Redirect Test', return_output => 1, redirect => 0 );
+
+unlike( $output, qr{^\QLocation: }ms, '...but not with redirect=0' );

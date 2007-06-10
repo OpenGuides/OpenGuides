@@ -175,7 +175,7 @@ sub display_node {
     my $wiki = $self->wiki;
     my $config = $self->config;
     my $oldid = $args{oldid} || '';
-    my $do_redirect = $args{redirect} || 1;
+    my $do_redirect = defined($args{redirect}) ? $args{redirect} : 1;
 
     my %tt_vars;
 

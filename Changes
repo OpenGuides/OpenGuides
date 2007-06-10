@@ -13,6 +13,7 @@ http://dev.openguides.org/log/trunk
         Support alternative database ports
         Only display the google maps preference if node maps are enabled
           (#192).
+        Respect redirect=0 (#104).
 
 0.60    13 May 2007
         Removed footer search from edit page (shouldn't have been there).
