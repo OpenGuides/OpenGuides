@@ -21,9 +21,7 @@
   [% TRY %]
     [% INCLUDE custom_footer_credits.tt %]
   [% CATCH %]
-    <p>
-      [% INCLUDE delete_link %]
-    </p>
+    [% INCLUDE delete_link %]
     <p>
       Powered by <a href="[% full_cgi_url%]?action=about">OpenGuides [% openguides_version %]</a>.
     </p>
