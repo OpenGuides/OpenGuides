@@ -268,13 +268,10 @@ sub display_node {
         $tt_vars{catloc_link} = $config->script_url . $config->script_name
                                 . "?id=";
     }
-    
-    if ( $node_data{content} && $node_data{content} =~ /^#REDIRECT\s+(.+?)\s*$/ ) {
-        my $redirect = $1;
-        # Strip off enclosing [[ ]] in case this is an extended link.
-        $redirect =~ s/^\[\[//;
-        $redirect =~ s/\]\]\s*$//;
 
+    my $redirect = OpenGuides::Utils->detect_redirect(
+                                              content => $node_data{content} );
+    if ( $redirect ) {
         # Don't redirect if the parameter "redirect" is given as 0.
         if ($do_redirect == 0) {
             return %tt_vars if $args{return_tt_vars};

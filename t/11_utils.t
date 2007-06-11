@@ -2,7 +2,7 @@ use strict;
 use Wiki::Toolkit::Setup::SQLite;
 use OpenGuides::Config;
 use OpenGuides::Utils;
-use Test::More tests => 8;
+use Test::More tests => 10;
 
 eval { my $wiki = OpenGuides::Utils->make_wiki_object; };
 ok( $@, "->make_wiki_object croaks if no config param supplied" );
@@ -28,7 +28,8 @@ if ( $@ ) {
 }
 
 SKIP: {
-    skip "DBD::SQLite could not be used - no database to test with. ($sqlite_error)", 5
+    skip "DBD::SQLite could not be used - no database to test with. "
+         . "($sqlite_error)", 7
       unless $have_sqlite;
 
     # Clear out the database from any previous runs.
@@ -59,4 +60,11 @@ SKIP: {
     ok( $wiki->store,      "...and store defined" );
     ok( $wiki->search_obj, "...and search defined" );
     ok( $wiki->formatter,  "...and formatter defined" );
+
+    # Now test ->detect_redirect
+    is( OpenGuides::Utils->detect_redirect( content => "#REDIRECT [[Foo]]" ),
+        "Foo",
+        "->detect_redirect successfully detects redirect content" );
+    ok( !OpenGuides::Utils->detect_redirect( content => "Mmmm, tea." ),
+        "...and successfully detects non-redirect content" );
 }

@@ -328,6 +328,33 @@ sub get_wgs84_coords {
     }
 }
 
+=item B<detect_redirect>
+
+    $redir = OpenGuides::Utils->detect_redirect( content => "foo" );
+
+Checks the content of a node to see if the node is a redirect to another
+node.  If so, returns the name of the node that this one redirects to.  If
+not, returns false.
+
+(Also returns false if no content is provided.)
+
+=cut
+
+sub detect_redirect {
+    my ( $self, %args ) = @_;
+    return unless $args{content};
+
+    if ( $args{content} =~ /^#REDIRECT\s+(.+?)\s*$/ ) {
+        my $redirect = $1;
+
+        # Strip off enclosing [[ ]] in case this is an extended link.
+        $redirect =~ s/^\[\[//;
+        $redirect =~ s/\]\]\s*$//;
+
+        return $redirect;
+    }
+}
+
 =back
 
 =head1 AUTHOR

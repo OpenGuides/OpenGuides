@@ -2,6 +2,8 @@ package OpenGuides::RDF;
 
 use strict;
 
+use OpenGuides::Utils;
+
 use vars qw( $VERSION );
 $VERSION = '0.09';
 
@@ -139,9 +141,9 @@ sub emit_rdfxml {
                             = $self->{make_node_url}->( $node_name,
                                                         $tt_vars{version} );
 
-    # Should probably be moved into OpenGuides::Utils.
-    if ($node_data{content} =~ /^\#REDIRECT \[\[(.*?)]\]$/) {
-        my $redirect = $1;
+    my $redirect = OpenGuides::Utils->detect_redirect( content =>
+                                                         $node_data{content} );
+    if ( $redirect ) {
         $tt_vars{redirect} = $config->script_url . $config->script_name
                              . "?id="
                              . $formatter->node_name_to_node_param( $redirect )
