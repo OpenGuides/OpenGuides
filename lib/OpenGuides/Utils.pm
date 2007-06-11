@@ -355,6 +355,26 @@ sub detect_redirect {
     }
 }
 
+=item B<validate_edit>
+
+    eval { OpenGuides::Utils->validate_edit(
+        id       => $node,
+        content  => $content
+        metadata => \%new_metadata
+    ) };
+
+Checks supplied content for general validity. If anything is invalid,
+dies with an error string suitable for reporting to the user.
+
+=cut
+
+sub validate_edit {
+    my ( $self, %args ) = @_;
+    die "Content missing\n" unless $args{content};
+    die "Metadata missing\n" unless $args{metadata};
+
+};
+
 =back
 
 =head1 AUTHOR
