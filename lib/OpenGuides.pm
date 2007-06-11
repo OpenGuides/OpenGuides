@@ -1335,26 +1335,6 @@ sub commit_node {
     }
     $new_metadata{host} = $ENV{REMOTE_ADDR};
 
-    # General validation
-    eval { OpenGuides::Utils->validate_edit(
-        content  => $content,
-        metadata => \%new_metadata
-    ) };
-
-    if ( $@ ) {
-        my $output = OpenGuides::Template->output(
-            wiki     => $self->wiki,
-            config   => $config,
-            template => "validate_edit_failed.tt",
-            vars => {
-                message => $@
-            }
-        );
-        return $output if $return_output;
-        print $output;
-        return;
-    }
-
     # Wiki::Toolkit::Plugin::RSS::ModWiki wants "major_change" to be set.
     $new_metadata{major_change} = ( $new_metadata{edit_type} eq "Normal edit" )
                                     ? 1
