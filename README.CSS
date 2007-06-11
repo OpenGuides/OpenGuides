@@ -284,6 +284,10 @@ div#node_title
     Used in: node.tt
     Purpose: Display the node name and an "edit this page" link.
 
+div#nonexistent_node_message
+    Used in: node.tt
+    Purpose: Display message when someone tries to view a nonexistent node.
+
 div#rdf_link
     Used in: node.tt
     Purpose: Link to an RDF version of the node
