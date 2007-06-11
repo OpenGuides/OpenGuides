@@ -50,7 +50,9 @@ ok( defined $tt_vars{recent_changes}, "...and recent_changes is set for the home
 
 $wiki->write_node( 'Redirect Test', '#REDIRECT Test Page', undef );
 
-$output = $guide->display_node( id => 'Redirect Test', return_output => 1 );
+$output = $guide->display_node( id => 'Redirect Test',
+                                return_output => 1,
+                                intercept_redirect => 1 );
 
 like( $output, qr{^\QLocation: http://example.com/wiki.cgi?id=Test_Page;oldid=Redirect_Test}ms,
       '#REDIRECT redirects correctly' );

@@ -163,13 +163,25 @@ sub differ {
                           return_tt_vars => 1,
                       );
 
-If C<version> is omitted then the latest version will be displayed.
+If C<version> is omitted then it will assume you want the latest version.
+
+Note that if you pass the C<return_output> parameter, and your node is a
+redirecting node, this method will fake the redirect and return the output
+that will actually end up in the user's browser.  If instead you want to see
+the HTTP headers that will be printed in order to perform the redirect, pass
+the C<intercept_redirect> parameter as well.  The C<intercept_redirect>
+parameter has no effect if the node isn't a redirect, or if the
+C<return_output> parameter is omitted.
+
+(At the moment, C<return_tt_vars> acts as if the C<intercept_redirect>
+parameter was passed.)
 
 =cut
 
 sub display_node {
     my ($self, %args) = @_;
     my $return_output = $args{return_output} || 0;
+    my $intercept_redirect = $args{intercept_redirect};
     my $version = $args{version};
     my $id = $args{id} || $self->config->home_name;
     my $wiki = $self->wiki;
@@ -276,9 +288,17 @@ sub display_node {
             print $output;
         } elsif ( $wiki->node_exists($redirect) && $redirect ne $id && $redirect ne $oldid ) {
             # Avoid loops by not generating redirects to the same node or the previous node.
-            my $output = $self->redirect_to_node($redirect, $id);
-            return $output if $return_output;
-            print $output;
+            if ( $return_output ) {
+                if ( $intercept_redirect ) {
+                    return $self->redirect_to_node( $redirect, $id );
+                } else {
+                    return $self->display_node( id            => $redirect,
+                                                oldid         => $id,
+                                                return_output => 1,
+                                              );
+                }
+            }
+            print $self->redirect_to_node( $redirect, $id );
             return 0;
         }
     }

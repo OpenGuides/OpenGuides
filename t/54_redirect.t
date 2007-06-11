@@ -41,7 +41,9 @@ $wiki->write_node( "Test Page", "#REDIRECT [[Test Page 2]]" )
 $wiki->write_node( "Test Page 2", "foo" )
   or die "Can't write node";
 my $output = eval {
-    $guide->display_node( id => "Test Page", return_output => 1 );
+    $guide->display_node( id => "Test Page",
+                          return_output => 1,
+                          intercept_redirect => 1 );
 };
 is( $@, "", "->display_node doesn't die when page is a redirect" );
 
