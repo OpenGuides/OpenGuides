@@ -274,8 +274,8 @@ sub display_node {
     if ( $redirect ) {
         # Don't redirect if the parameter "redirect" is given as 0.
         if ($do_redirect == 0) {
-            return %tt_vars if $args{return_tt_vars};
             $tt_vars{current} = 1;
+            return %tt_vars if $args{return_tt_vars};
             my $output = $self->process_template(
                                                   id            => $id,
                                                   template      => "node.tt",
