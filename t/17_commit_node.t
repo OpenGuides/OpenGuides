@@ -18,7 +18,7 @@ if ( $@ ) {
 }
 
 
-plan tests => 5;
+plan tests => 7;
 
 # Clear out the database from any previous runs.
 unlink "t/node.db";
@@ -97,3 +97,34 @@ $output = $guide->commit_node(
 %node = $wiki->retrieve_node("Wombats");
 is( $node{version}, 2, "First version" );
 is( $node{metadata}->{edit_type}[0], "Normal edit", "Right edit type" );
+
+# Now try to commit some invalid data, and make sure we get an edit form back
+$q = CGI->new;
+$q->param( -name => "content", -value => "foo" );
+$q->param( -name => "categories", -value => "" );
+$q->param( -name => "locales", -value => "" );
+$q->param( -name => "phone", -value => "" );
+$q->param( -name => "fax", -value => "" );
+$q->param( -name => "website", -value => "" );
+$q->param( -name => "hours_text", -value => "" );
+$q->param( -name => "address", -value => "" );
+$q->param( -name => "postcode", -value => "" );
+$q->param( -name => "map_link", -value => "" );
+$q->param( -name => "os_x", -value => "fooooo" );
+$q->param( -name => "os_y", -value => "" );
+$q->param( -name => "username", -value => "bob" );
+$q->param( -name => "comment", -value => "foo" );
+$q->param( -name => "node_image", -value => "image" );
+$q->param( -name => "edit_type", -value => "Minor tidying" );
+
+$output = $guide->commit_node(
+                                return_output => 1,
+                                id => "Wombats again",
+                                cgi_obj => $q,
+                             );
+
+like( $output, qr/Your input was invalid/,
+    "Edit form displayed and invalid input message shown if invalid input" );
+
+like( $output, qr/os_x must be integer/,
+    "Edit form displayed and os_x integer message displayed" );

@@ -11,6 +11,21 @@
     </div>
   [% END %]
 
+  [% IF validate_failed %]
+    <div class="warning_text">
+      <p>
+        Your input was invalid:
+      </p>
+      <ul>
+      [% FOREACH error = validate_failed %] 
+        <li>[% error %]</li>
+      [% END %]
+      </ul>
+      <p>
+        Please correct your input data and try again.
+      </p>
+  [% END %]
+
   [% IF preview_html AND preview_above_edit_box %]
     <div id="maincontent">
       <h2>Preview</h2>

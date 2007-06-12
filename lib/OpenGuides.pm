@@ -459,11 +459,20 @@ sub display_random_page {
 
   $guide->display_edit_form(
                              id => "Vivat Bacchus",
+                             vars => \%vars,
+                             content => $content,
+                             metadata => \%metadata,
+                             checksum => $checksum
                            );
 
 Display an edit form for the specified node.  As with other methods, the
 C<return_output> parameter can be used to return the output instead of
 printing it to STDOUT.
+
+If this is to redisplay an existing edit, the content, metadata
+and checksum may be supplied in those arguments
+
+Extra template variables may be supplied in the vars argument
 
 =cut
 
@@ -499,6 +508,22 @@ sub display_edit_form {
                     moderate        => $moderate,
                     deter_robots    => 1,
     );
+
+    # Override some things if we were supplied with them
+    $tt_vars{content} = $args{content} if $args{content};
+    $tt_vars{checksum} = $args{checksum} if $args{checksum};
+    if (defined $args{vars}) {
+        my %supplied_vars = %{$args{vars}};
+        foreach my $key ( keys %supplied_vars ) {
+            $tt_vars{$key} = $supplied_vars{$key};
+        }
+    }
+    if (defined $args{metadata}) {
+        my %supplied_metadata = %{$args{metadata}};
+        foreach my $key ( keys %supplied_metadata ) {
+            $tt_vars{$key} = $supplied_metadata{$key};
+        }
+    }
 
     my $output = $self->process_template(
                                           id            => $node,
@@ -1339,6 +1364,30 @@ sub commit_node {
     $new_metadata{major_change} = ( $new_metadata{edit_type} eq "Normal edit" )
                                     ? 1
                                     : 0;
+
+    # General validation
+    my $fails = OpenGuides::Utils->validate_edit(
+        cgi_obj  => $q
+    );
+
+    if ( scalar @{$fails} ) {
+        my %vars = (
+            validate_failed => $fails
+        );
+
+        my $output = $self->display_edit_form(
+                           id            => $node,
+                           content       => CGI->escapeHTML($content),
+                           metadata      => \%new_metadata,
+                           vars          => \%vars,
+                           checksum      => CGI->escapeHTML($checksum),
+                           return_output => 1
+        );
+
+        return $output if $return_output;
+        print $output;
+        return;
+    }
 
     # If we can, check to see if this edit looks like spam.
     my $spam_detector = $config->spam_detector_module;

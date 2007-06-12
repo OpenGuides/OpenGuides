@@ -18,6 +18,7 @@ http://dev.openguides.org/log/trunk
           action=display (partial fix for #102)
         Added new div#nonexistent_node_message for displaying message when
           someone tries to view a nonexistent node.
+        Validate input geodata (#22)
 
 0.60    13 May 2007
         Removed footer search from edit page (shouldn't have been there).

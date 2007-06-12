@@ -355,6 +355,43 @@ sub detect_redirect {
     }
 }
 
+=item B<validate_edit>
+
+    my $fails = OpenGuides::Utils->validate_edit(
+        id       => $node,
+        cgi_obj  => $q
+    );
+
+Checks supplied content for general validity. If anything is invalid,
+returns an array ref of errors to report to the user.
+
+=cut
+
+sub validate_edit {
+    my ( $self, %args ) = @_;
+    my $q = $args{cgi_obj};
+    my @fails;
+    push @fails, "Content missing" unless $q;
+    return \@fails if @fails;
+
+    # Now do our real validation
+    # Numeric tests
+    foreach my $var (qw(os_x os_y)) {
+        if ($q->param($var) and $q->param($var) !~ /^-?\d+$/) {
+            push @fails, "$var must be integer, was: " . $q->param($var);
+        }
+    }
+
+    foreach my $var (qw(latitude longitude)) {
+        if ($q->param($var) and $q->param($var) !~ /^-?\d+\.?(\d+)?$/) {
+            push @fails, "$var must be numeric, was: " . $q->param($var);
+        }
+    }
+
+    return \@fails;
+
+};
+
 =back
 
 =head1 AUTHOR
