@@ -94,6 +94,8 @@ same name in the config object or the user cookies.
 
 =item * C<licence_info_url>
 
+=item * C<prefs> (the preferences from the user cookie)
+
 =back
 
 =over
@@ -149,6 +151,7 @@ sub output {
 
     my $tt_vars = {
         config                => $config,
+        prefs                 => \%cookie_data,
         site_name             => $config->site_name,
         cgi_url               => $script_name,
         script_url            => $script_url,
