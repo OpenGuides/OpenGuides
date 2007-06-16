@@ -423,19 +423,19 @@ sub extract_metadata_vars {
             $os_y =~ s/\s+//g;
 
             # If we were sent x and y, work out lat/long; and vice versa.
-            if ( $os_x && $os_y ) {
+            if ( defined $os_x && defined $os_y ) {
                 my $point = Geography::NationalGrid::GB->new( Easting =>$os_x,
                                      Northing=>$os_y);
                 $lat  = sprintf("%.6f", $point->latitude);
                 $long = sprintf("%.6f", $point->longitude);
-            } elsif ( $lat && $long ) {
+            } elsif ( defined $lat && defined $long ) {
                 my $point = Geography::NationalGrid::GB->new(Latitude  => $lat,
                                                              Longitude => $long);
                 $os_x = $point->easting;
                 $os_y = $point->northing;
             }
             
-            if ( $os_x && $os_y ) {
+            if ( defined $os_x && defined $os_y ) {
                 %vars = (
                             %vars,
                             latitude  => $lat,
@@ -468,18 +468,18 @@ sub extract_metadata_vars {
             $osie_y =~ s/\s+//g;
 
             # If we were sent x and y, work out lat/long; and vice versa.
-            if ( $osie_x && $osie_y ) {
+            if ( defined $osie_x && defined $osie_y ) {
                 my $point = Geography::NationalGrid::IE->new(Easting=>$osie_x,
                                    Northing=>$osie_y);
                 $lat = sprintf("%.6f", $point->latitude);
                 $long = sprintf("%.6f", $point->longitude);
-            } elsif ( $lat && $long ) {
+            } elsif ( defined $lat && defined $long ) {
                 my $point = Geography::NationalGrid::GB->new(Latitude  => $lat,
                                                              Longitude => $long);
                 $osie_x = $point->easting;
                 $osie_y = $point->northing;
             }
-            if ( $osie_x && $osie_y ) {
+            if ( defined $osie_x && defined $osie_y ) {
                 %vars = (
                             %vars,
                             latitude  => $lat,
@@ -505,7 +505,7 @@ sub extract_metadata_vars {
             my $lat    = $q->param("latitude");
             my $long   = $q->param("longitude");
             
-            if ( $lat && $long ) {
+            if ( defined $lat && defined $long ) {
                 # Trim whitespace.
                 $lat =~ s/\s+//g;
                 $long =~ s/\s+//g;
