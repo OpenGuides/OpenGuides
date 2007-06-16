@@ -19,6 +19,7 @@ http://dev.openguides.org/log/trunk
         Added new div#nonexistent_node_message for displaying message when
           someone tries to view a nonexistent node.
         Validate input geodata (#22)
+        List all contributors in RDF version of nodes (#106).
 
 0.60    13 May 2007
         Removed footer search from edit page (shouldn't have been there).

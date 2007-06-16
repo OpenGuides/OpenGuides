@@ -82,7 +82,7 @@ sub emit_rdfxml {
                    );
 
     foreach my $var ( qw( phone fax website opening_hours_text address
-                          postcode city country latitude longitude username
+                          postcode city country latitude longitude
                           os_x os_y summary ) ) {
         my $val = $metadata{$var}[0] || $defaults{$var} || "";
         $tt_vars{$var} = $val;
@@ -133,9 +133,6 @@ sub emit_rdfxml {
         $tt_vars{timestamp} = $time->strftime("%Y-%m-%dT%H:%M:%S");
     }
 
-    $tt_vars{user_id} = $tt_vars{username};
-    $tt_vars{user_id} =~ s/\s/_/g;
-    
     $tt_vars{node_uri} = $self->{make_node_url}->( $node_name );
     $tt_vars{node_uri_with_version}
                             = $self->{make_node_url}->( $node_name,
@@ -155,6 +152,28 @@ sub emit_rdfxml {
         if ( $tt_vars{$var} ) {
             $tt_vars{$var} = encode_entities_numeric( $tt_vars{$var} );
         }
+    }
+
+    my @revisions = $wiki->list_node_all_versions(
+                                                   name => $node_name,
+                                                   with_content => 0,
+                                                   with_metadata => 1,
+                                                 );
+
+    # We want all users who have edited the page listed as contributors,
+    # but only once each
+    foreach my $rev ( @revisions ) {
+        my $username = $rev->{metadata}{username};
+        next unless defined $username && length $username;
+
+        my $user_id = $username;
+        $user_id =~ s/\s+/_/g;
+        
+        $tt_vars{contributors}{$username} ||=
+            {
+              username => encode_entities_numeric($username),
+              user_id  => encode_entities_numeric($user_id),
+            };
     }
 
     # OK, we've set all our template variables; now process the template.

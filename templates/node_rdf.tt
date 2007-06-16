@@ -18,11 +18,13 @@
     <dc:date>[% timestamp %]</dc:date>
     <dcterms:modified>[% timestamp %]</dcterms:modified>
 
+    [% FOREACH contributor = contributors.values %] 
     <dc:contributor>
-      <foaf:Person rdf:ID="[% user_id %]">
-        <foaf:nick>[% username %]</foaf:nick>
+      <foaf:Person rdf:ID="[% contributor.user_id %]">
+        <foaf:nick>[% contributor.username %]</foaf:nick>
       </foaf:Person>
     </dc:contributor>
+    [% END %]
 
     <dc:source rdf:resource="[% node_uri %]" />
     <wiki:version>[% version %]</wiki:version>
