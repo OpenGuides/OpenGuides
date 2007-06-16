@@ -155,6 +155,12 @@ sub get_prefs_from_cookie {
     if ( $cookies{$cookie_name} ) {
         %data = $cookies{$cookie_name}->value; # call ->value in list context
     }
+
+    return $class->get_prefs_from_hash( %data );
+}
+
+sub get_prefs_from_hash {
+    my ($class, %data) = @_;
     my %defaults = (
                      username                   => "Anonymous",
                      include_geocache_link      => 0,
