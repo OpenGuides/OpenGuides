@@ -190,7 +190,11 @@ sub make_cgi_object {
                         latitude longitude summary username comment edit_type
                       )
                   ) {
-        $q->param( -name => $param, -value => $args{$param} || "" );
+        if (defined $args{$param}) {
+            $q->param( -name => $param, -value => $args{$param} );
+        } else {
+            $q->param( -name => $param, -value => '' );
+        }
     }
     $ENV{REMOTE_ADDR} = "127.0.0.1";
 
