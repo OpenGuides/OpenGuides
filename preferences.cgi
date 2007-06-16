@@ -30,7 +30,7 @@ sub set_preferences {
     my @cookies = ( $prefs_cookie );
     # If they've asked not to have their recent changes visits tracked,
     # clear any existing recentchanges cookie.
-    if ( ! $track_rc ) {
+    if ( ! $prefs{track_recent_changes_views} ) {
         my $rc_cookie = OpenGuides::CGI->make_recent_changes_cookie(
             config       => $config,
             clear_cookie => 1,
@@ -42,9 +42,8 @@ sub set_preferences {
         config   => $config,
         template => "preferences.tt",
         cookies  => \@cookies,
-	vars     => {
-                      not_editable               => 1,
-                      %prefs,
+        vars     => {
+                      not_editable => 1,
                     }
     );
 }

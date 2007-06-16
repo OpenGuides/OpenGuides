@@ -136,11 +136,15 @@ sub make_prefs_cookie {
 =item B<get_prefs_from_cookie>
 
   my %prefs = OpenGuides::CGI->get_prefs_from_cookie(
-      config => $config
+      config => $config,
+      cookies => \@cookies
   );
 
 Croaks unless an L<OpenGuides::Config> object is supplied as C<config>.
 Returns default values for any parameter not specified in cookie.
+
+If C<cookies> is provided, this overrides any cookies submitted by the
+browser.
 
 =cut
 
@@ -149,14 +153,37 @@ sub get_prefs_from_cookie {
     my $config = $args{config} or croak "No config object supplied";
     croak "Config object not an OpenGuides::Config"
         unless UNIVERSAL::isa( $config, "OpenGuides::Config" );
-    my %cookies = CGI::Cookie->fetch;
     my $cookie_name = $class->_get_cookie_name( config => $config );
+    my %cookies;
+    if ( my $cookies = $args{cookies} ) {
+        if (ref $cookies ne 'ARRAY') {
+            $cookies = [ $cookies ];
+        }
+        %cookies = map { $_->name => $_ } @{ $cookies };
+    }
+    else {
+        %cookies = CGI::Cookie->fetch;
+    }
     my %data;
     if ( $cookies{$cookie_name} ) {
         %data = $cookies{$cookie_name}->value; # call ->value in list context
     }
 
-    return $class->get_prefs_from_hash( %data );
+    my %long_forms = (
+                       user       => "username",
+                       gclink     => "include_geocache_link",
+                       prevab     => "preview_above_edit_box",
+                       lltrad     => "latlong_traditional",
+                       omithlplks => "omit_help_links",
+                       rcmined    => "show_minor_edits_in_rc",
+                       defedit    => "default_edit_type",
+                       exp        => "cookie_expires",
+                       trackrc    => "track_recent_changes_views",
+                       gmaps      => "display_google_maps",
+                     );
+    my %long_data = map { $long_forms{$_} => $data{$_} } keys %long_forms;
+
+    return $class->get_prefs_from_hash( %long_data );
 }
 
 sub get_prefs_from_hash {
@@ -173,27 +200,11 @@ sub get_prefs_from_hash {
                      track_recent_changes_views => 0,
                      display_google_maps        => 1,
                    );
-    my %long_forms = (
-                       user       => "username",
-                       gclink     => "include_geocache_link",
-                       prevab     => "preview_above_edit_box",
-                       lltrad     => "latlong_traditional",
-                       omithlplks => "omit_help_links",
-                       rcmined    => "show_minor_edits_in_rc",
-                       defedit    => "default_edit_type",
-                       exp        => "cookie_expires",
-                       trackrc    => "track_recent_changes_views",
-                       gmaps      => "display_google_maps",
-                     );
     my %return;
-    foreach my $key ( keys %long_forms ) {
-        my $long_key = $long_forms{$key};
-        if ( defined $data{$key} ) {
-            $return{$long_key} = $data{$key};
-        } else {
-            $return{$long_key} = $defaults{$long_key};
-        }
+    foreach my $key ( keys %data ) {
+        $return{$key} = defined $data{$key} ? $data{$key} : $defaults{$key};
     }
+
     return %return;
 }
 

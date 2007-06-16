@@ -131,7 +131,9 @@ sub output {
     my ($formatting_rules_link, $omit_help_links);
     my $formatting_rules_node = $config->formatting_rules_node;
     $formatting_rules_link = $config->formatting_rules_link;
-    my %cookie_data = OpenGuides::CGI->get_prefs_from_cookie(config=>$config);
+    my %cookie_data = OpenGuides::CGI->get_prefs_from_cookie(config=>$config,
+                                                             cookies => $args{cookies},
+                                                            );
     if ( $cookie_data{omit_help_links} ) {
         $omit_help_links = 1;
     } else {

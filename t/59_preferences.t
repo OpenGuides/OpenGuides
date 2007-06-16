@@ -60,7 +60,7 @@ sub get_output {
         config       => $config,
         template     => "preferences.tt",
         content_type => '',
-        vars         => { OpenGuides::CGI->get_prefs_from_cookie( config => $config ),
+        vars         => {
                           not_editable => 1,
                           show_form    => 1
                         },

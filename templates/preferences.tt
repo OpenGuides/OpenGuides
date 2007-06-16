@@ -8,7 +8,7 @@
   <form action="preferences.cgi" method="post">
     <h1>Username</h1>
     <p><label for="username">How you wish to be identified in Recent Changes:</label></p>
-    <input type="text" size="20" id="username" name="username" value="[% username %]" />
+    <input type="text" size="20" id="username" name="username" value="[% prefs.username %]" />
 
     <h1>Preferences</h1>
 
@@ -117,7 +117,7 @@
 
   <h1>Username/preferences saved</h1>
 
-  <p>Username set to &#8220;[% username %]&#8221;.</p>
+  <p>Username set to &#8220;[% prefs.username %]&#8221;.</p>
 
   <p>Preview area shown
     [% IF prefs.preview_above_edit_box %]
@@ -128,7 +128,7 @@
   edit box.</p>
 
   <p>&#8220;Look for nearby geocaches&#8221; link
-    [% UNLESS include_geocache_link %] not [% END %]
+    [% UNLESS prefs.include_geocache_link %] not [% END %]
   included in navbar.</p>
 
   <p>Latitude and longitude displayed as
@@ -149,7 +149,7 @@
   included in Recent Changes.</p>
 
   <p>Your visits to Recent Changes will
-    [% UNLESS track_recent_changes_views %] not [% END %]
+    [% UNLESS prefs.track_recent_changes_views %] not [% END %]
   be tracked.</p>
 
   [% IF prefs.gmaps_api_key AND config.show_gmap_in_node_display %]
