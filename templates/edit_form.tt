@@ -138,12 +138,12 @@
 
       <div class="edit_form_group" id="summary_group">
         [% IF conflict %]
-          <label for="summary">Current summary:</label>
+          <label for="summary_input">Current summary:</label>
         [% ELSE %]
-          <label for="summary">One-line summary of this page:</label>
+          <label for="summary_input">One-line summary of this page:</label>
         [% END %]
         <div class="edit_box">
-          <input type="text" size="50" id="summary" name="summary"
+          <input type="text" size="50" id="summary_input" name="summary"
            value="[% summary %]" />
         </div>
         [% IF conflict %]
