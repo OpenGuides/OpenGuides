@@ -88,7 +88,7 @@ is( $node{version}, 2, "First version" );
 is( $node{metadata}->{edit_type}[0], "Normal edit", "Right edit type" );
 
 # Now try to commit some invalid data, and make sure we get an edit form back
-my $q = OpenGuides::Test->make_cgi_object(
+$q = OpenGuides::Test->make_cgi_object(
     content => "foo",
     os_x => "fooooo",
     username => "bob",
