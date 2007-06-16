@@ -423,19 +423,19 @@ sub extract_metadata_vars {
             $os_y =~ s/\s+//g;
 
             # If we were sent x and y, work out lat/long; and vice versa.
-            if ( defined $os_x && defined $os_y ) {
+            if ( defined $os_x && length $os_x && defined $os_y && length $os_y ) {
                 my $point = Geography::NationalGrid::GB->new( Easting =>$os_x,
                                      Northing=>$os_y);
                 $lat  = sprintf("%.6f", $point->latitude);
                 $long = sprintf("%.6f", $point->longitude);
-            } elsif ( defined $lat && defined $long ) {
+            } elsif ( defined $lat && length $lat && defined $long && length $long ) {
                 my $point = Geography::NationalGrid::GB->new(Latitude  => $lat,
                                                              Longitude => $long);
                 $os_x = $point->easting;
                 $os_y = $point->northing;
             }
             
-            if ( defined $os_x && defined $os_y ) {
+            if ( defined $os_x && length $os_x && defined $os_y && length $os_y ) {
                 %vars = (
                             %vars,
                             latitude  => $lat,
@@ -468,18 +468,18 @@ sub extract_metadata_vars {
             $osie_y =~ s/\s+//g;
 
             # If we were sent x and y, work out lat/long; and vice versa.
-            if ( defined $osie_x && defined $osie_y ) {
+            if ( defined $osie_x && length $osie_x && defined $osie_y && length $osie_y ) {
                 my $point = Geography::NationalGrid::IE->new(Easting=>$osie_x,
                                    Northing=>$osie_y);
                 $lat = sprintf("%.6f", $point->latitude);
                 $long = sprintf("%.6f", $point->longitude);
-            } elsif ( defined $lat && defined $long ) {
+            } elsif ( defined $lat && length $lat && defined $long && length $long ) {
                 my $point = Geography::NationalGrid::GB->new(Latitude  => $lat,
                                                              Longitude => $long);
                 $osie_x = $point->easting;
                 $osie_y = $point->northing;
             }
-            if ( defined $osie_x && defined $osie_y ) {
+            if ( defined $osie_x && length $osie_x && defined $osie_y && length $osie_y ) {
                 %vars = (
                             %vars,
                             latitude  => $lat,
@@ -505,7 +505,7 @@ sub extract_metadata_vars {
             my $lat    = $q->param("latitude");
             my $long   = $q->param("longitude");
             
-            if ( defined $lat && defined $long ) {
+            if ( defined $lat && length $lat && defined $long && length $long ) {
                 # Trim whitespace.
                 $lat =~ s/\s+//g;
                 $long =~ s/\s+//g;
@@ -542,7 +542,7 @@ sub extract_metadata_vars {
     my %prefs = OpenGuides::CGI->get_prefs_from_cookie( config => $config );
     if ( $prefs{latlong_traditional} ) {
         foreach my $var ( qw( latitude longitude ) ) {
-            next unless defined $vars{$var};
+            next unless defined $vars{$var} && length $vars{$var};
             $vars{$var."_unmunged"} = $vars{$var};
             $vars{$var} = Geography::NationalGrid->deg2string($vars{$var});
         }
