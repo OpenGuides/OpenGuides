@@ -122,7 +122,7 @@ t/54_redirect.t
 t/55_node_history.t
 t/56_diffs_with_macros.t
 t/57_random_page.t
-t/58_recent_changes_navbar.t
+t/58_navbar_common_locales_categories.t
 t/59_preferences.t
 t/61_bug_textareas.t
 t/62_bug_trailing_whitespace.t
@@ -132,6 +132,7 @@ t/65_bug_metadata_escape.t
 t/66_bug_latlong_representation.t
 t/67_bug_first_version.t
 t/68_bug_website_displayed.t
+t/69_bug_zero_geo.t
 t/70_admin_home.t
 t/71_missing_metadata.t
 t/72_node_moderation.t
