@@ -59,8 +59,10 @@ sub ACTION_install_extras {
     my $template_path        = $config->template_path;
     my $custom_template_path = $config->custom_template_path;
     my $custom_lib_path      = $config->custom_lib_path;
+    my $static_path          = $config->static_path;
     my @extra_scripts        = @{ $self->config_data( "__extra_scripts" ) };
     my @templates            = @{ $self->config_data( "__templates" ) };
+    my @static_files         = @{ $self->config_data( "__static_files" ) };
 
     print "Installing scripts to $install_directory:\n";
     # Allow for blank script_name - assume "index.cgi".
@@ -139,8 +141,8 @@ sub ACTION_install_extras {
     foreach my $template ( @templates ) {
         if ( $FAKE ) {
             print "templates/$template -> $template_path/$template (FAKE)\n";
-	} else {
-	    $self->copy_if_modified(from => "templates/$template", to_dir => $template_path, flatten => 1)
+	    } else {
+	        $self->copy_if_modified(from => "templates/$template", to_dir => $template_path, flatten => 1)
                 or print "Skipping $template_path/$template (unchanged)\n";
         }
     }
@@ -150,6 +152,16 @@ sub ACTION_install_extras {
         unless (-d $custom_template_path) {
             print "Creating directory $custom_template_path.\n";
             mkdir $custom_template_path or warn "Could not make $custom_template_path";
+        }
+    }
+
+    print "Installing static files to $static_path:\n";
+    foreach my $static_file ( @static_files ) {
+        if ( $FAKE ) {
+            print "static/$static_file -> $static_path/$static_file (FAKE)\n";
+        } else {
+            $self->copy_if_modified(from => "static/$static_file", to_dir => $static_path, flatten => 1)
+                or print "Skipping $static_path/$static_file (unchanged)\n";
         }
     }
 }

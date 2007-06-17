@@ -104,7 +104,7 @@ foreach my $var ( qw(
    default_gmaps_search_zoom force_wgs84 google_analytics_key
    licence_name licence_url licence_info_url moderation_requires_password
    enable_node_image enable_common_categories enable_common_locales
-   spam_detector_module
+   spam_detector_module static_path static_url
   ) ) {
     my $q_method = $var . "__qu";
     my $qu  = $existing_config->$q_method;
@@ -373,6 +373,10 @@ $build->config_data( __templates     => [
                       "spam_detected.tt",
                       "userstats.tt",
                       "wanted_pages.tt"
+    ] );
+
+$build->config_data( __static_files => [
+    # XXX to be supplied when we have some
     ] );
 
 # Finally write the build script.
