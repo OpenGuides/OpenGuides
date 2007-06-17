@@ -1,9 +1,9 @@
-[% IF common_locales %]
+[% IF config.enable_common_locales %]
   <div id="navbar_locales">
     <div class="navbar_group_title">Locales:</div>
     <ul class="navbar_group">
       [% FOREACH loc = [ 'North', 'South', 'East', 'West', 'Central' ] %]
-        <li><a href="[% catloc_link %]Locale_[% loc %]">[% loc %]</a></li>
+        <li><a href="[% config.script_url _ config.script_name %]?id=Locale_[% loc %]">[% loc %]</a></li>
       [% END %]
     </ul>
   </div>

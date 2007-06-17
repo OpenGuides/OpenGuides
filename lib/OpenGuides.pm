@@ -260,15 +260,6 @@ sub display_node {
         $tt_vars{display_google_maps} = 1;
     }
 
-    # Should we include a standard list of categories or locales?
-    if ($config->enable_common_categories || $config->enable_common_locales) {
-        $tt_vars{common_catloc} = 1;
-        $tt_vars{common_categories} = $config->enable_common_categories;
-        $tt_vars{common_locales} = $config->enable_common_locales;
-        $tt_vars{catloc_link} = $config->script_url . $config->script_name
-                                . "?id=";
-    }
-
     my $redirect = OpenGuides::Utils->detect_redirect(
                                               content => $node_data{content} );
     if ( $redirect ) {
@@ -670,13 +661,6 @@ sub display_recent_changes {
         }
     }
     $tt_vars{not_editable} = 1;
-    if ($config->enable_common_categories || $config->enable_common_locales) {
-        $tt_vars{common_catloc} = 1;
-        $tt_vars{common_categories} = $config->enable_common_categories;
-        $tt_vars{common_locales} = $config->enable_common_locales;
-        $tt_vars{catloc_link} = $config->script_url . $config->script_name
-                                . "?id=";
-    }
     $tt_vars{recent_changes} = \%recent_changes;
     my %processing_args = (
                             id            => $id,

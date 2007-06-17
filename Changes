@@ -22,6 +22,8 @@ http://dev.openguides.org/log/trunk
         List all contributors in RDF version of nodes (#106).
         The "Look for nearby geocaches" preference and link now actually work
           (#216).
+        Move the common categories/locales navbar display decision into the
+          templates (#214).
 
 0.60    13 May 2007
         Removed footer search from edit page (shouldn't have been there).
