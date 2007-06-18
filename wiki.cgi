@@ -302,7 +302,7 @@ sub process_template {
             template => $template,
             vars     => $vars
     );
-    $output_conf{content_type} = "" if $omit_header; # defaults otherwise
+    $output_conf{noheaders} = 1 if $omit_header; # defaults otherwise
     print OpenGuides::Template->output( %output_conf );
 }
 

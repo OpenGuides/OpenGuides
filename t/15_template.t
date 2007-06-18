@@ -5,7 +5,7 @@ use Wiki::Toolkit::Formatter::UseMod;
 use OpenGuides;
 use OpenGuides::Template;
 use OpenGuides::Test;
-use Test::More tests => 28;
+use Test::More tests => 29;
 
 my $config = OpenGuides::Test->make_basic_config;
 $config->template_path( cwd . "/t/templates" );
@@ -50,6 +50,17 @@ $output = OpenGuides::Template->output(
 );
 unlike( $output, qr/^Content-Type: text\/html/,
         "Content-Type header omitted if content_type arg explicitly blank" );
+
+$output = OpenGuides::Template->output(
+    wiki          => $wiki,
+    config        => $config,
+    template      => "15_test.tt",
+    noheaders      => 1,
+    http_response => 500
+);
+
+unlike( $output, qr/^Status: /,
+        "Headers omitted if noheaders arg given" );
 
 $output = OpenGuides::Template->output(
     wiki     => $wiki,

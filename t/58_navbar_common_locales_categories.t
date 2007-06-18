@@ -32,7 +32,7 @@ sub get_preferences {
         wiki         => $guide->wiki,
         config       => $guide->config,
         template     => "preferences.tt",
-        content_type => '',
+        noheaders    => 1,
         vars         => {
                           not_editable => 1,
                           show_form    => 1

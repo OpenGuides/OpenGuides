@@ -50,7 +50,8 @@ to OpenGuides developers.
                                       template     => "node.tt",
                                       content_type => "text/html",
                                       cookies      => $cookie,
-                                      vars         => {foo => "bar"}
+                                      vars         => {foo => "bar"},
+                                      noheaders    => 1
   );
 
 Returns everything you need to send to STDOUT, including the
@@ -110,6 +111,9 @@ If C<node> is supplied:
 
 Content-Type: defaults to C<text/html> and is omitted if the
 C<content_type> arg is explicitly set to the blank string.
+
+However, what you more often need is the C<noheaders> option,
+which suppresses all HTTP headers, not just the Content-Type.
 
 The HTTP response code may be explictly set with the C<http_status> arg.
 
@@ -187,30 +191,31 @@ sub output {
     $tt_vars = { %$tt_vars, %{ $args{vars} || {} } };
 
     my $header = "";
-    my %cgi_header_args;
 
-    if ( defined $args{content_type} and $args{content_type} eq "" ) {
-        $cgi_header_args{'-type'} = '';
-    } else {
-        if ( $args{content_type} ) {
-            $cgi_header_args{'-type'} = $args{content_type};
+    unless ( $args{noheaders} ) {
+        my %cgi_header_args;
+
+        if ( defined $args{content_type} and $args{content_type} eq "" ) {
+            $cgi_header_args{'-type'} = '';
         } else {
-            $cgi_header_args{'-type'} = "text/html";
+            if ( $args{content_type} ) {
+                $cgi_header_args{'-type'} = $args{content_type};
+            } else {
+                $cgi_header_args{'-type'} = "text/html";
+            }
         }
+
         if ( $tt_vars->{http_charset} ) {
             $cgi_header_args{'-type'} .= "; charset=".$tt_vars->{http_charset};
         }
-        # XXX should possibly not be inside this block, but retaining
-        # existing functionality for now. See
-        # http://dev.openguides.org/ticket/220
         $cgi_header_args{'-cookie'} = $args{cookies};
-    }
 
-    if ( $args{http_status} ) {
-        $cgi_header_args{'-status'} = $args{http_status};
-    }
+        if ( $args{http_status} ) {
+            $cgi_header_args{'-status'} = $args{http_status};
+        }
 
-    $header = CGI::header( %cgi_header_args );
+        $header = CGI::header( %cgi_header_args );
+    }
 
     # vile hack
     my %field_vars = OpenGuides::Template->extract_metadata_vars(
@@ -219,7 +224,7 @@ sub output {
                          set_coord_field_vars => 1,
                          metadata => {},
                      );
-                     
+
     $tt_vars = { %field_vars, %$tt_vars };
 
     my $output;
