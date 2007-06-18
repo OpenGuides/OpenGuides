@@ -9,6 +9,7 @@ use Wiki::Toolkit;
 use Wiki::Toolkit::Formatter::UseMod;
 use Wiki::Toolkit::Plugin::RSS::Reader;
 use URI::Escape;
+use MIME::Lite;
 
 =head1 NAME
 
@@ -391,6 +392,62 @@ sub validate_edit {
     return \@fails;
 
 };
+
+=item B<send_email>
+
+    eval { OpenGuides::Utils->send_email(
+            config        => $config,
+            subject       => "Subject",
+            body          => "Test body",
+            admin         => 1,
+            nobcc         => 1,
+            return_output => 1
+    ) };
+
+    if ($@) {
+        print "Error mailing admin: $@\n";
+    } else {
+        print "Mailed admin\n";
+    }
+
+Send out email. If C<admin> is true, the email will be sent to the site
+admin. If C<to> is defined, email will be sent to addresses in that
+arrayref. If C<nobcc> is true, there will be no Bcc to the admin.
+
+C<subject> and C<body> are mandatory arguments.
+
+Debugging: if C<return_output> is true, the message will be returned as
+a string instead of being sent by email.
+
+=cut
+
+sub send_email {
+    my ( $self, %args ) = @_;
+    my $config = $args{config} or die "config argument not supplied";
+    my @to;
+    @to = @{$args{to}} if $args{to};
+    my @bcc;
+    push @to, $config->contact_email if $args{admin};
+    die "No recipients specified" unless scalar @to;
+    die "No subject specified" unless $args{subject};
+    die "No body specified" unless $args{body};
+    my $to_str = join ',', @to;
+    push @bcc, $config->contact_email unless $args{nobcc};
+    my $bcc_str = join ',', @bcc;
+    my $msg = MIME::Lite->new(
+        From    => $config->contact_email,
+        To      => $to_str,
+        Bcc     => $bcc_str,
+        Subject => $args{subject},
+        Data    => $args{body}
+    );
+
+    if ( $args{return_output} ) {
+        return $msg->as_string;
+    } else {
+        $msg->send or die "Couldn't send mail!";
+    }
+}
 
 =back
 

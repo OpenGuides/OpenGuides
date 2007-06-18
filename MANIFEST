@@ -140,5 +140,6 @@ t/73_toggle_moderation.t
 t/74_ping_plugin.t
 t/75_revert_user.t
 t/76_detect_spam.t
+t/77_send_email.t
 t/templates/15_test.tt
 wiki.cgi

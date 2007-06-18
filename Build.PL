@@ -294,6 +294,7 @@ my $build = OpenGuides::Build->new(
         'Geography::NationalGrid'             => 0,
         'HTML::Entities'                      => 0,
         'LWP::Simple'                         => 0,
+        'MIME::Lite'                          => 0,
         'Parse::RecDescent'                   => 0,
         $search_module                        => 0,
         'POSIX'                               => 0,

@@ -35,6 +35,7 @@ File::Temp
 )
 HTML::Entities
 LWP::Simple
+MIME::Lite
 Module::Build (version 0.26 or later)
 Parse::RecDescent
 Plucene
