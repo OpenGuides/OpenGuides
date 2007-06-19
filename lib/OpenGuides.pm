@@ -1404,7 +1404,8 @@ sub commit_node {
     # Check to make sure all the indexable nodes are created
     # Skip this for nodes needing moderation - this occurs for them once
     #  they've been moderated
-    unless($wiki->node_required_moderation($node)) {
+    my $needs_moderation = $wiki->node_required_moderation($node);
+    unless( $needs_moderation ) {
         $self->_autoCreateCategoryLocale(
                                           id       => $node,
                                           metadata => \%new_metadata
@@ -1415,6 +1416,24 @@ sub commit_node {
                                      \%new_metadata );
 
     if ($written) {
+        if ( $needs_moderation and $config->send_moderation_notifications ) {
+            my $body = "The node '$node' in the OpenGuides installation\n" .
+                "'" . $config->site_name . "' requires moderation. ".
+                "Please visit\n" .
+                $config->script_url . $config->script_name .
+                "?action=show_needing_moderation\nat your convenience.\n";
+            eval {
+                OpenGuides::Utils->send_email(
+                    config        => $config,
+                    subject       => "Node requires moderation",
+                    body          => $body,
+                    admin         => 1,
+                    return_output => $return_output
+                );
+            };
+            warn $@ if $@;
+        }
+
         my $output = $self->redirect_to_node($node);
         return $output if $return_output;
         print $output;

@@ -21,7 +21,7 @@ my @variables = qw(
    centre_lat default_gmaps_zoom default_gmaps_search_zoom force_wgs84
    licence_name licence_url licence_info_url moderation_requires_password
    enable_node_image enable_common_categories enable_common_locales
-   spam_detector_module static_path static_url
+   spam_detector_module static_path static_url send_moderation_notifications
 );
 my @questions = map { $_ . "__qu" } @variables;
 OpenGuides::Config->mk_accessors( @variables );
@@ -109,6 +109,7 @@ sub _init {
                      licence_info_url => "",
                      spam_detector_module => "",
                      static_path => "/usr/local/share/openguides/static",
+                     send_moderation_notifications => 1
                    );
 
     # See if we already have some config variables set.
@@ -192,6 +193,7 @@ sub _init {
         spam_detector_module => "What module would you like to use for spam detection? (optional)",
         static_path => "What directory should we install static content (CSS, images, javascript) to?",
         static_url => "What is the URL corresponding to the static content?",
+        send_moderation_notifications => "Should we send email notifications when a moderated node is edited?"
     );
 
     foreach my $var ( keys %questions ) {
@@ -321,6 +323,8 @@ sub script_url {
 =item * static_path
 
 =item * static_url
+
+=item * send_moderation_notifications
 
 =back
 
