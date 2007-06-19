@@ -42,6 +42,7 @@
         <td><span class="recentchanges_user">
           [% IF (node.username != 'Anonymous') %]
             <a href="[% cgi_url %]?username=[% node.username %];action=userstats">[% node.username %]</a>
+            (<a href="[% cgi_url %]?host=[% node.host %];action=userstats">[% node.host %]</a>)
           [% ELSE %]
             <a href="[% cgi_url %]?host=[% node.host %];action=userstats">[% node.host %]</a>
           [% END %]
