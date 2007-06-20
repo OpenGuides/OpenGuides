@@ -12,8 +12,9 @@ if ( $@ ) {
     plan skip_all => "DBD::SQLite could not be used - no database to test with ($error)";
 }
 
-plan tests => 9;
+plan tests => 13;
 
+Wiki::Toolkit::Setup::SQLite::cleardb( { dbname => "t/node.db" } );
 Wiki::Toolkit::Setup::SQLite::setup( { dbname => "t/node.db" } );
 my $config = OpenGuides::Config->new(
        vars => {
@@ -60,3 +61,37 @@ like( $output, qr{^\QLocation: http://example.com/wiki.cgi?id=Test_Page;oldid=Re
 $output = $guide->display_node( id => 'Redirect Test', return_output => 1, redirect => 0 );
 
 unlike( $output, qr{^\QLocation: }ms, '...but not with redirect=0' );
+
+$wiki->write_node( "Non-existent categories and locales", "foo", undef,
+                                { category => [ "Does not exist" ],
+                                  locale   => [ "Does not exist" ] } );
+
+$output = $guide->display_node( id => 'Non-existent categories and locales',
+                                return_output => 1
+                              );
+
+unlike( $output, qr{\Q<a href="wiki.cgi?Category_Does_Not_Exist"},
+    'Category name not linked if category does not exist' );
+
+$wiki->write_node( "Category_Does_Not_Exist", "bar", undef, undef );
+
+$output = $guide->display_node( id => 'Non-existent categories and locales',
+                                return_output => 1
+                              );
+
+like( $output, qr{\Q<a href="wiki.cgi?Category_Does_Not_Exist"},
+    'but does when it does exist' );
+
+unlike( $output, qr{\Q<a href="wiki.cgi?Locale_Does_Not_Exist"},
+    'Locale name not linked if category does not exist' );
+
+$wiki->write_node( "Locale_Does_Not_Exist", "wibble", undef, undef );
+
+$output = $guide->display_node( id => 'Non-existent categories and locales',
+                                return_output => 1
+                              );
+
+like( $output, qr{\Q<a href="wiki.cgi?Locale_Does_Not_Exist"},
+    'but does when it does exist' );
+
+

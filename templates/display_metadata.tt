@@ -81,7 +81,11 @@
       <li class="categories_list">
         <span class="metadata_label">Categories:</span>
         [% FOREACH category = categories %]
-          <a href="[% category.url %]" class="category">[% category.name %]</a>[%- "," UNLESS loop.last %]
+          [% IF category.url != "" %]
+            <a href="[% category.url %]" class="category">[% category.name %]</a>[%- "," UNLESS loop.last %]
+          [% ELSE %]
+            [% category.name %][%- "," UNLESS loop.last %]
+          [% END %]
         [% END %]
       </li>
     [% END %]
@@ -90,7 +94,11 @@
       <li class="locales_list">
         <span class="metadata_label">Locales:</span>
         [% FOREACH locale = locales %]
-          <a href="[% locale.url %]" class="addr locality">[% locale.name %]</a>[%- "," UNLESS loop.last %]
+          [% IF locale.url != "" %]
+            <a href="[% locale.url %]" class="addr locality">[% locale.name %]</a>[%- "," UNLESS loop.last %]
+          [% ELSE %]
+            [% locale.name %][%- "," UNLESS loop.last %]
+          [% END %]
         [% END %]
       </li>
     [% END %]

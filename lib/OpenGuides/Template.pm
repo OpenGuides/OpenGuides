@@ -319,12 +319,12 @@ sub extract_metadata_vars {
     }
 
     my @categories = map { { name => $_,
-                             url  => "$script_name?Category_"
-            . uri_escape($formatter->node_name_to_node_param($_)) } } @catlist;
+                             url  => $args{wiki}->node_exists( "Category_" . $formatter->node_name_to_node_param($_)) ? "$script_name?Category_"
+            . uri_escape($formatter->node_name_to_node_param($_)) : "" } } @catlist;
 
     my @locales    = map { { name => $_,
-                             url  => "$script_name?Locale_"
-            . uri_escape($formatter->node_name_to_node_param($_)) } } @loclist;
+                             url  => $args{wiki}->node_exists( "Locale_" . $formatter->node_name_to_node_param($_)) ? "$script_name?Locale_"
+            . uri_escape($formatter->node_name_to_node_param($_)) : "" } } @loclist;
 
     # The 'website' attribute might contain a URL so we wiki-format it here
     # rather than just CGI::escapeHTMLing it all in the template.
