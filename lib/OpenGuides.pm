@@ -1123,6 +1123,14 @@ sub display_feed {
     print $output;
 }
 
+=item B<display_about>
+
+                print $guide->display_about(format => "rdf");
+
+Displays static 'about' information in various format. Defaults to HTML.
+
+=cut
+
 sub display_about {
     my ($self, %args) = @_;
 
@@ -1188,8 +1196,28 @@ sub display_about {
 </Project>
 
 </rdf:RDF>};
-    }
-    else {
+    } elsif ($args{format} && $args{format} eq 'opensearch') {
+        my $site_name  = $self->config->site_name;
+        my $search_url = $self->config->script_url . 'search.cgi';
+        my $contact_email = $self->config->contact_email;
+        $output = qq{Content-Type: application/opensearchdescription+xml; charset=utf-8
+
+<?xml version="1.0" encoding="UTF-8"?>
+
+<OpenSearchDescription xmlns="http://a9.com/-/spec/opensearch/1.1/">
+ <ShortName>$site_name</ShortName>
+ <Description>Search the $site_name</Description>
+ <Tags>$site_name</Tags>
+ <Contact>$contact_email</Contact>
+ <Url type="application/atom+xml"
+   template="$search_url?search={searchTerms};format=atom"/>
+ <Url type="application/rss+xml"
+   template="$search_url?search={searchTerms};format=rss"/>
+ <Url type="text/html"
+   template="$search_url?search={searchTerms}"/>
+ <Query role="example" searchTerms="pubs"/>
+</OpenSearchDescription>};
+    } else {
         my $site_name  = $self->config->{site_name};
         my $script_name = $self->config->{script_name};
         $output = qq{Content-Type: text/html; charset=utf-8
