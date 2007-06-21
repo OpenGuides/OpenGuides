@@ -26,6 +26,7 @@ http://dev.openguides.org/log/trunk
           templates (#214).
         Add email notifications when moderated nodes are edited (#138)
         Add IP addresses into non-anonymous changes in Recent Changes (#113)
+        Add an OpenSearch description, and automatic discovery for it (#180)
 
 0.60    13 May 2007
         Removed footer search from edit page (shouldn't have been there).

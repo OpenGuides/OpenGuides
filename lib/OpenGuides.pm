@@ -1206,7 +1206,7 @@ sub display_about {
 
 <OpenSearchDescription xmlns="http://a9.com/-/spec/opensearch/1.1/">
  <ShortName>$site_name</ShortName>
- <Description>Search the $site_name</Description>
+ <Description>Search the site '$site_name'</Description>
  <Tags>$site_name</Tags>
  <Contact>$contact_email</Contact>
  <Url type="application/atom+xml"
