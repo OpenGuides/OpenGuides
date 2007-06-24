@@ -290,7 +290,8 @@ sub extract_metadata_vars {
     my ($class, %args) = @_;
     my %metadata = %{$args{metadata} || {} };
     my $q = $args{cgi_obj};
-    my $formatter = $args{wiki}->formatter;
+    my $wiki = $args{wiki};
+    my $formatter = $wiki->formatter;
     my $config = $args{config};
     my $script_name = $config->script_name;
 
@@ -318,13 +319,33 @@ sub extract_metadata_vars {
                         split("\r\n", $locales_text);
     }
 
-    my @categories = map { { name => $_,
-                             url  => $args{wiki}->node_exists( "Category_" . $formatter->node_name_to_node_param($_)) ? "$script_name?Category_"
-            . uri_escape($formatter->node_name_to_node_param($_)) : "" } } @catlist;
+    # Some stuff here is copied from OpenGuides->_autoCreateCategoryLocale
+    # - we should rationalise this.
+    my @categories = map {
+        my $param = $formatter->node_name_to_node_param( $_ );
+        my $name = $_;
+        $name =~ s/(.*)/\u$1/;
+        $name = $wiki->formatter->_do_freeupper( "Category $name" );
+        {
+          name => $_,
+          url  => $wiki->node_exists( $name )
+                      ? "$script_name?Category_" . uri_escape( $param )
+                      : "",
+        };
+    } @catlist;
 
-    my @locales    = map { { name => $_,
-                             url  => $args{wiki}->node_exists( "Locale_" . $formatter->node_name_to_node_param($_)) ? "$script_name?Locale_"
-            . uri_escape($formatter->node_name_to_node_param($_)) : "" } } @loclist;
+    my @locales = map {
+        my $param = $formatter->node_name_to_node_param( $_ );
+        my $name = $_;
+        $name =~ s/(.*)/\u$1/;
+        $name = $wiki->formatter->_do_freeupper( "Locale $name" );
+        {
+          name => $_,
+          url  => $wiki->node_exists( $name )
+                      ? "$script_name?Locale_" . uri_escape( $param )
+                      : "",
+        };
+    } @loclist;
 
     # The 'website' attribute might contain a URL so we wiki-format it here
     # rather than just CGI::escapeHTMLing it all in the template.

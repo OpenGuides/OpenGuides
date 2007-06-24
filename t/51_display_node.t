@@ -2,6 +2,7 @@ use strict;
 use Wiki::Toolkit::Setup::SQLite;
 use OpenGuides::Config;
 use OpenGuides;
+use OpenGuides::Test;
 use Test::More;
 
 eval { require DBD::SQLite; };
@@ -12,7 +13,7 @@ if ( $@ ) {
     plan skip_all => "DBD::SQLite could not be used - no database to test with ($error)";
 }
 
-plan tests => 13;
+plan tests => 15;
 
 Wiki::Toolkit::Setup::SQLite::cleardb( { dbname => "t/node.db" } );
 Wiki::Toolkit::Setup::SQLite::setup( { dbname => "t/node.db" } );
@@ -26,6 +27,7 @@ my $config = OpenGuides::Config->new(
                  site_name          => "Test Site",
                  template_path      => "./templates",
                  home_name          => "Home",
+                 admin_pass         => "password",
                }
 );
 eval { require Wiki::Toolkit::Search::Plucene; };
@@ -62,36 +64,49 @@ $output = $guide->display_node( id => 'Redirect Test', return_output => 1, redir
 
 unlike( $output, qr{^\QLocation: }ms, '...but not with redirect=0' );
 
-$wiki->write_node( "Non-existent categories and locales", "foo", undef,
-                                { category => [ "Does not exist" ],
-                                  locale   => [ "Does not exist" ] } );
+# Write a node, then delete one each of its categories and locales.
+OpenGuides::Test->write_data(
+                              guide => $guide,
+                              node => "Non-existent categories and locales",
+                              categories => "Does Not Exist\r\nDoes Exist",
+                              locales => "Does Not Exist\r\nDoes Exist",
+                              return_output => 1,
+                            );
+foreach my $id ( ( "Category Does Not Exist", "Locale Does Not Exist" ) ) {
+    $guide->delete_node(
+                         id => $id,
+                         password => "password",
+                         return_output => 1,
+                       );
+}
 
+# Check the display comes up right for the existent and nonexistent.
 $output = $guide->display_node( id => 'Non-existent categories and locales',
                                 return_output => 1
                               );
 
 unlike( $output, qr{\Q<a href="wiki.cgi?Category_Does_Not_Exist"},
-    'Category name not linked if category does not exist' );
-
-$wiki->write_node( "Category_Does_Not_Exist", "bar", undef, undef );
-
-$output = $guide->display_node( id => 'Non-existent categories and locales',
-                                return_output => 1
-                              );
-
-like( $output, qr{\Q<a href="wiki.cgi?Category_Does_Not_Exist"},
-    'but does when it does exist' );
-
+    "category name not linked if category does not exist" );
+like( $output, qr{\Q<a href="wiki.cgi?Category_Does_Exist"},
+    "...but does when it does exist" );
 unlike( $output, qr{\Q<a href="wiki.cgi?Locale_Does_Not_Exist"},
-    'Locale name not linked if category does not exist' );
+    "locale name not linked if category does not exist" );
+like( $output, qr{\Q<a href="wiki.cgi?Locale_Does_Exist"},
+    "...but does when it does exist" );
 
-$wiki->write_node( "Locale_Does_Not_Exist", "wibble", undef, undef );
+# Check it works when the case is different too.
+OpenGuides::Test->write_data(
+                              guide => $guide,
+                              node => "Existent categories and locales",
+                              categories => "does exist",
+                              locales => "does exist",
+                              return_output => 1,
+                            );
 
-$output = $guide->display_node( id => 'Non-existent categories and locales',
+$output = $guide->display_node( id => "Existent categories and locales",
                                 return_output => 1
                               );
-
-like( $output, qr{\Q<a href="wiki.cgi?Locale_Does_Not_Exist"},
-    'but does when it does exist' );
-
-
+like( $output, qr{\Q<a href="wiki.cgi?Category_Does_Exist"},
+    "wrongly-cased categories are linked as they should be" );
+like( $output, qr{\Q<a href="wiki.cgi?Locale_Does_Exist"},
+    "wrongly-cased locales are linked as they should be" );
