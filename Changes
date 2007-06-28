@@ -27,6 +27,7 @@ http://dev.openguides.org/log/trunk
         Add email notifications when moderated nodes are edited (#138)
         Add IP addresses into non-anonymous changes in Recent Changes (#113)
         Add an OpenSearch description, and automatic discovery for it (#180)
+        Include machine-readable link to licence, if configured (#226)
 
 0.60    13 May 2007
         Removed footer search from edit page (shouldn't have been there).

@@ -49,6 +49,9 @@ locales.size > 0 %][% FOREACH locale = locales %][% locale.name %][%-
           type="application/opensearchdescription+xml"
           title="Search the site '[% site_name %]'"
           href="[% full_cgi_url %]?action=about;format=opensearch"  />
+  [% IF licence_url %]
+    <link rel="copyright" href="[% licence_url %]" />
+  [% END %]
   [% IF deter_robots %]
     <meta name="robots" content="noindex,nofollow" />
   [% END %]
