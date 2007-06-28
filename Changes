@@ -10,7 +10,7 @@ http://dev.openguides.org/log/trunk
           want it, add div#title_edit_link {display:none;} to your stylesheet.
         Removed dependency on Test::MockObject.
         Remove misleading CSS examples
-        Support alternative database ports
+        Support alternative database ports (#165)
         Only display the google maps preference if node maps are enabled
           (#192).
         Respect redirect=0 (#104).
