@@ -1,3 +1,17 @@
+0.61
+        Customized navbar_categories.tt and navbar_locales.tt templates
+        need to be updated:
+        - First of all, your template needs to check for
+            [% config.enable_common_categories %]
+          rather than
+            [% common_categories %]
+          in order to know whether to add this <div> to the navbar or not.
+
+        - Secondly, you need to replace
+            <a href="[% catloc_link %]Category_[% cat %]">
+          with 
+            <a href="[% config.script_url _ config.script_name %]?id=Category_[% cat %]">
+
 0.60    The edit form now uses stylable <div>s rather than tables.  You will
         probably want to provide at least basic styling for these.
 
