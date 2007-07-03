@@ -294,6 +294,11 @@ automatically.
 You will need to configure the above directory in your web server, then
 input the URL the content will be visible at here.
 
+  "Should we send email notifications when a moderated node is edited?"
+
+For spam avoidance, you can configure certain nodes to require moderation.
+To ensure that such edits are noticed, OpenGuides can email you.
+
   "Distance calculation methods available are:
       1) British National Grid
       2) Irish National Grid

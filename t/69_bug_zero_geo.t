@@ -47,9 +47,6 @@ my $output = $guide->commit_node(
 
 my %details = $guide->wiki->retrieve_node("Test Node");
 
-use Data::Dumper;
-#print STDERR Dumper %details;
-
 is( @{$details{metadata}->{os_x}}[0], 0, "Zero os_x saved" );
 is( @{$details{metadata}->{os_y}}[0], 0, "Zero os_y saved" );
 

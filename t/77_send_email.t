@@ -32,7 +32,8 @@ $output = OpenGuides::Utils->send_email(
     body          => 'Test body'
 );
 
-like( $output, qr|^To: admin\@example\.com|m, "Admin address appropriately" );
+like( $output, qr|^To: admin\@example\.com|m, "Admin address used ".
+    "appropriately" );
 
 eval { $output = OpenGuides::Utils->send_email(
     config        => $config,
