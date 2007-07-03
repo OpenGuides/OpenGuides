@@ -47,7 +47,7 @@
     <span class="node_name">[% node_name %]</span></em>
   </h2>
 [% END %]
-[% IF not (content || coord_field_1_value || coord_field_2_value || wgs84_lat || wgs84_long) %]
+[% IF not (content || coord_field_1_value || coord_field_2_value || latitude || longitude) %]
 </div>
 <div id="nonexistent_node_message">We don't have a node called "[% node_param %]". Would you like to <a href="[% full_cgi_url %]?action=edit;id=[% node_param %]">create it</a>?</div>
 [% ELSE %]
@@ -86,7 +86,7 @@
     </form>
   </div>
 [% END %]
-[% IF (wgs84_lat AND wgs84_long) OR (os_x AND os_y) OR (osie_x AND osie_y) %]
+[% IF (latitude AND longitude) OR (os_x AND os_y) OR (osie_x AND osie_y) %]
 <div id="coordinates" class="geo">
 [% END %]
 [% IF os_x AND os_y %]
@@ -108,15 +108,16 @@
   </small>
   &nbsp;&nbsp;&nbsp;
 [% END %]
-[% IF wgs84_lat AND wgs84_long %]
+[% IF latitude AND longitude %]
   <small>
     (Latitude: 
-    <abbr class="latitude" title="[% wgs84_lat %]">[% wgs84_lat %]</abbr>
+    <!-- titles using the wgs84 versions here are for microformats -->
+    <abbr class="latitude" title="[% wgs84_lat %]">[% latitude %]</abbr>
 	Longitude: 
-	<abbr class="longitude" title="[% wgs84_long %]">[% wgs84_long %]</abbr>)
+	<abbr class="longitude" title="[% wgs84_long %]">[% longitude %]</abbr>)
   </small>
 [% END %]
-[% IF (wgs84_lat AND wgs84_long) OR (os_x AND os_y) OR (osie_x AND osie_y)%]
+[% IF (latitude AND longitude) OR (os_x AND os_y) OR (osie_x AND osie_y)%]
 </div>
 [% END %]
 <div id="rdf_link">
