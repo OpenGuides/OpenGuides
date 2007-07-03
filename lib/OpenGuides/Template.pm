@@ -2,7 +2,7 @@ package OpenGuides::Template;
 
 use strict;
 use vars qw( $VERSION );
-$VERSION = '0.12';
+$VERSION = '0.13';
 
 use Carp qw( croak );
 use CGI; # want to get rid of this and put the burden on the templates
