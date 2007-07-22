@@ -1,6 +1,10 @@
 package OpenGuides::Build;
 
 use strict;
+
+use vars qw( $VERSION );
+$VERSION = '0.01';
+
 use Module::Build;
 use OpenGuides::Config;
 use base 'Module::Build';

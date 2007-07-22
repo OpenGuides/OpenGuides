@@ -2,6 +2,9 @@ package OpenGuides::Config;
 use strict;
 use warnings;
 
+use vars qw( $VERSION );
+$VERSION = '0.01';
+
 use Carp qw( croak );
 use Config::Tiny;
 

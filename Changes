@@ -3,6 +3,9 @@
 More detailed changelogs can be found at
 http://dev.openguides.org/log/trunk
 
+0.62    
+        Ensure that all modules we ship are versioned.
+
 0.61    4 July 2007
         Added experimental support for local spam detection modules; see the
           commit_node method in "perldoc OpenGuides" for details.
