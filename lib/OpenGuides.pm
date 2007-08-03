@@ -176,6 +176,15 @@ C<return_output> parameter is omitted.
 (At the moment, C<return_tt_vars> acts as if the C<intercept_redirect>
 parameter was passed.)
 
+If you have specified the C<host_checker_module> option in your
+C<wiki.conf>, this method will attempt to call the <blacklisted_host>
+method of that module to determine whether the host requesting the node
+has been blacklisted. If this method returns true, then the 
+C<blacklisted_host.tt> template will be used to display an error message.
+
+The C<blacklisted_host> method will be passed a scalar containing the host's
+IP address.
+
 =cut
 
 sub display_node {
@@ -190,6 +199,30 @@ sub display_node {
     my $do_redirect = defined($args{redirect}) ? $args{redirect} : 1;
 
     my %tt_vars;
+
+    # If we can, check to see if requesting host is blacklisted.
+    my $host_checker = $config->host_checker_module;
+    my $is_blacklisted;
+    if ( $host_checker ) {
+        eval {
+            eval "require $host_checker";
+            $is_blacklisted = $host_checker->blacklisted_host(CGI->new->remote_host);
+        };
+    }
+
+    if ( $is_blacklisted ) {
+        my $output = OpenGuides::Template->output(
+            wiki     => $self->wiki,
+            config   => $config,
+            template => "blacklisted_host.tt",
+            vars     => {
+                          not_editable => 1,
+                        },
+        );
+        return $output if $return_output;
+        print $output;
+        return;
+    }
 
     $tt_vars{home_name} = $self->config->home_name;
     

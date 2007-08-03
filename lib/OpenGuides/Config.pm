@@ -3,7 +3,7 @@ use strict;
 use warnings;
 
 use vars qw( $VERSION );
-$VERSION = '0.01';
+$VERSION = '0.02';
 
 use Carp qw( croak );
 use Config::Tiny;
@@ -24,7 +24,8 @@ my @variables = qw(
    centre_lat default_gmaps_zoom default_gmaps_search_zoom force_wgs84
    licence_name licence_url licence_info_url moderation_requires_password
    enable_node_image enable_common_categories enable_common_locales
-   spam_detector_module static_path static_url send_moderation_notifications
+   spam_detector_module host_checker_module static_path static_url
+   send_moderation_notifications
 );
 my @questions = map { $_ . "__qu" } @variables;
 OpenGuides::Config->mk_accessors( @variables );
@@ -111,6 +112,7 @@ sub _init {
                      licence_url => "",
                      licence_info_url => "",
                      spam_detector_module => "",
+                     host_checker_module => "",
                      static_path => "/usr/local/share/openguides/static",
                      send_moderation_notifications => 1
                    );
@@ -194,6 +196,7 @@ sub _init {
         licence_url => "What is the URL to your licence?",
         licence_info_url => "What is the URL to your local page about your licensing policy?",
         spam_detector_module => "What module would you like to use for spam detection? (optional)",
+        host_checker_module => "What module would you like to use to run an IP blacklist? (optional)",
         static_path => "What directory should we install static content (CSS, images, javascript) to?",
         static_url => "What is the URL corresponding to the static content?",
         send_moderation_notifications => "Should we send email notifications when a moderated node is edited?"
@@ -322,6 +325,8 @@ sub script_url {
 =item * licence_info_url
 
 =item * spam_detector_module
+
+=item * host_checker_module
 
 =item * static_path
 

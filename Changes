@@ -1,10 +1,12 @@
 "#" items refer to tickets. See <http://dev.openguides.org/report/9> for details.
 
 More detailed changelogs can be found at
-http://dev.openguides.org/log/trunk
+<http://dev.openguides.org/log/trunk>.
 
 0.62    
         Ensure that all modules we ship are versioned.
+        Added experimental support for local IP blacklisting modules; see the
+          display_node method in "perldoc OpenGuides" for details.
 
 0.61    4 July 2007
         Added experimental support for local spam detection modules; see the

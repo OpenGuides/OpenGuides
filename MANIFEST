@@ -30,6 +30,7 @@ templates/admin_home.tt
 templates/admin_revert_user.tt
 templates/backlink_results.tt
 templates/banner.tt
+templates/blacklisted_host.tt
 templates/delete_confirm.tt
 templates/delete_done.tt
 templates/delete_password_wrong.tt
@@ -142,5 +143,6 @@ t/75_revert_user.t
 t/76_detect_spam.t
 t/77_send_email.t
 t/78_about.t
+t/79_host_blacklist.t
 t/templates/15_test.tt
 wiki.cgi
