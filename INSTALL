@@ -7,7 +7,8 @@ OpenGuides install you see an error that you don't understand, please
 consult the TROUBLESHOOTING file.
 
 For details about installing multiple OpenGuides sites on a single
-server, see further down this file.
+server, or installing OpenGuides into a directory that isn't where
+your system Perl library is, see further down this file.
 
 * Basic installation
 
@@ -216,7 +217,8 @@ want to use a local node make sure to leave the latter blank.
   "Make node titles link to node backlinks (C2 style)?"
 
 This refers to turning titles into links which bring up a list of referring
-pages. This was the convention with older wikis, but is not intuitive.
+pages. This was the convention with older wikis ("C2" refers to the original
+wiki at http://c2.com/cgi/wiki), but is not intuitive.
 
   "Do you have a Google Maps API key to use with this guide?"
 
@@ -393,6 +395,38 @@ setting the script name to be empty in wiki.conf:
 Currently the Build script does not support this value, so you will
 have to make sure that you fix this up after an upgrade.
 
+* Custom install locations
+
+If you wish to install the OpenGuides modules in a private directory,
+you will need to specify this when you run the Build.PL.
+
+If you are using version 0.20 of Module::Build, do:
+
+  perl Build.PL install_path=lib=/path/to/my/modules/ \
+		install_path=script=/path/to/my/bin/ \
+                install_path=arch=/path/to/my/modules/auto/ \
+		install_path=libdoc=/path/to/my/man/ \
+		install_path=bindoc=/path/to/my/man/
+
+Or for earlier versions of Module::Build, do:
+
+  perl Build.PL config='sitelib=/path/to/my/modules/' 
+
+If any or all of the modules required by the OpenGuides scripts are in
+a private directory, then you'll need to tell the scripts where to find
+them. See the section above about munging in a custom lib path.
+
+----------------------------------------------------------------------
+
+Important note for those using SQLite:
+
+The user your CGI is running as must have write access to not only the
+database file itself, but the directory that the file is in, in order
+that it can write a lockfile. If it doesn't have write access to the
+database file, you'll see errors like "Unhandled error: [DBD::SQLite::db 
+do failed...".
+
+----------------------------------------------------------------------
 
 * Multiple installations
 
