@@ -400,7 +400,7 @@ have to make sure that you fix this up after an upgrade.
 If you wish to install the OpenGuides modules in a private directory,
 you will need to specify this when you run the Build.PL.
 
-If you are using version 0.20 of Module::Build, do:
+If you are using version 0.20 or newer of Module::Build, do:
 
   perl Build.PL install_path=lib=/path/to/my/modules/ \
 		install_path=script=/path/to/my/bin/ \
