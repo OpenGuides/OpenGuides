@@ -404,7 +404,7 @@ If you are using version 0.20 or newer of Module::Build, do:
 
   perl Build.PL install_path=lib=/path/to/my/modules/ \
 		install_path=script=/path/to/my/bin/ \
-                install_path=arch=/path/to/my/modules/auto/ \
+        install_path=arch=/path/to/my/modules/auto/ \
 		install_path=libdoc=/path/to/my/man/ \
 		install_path=bindoc=/path/to/my/man/
 
