@@ -288,6 +288,9 @@ sub display_node {
                    wgs84_lat     => $wgs84_lat
                );
 
+    # Hide from search engines if showing a specific version.
+    $tt_vars{'deter_robots'} = 1 if $args{version};
+
     if ( $config->show_gmap_in_node_display
            && $self->get_cookie( "display_google_maps" ) ) {
         $tt_vars{display_google_maps} = 1;
