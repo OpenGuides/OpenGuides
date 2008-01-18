@@ -7,6 +7,8 @@ More detailed changelogs can be found at
         Ensure that all modules we ship are versioned.
         Added experimental support for local IP blacklisting modules; see the
           display_node method in "perldoc OpenGuides" for details.
+        Include map link URLs in RDF output. (#26)
+        Hide historic versions of nodes from search engines. (#207)
 
 0.61    4 July 2007
         Added experimental support for local spam detection modules; see the
