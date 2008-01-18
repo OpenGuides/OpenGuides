@@ -10,6 +10,7 @@
   xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#"
   xmlns:os="http://downlode.org/Code/RDF/Ordnance_Survey/schema/1#"
   xmlns:owl="http://www.w3.org/2002/07/owl#"
+  xmlns:map="http://www.daml.org/2001/06/map/map-ont#"
   xmlns="http://www.w3.org/2000/10/swap/pim/contact#"
 >
 
@@ -59,6 +60,12 @@
       [% END %]
       [% IF country %]
         <country>[% country %]</country>
+      [% END %]
+
+      [% IF map_link %]
+        <foaf:page>
+          <map:Map rdf:about="[% map_link %]" />
+        </foaf:page>
       [% END %]
 
       [% FOREACH locale = locales %]
