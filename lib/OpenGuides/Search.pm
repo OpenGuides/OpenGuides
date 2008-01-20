@@ -503,17 +503,25 @@ sub _run_phrase_search {
         $contents_res{$node} = int( $contents_res{$node} / $num_results ) + 1;
     }
 
-    # It'll be a real phrase (as opposed to a word) if it has a space in it.
-    # In this case, dump out the nodes that don't match the search exactly.
-    # I don't know why the phrase searching isn't working properly.  Fix later.
-    if ( $phrase =~ /\s/ ) {
-        my @tmp = keys %contents_res;
-        foreach my $node ( @tmp ) {
-            my $content = $wiki->retrieve_node( $node );
+    my @tmp = keys %contents_res;
+    foreach my $node ( @tmp ) {
+        my $content = $wiki->retrieve_node( $node );
+
+        # Don't include redirects in search results.
+        if ($content =~ /^#REDIRECT/) {
+            delete $contents_res{$node};
+            next;
+        }
+        
+        # It'll be a real phrase (as opposed to a word) if it has a space in it.
+        # In this case, dump out the nodes that don't match the search exactly.
+        # I don't know why the phrase searching isn't working properly.  Fix later.
+        if ( $phrase =~ /\s/ ) {
             unless ( $content =~ /$phrase/i || $node =~ /$phrase/i ) {
                 delete $contents_res{$node};
-	    }
+            }
         }
+
     }
 
     my %results = map { $_ => { name => $_, score => $contents_res{$_} } }
