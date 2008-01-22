@@ -267,7 +267,10 @@ sub show_userstats {
     my @nodes = $wiki->list_recent_changes( %criteria );
     @nodes = map { {name          => $q->escapeHTML($_->{name}),
             last_modified => $q->escapeHTML($_->{last_modified}),
-            comment       => $q->escapeHTML($_->{metadata}{comment}[0]),
+            comment       => OpenGuides::Utils::parse_change_comment(
+                $q->escapeHTML($_->{metadata}{comment}[0]),
+                $script_url . '?',
+            ),
             url           => "$script_name?"
           . $q->escape($formatter->node_name_to_node_param($_->{name})) }
                        } @nodes;
