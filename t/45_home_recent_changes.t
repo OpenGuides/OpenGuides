@@ -10,7 +10,7 @@ if ( $@ ) {
     plan skip_all => "DBD::SQLite could not be used - no database to test with ($error)";
 }
 
-plan tests => 13;
+plan tests => 15;
 
 my ( $config, $guide, $wiki );
 
@@ -59,6 +59,24 @@ like( $output, qr/I edited it\./, "...including comments" );
 like( $output, qr/Kake/, "...and usernames" );
 like( $output, qr/Edit this page/, "...edit this page link is there too" );
 
+OpenGuides::Test->write_data(
+                              guide    => $guide,
+                              node     => "Red Lion",
+                              content  => "A nice pub.",
+                              username => "Earle",
+                              comment  => "I also edited it. For fun, here are two links: [[A Page]], and the same link [[A Page|again]].",
+                            );
+
+# Reload page.
+$output = $guide->display_node(
+                                   id            => $config->home_name,
+                                   return_output => 1,
+                                 );
+
+like( $output, qr{<a href="\?A Page">A Page</a>}, "...simple wiki links appear in Recent Changes" );
+like( $output, qr{<a href="\?A Page">again</a>},  "...titled wiki links appear in Recent Changes" );
+
+
 # And that they don't show up if we don't want them.  Turn off the navbar
 # too, since we want to make sure the edit page link shows up regardless (it
 # normally appears in the recent changes box).
@@ -77,3 +95,4 @@ unlike( $output, qr/I edited it\./, "...comments not shown either" );
 unlike( $output, qr/Kake/, "...nor usernames" );
 unlike( $output, qr/Ten most.*recent changes/, "...heading not shown either" );
 like( $output, qr/Edit this page/, "...edit this page link is there though" );
+

@@ -338,17 +338,20 @@ sub display_node {
                 last_n_changes => 10,
                 metadata_was   => { edit_type => "Normal edit" },
             );
+            my $base_url = $config->script_name . '?';
             @recent = map {
                             {
                               name          => CGI->escapeHTML($_->{name}),
                               last_modified =>
                                   CGI->escapeHTML($_->{last_modified}),
                               version       => CGI->escapeHTML($_->{version}),
-                              comment       =>
+                              comment       => OpenGuides::Utils::parse_change_comment(
                                   CGI->escapeHTML($_->{metadata}{comment}[0]),
+                                  $base_url,
+                              ),
                               username      =>
                                   CGI->escapeHTML($_->{metadata}{username}[0]),
-                              url           => $config->script_name . "?"
+                              url           => $base_url
                                              . CGI->escape($wiki->formatter->node_name_to_node_param($_->{name}))
                             }
                           } @recent;
@@ -652,18 +655,23 @@ sub display_recent_changes {
         $criteria{metadata_was} = { edit_type => "Normal edit" }
           unless $minor_edits;
         my @rc = $self->{wiki}->list_recent_changes( %criteria );
- 
+
+        my $base_url = $config->script_name . '?';
+        
         @rc = map {
             {
               name        => CGI->escapeHTML($_->{name}),
               last_modified => CGI->escapeHTML($_->{last_modified}),
               version     => CGI->escapeHTML($_->{version}),
-              comment     => CGI->escapeHTML($_->{metadata}{comment}[0]),
+              comment     => OpenGuides::Utils::parse_change_comment(
+                  CGI->escapeHTML($_->{metadata}{comment}[0]),
+                  $base_url,
+              ),
               username    => CGI->escapeHTML($_->{metadata}{username}[0]),
               host        => CGI->escapeHTML($_->{metadata}{host}[0]),
               username_param => CGI->escape($_->{metadata}{username}[0]),
               edit_type   => CGI->escapeHTML($_->{metadata}{edit_type}[0]),
-              url         => $config->script_name . "?"
+              url         => $base_url
       . CGI->escape($wiki->formatter->node_name_to_node_param($_->{name})),
         }
                    } @rc;
@@ -677,17 +685,22 @@ sub display_recent_changes {
               unless $minor_edits;
             my @rc = $self->{wiki}->list_recent_changes( %criteria );
 
+            my $base_url = $config->script_name . '?';
+            
             @rc = map {
             {
               name        => CGI->escapeHTML($_->{name}),
               last_modified => CGI->escapeHTML($_->{last_modified}),
               version     => CGI->escapeHTML($_->{version}),
-              comment     => CGI->escapeHTML($_->{metadata}{comment}[0]),
+              comment     => OpenGuides::Utils::parse_change_comment(
+                  CGI->escapeHTML($_->{metadata}{comment}[0]),
+                  $base_url,
+              ),
               username    => CGI->escapeHTML($_->{metadata}{username}[0]),
               host        => CGI->escapeHTML($_->{metadata}{host}[0]),
               username_param => CGI->escape($_->{metadata}{username}[0]),
               edit_type   => CGI->escapeHTML($_->{metadata}{edit_type}[0]),
-              url         => $config->script_name . "?"
+              url         => $base_url
       . CGI->escape($wiki->formatter->node_name_to_node_param($_->{name})),
         }
                        } @rc;
@@ -1021,8 +1034,11 @@ sub list_all_versions {
             version  => CGI->escapeHTML( $version ),
             modified => CGI->escapeHTML( $node_data{last_modified} ),
             username => CGI->escapeHTML( $node_data{metadata}{username}[0] ),
-            comment  => CGI->escapeHTML( $node_data{metadata}{comment}[0] ),
-                       } if $node_data{version};
+            comment  => OpenGuides::Utils::parse_change_comment(
+                CGI->escapeHTML( $node_data{metadata}{comment}[0] ),
+                $self->config->script_name . '?',
+            ),
+        } if $node_data{version};
     }
     @history = reverse @history;
     my %tt_vars = (
