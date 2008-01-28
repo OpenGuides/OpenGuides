@@ -1,6 +1,7 @@
 use strict;
 use lib "lib";
 use Data::Dumper;
+use Getopt::Long;
 
 eval {
     require Config::Tiny;
@@ -11,7 +12,12 @@ eval {
 
 die "Problem loading OpenGuides module or a missing module\n\n$@.\n" if $@;
 
-print <<EOF;
+my $force;
+
+GetOptions('force' => \$force);
+
+unless ($force) {
+	print <<EOF;
 
 Beginning install process... if you already have an OpenGuides
 configuration file and you don't want to have to type in all your config
@@ -22,6 +28,7 @@ EOF
 
 my $continue = Module::Build->y_n("Continue with install?", "y");
 exit 0 unless $continue;
+}
 
 my $existing_config_file = 'wiki.conf';
 my $existing_config;
@@ -45,7 +52,7 @@ my %yn_vars = map { $_ => 1 }
       content_above_navbar_in_html show_gmap_in_node_display
       send_moderation_notifications);
 
-my $skip_config = Module::Build->y_n("Skip OpenGuides configuration?", "n");
+my $skip_config = $force ? 'y' : Module::Build->y_n("Skip OpenGuides configuration?", "n");
 if ( $skip_config ) {
     print <<EOF;
 ===========================================================================

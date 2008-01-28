@@ -32,7 +32,10 @@ the installation.
   "Skip OpenGuides configuration?"
 
 Answer "n" to this question unless you really know what you're doing.
-It's mainly there for developers.
+It's mainly there for developers. (If you already have a configuration
+file, and wish to use it without the build script asking you this
+question, run Build.PL with the option --force. This will also skip 
+the "Continue with install?" question.)
 
 
   "What type of database do you want the site to run on?"
