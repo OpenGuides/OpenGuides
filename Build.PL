@@ -49,7 +49,7 @@ my %yn_vars = map { $_ => 1 }
       moderation_requires_password enable_node_image enable_common_categories
       enable_common_locales recent_changes_on_home_page
       random_page_omits_locales random_page_omits_categories
-      content_above_navbar_in_html show_gmap_in_node_display
+      content_above_navbar_in_html show_gmap_in_node_display force_wgs84
       send_moderation_notifications);
 
 my $skip_config = $force ? 'y' : Module::Build->y_n("Skip OpenGuides configuration?", "n");
