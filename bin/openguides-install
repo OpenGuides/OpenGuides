@@ -1,0 +1,545 @@
+#!/usr/bin/perl -w
+use warnings;
+use strict;
+use Config::Tiny;
+use ExtUtils::MM_Unix; # for fixing the shebang lines
+use FindBin qw($Bin);
+use File::Spec::Functions qw( catfile );
+use File::Copy;
+use Getopt::Long;
+use OpenGuides; # to get it into %INC for splitpath, below.
+use OpenGuides::Config;
+use Term::Prompt;
+
+# little utility function to find a script and make sure it's +x, etc.
+sub find_script {
+  my $name = shift;
+
+  # for preference, we find files in the same dir as us. Really handy
+  # for development.
+  my $file = catfile($Bin, $name);
+  
+  # It's not with me. Look in the path.
+  unless (-f $file) { chomp( $file = `which $name` ) }
+
+  die "I can't find '$name' in $Bin or your path. Stopping.\n"
+    unless (-f $file);
+  die "I found '$name' at $file, but it's not executable. Stopping.\n"
+    unless (-x $file);
+
+  return $file;
+}
+
+sub show_help {
+    print qq(
+To create an OpenGuides install, run
+
+  openguides-install
+
+and answer the questions that it asks you.  If you have an existing wiki.conf
+file, then make sure it's in the current directory before you start.
+);
+}
+
+=head1 NAME
+
+openguides-install
+
+=head1 DESCRIPTION
+
+Creates an L<OpenGuides> install.
+
+=head1 USAGE
+
+To create an L<OpenGuides> install, run
+
+  openguides-install
+
+and answer the questions that it asks you.  If you have an existing
+C<wiki.conf> file, then make sure it's in the current directory before you
+start.
+
+To show this help, run
+
+  openguides-install --help
+
+=cut
+
+my $show_help;
+GetOptions( help => \$show_help );
+if ( $show_help ) {
+    show_help();
+    exit 0;
+}
+
+# Map master copies of scripts to what they should be called.
+my %targets;
+foreach my $label ( qw( newpage preferences search wiki ) ) {
+    $targets{"$label.cgi"} = find_script( "openguides-$label-script" );
+}
+
+# The database setup script.
+my $setup = find_script( "wiki-toolkit-setupdb" );
+
+my $force;
+GetOptions('force' => \$force);
+unless ($force) {
+    print "Beginning install process...\n";
+    if ( ! -f "wiki.conf" ) {
+	print <<EOF;
+
+No existing configuration file found; assuming this is a new install.  If you
+already have an OpenGuides configuration file and you don't want to have to
+type in all your config parameters over again, abort this process now, copy
+that file to the current directory (and/or make sure you're in the directory
+you intended to be in), and start again.
+
+EOF
+    }
+}
+
+exit 0 unless prompt( "y", "Continue with install?", "y or n", "y" );
+
+my $existing_config;
+
+if (-f "wiki.conf" ) {
+    $existing_config = OpenGuides::Config->new( file => "wiki.conf" );
+} else {
+    $existing_config = OpenGuides::Config->new();
+}
+
+my %yn_vars = map { $_ => 1 }
+   qw(use_plucene enable_page_deletion navbar_on_home_page backlinks_in_title
+      moderation_requires_password enable_node_image enable_common_categories
+      enable_common_locales recent_changes_on_home_page
+      random_page_omits_locales random_page_omits_categories
+      content_above_navbar_in_html show_gmap_in_node_display force_wgs84
+      send_moderation_notifications);
+
+my $skip_config = $force ? 'y'
+                         : prompt( "y", "Skip OpenGuides configuration?",
+                                   "y or n", "n" );
+
+if ( $skip_config ) {
+    print <<EOF;
+===========================================================================
+Skipping OpenGuides configuration - the wiki.conf in the current directory
+will be used to select default configuration options.  You may tweak your
+configuration later by editing wiki.conf again after this script has had a
+go at it.
+===========================================================================
+EOF
+}
+
+my @answers;
+
+# It is an ancient Configurer, and he chooseth one of three. 
+my $dbtype;
+my $dbtype_qu = $existing_config->dbtype__qu;
+if ( $skip_config ) {
+    $dbtype = $existing_config->dbtype;
+} else {
+    my $default;
+    my @options = qw( postgres mysql sqlite );
+
+    foreach my $n ( ( 0 .. $#options ) ) {
+        if ( $options[$n] eq $existing_config->dbtype ) {
+            $default = $n + 1; # The +1 requirement might be a Term::Prompt bug
+            last;
+        }
+    }
+
+    die "Invalid dbtype " . $existing_config->dbtype
+        unless $default;
+
+    my $i = prompt( "m", {
+                           prompt => "$dbtype_qu",
+                           items  => \@options,
+                         },
+                    undef, $default );
+    $dbtype = $options[$i];
+}
+
+# Check they have the relevant DBD driver installed.
+my %drivers = ( postgres => "DBD::Pg",
+                mysql    => "DBD::mysql",
+                sqlite   => "DBD::SQLite",
+              );
+eval "require $drivers{$dbtype}";
+warn "$drivers{$dbtype} is needed to run a $dbtype database" if $@;
+
+push @answers, { question => $dbtype_qu,
+                 variable => "dbtype",
+                 value    => $dbtype };
+
+my $install_directory; # used to suggest template paths
+my $centre_lat = ''; # contains centre lat derived from Google Maps URL
+my $script_name; # keep track of this for when we install the CGI scripts
+my $template_path; # and this for when we install the templates
+my $static_url; # and this for installing a stylesheet
+my $static_path; # and this for printing a message when doing the above
+my $install_stylesheet; # do we install a basic stylesheet or not
+my $use_gmaps; # do we have a Google Maps API key, basically.
+
+# for setting up the database - shouldn't dbport be in here too?
+my ( $dbname, $dbuser, $dbpass, $dbhost ) = ( "", "", "", "" );
+
+my %is_gmaps_var = map { $_ => 1 } qw( centre_long centre_lat default_gmaps_zoom default_gmaps_search_zoom show_gmap_in_node_display );
+
+foreach my $var ( qw(
+   dbname dbuser dbpass dbhost dbport script_name
+   install_directory template_path custom_template_path script_url
+   custom_lib_path use_plucene indexing_directory enable_page_deletion
+   admin_pass static_path static_url stylesheet_url
+   site_name navbar_on_home_page
+   recent_changes_on_home_page random_page_omits_locales
+   random_page_omits_categories content_above_navbar_in_html home_name
+   site_desc default_city default_country contact_email default_language
+   formatting_rules_node backlinks_in_title gmaps_api_key centre_long
+   centre_lat show_gmap_in_node_display default_gmaps_zoom
+   default_gmaps_search_zoom force_wgs84 google_analytics_key
+   licence_name licence_url licence_info_url moderation_requires_password
+   enable_node_image enable_common_categories enable_common_locales
+   spam_detector_module host_checker_module
+   send_moderation_notifications
+  ) ) {
+    my $q_method = $var . "__qu";
+    my $qu  = $existing_config->$q_method;
+    my $type = $yn_vars{$var} ? "y_n" : "";
+    my $def = $existing_config->$var || "";
+    my $val = $def;
+
+    # Override dbname question for SQLite only.
+    if ( $dbtype eq "sqlite" and $var eq "dbname" ) {
+        $qu = "what's the full filename of the SQLite database this site runs on?";
+    }
+
+    if ( $dbtype eq "sqlite" and
+         ( $var eq "dbuser" or $var eq "dbpass" or $var eq "dbhost" or
+           $var eq "dbport")
+       ) {
+        print "$var not relevant for SQLite... skipping...\n"
+            unless $skip_config;
+        push @answers, { question => $qu,
+                            variable => $var,
+                         value    => "not-used" };
+        next;
+    }
+
+    # Make sensible suggestions for template paths if we don't already
+    # have them stored.  Not really a default, but a useful hint/shortcut.
+    if ( $var eq "template_path" && !defined $existing_config->$var ) {
+        $def = $install_directory;
+        $def .= "/" unless $def =~ m|/$|;
+        $def .= "templates";
+    }
+    if ( $var eq "custom_template_path" && !defined $existing_config->$var ) {
+        $def = $install_directory;
+        $def .= "/" unless $def =~ m|/$|;
+        $def .= "custom-templates";
+    }
+
+    # If a Google Maps URL was provided last time we know the centre_lat
+    if ( $var eq 'centre_lat' && $centre_lat ) {
+        $val = $centre_lat;
+        next;
+    }
+
+    # Term::Prompt doesn't like blank answers, so we ask a yes-no question
+    # about munging in a lib path before we actually ask for the path.  Most
+    # people will want to say "no" to this option, anyway.  The $def variable
+    # will either be blank (no munging) or will contain the required path(s).
+    unless ( $skip_config ) {
+        if ( $var eq "custom_lib_path" ) {
+            my $yn_def = $def ? "y" : "n";
+            my $munge = prompt( "y", $qu,
+              "if you don't understand this question, answer \"n\"", $yn_def );
+            if ( $munge ) {
+                $val = prompt( "x", "Please enter your lib path here.  "
+                                    . "Separate path entries with whitespace.",
+                               "", $def );
+            } else {
+                $val = "";
+            }
+            push @answers, { question => $qu,
+                             variable => $var,
+                             value    => $val };
+            next;
+        }
+    }
+
+    # Skip Google Maps questions if we have no API key.
+    if ( $is_gmaps_var{$var} && !$use_gmaps ) {
+        next;
+    }
+
+    # Again, because Term::Prompt doesn't like blank answers.
+    unless ( $skip_config ) {
+        if ( $var eq "google_analytics_key"
+            || $var eq "gmaps_api_key"
+             || $var eq "spam_detector_module"
+             || $var eq "host_checker_module" ) {
+            my $yn_def = $def ? "y" : "n";
+            my $do_it = prompt( "y", $qu,
+                        "if you don't understand this question, answer \"n\"",
+                                $yn_def );
+            if ( $do_it ) {
+                $val = prompt( "x", "Please enter it here", "", $def );
+            } else {
+                $val = "";
+            }
+            # Keep track of whether they have a GMaps API key as if they don't
+            # then we can skip some later questions.
+            if ( $var eq "gmaps_api_key" ) {
+                $use_gmaps = $do_it;
+            }
+            push @answers, { question => $qu,
+                             variable => $var,
+                             value    => $val };
+            next;
+        }
+    }
+
+    # They have the option of using their own stylesheet, or having us install
+    # one for them.  NOTE: we don't reinstall the stylesheet if things change,
+    # this is a one-off.  The $def variable will either be blank (if this is
+    # a fresh install) or will contain the stylesheet URL.
+    if ( $var eq "stylesheet_url" && !$skip_config ) {
+        my $yn_def = $def ? "y" : "n";
+        $install_stylesheet = prompt( "y",
+           "Would you like to have a basic stylesheet installed for you?",
+           "y or n", $yn_def );
+        if ( $install_stylesheet ) {
+            # just install the stylesheet in the static content
+            print "OK, will install style.css in $static_path\n";
+            $val = $static_url . "style.css";
+            push @answers, { question => $qu,
+                             variable => $var,
+                             value    => $val };
+            next;
+        }
+    }
+
+    # Here is where we actually ask the questions.
+    unless ( $skip_config ) {
+        if ( $type eq "y_n" ) {
+            # may be stored as true/false integer value
+            if ( $def =~ /^\d+$/ ) {
+                $def = $def ? "y" : "n";
+            }
+            $val = prompt( "y", $qu, "y or n", $def );
+        } else {
+             $val = prompt( "x", $qu, "", $def );
+        }
+    }
+
+    # Plucene is currently the recommended search backend as it seems to have
+    # fewer bugs than the other options.
+    if ( $var eq "use_plucene" && $val ) {
+        eval "require Plucene";
+        if ( $@ ) {
+            print "\n***NOTE*** Plucene not found - you will need to install "
+                  . "it before running this\nOpenGuides instance.\n\n";
+        }
+    }
+
+    # Allow user to use a Google Maps URL rather than enter lat/long by hand.
+    # Assume centre_long is being asked for first; ensure so in big list above.
+    if ( $var eq 'centre_long' ) {
+        if ( $val =~ /ll=([-\d.]+),([-\d.]+)/ ) {
+            print "Got a Google Maps URL with centre long,lat: [$1, $2]\n";
+            $val = $1;
+            $centre_lat = $2;
+        }
+    }
+
+    # Make sure that script_url and static_url both end in a /
+    if ( $var eq "script_url" || $var eq "static_url" ) {
+        if ( $val !~ /\/$/ ) {
+            $val .= "/";
+        }
+    }
+
+    # Store install_directory so we can use it to suggest template paths.
+    $install_directory = $val if $var eq "install_directory";
+
+    # And the static content URL (for stylesheet installation default).
+    $static_url = $val if $var eq "static_url";
+    $static_path = $val if $var eq "static_path";
+
+    # Store the script name and template path for use lower down.
+    $script_name = $val if $var eq "script_name";
+    if ( $var eq "template_path" ) {
+        $template_path = $val;
+    }
+
+    # Store database vars for setting up the DB.
+    if ( $var eq "dbname" ) {
+        $dbname = $val;
+    }
+    if ( $var eq "dbuser" ) {
+        $dbuser = $val;
+    }
+    if ( $var eq "dbpass" ) {
+        $dbpass = $val;
+    }
+    if ( $var eq "dbhost" ) {
+        $dbhost = $val;
+    }
+
+    push @answers, { question => $qu,
+                     variable => $var,
+                     value    => $val };
+}
+
+# Now deal with the geo stuff.
+my $geo_handler;
+my $geo_handler_qu = "How would you like to calculate distances?";
+
+if ( $skip_config ) {
+    # We default to GB National Grid for historical reasons.
+    $geo_handler = $existing_config->geo_handler;
+} else {
+    my $default = $existing_config->geo_handler;
+    my @options = ( "British National Grid",
+                    "Irish National Grid",
+                    "UTM ellipsoid" );
+    $geo_handler = prompt( "m", {
+                                  prompt => $geo_handler_qu,
+                                  items  => \@options,
+                                  return_base => 1,
+                                 },
+                           "1, 2, or 3", $default );
+}
+
+push @answers, {
+                 question => $geo_handler_qu,
+                 variable => "geo_handler",
+                 value    => $geo_handler,
+               };
+
+if ( $geo_handler eq "3" ) {
+    my $qu = $existing_config->ellipsoid__qu;
+    my $ellipsoid;
+    if ( $skip_config ) {
+        $ellipsoid = $existing_config->ellipsoid;
+    } else {
+        my $def = $existing_config->ellipsoid;
+        $ellipsoid = prompt( "x", $qu, undef, $def );
+        $ellipsoid =~ s/^\s*//;
+        $ellipsoid =~ s/\s*$//;
+    }
+    push @answers, {
+                     question => $qu,
+                     variable => "ellipsoid",
+                     value    => $ellipsoid,
+                   };
+}
+
+# Create a user-friendly config file from answers to prompts.
+open FILE, ">wiki.conf" or die "Can't open wiki.conf for writing: $!";
+foreach my $ans (@answers) {
+    print FILE "# $ans->{question}\n";
+    print FILE "$ans->{variable} = $ans->{value}\n\n";
+}
+close FILE or die "Can't close wiki.conf: $!";
+
+# Find the templates from where we stored them when we installed OpenGuides.
+#use Data::Dumper; print Dumper \%INC;
+my (undef, $path, undef) = File::Spec->splitpath($INC{'OpenGuides.pm'});
+my $templates = File::Spec->catfile( $path, "OpenGuides", "templates" );
+die "Can't find OpenGuides templates in '$path'"
+  unless (-d $templates);
+
+# Munge %targets to account for what they want the main script to be called.
+if ( $script_name ne "wiki.cgi" ) {
+    $targets{$script_name} = $targets{"wiki.cgi"};
+    delete $targets{"wiki.cgi"};
+}
+
+# Install!
+print "Installing OpenGuides...\n";
+
+print "  installing cgi scripts\n";
+foreach my $target ( keys %targets ) {
+    my $dest = File::Spec->catfile( $install_directory, $target );
+    copy( $targets{$target}, $dest)
+        or die "Can't install $target to $dest - $!\n";
+    # The below throws spurious warnings (EU::MM 6.44) because our shebang
+    # lines have no options.  I don't understand why this didn't happen with
+    # Module::Build->fix_shebang_line though.
+    ExtUtils::MM_Unix->fixin( $dest );
+    chmod( 0755, $dest )
+        or die "Can't make $dest executable - $!\n";
+}
+
+print "  installing wiki.conf\n";
+copy( "wiki.conf", $install_directory )
+  or die "Can't install wiki.conf in $install_directory - $!\n";
+#chmod( 0600, File::Spec->catfile( $install_directory, "wiki.conf" ) )
+#  or die "Can't read-protect wiki.conf in $install_directory: $!\n";
+
+my $mentionswikidotconf = 0;
+my $htaccess = File::Spec->catfile( $install_directory, ".htaccess" );
+print "Trying to ensure that wiki.conf is protected by .htaccess...\n";
+if ( -f $htaccess ) {
+    if ( open HTACCESS, $htaccess ) {
+        while ( <HTACCESS> ) {
+            if ( /wiki\.conf/ ) {
+                $mentionswikidotconf = 1;
+            }
+        }
+        close HTACCESS;
+     } else {
+        warn "Couldn't open $htaccess for reading: $!";
+     }
+}
+
+if ( $mentionswikidotconf ) {
+    print ".htaccess appears to already mention wiki.conf.\n";
+} else {
+    if ( open HTACCESS, ">>$htaccess" ) {
+        print HTACCESS "# Added by openguides-install script\n";
+        print HTACCESS "<Files wiki.conf>\ndeny from all\n</Files>\n";
+        close HTACCESS;
+        print "apparent success. You should check that this is working!\n";
+    } else {
+        warn "Couldn't open $htaccess for writing: $!";
+    }
+}
+
+print "  Installing templates to $template_path...\n";
+unless ( -d $template_path ) {
+    mkdir $template_path or die "Can't make template dir: $!";
+}
+opendir TEMPLATES, $templates or die "Can't open template source folder: $!\n";
+for (grep { /(\.tt)$/ } readdir(TEMPLATES)) {
+  File::Copy::copy(
+    File::Spec->catfile($templates, $_),
+    File::Spec->catfile($template_path, $_ )
+  ) or die "Error copying $_: $!\n";
+}
+closedir(TEMPLATES);
+
+print "  setting up DB\n";
+
+my %setup_modules = ( postgres => "Wiki::Toolkit::Setup::Pg",
+                      mysql    => "Wiki::Toolkit::Setup::MySQL",
+                      sqlite   => "Wiki::Toolkit::Setup::SQLite",
+                    );
+
+my $class = $setup_modules{$dbtype};
+eval "require $class";
+if ( $@ ) {
+    print "Couldn't 'use' $class: $@\n";
+    exit 1;
+}
+
+{   
+    no strict 'refs';
+    &{$class."::setup"}($dbname, $dbuser, $dbpass, $dbhost);
+}
+
+print "Installation complete.\n";
+
+

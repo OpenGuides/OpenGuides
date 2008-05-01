@@ -12,8 +12,12 @@ README.GMAPS
 SIGNATURE
 TROUBLESHOOTING
 UPGRADING
+bin/openguides-install
+bin/openguides-newpage-script
+bin/openguides-preferences-script
+bin/openguides-search-script
+bin/openguides-wiki-script
 examples/reindex.pl
-lib/OpenGuides/Build.pm
 lib/OpenGuides/CGI.pm
 lib/OpenGuides/Config.pm
 lib/OpenGuides/Feed.pm
@@ -23,9 +27,6 @@ lib/OpenGuides/Template.pm
 lib/OpenGuides/Test.pm
 lib/OpenGuides/Utils.pm
 lib/OpenGuides.pm
-newpage.cgi
-preferences.cgi
-search.cgi
 templates/admin_home.tt
 templates/admin_revert_user.tt
 templates/backlink_results.tt
@@ -145,4 +146,3 @@ t/77_send_email.t
 t/78_about.t
 t/79_host_blacklist.t
 t/templates/15_test.tt
-wiki.cgi
