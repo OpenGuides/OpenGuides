@@ -65,6 +65,7 @@ sub make_basic_config {
                      home_name            => "Home",
                      geo_handler          => 1,
                      force_wgs84          => 1,
+                     contact_email        => 'admins@example.org',
                    }
     );
 

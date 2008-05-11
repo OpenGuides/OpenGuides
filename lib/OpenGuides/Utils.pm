@@ -470,7 +470,7 @@ sub send_email {
     @to = @{$args{to}} if $args{to};
     my @bcc;
     push @to, $config->contact_email if $args{admin};
-    die "No recipients specified" unless scalar @to;
+    die "No recipients specified" unless $to[0];
     die "No subject specified" unless $args{subject};
     die "No body specified" unless $args{body};
     my $to_str = join ',', @to;
