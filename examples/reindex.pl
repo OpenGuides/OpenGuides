@@ -2,6 +2,7 @@
 
 use strict;
 use warnings;
+use sigtrap die => 'normal-signals';                                            
 
 use OpenGuides::Config;
 use OpenGuides::Utils;
