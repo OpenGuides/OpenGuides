@@ -3,6 +3,10 @@
 More detailed changelogs can be found at
 <http://dev.openguides.org/log/trunk>.
 
+0.63
+        Link dc:contributor items in RDF output to actual URIs that exist in
+          our system.
+
 0.62    8 June 2008
         Allow wiki page links (simple: [[Foo]], title: [[Foo|bar]]) in
           change summaries.

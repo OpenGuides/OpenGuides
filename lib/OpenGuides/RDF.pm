@@ -182,6 +182,8 @@ sub emit_rdfxml {
     my $tt = Template->new( {
                     INCLUDE_PATH => "$custom_template_path:$template_path" } );
 
+    $tt_vars{full_cgi_url} = $config->script_url . $config->script_name;
+
     my $rdf;
     $tt->process( "node_rdf.tt", \%tt_vars, \$rdf );
     $rdf ||= "ERROR: " . $tt->error;

@@ -20,11 +20,7 @@
     <dcterms:modified>[% timestamp %]</dcterms:modified>
 
     [% FOREACH contributor = contributors.values %] 
-    <dc:contributor>
-      <foaf:Person rdf:ID="[% contributor.user_id %]">
-        <foaf:nick>[% contributor.username %]</foaf:nick>
-      </foaf:Person>
-    </dc:contributor>
+    <dc:contributor rdf:resource="[% full_cgi_url %]?id=[% contributor.user_id %];format=rdf#obj" foaf:name="[% contributor.user_id %]" />
     [% END %]
 
     <dc:source rdf:resource="[% node_uri %]" />

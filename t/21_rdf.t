@@ -98,9 +98,9 @@ like( $rdfxml,
     qr|<dc:title>Wiki::Toolkit Test Site: Calthorpe Arms</dc:title>|,
     "sets the title correctly" );
 
-like( $rdfxml, qr|<foaf:Person rdf:ID="Kake">|,
+like( $rdfxml, qr|id=Kake;format=rdf#obj"|,
     "last username to edit used as contributor" );
-like( $rdfxml, qr|<foaf:Person rdf:ID="Anonymous">|,
+like( $rdfxml, qr|id=Anonymous;format=rdf#obj"|,
     "... as well as previous usernames" );
 
 like( $rdfxml, qr|<wiki:version>2</wiki:version>|, "version picked up" );
