@@ -4,8 +4,21 @@ More detailed changelogs can be found at
 <http://dev.openguides.org/log/trunk>.
 
 0.63
-        Link dc:contributor items in RDF output to actual URIs that exist in
+        Major overhaul of RDF output.
+        * Remodelled addresses using WAIL.
+          (http://www.eyrie.org/~zednenem/2002/wail/)
+        * Include node image as foaf:depiction.
+        * Link dc:contributor items in RDF output to actual URIs that exist in
           our system.
+        * Replace map XMLNS with dedicated vocabulary.
+          (http://downlode.org/Code/RDF/Map/)
+        * Replace usage of weakly-modeled and unavailable Wordnet vocabulary 
+          for "neighborhood" value with WAIL term.
+        * Replace usage of unmodeled and unmaintained ChefMoz vocabulary for 
+          opening hours value and replace with Dublin Core "available" term.
+        * Replace unnecessary instances of rdf:ID with rdf:nodeID.
+        * Model relationship of neighborhood to parent city.
+        * Reduce acres of whitespace in output and clean up indenting.
 
 0.62    8 June 2008
         Allow wiki page links (simple: [[Foo]], title: [[Foo|bar]]) in

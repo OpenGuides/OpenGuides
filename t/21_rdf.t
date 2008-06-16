@@ -15,7 +15,7 @@ if ( $@ ) {
     plan skip_all => "DBD::SQLite could not be used - no database to test with. ($error)";
 }
 
-plan tests => 28;
+plan tests => 29;
 
 Wiki::Toolkit::Setup::SQLite::setup( { dbname => "t/node.db" } );
 my $config = OpenGuides::Test->make_basic_config;
@@ -75,21 +75,24 @@ OpenGuides::Test->write_data(
         latitude           => "51.524193",
         longitude          => "-0.114436",
         summary            => "a nice pub",
+        node_image         => "http://example.com/calthorpe.jpg",
 );
 
 my $rdfxml = $rdf_writer->emit_rdfxml( node => "Calthorpe Arms" );
 
 like( $rdfxml, qr|<\?xml version="1.0"\?>|, "RDF is encoding-neutral" );
 
-like( $rdfxml, qr|<dc:title>Bloomsbury</dc:title>|,
+like( $rdfxml, qr|<foaf:depiction rdf:resource="http://example.com/calthorpe.jpg" />|, "Node image");
+
+like( $rdfxml, qr|<wail:Neighborhood rdf:nodeID="Bloomsbury">|,
     "finds the first locale" );
-like( $rdfxml, qr|<dc:title>St Pancras</dc:title>|,
+like( $rdfxml, qr|<wail:Neighborhood rdf:nodeID="St_Pancras">|,
     "finds the second locale" );
 
-like( $rdfxml, qr|<phone>test phone number</phone>|,
+like( $rdfxml, qr|<contact:phone>test phone number</contact:phone>|,
     "picks up phone number" );
 
-like( $rdfxml, qr|<chefmoz:Hours>test hours</chefmoz:Hours>|,
+like( $rdfxml, qr|<dc:available>test hours</dc:available>|,
     "picks up opening hours text" );
 
 like( $rdfxml, qr|<foaf:homepage rdf:resource="test website" />|, "picks up website" );
@@ -110,9 +113,9 @@ like( $rdfxml, qr|<rdf:Description rdf:about="">|, "sets the 'about' correctly" 
 like( $rdfxml, qr|<dc:source rdf:resource="http://wiki.example.com/mywiki.cgi\?Calthorpe_Arms" />|,
     "set the dc:source with the version-independent uri" );
 
-like( $rdfxml, qr|<country>United Kingdom</country>|, "country" ).
-like( $rdfxml, qr|<city>London</city>|, "city" ).
-like( $rdfxml, qr|<postalCode>WC1X 8JR</postalCode>|, "postcode" );
+like( $rdfxml, qr|<wail:City rdf:nodeID="city">\n\s+<wail:name>London</wail:name>|, "city" ).
+like( $rdfxml, qr|<wail:locatedIn>\n\s+<wail:Country rdf:nodeID="country">\n\s+<wail:name>United Kingdom</wail:name>|, "country" ).
+like( $rdfxml, qr|<wail:postalCode>WC1X 8JR</wail:postalCode>|, "postcode" );
 like( $rdfxml, qr|<geo:lat>51.524193</geo:lat>|, "latitude" );
 like( $rdfxml, qr|<geo:long>-0.114436</geo:long>|, "longitude" );
 like( $rdfxml, qr|<dc:description>a nice pub</dc:description>|, "summary (description)" );
@@ -169,6 +172,6 @@ $wiki->write_node( "Nonesuch Stores",
 
 $rdfxml = $rdf_writer->emit_rdfxml( node => "Nonesuch Stores" );
 
-like( $rdfxml, qr|<geo:SpatialThing rdf:ID="obj" dc:title="Nonesuch Stores">|,
+like( $rdfxml, qr|<geo:SpatialThing rdf:ID="obj">|,
     "having opening hours marks node as geospatial" );
 

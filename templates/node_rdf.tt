@@ -1,108 +1,131 @@
 <?xml version="1.0"?>
 <rdf:RDF
-  xmlns:chefmoz = "http://chefmoz.org/rdf/elements/1.0/"
   xmlns:dc      = "http://purl.org/dc/elements/1.1/"
   xmlns:dcterms = "http://purl.org/dc/terms/"
   xmlns:foaf    = "http://xmlns.com/foaf/0.1/"
   xmlns:geo     = "http://www.w3.org/2003/01/geo/wgs84_pos#"
-  xmlns:map     = "http://www.daml.org/2001/06/map/map-ont#"
+  xmlns:map     = "http://downlode.org/Code/RDF/Map/"
   xmlns:os      = "http://downlode.org/Code/RDF/Ordnance_Survey/schema/1#"
   xmlns:owl     = "http://www.w3.org/2002/07/owl#"
   xmlns:rdf     = "http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+  xmlns:rdfs    = "http://www.w3.org/2000/01/rdf-schema#"
+  xmlns:wail    = "http://www.eyrie.org/~zednenem/2002/wail/"
   xmlns:wiki    = "http://purl.org/rss/1.0/modules/wiki/"
-  xmlns:wn      = "http://xmlns.com/wordnet/1.6/"
-  xmlns         = "http://www.w3.org/2000/10/swap/pim/contact#"
+  xmlns:contact = "http://www.w3.org/2000/10/swap/pim/contact#"
 >
 
-  <rdf:Description rdf:about="">
-    <dc:title>[% site_name %]: [% node_name %]</dc:title>
-    <dc:date>[% timestamp %]</dc:date>
-    <dcterms:modified>[% timestamp %]</dcterms:modified>
+<rdf:Description rdf:about="">
+  <dc:title>[% site_name %]: [% node_name %]</dc:title>
+  <dc:date>[% timestamp %]</dc:date>
+  <dcterms:modified>[% timestamp %]</dcterms:modified>
 
-    [% FOREACH contributor = contributors.values %] 
-    <dc:contributor rdf:resource="[% full_cgi_url %]?id=[% contributor.user_id %];format=rdf#obj" foaf:name="[% contributor.user_id %]" />
-    [% END %]
+  [%- FOREACH contributor = contributors.values %] 
+  <dc:contributor rdf:resource="[% full_cgi_url %]?id=[% contributor.user_id %];format=rdf#obj" />
+  [%- END %]
 
-    <dc:source rdf:resource="[% node_uri %]" />
-    <wiki:version>[% version %]</wiki:version>
-    <foaf:topic rdf:resource="#obj" />
-  </rdf:Description>
+  <dc:source rdf:resource="[% node_uri %]" />
+  <wiki:version>[% version %]</wiki:version>
+  <foaf:topic rdf:resource="#obj" />
 
-  <[% obj_type %] rdf:ID="obj" dc:title="[% node_name %]">
+  [%- IF redirect %]
+    <owl:sameAs rdf:resource="[% redirect %]" />
+  [%- END %]
 
-    [% IF summary %]
-      <dc:description>[% summary %]</dc:description>
-    [% END %]
+</rdf:Description>
 
-    [% IF categories %]
-      <!-- categories -->
+<[% obj_type %] rdf:ID="obj">
 
-      [% FOREACH category = categories %]
-        <dc:subject>[% category.name %]</dc:subject>
-      [% END %]
-    [% END %]
+  <dc:title>[% node_name %]</dc:title>
+  
+  [%- IF summary %]
+  <dc:description>[% summary %]</dc:description>
+  [%- END %]
 
-    [% IF is_geospatial %]
-      <!-- address and geospatial data -->
+  [%- IF node_image %]
+  <foaf:depiction rdf:resource="[% node_image %]" />
+  [%- END %]
 
-      [% IF address %]
-        <address>[% address %]</address>
-      [% END %]
-      [% IF city %]
-        <city>[% city %]</city>
-      [% END %]
-      [% IF postcode %]
-        <postalCode>[% postcode %]</postalCode>
-      [% END %]
-      [% IF country %]
-        <country>[% country %]</country>
-      [% END %]
+  [%- IF categories %]
+  <!-- categories -->
 
-      [% IF map_link %]
-        <foaf:page>
-          <map:Map rdf:about="[% map_link %]" />
-        </foaf:page>
-      [% END %]
+  [%- FOREACH category = categories %]
+  <dc:subject>[% category.name %]</dc:subject>
+  [%- END %]
+  [%- END %]
 
-      [% FOREACH locale = locales %]
-        <foaf:based_near>
-          <wn:Neighborhood rdf:ID="[% locale.id %]">
-            <dc:title>[% locale.name %]</dc:title>
-          </wn:Neighborhood>
-        </foaf:based_near>
-      [% END %]
+  [%- IF is_geospatial %]
+  <!-- address and geospatial data -->
 
-      [% IF wgs84_lat AND wgs84_long %]
-        <geo:lat>[% wgs84_lat %]</geo:lat>
-        <geo:long>[% wgs84_long %]</geo:long>
-      [% END %]
+  <wail:location>
+    <wail:Address rdf:nodeID="address">
+  [%- IF address %]
+      <wail:streetName>[% address %]</wail:streetName>
+  [%- END %]
+  [%- IF postcode %]
+      <wail:postalCode>[% postcode %]</wail:postalCode>
+  [%- END %]
+  [%- IF city %]
+      <wail:locatedIn>
+        <wail:City rdf:nodeID="city">
+          <wail:name>[% city %]</wail:name>
+          [%- IF country %]
+            <wail:locatedIn>
+              <wail:Country rdf:nodeID="country">
+                <wail:name>[% country %]</wail:name>
+              </wail:Country>
+            </wail:locatedIn>
+          [%- END %]
+        </wail:City>
+      </wail:locatedIn>
+  [%- END %]
+    </wail:Address>
+  </wail:location>
 
-      [% IF os_x AND os_y %]
-        <os:x>[% os_x %]</os:x>
-        <os:y>[% os_y %]</os:y>
-      [% END %]
+  [%- IF map_link %]
+  <map:shownBy>
+    <map:Map rdf:about="[% map_link %]" />
+  </map:shownBy>
+  [%- END %]
 
-    [% END %]
+  [%- FOREACH locale = locales %]
+  <foaf:based_near>
+    <wail:Neighborhood rdf:nodeID="[% locale.id %]">
+      <wail:name>[% locale.name %]</wail:name>
+      [%- IF city %]
+        <wail:locatedIn rdf:nodeID="city" />
+      [%- END %]
+    </wail:Neighborhood>
+  </foaf:based_near>
+  [%- END %]
 
-    [% IF phone OR fax OR website OR opening_hours_text %]
-      <!-- contact information -->
-      [% IF phone %]
-        <phone>[% phone %]</phone>
-      [% END %]
-      [% IF fax %]
-        <fax>[% fax %]</fax>
-      [% END %]
-      [% IF website %]
-        <foaf:homepage rdf:resource="[% website %]" />
-      [% END %]
-      [% IF opening_hours_text %]
-        <chefmoz:Hours>[% opening_hours_text %]</chefmoz:Hours>
-      [% END %]
-    [% END %]
+  [%- IF wgs84_lat AND wgs84_long %]
+  <geo:lat>[% wgs84_lat %]</geo:lat>
+  <geo:long>[% wgs84_long %]</geo:long>
+  [%- END %]
 
-    [% IF redirect %]
-      <owl:sameAs rdf:resource="[% redirect %]" />
-    [% END %]
+  [%- IF os_x AND os_y %]
+  <os:x>[% os_x %]</os:x>
+  <os:y>[% os_y %]</os:y>
+  [%- END %]
 
-  </[% obj_type %]>
+  [%- END %]
+
+  [%- IF phone OR fax OR website OR opening_hours_text %]
+  <!-- contact information -->
+  [%- IF phone %]
+  <contact:phone>[% phone %]</contact:phone>
+  [%- END %]
+  [%- IF fax %]
+  <contact:fax>[% fax %]</contact:fax>
+  [%- END %]
+  [%- IF website %]
+  <foaf:homepage rdf:resource="[% website %]" />
+  [%- END %]
+  [%- IF opening_hours_text %]
+  <dc:available>[% opening_hours_text %]</dc:available>
+  [%- END %]
+  [%- END %]
+
+</[% obj_type %]>
+
 </rdf:RDF>
