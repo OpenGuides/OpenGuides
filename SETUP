@@ -173,7 +173,8 @@ put them somewhere in /etc.
   "What URL does the install directory map to?"
 
 Give the full address needed to access the installation directory with
-a web browser - for example http://london.openguides.org/
+a web browser, including the "http://" prefix - for example,
+http://london.openguides.org/
 
 
   "Do you want me to munge a custom lib path into the scripts?"

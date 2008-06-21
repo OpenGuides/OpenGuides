@@ -78,9 +78,6 @@ foreach my $label ( qw( newpage preferences search wiki ) ) {
     $targets{"$label.cgi"} = find_script( "openguides-$label-script" );
 }
 
-# The database setup script.
-my $setup = find_script( "wiki-toolkit-setupdb" );
-
 my $force;
 GetOptions('force' => \$force);
 unless ($force) {
@@ -115,6 +112,9 @@ my %yn_vars = map { $_ => 1 }
       random_page_omits_locales random_page_omits_categories
       content_above_navbar_in_html show_gmap_in_node_display force_wgs84
       send_moderation_notifications);
+
+my %blank_ok = map { $_ => 1 }
+   qw( dbpass dbhost );
 
 my $skip_config = $force ? 'y'
                          : prompt( "y", "Skip OpenGuides configuration?",
@@ -166,7 +166,8 @@ my %drivers = ( postgres => "DBD::Pg",
                 sqlite   => "DBD::SQLite",
               );
 eval "require $drivers{$dbtype}";
-warn "$drivers{$dbtype} is needed to run a $dbtype database" if $@;
+die "\nSorry; $drivers{$dbtype} is needed to run a $dbtype database - please "
+    . "install this\nmodule and try again.\n\n" if $@;
 
 push @answers, { question => $dbtype_qu,
                  variable => "dbtype",
@@ -205,13 +206,12 @@ foreach my $var ( qw(
   ) ) {
     my $q_method = $var . "__qu";
     my $qu  = $existing_config->$q_method;
-    my $type = $yn_vars{$var} ? "y_n" : "";
     my $def = $existing_config->$var || "";
     my $val = $def;
 
     # Override dbname question for SQLite only.
     if ( $dbtype eq "sqlite" and $var eq "dbname" ) {
-        $qu = "what's the full filename of the SQLite database this site runs on?";
+        $qu = "What's the full filename of the SQLite database this site runs on?";
     }
 
     if ( $dbtype eq "sqlite" and
@@ -322,12 +322,17 @@ foreach my $var ( qw(
 
     # Here is where we actually ask the questions.
     unless ( $skip_config ) {
-        if ( $type eq "y_n" ) {
+print $var . "\n";
+        if ( $yn_vars{$var} ) {
             # may be stored as true/false integer value
             if ( $def =~ /^\d+$/ ) {
                 $def = $def ? "y" : "n";
             }
             $val = prompt( "y", $qu, "y or n", $def );
+        } elsif ( $blank_ok{$var} ) {
+print "boo!\n";
+             $val = prompt( "s", $qu, "optional", $def,
+                            sub { print "hello!\n"; return 1; } );
         } else {
              $val = prompt( "x", $qu, "", $def );
         }
