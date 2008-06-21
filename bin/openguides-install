@@ -231,12 +231,12 @@ foreach my $var ( qw(
     if ( $var eq "template_path" && !defined $existing_config->$var ) {
         $def = $install_directory;
         $def .= "/" unless $def =~ m|/$|;
-        $def .= "templates";
+        $def .= "templates/";
     }
     if ( $var eq "custom_template_path" && !defined $existing_config->$var ) {
         $def = $install_directory;
         $def .= "/" unless $def =~ m|/$|;
-        $def .= "custom-templates";
+        $def .= "custom-templates/";
     }
 
     # If a Google Maps URL was provided last time we know the centre_lat

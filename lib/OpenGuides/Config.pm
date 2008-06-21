@@ -113,7 +113,7 @@ sub _init {
                      licence_info_url => "",
                      spam_detector_module => "",
                      host_checker_module => "",
-                     static_path => "/usr/local/share/openguides/static",
+                     static_path => "/usr/local/share/openguides/static/",
                      send_moderation_notifications => 1
                    );
 
