@@ -36,3 +36,9 @@ database file, you'll see errors like "Unhandled error: [DBD::SQLite::db
 do failed...".
 
 ----------------------------------------------------------------------
+
+If you need to rerun the table creation process for any reason, use
+wiki-toolkit-setupdb, which should have been installed when you installed
+the Wiki::Toolkit modules.
+
+----------------------------------------------------------------------
