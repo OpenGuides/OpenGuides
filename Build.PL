@@ -22,19 +22,24 @@ my $class = Module::Build->subclass(
       mkdir( File::Spec->catfile( $path, "OpenGuides" ) );
       die "Can't make template install folder: $!\n" unless (-d File::Spec->catfile( $path, "OpenGuides" ) );
 
-      mkdir( File::Spec->catfile( $path, "OpenGuides", "templates" ) );
-      die "Can't make template install folder: $!\n" unless (-d File::Spec->catfile( $path, "OpenGuides", "templates" ) );
+      my $templ_dir = File::Spec->catfile( $path, "OpenGuides", "templates" );
 
-      print "Installing templates to $path/OpenGuides/templates\n";
-      opendir TEMPLATES, "templates" or die "Can't open template source folder: $!\n";
+      mkdir( $templ_dir );
+      die "Can't make template install folder: $!\n" unless (-d $templ_dir );
+
+      print "Installing templates to $templ_dir\n";
+      opendir TEMPLATES, "templates"
+        or die "Can't open template source folder: $!\n";
+
       for (grep { /\.(tt)$/ } readdir(TEMPLATES)) {
-        print "  installing template $_\n";
+        #print "  installing template $_\n";
         File::Copy::copy(
-          File::Spec->catfile('templates', $_),
-          File::Spec->catfile( $path, "OpenGuides", "templates", $_ )
+          File::Spec->catfile( "templates", $_ ),
+          File::Spec->catfile( $templ_dir, $_ )
         ) or die "Error copying $_: $!\n";;
       }
       closedir(TEMPLATES);
+      print "Done!\n";
 
       return $ret;
     }
@@ -78,6 +83,7 @@ my $build = $class->new(
         'Parse::RecDescent'                   => 0,
         'POSIX'                               => 0,
         'Template'                            => '2.15', # for hash.delete and string.remove vmethods
+        'Term::Prompt'                        => 0,
         'Time::Piece'                         => 0,
         'URI::Escape'                         => 0,
         'XML::RSS'                            => 0,

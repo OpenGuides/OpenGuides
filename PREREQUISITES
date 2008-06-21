@@ -41,6 +41,7 @@ Parse::RecDescent
 Plucene
 POSIX
 Template
+Term::Prompt
 Time::Piece
 URI::Escape
 XML::RSS
