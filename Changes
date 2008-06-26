@@ -19,6 +19,7 @@ More detailed changelogs can be found at
         * Replace unnecessary instances of rdf:ID with rdf:nodeID.
         * Model relationship of neighborhood to parent city.
         * Reduce acres of whitespace in output and clean up indenting.
+        Added a Universal Edit Link (http://universaleditbutton.org/)
 
 0.62    8 June 2008
         Allow wiki page links (simple: [[Foo]], title: [[Foo|bar]]) in
