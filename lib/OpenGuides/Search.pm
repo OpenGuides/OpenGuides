@@ -184,7 +184,7 @@ sub run {
     my %tt_vars = (
                    format      => $args{'vars'}->{'format'},
                    ss_version  => $VERSION,
-                   ss_info_url => 'http://openguides.org/page/search_help'
+                   ss_info_url => 'http://openguides.org/search_help'
                   );
 
     my $doing_search;

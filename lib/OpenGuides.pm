@@ -1214,7 +1214,7 @@ sub display_about {
   </description>
 
   <homepage rdf:resource="http://openguides.org/" />
-  <mailing-list rdf:resource="http://openguides.org/mm/listinfo/openguides-dev/" />
+  <mailing-list rdf:resource="http://lists.openguides.org/mailman/listinfo/openguides-dev/" />
   <mailing-list rdf:resource="http://urchin.earth.li/mailman/listinfo/openguides-commits/" />
 
   <maintainer>
@@ -1324,7 +1324,7 @@ project is available from the <a href="http://dev.openguides.org/">OpenGuides
 development site</a>.
 </p>
 <p>
-Copyright &copy;2003-2007, <a href="http://openguides.org/">The OpenGuides
+Copyright &copy;2003-2008, <a href="http://openguides.org/">The OpenGuides
 Project</a>. "OpenGuides", "[The] Open Guide To..." and "The guides made by
 you" are trademarks of The OpenGuides Project. Any uses on this site are made 
 with permission.

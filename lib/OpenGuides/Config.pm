@@ -98,7 +98,7 @@ sub _init {
                      default_language => "en",
                      http_charset => "",
                      formatting_rules_node => "Text Formatting Examples",
-                     formatting_rules_link => "http://openguides.org/page/text_formatting",
+                     formatting_rules_link => "http://openguides.org/text_formatting",
                      backlinks_in_title => 0,
                      geo_handler => 1,
                      ellipsoid => "WGS-84",
@@ -294,7 +294,7 @@ sub script_url {
 
 =item * formatting_rules_node (default: C<Text Formatting Examples>)
 
-=item * formatting_rules_link (default: C<http://openguides.org/page/text_formatting>
+=item * formatting_rules_link (default: C<http://openguides.org/text_formatting>
 
 =item * backlinks_in_title (default: false)
 

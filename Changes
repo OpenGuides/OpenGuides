@@ -20,6 +20,7 @@ More detailed changelogs can be found at
         * Model relationship of neighborhood to parent city.
         * Reduce acres of whitespace in output and clean up indenting.
         Added a Universal Edit Link (http://universaleditbutton.org/) (#254)
+        Update references to http://openguides.org moved URLs
 
 0.62    8 June 2008
         Allow wiki page links (simple: [[Foo]], title: [[Foo|bar]]) in
