@@ -52,7 +52,7 @@
     </script>
 
     <script type="text/javascript">
-    var pageTracker = _gat._getTracker("[% CGI.escapeHTML( config.google_analytics_key  ) %]");
+    var pageTracker = _gat._getTracker("[% config.google_analytics_key %]");
     pageTracker._trackPageview();
     </script>
   [% END %]

@@ -22,6 +22,7 @@ More detailed changelogs can be found at
         Added a Universal Edit Link (http://universaleditbutton.org/) (#254)
         Update references to http://openguides.org moved URLs
         Update Google Analytics code to support new version (#255)
+        Some pages didn't properly include Google Analyatics; fix this (#257)
 
 0.62    8 June 2008
         Allow wiki page links (simple: [[Foo]], title: [[Foo|bar]]) in
