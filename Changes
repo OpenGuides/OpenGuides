@@ -3,7 +3,7 @@
 More detailed changelogs can be found at
 <http://dev.openguides.org/log/trunk>.
 
-0.63
+0.63    16 August 2008
         Major overhaul of RDF output.
         * Remodelled addresses using WAIL.
           (http://www.eyrie.org/~zednenem/2002/wail/)
