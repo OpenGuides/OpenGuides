@@ -1,6 +1,6 @@
 package OpenGuides::Search;
 use strict;
-our $VERSION = '0.12';
+our $VERSION = '0.13';
 
 use CGI qw( :standard );
 use Wiki::Toolkit::Plugin::Locator::Grid;
