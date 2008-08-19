@@ -315,6 +315,9 @@ my $build = OpenGuides::Build->new(
         },
     build_requires => {
         'Module::Build' => '0.26', # API change for accessing config data
+        'Class::Accessor'                     => 0,
+        'Config::Tiny'                        => 0,
+        'Data::Dumper'                        => 0,
         },
     recommends => {
         'DBD::SQLite'         => 0, # for testing

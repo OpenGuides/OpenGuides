@@ -3,6 +3,9 @@
 More detailed changelogs can be found at
 <http://dev.openguides.org/log/trunk>.
 
+0.64
+        Correctly specify all build_requires (#245)
+
 0.63    16 August 2008
         Major overhaul of RDF output.
         * Remodelled addresses using WAIL.
