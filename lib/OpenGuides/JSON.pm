@@ -124,15 +124,16 @@ sub json_maker {
     return $self->{json_maker};
 }
 
-sub make_recentchanges_rss {
+sub make_recentchanges_json {
     my ( $self, %args ) = @_;
 
     $self->json_maker->recent_changes(%args);
 }
 
-sub rss_timestamp {
+sub json_timestamp {
     my ( $self, %args ) = @_;
 
+    # RSS and JSON timestamps are close, I think...
     $self->json_maker->rss_timestamp(%args);
 }
 
@@ -155,17 +156,17 @@ developers.
 
     my $wiki = Wiki::Toolkit->new( ... );
     my $config = OpenGuides::Config->new( file => "wiki.conf" );
-    my $rdf_writer = OpenGuides::JSON->new( wiki   => $wiki,
+    my $json_writer = OpenGuides::JSON->new( wiki   => $wiki,
                                          config => $config ); 
 
     # JSON version of a node.
-    print "Content-Type: application/rdf+xml\n\n";
-    print $rdf_writer->emit_rdfxml( node => "Masala Zone, N1 0NU" );
+    print "Content-Type: application/javascript\n\n";
+    print $json_writer->emit_json( node => "Masala Zone, N1 0NU" );
 
     # Ten most recent changes.
-    print "Content-Type: application/rdf+xml\n";
-    print "Last-Modified: " . $self->rss_timestamp( items => 10 ) . "\n\n";
-    print $rdf_writer->make_recentchanges_rss( items => 10 );
+    print "Content-Type: application/javascript\n";
+    print "Last-Modified: " . $self->json_timestamp( items => 10 ) . "\n\n";
+    print $json_writer->make_recentchanges_json( items => 10 );
 
 =head1 METHODS
 
@@ -173,14 +174,14 @@ developers.
 
 =item B<new>
 
-    my $rdf_writer = OpenGuides::JSON->new( wiki   => $wiki,
+    my $json_writer = OpenGuides::JSON->new( wiki   => $wiki,
                                            config => $config ); 
 
 C<wiki> must be a L<Wiki::Toolkit> object and C<config> must be an
 L<OpenGuides::Config> object.  Both arguments mandatory.
 
 
-=item B<emit_rdfxml>
+=item B<emit_json>
 
     $wiki->write_node( "Masala Zone, N1 0NU",
 		     "Quick and tasty Indian food",
@@ -190,8 +191,8 @@ L<OpenGuides::Config> object.  Both arguments mandatory.
 		       locale   => "Islington" }
     );
 
-    print "Content-Type: application/rdf+xml\n\n";
-    print $rdf_writer->emit_rdfxml( node => "Masala Zone, N1 0NU" );
+    print "Content-Type: application/javascript\n\n";
+    print $json_writer->emit_json( node => "Masala Zone, N1 0NU" );
 
 B<Note:> Some of the fields emitted by the JSON generator are taken
 from the node metadata. The form of this metadata is I<not> mandated
@@ -223,12 +224,12 @@ all of the following metadata when calling C<write_node>:
 Returns a raw L<Wiki::Toolkit::Plugin::JSON> object created with the values you
 invoked this module with.
 
-=item B<make_recentchanges_rss>
+=item B<make_recentchanges_json>
 
     # Ten most recent changes.
-    print "Content-Type: application/rdf+xml\n";
-    print "Last-Modified: " . $rdf_writer->rss_timestamp( items => 10 ) . "\n\n";
-    print $rdf_writer->make_recentchanges_rss( items => 10 );
+    print "Content-Type: application/javascript\n";
+    print "Last-Modified: " . $json_writer->json_timestamp( items => 10 ) . "\n\n";
+    print $json_writer->make_recentchanges_json( items => 10 );
 
     # All the changes made by bob in the past week, ignoring minor edits.
 
@@ -238,17 +239,17 @@ invoked this module with.
                  filter_on_metadata => { username => "bob" },
                );
 
-    print "Content-Type: application/rdf+xml\n";
-    print "Last-Modified: " . $rdf_writer->rss_timestamp( %args ) . "\n\n";
-    print $rdf_writer->make_recentchanges_rss( %args );
+    print "Content-Type: application/javascript\n";
+    print "Last-Modified: " . $json_writer->json_timestamp( %args ) . "\n\n";
+    print $json_writer->make_recentchanges_json( %args );
 
-=item B<rss_timestamp>
+=item B<json_timestamp>
 
-    print "Last-Modified: " . $rdf_writer->rss_timestamp( %args ) . "\n\n";
+    print "Last-Modified: " . $json_writer->json_timestamp( %args ) . "\n\n";
 
 Returns the timestamp of the RSS feed in POSIX::strftime style ("Tue, 29 Feb 2000 
 12:34:56 GMT"), which is equivalent to the timestamp of the most recent item
-in the feed. Takes the same arguments as make_recentchanges_rss(). You will most 
+in the feed. Takes the same arguments as make_recentchanges_json(). You will most 
 likely need this to print a Last-Modified HTTP header so user-agents can determine
 whether they need to reload the feed or not.
 
