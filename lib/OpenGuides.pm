@@ -1002,6 +1002,72 @@ sub show_index {
     print $output;
 }
 
+=item B<show_metadata>
+
+  $guide->show_metadata();
+  $guide->show_metadata(type => "category");
+  $guide->show_metadata(type => "category", format => "json");
+
+Lists all metadata types, or all metadata values of a given
+type. Useful for programatically discovering a guide.
+
+As with other methods, parameters C<return_tt_vars> and
+C<return_output> can be used to return these things instead of
+printing the output to STDOUT.
+
+=cut
+sub show_metadata {
+    my ($self, %args) = @_;
+    my $wiki = $self->wiki;
+    my $formatter = $wiki->formatter;
+
+    my @values;
+    my $type;
+    if($args{"type"}) {
+       $type = $args{"type"};
+       @values = $wiki->store->list_metadata_by_type($args{"type"});
+    } else {
+       $type = "metadata_type";
+       @values = $wiki->store->list_metadata_names;
+    }
+
+    my %tt_vars = ( type          => $type,
+                    metadata      => \@values,
+                    num_results   => scalar @values,
+                    not_deletable => 1,
+                    deter_robots  => 1,
+                    not_editable  => 1 );
+    return %tt_vars if $args{return_tt_vars};
+
+    my $output;
+    my $content_type;
+
+    if($args{"format"}) {
+       if($args{"format"} eq "json") {
+          $content_type = "text/javascript";
+          my $json = OpenGuides::JSON->new( wiki => $wiki, 
+                                            config => $self->config );
+          $output = $json->output_as_json(
+                                 $type => \@values
+          );
+       }
+    }
+    unless($output) {
+       $output = OpenGuides::Template->output(
+                                                 wiki    => $wiki,
+                                                 config  => $self->config,
+                                                 template=>"metadata.tt",
+                                                 vars    => \%tt_vars,
+                                             );
+    }
+    return $output if $args{return_output};
+
+    if($content_type) {
+       print "Content-type: $content_type\n\n";
+    }
+    print $output;
+}
+
 =item B<list_all_versions>
 
   $guide->list_all_versions ( id => "Home Page" );

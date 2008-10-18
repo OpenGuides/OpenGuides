@@ -188,9 +188,9 @@ eval {
         print $q->redirect( $redir_target );
     } elsif ($action eq 'about') {
         $guide->display_about(format => $format);
-    } elsif ($action eq 'metadata' && $q->param("type")) {
+    } elsif ($action eq 'metadata') {
         $guide->show_metadata(
-                            type   => $q->param("type"),
+                            type   => $q->param("type") || "",
                             format => $format,
                           );
     } elsif ($action eq 'display') { 

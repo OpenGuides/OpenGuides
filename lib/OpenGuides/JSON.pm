@@ -60,6 +60,9 @@ sub _init {
     $self;
 }
 
+=item B<emit_json>
+Renders the given node as JSON
+=cut
 sub emit_json {
     my ( $self, %args ) = @_;
 
@@ -101,6 +104,14 @@ sub emit_json {
     $data->{url} = $self->{make_node_url}->( $node_name, $data->{version} );
     $data->{version_indpt_url} = $self->{make_node_url}->($node_name);
     return $self->json_maker->make_json($data);
+}
+
+=item B<output_as_json>
+Renders the given arbitary data as JSON
+=cut
+sub output_as_json {
+    my ( $self, %args ) = @_;
+    return $self->json_maker->make_json(\%args);
 }
 
 sub json_maker {
