@@ -6,6 +6,8 @@ More detailed changelogs can be found at
 0.64
         Correctly specify all build_requires (#245)
         Fix some broken POD (#246)
+        Metadata discovery features (action=metadata)
+        JSON support for node details and metatdata discovery
 
 0.63    16 August 2008
         Major overhaul of RDF output.

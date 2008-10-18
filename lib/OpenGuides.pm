@@ -1023,15 +1023,18 @@ sub show_metadata {
 
     my @values;
     my $type;
-    if($args{"type"}) {
+    my $may_descend = 0;
+    if($args{"type"} && $args{"type"} ne "metadata_type") {
        $type = $args{"type"};
        @values = $wiki->store->list_metadata_by_type($args{"type"});
     } else {
+       $may_descend = 1;
        $type = "metadata_type";
        @values = $wiki->store->list_metadata_names;
     }
 
     my %tt_vars = ( type          => $type,
+                    may_descend   => $may_descend,
                     metadata      => \@values,
                     num_results   => scalar @values,
                     not_deletable => 1,
