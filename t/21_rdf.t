@@ -54,7 +54,7 @@ OpenGuides::Test->write_data(
         postcode           => "WC1X 8JR",
         locales            => "Bloomsbury\r\nSt Pancras",
         phone              => "test phone number",
-        website            => "test website",
+        website            => "http://example.com",
         hours_text         => "test hours",
         latitude           => "51.524193",
         longitude          => "-0.114436",
@@ -70,7 +70,7 @@ OpenGuides::Test->write_data(
         postcode           => "WC1X 8JR",
         locales            => "Bloomsbury\r\nSt Pancras",
         phone              => "test phone number",
-        website            => "test website",
+        website            => "http://example.com",
         hours_text         => "test hours",
         latitude           => "51.524193",
         longitude          => "-0.114436",
@@ -95,7 +95,7 @@ like( $rdfxml, qr|<contact:phone>test phone number</contact:phone>|,
 like( $rdfxml, qr|<dc:available>test hours</dc:available>|,
     "picks up opening hours text" );
 
-like( $rdfxml, qr|<foaf:homepage rdf:resource="test website" />|, "picks up website" );
+like( $rdfxml, qr|<foaf:homepage rdf:resource="http://example.com" />|, "picks up website" );
 
 like( $rdfxml,
     qr|<dc:title>Wiki::Toolkit Test Site: Calthorpe Arms</dc:title>|,

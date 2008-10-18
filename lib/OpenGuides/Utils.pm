@@ -10,6 +10,7 @@ use Wiki::Toolkit::Formatter::UseMod;
 use Wiki::Toolkit::Plugin::RSS::Reader;
 use URI::Escape;
 use MIME::Lite;
+use Data::Validate::URI qw( is_web_uri );
 
 =head1 NAME
 
@@ -376,7 +377,6 @@ sub validate_edit {
     return \@fails if @fails;
 
     # Now do our real validation
-    # Numeric tests
     foreach my $var (qw(os_x os_y)) {
         if ($q->param($var) and $q->param($var) !~ /^-?\d+$/) {
             push @fails, "$var must be integer, was: " . $q->param($var);
@@ -386,6 +386,12 @@ sub validate_edit {
     foreach my $var (qw(latitude longitude)) {
         if ($q->param($var) and $q->param($var) !~ /^-?\d+\.?(\d+)?$/) {
             push @fails, "$var must be numeric, was: " . $q->param($var);
+        }
+    }
+
+    if ( $q->param('website') and $q->param('website') ne 'http://' ) {
+        unless ( is_web_uri( $q->param('website') ) ) {
+            push @fails, $q->param('website') . ' is not a valid web URI';
         }
     }
 

@@ -25,7 +25,7 @@ my @variables = qw(
    licence_name licence_url licence_info_url moderation_requires_password
    enable_node_image enable_common_categories enable_common_locales
    spam_detector_module host_checker_module static_path static_url
-   send_moderation_notifications
+   send_moderation_notifications website_link_max_chars
 );
 my @questions = map { $_ . "__qu" } @variables;
 OpenGuides::Config->mk_accessors( @variables );
@@ -114,7 +114,8 @@ sub _init {
                      spam_detector_module => "",
                      host_checker_module => "",
                      static_path => "/usr/local/share/openguides/static",
-                     send_moderation_notifications => 1
+                     send_moderation_notifications => 1,
+                     website_link_max_chars => 20,
                    );
 
     # See if we already have some config variables set.
@@ -199,7 +200,8 @@ sub _init {
         host_checker_module => "What module would you like to use to run an IP blacklist? (optional)",
         static_path => "What directory should we install static content (CSS, images, javascript) to?",
         static_url => "What is the URL corresponding to the static content?",
-        send_moderation_notifications => "Should we send email notifications when a moderated node is edited?"
+        send_moderation_notifications => "Should we send email notifications when a moderated node is edited?",
+        website_link_max_chars => "How many characters of the URL of node websites should be displayed?",
     );
 
     foreach my $var ( keys %questions ) {
@@ -333,6 +335,8 @@ sub script_url {
 =item * static_url
 
 =item * send_moderation_notifications
+
+=item * website_link_max_chars (default: C<20>)
 
 =back
 

@@ -266,10 +266,6 @@ foreach my $ans (@answers) {
 }
 close FILE or die "Can't close wiki.conf: $!";
 
-#####
-##### When updating the prereqs PLEASE REMEMBER to update PREREQUISITES.
-#####
-
 # We currently only support Plucene for new installs, but may support
 # others in future
 my $search_module = $use_plucene ? "Plucene" : "Search::InvertedIndex";
@@ -313,6 +309,7 @@ my $build = OpenGuides::Build->new(
         'Time::Piece'                         => 0,
         'URI::Escape'                         => 0,
         'XML::RSS'                            => 0,
+        'Data::Validate::URI'                 => 0,
         },
     build_requires => {
         'Module::Build' => '0.26', # API change for accessing config data
@@ -321,8 +318,8 @@ my $build = OpenGuides::Build->new(
         'Data::Dumper'                        => 0,
         },
     recommends => {
-        'DBD::SQLite'         => 0, # for testing
-        'Test::HTML::Content' => 0, # for testing, oddly enough
+        'DBD::SQLite'                         => 0, # for testing
+        'Test::HTML::Content'                 => 0, # for testing, oddly enough
         'Wiki::Toolkit::Plugin::Ping' => 0, # for pinging external services
         'Geo::HelmertTransform'  => 0,      # for correct WGS84 lat/long
                                             # when using grid systems

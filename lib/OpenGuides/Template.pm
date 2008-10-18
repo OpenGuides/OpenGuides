@@ -12,6 +12,7 @@ use OpenGuides; # for $VERSION for template variable
 use OpenGuides::CGI;
 use Template;
 use URI::Escape;
+use Data::Validate::URI qw( is_web_uri );
 
 =head1 NAME
 
@@ -347,16 +348,15 @@ sub extract_metadata_vars {
         };
     } @loclist;
 
-    # The 'website' attribute might contain a URL so we wiki-format it here
-    # rather than just CGI::escapeHTMLing it all in the template.
     my $website = $args{metadata} ? $metadata{website}[0]
                                   : $q->param("website");
     my $formatted_website_text = "";
-    if ( $website && $website ne "http://" ) {
-        $formatted_website_text = $class->format_website_text(
-            formatter => $formatter,
-            text      => $website
-        );
+    if ( $website && $website ne "http://" && is_web_uri( $website ) ) {
+        my $trunc_website = substr( $website, 0, $config->website_link_max_chars );
+        unless ($website eq $trunc_website ) {
+            $trunc_website .= '...';
+        }
+        $formatted_website_text = '<a href="' . $website . '">' . $trunc_website . '</a>';
     }
 
     my $hours_text = $args{metadata} ? $metadata{opening_hours_text}[0]
@@ -582,20 +582,6 @@ sub extract_metadata_vars {
     return %vars;
 }
 
-sub format_website_text {
-    my ($class, %args) = @_;
-    my ($formatter, $text) = @args{ qw( formatter text ) };
-    my $formatted = $formatter->format($text);
-
-    # Strip out paragraph markers put in by formatter since we want this
-    # to be a single string to put in a <ul>.
-    $formatted =~ s/<p>//g;
-    $formatted =~ s/<\/p>//g;
-
-    return $formatted;
-}
-
-
 =back
 
 =head1 AUTHOR
@@ -604,7 +590,7 @@ The OpenGuides Project (openguides-dev@lists.openguides.org)
 
 =head1 COPYRIGHT
 
-  Copyright (C) 2003-2007 The OpenGuides Project.  All Rights Reserved.
+  Copyright (C) 2003-2008 The OpenGuides Project.  All Rights Reserved.
 
 This module is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself.

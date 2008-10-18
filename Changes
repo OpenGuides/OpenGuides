@@ -8,6 +8,8 @@ More detailed changelogs can be found at
         Fix some broken POD (#246)
         Metadata discovery features (action=metadata)
         JSON support for node details and metatdata discovery
+        Correctly validate web site URLs during edit and display,
+        and truncate URLs that are too long (#21)
 
 0.63    16 August 2008
         Major overhaul of RDF output.
