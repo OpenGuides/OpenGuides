@@ -5,6 +5,7 @@ More detailed changelogs can be found at
 
 0.64
         Correctly specify all build_requires (#245)
+        Fix some broken POD (#246)
 
 0.63    16 August 2008
         Major overhaul of RDF output.

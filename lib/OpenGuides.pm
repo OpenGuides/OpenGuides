@@ -2223,11 +2223,11 @@ L<http://dev.openguides.org/>
 
 =over 4
 
-=item * L<http://london.openguides.org/|The Open Guide to London>, the first and biggest OpenGuides site.
+=item * The Open Guide to London, at L<http://london.openguides.org/>, is the first and biggest OpenGuides site.
 
-=item * L<http://openguides.org/|The OpenGuides website>, with a list of all live OpenGuides installs.
+=item * A list of live OpenGuides installs is available at L<http://openguides.org/>.
 
-=item * L<Wiki::Toolkit>, the Wiki toolkit which does the heavy lifting for OpenGuides
+=item * L<Wiki::Toolkit>, the Wiki toolkit which does the heavy lifting for OpenGuides.
 
 =back
 
