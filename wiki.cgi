@@ -16,6 +16,7 @@ use OpenGuides;
 use OpenGuides::CGI;
 use OpenGuides::Config;
 use OpenGuides::RDF;
+use OpenGuides::JSON;
 use OpenGuides::Utils;
 use OpenGuides::Template;
 use Time::Piece;
@@ -187,9 +188,16 @@ eval {
         print $q->redirect( $redir_target );
     } elsif ($action eq 'about') {
         $guide->display_about(format => $format);
+    } elsif ($action eq 'metadata' && $q->param("type")) {
+        $guide->show_metadata(
+                            type   => $q->param("type"),
+                            format => $format,
+                          );
     } elsif ($action eq 'display') { 
         if ( $format and $format eq "rdf" ) {
             display_node_rdf( node => $node );
+        } elsif ( $format and $format eq "json" ) {
+            display_node_json( node => $node );
         } elsif ( $format and $format eq 'raw' ) {
             $guide->display_node(
                                   id       => $node,
@@ -291,11 +299,19 @@ sub get_cookie {
 
 sub display_node_rdf {
     my %args = @_;
-    my $rdf_writer = OpenGuides::RDF->new( wiki      => $wiki,
-                       config => $config );
+    my $rdf_writer = OpenGuides::RDF->new( wiki => $wiki,
+                                           config => $config );
     print "Content-type: application/rdf+xml\n\n";
     print $rdf_writer->emit_rdfxml( node => $args{node} );
 }
+
+sub display_node_json { 
+    my %args = @_; 
+    my $json_writer = OpenGuides::JSON->new( wiki => $wiki, 
+                                             config => $config ); 
+    print "Content-type: text/javascript\n\n"; 
+    print $json_writer->emit_json( node => $args{node} ); 
+} 
 
 sub process_template {
     my ($template, $node, $vars, $conf, $omit_header) = @_;

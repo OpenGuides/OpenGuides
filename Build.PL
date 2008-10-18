@@ -292,6 +292,7 @@ my $build = OpenGuides::Build->new(
         'Wiki::Toolkit::Formatter::UseMod'    => 0,
         'Wiki::Toolkit::Plugin::Categoriser'  => 0,
         'Wiki::Toolkit::Plugin::Diff'         => 0,
+        'Wiki::Toolkit::Plugin::JSON'         => 0,
         'Wiki::Toolkit::Plugin::Locator::Grid'=> 0,
         'Wiki::Toolkit::Plugin::RSS::Reader'  => 0,
         'Class::Accessor'                     => 0,

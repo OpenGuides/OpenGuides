@@ -17,6 +17,7 @@ lib/OpenGuides/Build.pm
 lib/OpenGuides/CGI.pm
 lib/OpenGuides/Config.pm
 lib/OpenGuides/Feed.pm
+lib/OpenGuides/JSON.pm
 lib/OpenGuides/RDF.pm
 lib/OpenGuides/Search.pm
 lib/OpenGuides/Template.pm

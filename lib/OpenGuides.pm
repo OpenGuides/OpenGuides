@@ -945,8 +945,10 @@ sub show_index {
         if ( $args{format} eq "rdf" ) {
             $template = "rdf_index.tt";
             $conf{content_type} = "application/rdf+xml";
-        }
-        elsif ( $args{format} eq "plain" ) {
+        } elsif ( $args{format} eq "json" ) {
+            $template = "json_index.tt";
+            $conf{content_type} = "text/javascript";
+        } elsif ( $args{format} eq "plain" ) {
             $template = "plain_index.tt";
             $conf{content_type} = "text/plain";
         } elsif ( $args{format} eq "map" ) {
