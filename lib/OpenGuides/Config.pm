@@ -73,7 +73,7 @@ sub _init {
     # Here are the defaults for the variable values.
     # Don't forget to add to INSTALL when changing these.
     my %defaults = (
-                     dbtype => "postgres",
+                     dbtype => "sqlite",
                      script_name => "wiki.cgi",
                      install_directory => "/usr/lib/cgi-bin/openguides/",
                      use_plucene => 1,

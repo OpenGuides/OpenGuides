@@ -10,6 +10,7 @@ More detailed changelogs can be found at
         JSON support for node details and metatdata discovery
         Correctly validate web site URLs during edit and display,
         and truncate URLs that are too long (#21)
+        Change default database type to sqlite (#241)
         Set content charset correctly in RDF (#260)
 
 0.63    16 August 2008
