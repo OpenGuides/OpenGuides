@@ -38,7 +38,8 @@ Saving preferences in a cookie:
       default_edit_type          => "tidying",
       cookie_expires             => "never",
       track_recent_changes_views => 1,
-      display_google_maps        => 1
+      display_google_maps        => 1,
+      is_admin                   => 1
   );
 
   my $wiki = OpenGuides::Utils->make_wiki_object( config => $config );
@@ -83,7 +84,8 @@ Tracking visits to Recent Changes:
       default_edit_type          => "tidying",
       cookie_expires             => "never",
       track_recent_changes_views => 1,
-      display_google_maps        => 1
+      display_google_maps        => 1,
+      is_admin                   => 1
   );
 
 Croaks unless an L<OpenGuides::Config> object is supplied as C<config>.
@@ -126,7 +128,8 @@ sub make_prefs_cookie {
                     defedit    => $args{default_edit_type} || "normal",
                     exp        => $args{cookie_expires},
                     trackrc    => $args{track_recent_changes_views} || 0,
-                    gmaps      => $args{display_google_maps} || 0
+                    gmaps      => $args{display_google_maps} || 0,
+                    admin      => $args{is_admin} || 0
                   },
         -expires => $expires,
     );
@@ -180,6 +183,7 @@ sub get_prefs_from_cookie {
                        exp        => "cookie_expires",
                        trackrc    => "track_recent_changes_views",
                        gmaps      => "display_google_maps",
+                       admin      => "is_admin",
                      );
     my %long_data = map { $long_forms{$_} => $data{$_} } keys %long_forms;
 
@@ -199,6 +203,7 @@ sub get_prefs_from_hash {
                      cookie_expires             => "month",
                      track_recent_changes_views => 0,
                      display_google_maps        => 1,
+                     is_admin                   => 0,
                    );
     my %return;
     foreach my $key ( keys %data ) {

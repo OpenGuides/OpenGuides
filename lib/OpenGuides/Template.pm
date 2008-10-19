@@ -155,6 +155,10 @@ sub output {
        ) {
         $enable_page_deletion = 1;
     }
+    my $is_admin = 0;
+    if ( $cookie_data{is_admin} ) {
+        $is_admin = 1;
+    } 
 
     my $tt_vars = {
         config                => $config,
@@ -169,6 +173,7 @@ sub output {
         home_name             => $config->home_name,
         navbar_on_home_page   => $config->navbar_on_home_page,
         omit_help_links       => $omit_help_links,
+        is_admin              => $is_admin,
         formatting_rules_link => $formatting_rules_link,
         formatting_rules_node => $formatting_rules_node,
         openguides_version    => $OpenGuides::VERSION,

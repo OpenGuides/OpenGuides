@@ -45,6 +45,7 @@ sub set_preferences {
         cookies  => \@cookies,
         vars     => {
                       not_editable => 1,
+                      not_deletable => 1,
                     }
     );
 }
@@ -55,8 +56,9 @@ sub show_form {
         config   => $config,
         template => "preferences.tt",
 	vars     => { 
-                      not_editable => 1,
-                      show_form    => 1
+                      not_editable  => 1,
+                      show_form     => 1,
+                      not_deletable => 1,
                     }
     );
 }

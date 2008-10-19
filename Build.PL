@@ -362,6 +362,7 @@ $build->config_data( __templates     => [
                       "navbar_categories.tt",
                       "navbar_locales.tt",
                       "navbar_help.tt",
+                      "navbar_admin.tt",
                       "navbar_home_link.tt",
                       "navbar_options.tt",
                       "navbar_revision_info.tt",

@@ -47,6 +47,7 @@ templates/missing_metadata.tt
 templates/moderate_confirm.tt
 templates/moderate_password_wrong.tt
 templates/navbar.tt
+templates/navbar_admin.tt
 templates/navbar_categories.tt
 templates/navbar_help.tt
 templates/navbar_home_link.tt

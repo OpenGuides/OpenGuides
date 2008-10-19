@@ -3,7 +3,7 @@ use OpenGuides::Config;
 use OpenGuides::CGI;
 use Time::Piece;
 use Time::Seconds;
-use Test::More tests => 27;
+use Test::More tests => 29;
 
 eval { OpenGuides::CGI->make_prefs_cookie; };
 ok( $@, "->make_prefs_cookie dies if no config object supplied" );
@@ -30,6 +30,7 @@ my $cookie = OpenGuides::CGI->make_prefs_cookie(
     cookie_expires             => "never",
     track_recent_changes_views => "rc_pref",
     display_google_maps        => "gm_pref",
+    is_admin                   => "admin_pref",
 );
 isa_ok( $cookie, "CGI::Cookie", "->make_prefs_cookie returns a cookie" );
 
@@ -68,7 +69,8 @@ is( $prefs{track_recent_changes_views}, "rc_pref",
                                      "...and recent changes tracking" );
 is( $prefs{display_google_maps}, "gm_pref",
                                      "...and Google Maps display preference" );
-
+is( $prefs{is_admin}, "admin_pref",
+                                     "...and admin preference" );
 # Now make sure that true/false preferences are taken account of when
 # they're false.
 $cookie = OpenGuides::CGI->make_prefs_cookie(
@@ -80,6 +82,7 @@ $cookie = OpenGuides::CGI->make_prefs_cookie(
     show_minor_edits_in_rc     => 0,
     track_recent_changes_views => 0,
     display_google_maps        => 0,
+    is_admin                   => 0,
 );
 
 $ENV{HTTP_COOKIE} = $cookie;
@@ -92,9 +95,10 @@ ok( !$prefs{omit_help_links}, "...and help link prefs" );
 ok( !$prefs{show_minor_edits_in_rc}, "...and minor edits prefs" );
 ok( !$prefs{track_recent_changes_views}, "...and recent changes prefs" );
 ok( !$prefs{display_google_maps}, "...and Google Maps prefs" );
+ok( !$prefs{is_admin}, "...and admin prefs" );
 
 # Check that cookie parsing fails nicely if no cookie set.
 delete $ENV{HTTP_COOKIE};
 %prefs = eval { OpenGuides::CGI->get_prefs_from_cookie( config => $config ); };
 is( $@, "", "->get_prefs_from_cookie doesn't die if no cookie set" );
-is( keys %prefs, 10, "...and returns ten default values" );
+is( keys %prefs, 11, "...and returns ten default values" );

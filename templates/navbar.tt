@@ -4,6 +4,7 @@
   [% INCLUDE navbar_home_link.tt %]
   [% INCLUDE navbar_tools.tt %]
   [% INCLUDE navbar_help.tt %]
+  [% INCLUDE navbar_admin.tt %]
   [% INCLUDE navbar_options.tt %]
   [% INCLUDE navbar_search.tt %]
   [% INCLUDE navbar_this_page.tt %]
