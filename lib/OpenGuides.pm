@@ -1556,7 +1556,10 @@ sub commit_node {
     # Skip this for nodes needing moderation - this occurs for them once
     #  they've been moderated
     my $needs_moderation = $wiki->node_required_moderation($node);
-    unless( $needs_moderation ) {
+    my $in_moderate_whitelist
+        = OpenGuides::Utils->in_moderate_whitelist($self->config, $new_metadata{host});
+
+    if ( $in_moderate_whitelist or not $needs_moderation ) {
         $self->_autoCreateCategoryLocale(
                                           id       => $node,
                                           metadata => \%new_metadata
@@ -1567,22 +1570,30 @@ sub commit_node {
                                      \%new_metadata );
 
     if ($written) {
-        if ( $needs_moderation and $config->send_moderation_notifications ) {
-            my $body = "The node '$node' in the OpenGuides installation\n" .
-                "'" . $config->site_name . "' requires moderation. ".
-                "Please visit\n" .
-                $config->script_url . $config->script_name .
-                "?action=show_needing_moderation\nat your convenience.\n";
-            eval {
-                OpenGuides::Utils->send_email(
-                    config        => $config,
-                    subject       => "Node requires moderation",
-                    body          => $body,
-                    admin         => 1,
-                    return_output => $return_output
+        if ( $needs_moderation ) {
+            if ( $in_moderate_whitelist ) {
+                $self->wiki->moderate_node(
+                                            name    => $node,
+                                            version => $written
                 );
-            };
-            warn $@ if $@;
+            }
+            elsif ( $config->send_moderation_notifications ) {
+                my $body = "The node '$node' in the OpenGuides installation\n" .
+                    "'" . $config->site_name . "' requires moderation. ".
+                    "Please visit\n" .
+                    $config->script_url . $config->script_name .
+                    "?action=show_needing_moderation\nat your convenience.\n";
+                eval {
+                    OpenGuides::Utils->send_email(
+                        config        => $config,
+                        subject       => "Node requires moderation",
+                        body          => $body,
+                        admin         => 1,
+                        return_output => $return_output
+                    );
+                };
+                warn $@ if $@;
+            }
         }
 
         my $output = $self->redirect_to_node($node);

@@ -145,6 +145,7 @@ t/76_detect_spam.t
 t/77_send_email.t
 t/78_about.t
 t/79_host_blacklist.t
+t/81_node_moderate_whitelist.t
 t/85_universal_edit_link.t
 t/templates/15_test.tt
 wiki.cgi

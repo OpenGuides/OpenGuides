@@ -10,6 +10,8 @@ use Wiki::Toolkit::Formatter::UseMod;
 use Wiki::Toolkit::Plugin::RSS::Reader;
 use URI::Escape;
 use MIME::Lite;
+use Net::Netmask;
+use List::Util qw( first );
 use Data::Validate::URI qw( is_web_uri );
 
 =head1 NAME
@@ -495,6 +497,35 @@ sub send_email {
     } else {
         $msg->send or die "Couldn't send mail!";
     }
+}
+
+=item B<in_moderate_whitelist>
+
+ if (OpenGuides::Utils->in_moderate_whitelist( '127.0.0.1' )) {
+     # skip moderation and apply new verson to published site
+ }
+
+Admins can supply a comma separated list of IP addresses or CIDR-notation
+subnets indicating the hosts which can bypass enforced moderation. Any
+values which cannot be parsed by C<NetAddr::IP> will be ignored.
+
+=cut
+
+sub in_moderate_whitelist {
+    my ($self, $config, $ip) = @_;
+    return undef if not defined $ip;
+
+    # create NetAddr::IP object of the test IP
+    my $addr = Net::Netmask->new2($ip) or return undef;
+
+    # load the configured whitelist
+    my @whitelist
+        = split ',', $config->moderate_whitelist;
+
+    # test each entry in the whitelist
+    return eval{
+        first { Net::Netmask->new2($_)->match($addr->base) } @whitelist
+    };
 }
 
 =back

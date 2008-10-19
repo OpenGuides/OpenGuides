@@ -66,6 +66,7 @@ sub make_basic_config {
                      geo_handler          => 1,
                      force_wgs84          => 1,
                      contact_email        => 'admins@example.org',
+                     moderate_whitelist   => "",
                    }
     );
 

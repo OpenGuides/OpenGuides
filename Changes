@@ -16,6 +16,8 @@ More detailed changelogs can be found at
         Fix install with CPAN when Config::Tiny not already installed (#224)
         Add an admin navbar, to be displayed if the user requests (#261)
         Move the node image outside the metadata div, to aid styling (#222)
+        Add the ability to whitelist hosts who can change moderated nodes
+          without explicit moderation (#203)
 
 0.63    16 August 2008
         Major overhaul of RDF output.

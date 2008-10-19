@@ -22,7 +22,8 @@ my @variables = qw(
    custom_template_path geo_handler ellipsoid gmaps_api_key centre_long
    show_gmap_in_node_display google_analytics_key
    centre_lat default_gmaps_zoom default_gmaps_search_zoom force_wgs84
-   licence_name licence_url licence_info_url moderation_requires_password
+   licence_name licence_url licence_info_url
+   moderation_requires_password moderate_whitelist
    enable_node_image enable_common_categories enable_common_locales
    spam_detector_module host_checker_module static_path static_url
    send_moderation_notifications website_link_max_chars
@@ -80,6 +81,7 @@ sub _init {
                      indexing_directory => "/usr/lib/cgi-bin/openguides/indexes/",
                      enable_page_deletion => 0,
                      moderation_requires_password => 1,
+                     moderate_whitelist => "",
                      admin_pass => "Change This!",
                      enable_node_image => 1,
                      enable_common_categories => 0,
@@ -202,6 +204,7 @@ sub _init {
         static_url => "What is the URL corresponding to the static content?",
         send_moderation_notifications => "Should we send email notifications when a moderated node is edited?",
         website_link_max_chars => "How many characters of the URL of node websites should be displayed?",
+        moderate_whitelist => "Enter a comma-separated list of IP addresses able to make changes to moderated nodes and have them show up immediately",
     );
 
     foreach my $var ( keys %questions ) {
@@ -335,6 +338,8 @@ sub script_url {
 =item * static_url
 
 =item * send_moderation_notifications
+
+=item * moderate_whitelist
 
 =item * website_link_max_chars (default: C<20>)
 
