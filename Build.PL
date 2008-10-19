@@ -274,6 +274,7 @@ my $search_module = $use_plucene ? "Plucene" : "Search::InvertedIndex";
 my $build = OpenGuides::Build->new(
     sign => 1,
     dist_name => "OpenGuides",
+    dist_abstract => "A complete web application for managing a collaboratively-written guide to a city or town.",
     module_name => "OpenGuides",
     dist_version_from => "wiki.cgi",
     license => "perl",
