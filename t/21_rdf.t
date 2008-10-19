@@ -15,7 +15,7 @@ if ( $@ ) {
     plan skip_all => "DBD::SQLite could not be used - no database to test with. ($error)";
 }
 
-plan tests => 29;
+plan tests => 30;
 
 Wiki::Toolkit::Setup::SQLite::setup( { dbname => "t/node.db" } );
 my $config = OpenGuides::Test->make_basic_config;
@@ -80,7 +80,11 @@ OpenGuides::Test->write_data(
 
 my $rdfxml = $rdf_writer->emit_rdfxml( node => "Calthorpe Arms" );
 
-like( $rdfxml, qr|<\?xml version="1.0"\?>|, "RDF is encoding-neutral" );
+like( $rdfxml, qr|<\?xml version="1.0" \?>|, "RDF uses no encoding when none set" );
+$config->http_charset( "UTF-8" );
+$guide = OpenGuides->new( config => $config );
+$rdfxml = $rdf_writer->emit_rdfxml( node => "Calthorpe Arms" );
+like( $rdfxml, qr|<\?xml version="1.0" encoding="UTF-8"\?>|, "RDF uses declared encoding" );
 
 like( $rdfxml, qr|<foaf:depiction rdf:resource="http://example.com/calthorpe.jpg" />|, "Node image");
 

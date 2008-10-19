@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+<?xml version="1.0" [%- IF config.http_charset %]encoding="[% config.http_charset %]"[%- END %]?>
 <rdf:RDF
   xmlns:dc      = "http://purl.org/dc/elements/1.1/"
   xmlns:dcterms = "http://purl.org/dc/terms/"

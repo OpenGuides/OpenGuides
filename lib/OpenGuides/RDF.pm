@@ -74,6 +74,7 @@ sub emit_rdfxml {
                     site_name  => $self->{site_name},
                     site_desc  => $self->{site_description},
                     og_version => $self->{og_version},
+                    config     => $config,
                   );
 
     my %defaults = (
