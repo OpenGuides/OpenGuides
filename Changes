@@ -14,6 +14,7 @@ More detailed changelogs can be found at
         Set content charset correctly in RDF (#260)
         Display geodata ellipsoid to user in edit from (#230)
         Add an admin navbar, to be displayed if the user requests (#261)
+        Move the node image outside the metadata div, to aid styling (#222)
 
 0.63    16 August 2008
         Major overhaul of RDF output.
