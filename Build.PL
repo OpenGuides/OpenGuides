@@ -317,6 +317,9 @@ my $build = OpenGuides::Build->new(
         'Config::Tiny'                        => 0,
         'Data::Dumper'                        => 0,
         },
+    configure_requires => {
+        'Config::Tiny'                        => 0,
+        },
     recommends => {
         'DBD::SQLite'                         => 0, # for testing
         'Test::HTML::Content'                 => 0, # for testing, oddly enough
