@@ -162,7 +162,7 @@ Test::HTML::Content::tag_ok( $output, "input", { name => "longitude" },
 Test::HTML::Content::tag_ok( $output, "input", { name  => "longitude",
                                                  value => -0.118 },
                              "...with correct value..." );
-like( $output, qr|Latitude \(decimal\):|s,
-      "...'Latitude (decimal):' label included" );
-like( $output, qr|Longitude \(decimal\):|s,
-      "...'Longitude (decimal):' label included" );
+like( $output, qr|Latitude \(Airy decimal\):|s,
+      "...'Latitude (Airy decimal):' label included" );
+like( $output, qr|Longitude \(Airy decimal\):|s,
+      "...'Longitude (Airy decimal):' label included" );

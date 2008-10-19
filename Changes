@@ -12,6 +12,7 @@ More detailed changelogs can be found at
         and truncate URLs that are too long (#21)
         Change default database type to sqlite (#241)
         Set content charset correctly in RDF (#260)
+        Display geodata ellipsoid to user in edit from (#230)
 
 0.63    16 August 2008
         Major overhaul of RDF output.

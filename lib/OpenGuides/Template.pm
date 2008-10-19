@@ -423,13 +423,15 @@ sub extract_metadata_vars {
                         coord_field_2_value => $metadata{osie_y}[0],
                     );
         } else {
+            my $lat_text = "Latitude (" . $config->ellipsoid . " decimal)";
+            my $long_text = "Longitude (" . $config->ellipsoid . " decimal)";
             %vars = (
                         %vars,
                         coord_field_1       => "latitude",
                         coord_field_2       => "longitude",
                         dist_field          => "latlong_dist",
-                        coord_field_1_name  => "Latitude (decimal)",
-                        coord_field_2_name  => "Longitude (decimal)",
+                        coord_field_1_name  => $lat_text,
+                        coord_field_2_name  => $long_text,
                         coord_field_1_value => $metadata{latitude}[0],
                         coord_field_2_value => $metadata{longitude}[0],
                     );
