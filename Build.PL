@@ -312,7 +312,7 @@ my $build = OpenGuides::Build->new(
         'XML::RSS'                            => 0,
         'Data::Validate::URI'                 => 0,
         'Net::Netmask'                        => 0,
-        'List::Utils'                         => 0,
+        'List::Util'                          => 0,
         },
     build_requires => {
         'Module::Build' => '0.26', # API change for accessing config data
