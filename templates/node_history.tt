@@ -54,7 +54,7 @@ Note: only administrators can delete historical versions.
       [% IF revision.comment %]
         &nbsp;&nbsp;<i>([% revision.comment %])</i>
       [% END %]
-      [% IF enable_page_deletion %]
+      [% IF enable_page_deletion AND is_admin %]
         &nbsp;&nbsp;<small>[<a href="[% full_cgi_url %]?id=[% node_param %];version=[% revision.version %];action=delete">delete</a>]</small>
       [% END %]
   </li>

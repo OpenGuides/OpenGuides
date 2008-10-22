@@ -8,7 +8,7 @@
         <li><a href="[% full_cgi_url %]?action=list_all_versions;id=[% node_param %]">List all revisions</a></li> 
       [% END %]
       <li><a href="[% full_cgi_url %]?id=[% node_param %];format=rdf">RDF/XML version</a></li>
-      [% IF enable_page_deletion %]
+      [% IF enable_page_deletion and is_admin %]
         <li><a href="[% full_cgi_url %]?id=[% node_param %];action=delete">Delete (admin only)</a></li>
       [% END %]
     </ul>

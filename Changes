@@ -18,6 +18,7 @@ More detailed changelogs can be found at
         Move the node image outside the metadata div, to aid styling (#222)
         Add the ability to whitelist hosts who can change moderated nodes
           without explicit moderation (#203)
+        Don't add delete links unless the user requests (#159)
 
 0.63    16 August 2008
         Major overhaul of RDF output.
