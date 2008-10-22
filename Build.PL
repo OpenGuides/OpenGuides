@@ -338,6 +338,7 @@ my $build = OpenGuides::Build->new(
 
 $build->add_to_cleanup( "t/indexes/" );
 $build->add_to_cleanup( "t/node.db" );
+$build->add_to_cleanup( "t/prefs.db" );
 $build->add_to_cleanup( "t/templates/tmp/" );
 
 # Tell OpenGuides::Build which additional scripts and templates to install.
