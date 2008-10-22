@@ -1,6 +1,5 @@
 use strict;
 use lib "lib";
-use Data::Dumper;
 use Getopt::Long;
 
 eval {
@@ -322,6 +321,8 @@ my $build = OpenGuides::Build->new(
         },
     configure_requires => {
         'Config::Tiny'                        => 0,
+        'Class::Accessor'                     => 0,
+        'Module::Build' => '0.26', # API change for accessing config data
         },
     recommends => {
         'DBD::SQLite'                         => 0, # for testing
