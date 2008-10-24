@@ -20,6 +20,8 @@ More detailed changelogs can be found at
           without explicit moderation (#203)
         Don't add delete links unless the user requests (#159)
         Fix clean target to remove everything it should (#242)
+        Warn about errors fetching remote RSS feeds, but carry on
+          generating the page content (#228)
 
 0.63    16 August 2008
         Major overhaul of RDF output.

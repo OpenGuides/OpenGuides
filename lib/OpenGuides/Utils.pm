@@ -211,7 +211,13 @@ sub make_wiki_object {
                         $url = $1;
                     }
 
-                    my $rss = Wiki::Toolkit::Plugin::RSS::Reader->new(url => $url);
+                    # We can't do much about remote errors fetching
+                    # at this stage
+                    my $rss = eval { Wiki::Toolkit::Plugin::RSS::Reader->new(url => $url); };
+                    if ( $@ ) {
+                        warn $@;
+                        return '';
+                    }
                     my @items = $rss->retrieve;
 
                     # Ten items only at this till.
