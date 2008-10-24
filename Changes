@@ -7,7 +7,7 @@ More detailed changelogs can be found at
         Correctly specify all build_requires (#245)
         Fix some broken POD (#246)
         Metadata discovery features (action=metadata)
-        JSON support for node details and metatdata discovery
+        JSON support for node details and metadata discovery
         Correctly validate web site URLs during edit and display,
         and truncate URLs that are too long (#21)
         Change default database type to sqlite (#241)
