@@ -198,7 +198,7 @@ sub get_prefs_from_hash {
                      preview_above_edit_box     => 0,
                      latlong_traditional        => 0,
                      omit_help_links            => 0,
-                     show_minor_edits_in_rc     => 0,
+                     show_minor_edits_in_rc     => 1,
                      default_edit_type          => "normal",
                      cookie_expires             => "month",
                      track_recent_changes_views => 0,
