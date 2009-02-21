@@ -16,7 +16,7 @@ if ( $@ ) {
     plan skip_all => "Plucene not installed";
 }
 
-plan tests => 9;
+plan tests => 18;
 
 # Clear out the database from any previous runs.
 unlink "t/node.db";
@@ -34,7 +34,7 @@ SKIP: {
     skip "Geography::NationalGrid::GB not installed", 3 if $@;
     $config->geo_handler( 1 );
 
-    foreach my $i ( 1 .. 30 ) {
+    foreach my $i ( 1 .. 50 ) {
         OpenGuides::Test->write_data(
                                       guide      => $guide,
                                       node       => "Crabtree Tavern $i",
@@ -50,6 +50,7 @@ SKIP: {
                                                   os_dist => 1500,
                                                   os_x => 523500,
                                                   os_y => 177500,
+						 next => 21,
                                                 },
                              );
     like( $output, qr/search.cgi\?.*os_x=523500.*Next.*results/s,
@@ -58,6 +59,12 @@ SKIP: {
           "os_y retained in next page link" );
     like( $output, qr/search.cgi\?.*os_dist=1500.*Next.*results/s,
           "os_dist retained in next page link" );
+    like( $output, qr/search.cgi\?.*os_x=523500.*Previous.*results/s,
+          "os_x retained in previous page link" );
+    like( $output, qr/search.cgi\?.*os_y=177500.*Previous.*results/s,
+          "os_y retained in previous page link" );
+    like( $output, qr/search.cgi\?.*os_dist=1500.*Previous.*results/s,
+          "os_dist retained in previous page link" );
 }
 
 # Test with OSIE co-ords.
@@ -70,7 +77,7 @@ SKIP: {
     $config->geo_handler( 2 );
     my $search = OpenGuides::Search->new( config => $config );
 
-    foreach my $i ( 1 .. 30 ) {
+    foreach my $i ( 1 .. 50 ) {
         OpenGuides::Test->write_data(
                                       guide      => $guide,
                                       node       => "I Made This Place Up $i",
@@ -85,6 +92,7 @@ SKIP: {
                                                   osie_dist => 1500,
                                                   osie_x => 100000,
                                                   osie_y => 200000,
+						  next => 21,
                                                 },
                              );
     like( $output, qr/search.cgi\?.*osie_x=100000.*Next.*results/s,
@@ -93,6 +101,12 @@ SKIP: {
           "osie_y retained in next page link" );
     like( $output, qr/search.cgi\?.*osie_dist=1500.*Next.*results/s,
           "osie_dist retained in next page link" );
+    like( $output, qr/search.cgi\?.*osie_x=100000.*Previous.*results/s,
+          "osie_x retained in previous page link" );
+    like( $output, qr/search.cgi\?.*osie_y=200000.*Previous.*results/s,
+          "osie_y retained in previous page link" );
+    like( $output, qr/search.cgi\?.*osie_dist=1500.*Previous.*results/s,
+          "osie_dist retained in previous page link" );
 }
 
 # Test with UTM.
@@ -105,7 +119,7 @@ SKIP: {
     $config->geo_handler( 3 );
     my $search = OpenGuides::Search->new( config => $config );
 
-    foreach my $i ( 1 .. 30 ) {
+    foreach my $i ( 1 .. 50 ) {
         OpenGuides::Test->write_data(
                                       guide      => $guide,
                                       node       => "London Aquarium $i",
@@ -120,6 +134,7 @@ SKIP: {
                                                   latlong_dist => 1500,
                                                   latitude     => 51.5,
                                                   longitude    => -0.12,
+						  next	       => 21,
                                                 },
                              );
     like( $output, qr/search.cgi\?.*latitude=51.5.*Next.*results/s,
@@ -128,4 +143,10 @@ SKIP: {
           "longitude retained in next page link" );
     like( $output, qr/search.cgi\?.*latlong_dist=1500.*Next.*results/s,
           "latlong_dist retained in next page link" );
+    like( $output, qr/search.cgi\?.*latitude=51.5.*Previous.*results/s,
+          "latitude retained in previous page link" );
+    like( $output, qr/search.cgi\?.*longitude=-0.12.*Previous.*results/s,
+          "longitude retained in previous page link" );
+    like( $output, qr/search.cgi\?.*latlong_dist=1500.*Previous.*results/s,
+          "latlong_dist retained in previous page link" );
 }

@@ -24,6 +24,7 @@ More detailed changelogs can be found at
           generating the page content (#228)
         Work around Wiki::Toolkit bug #41 by displaying minor edits by
           default
+        Correctly paginate search when geodata is supplied (#267)
 
 0.63    16 August 2008
         Major overhaul of RDF output.
