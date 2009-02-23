@@ -5,7 +5,7 @@ use strict;
 use OpenGuides::Utils;
 
 use vars qw( $VERSION );
-$VERSION = '0.12';
+$VERSION = '0.13';
 
 use Time::Piece;
 use URI::Escape;
