@@ -3,7 +3,7 @@
 More detailed changelogs can be found at
 <http://dev.openguides.org/log/trunk>.
 
-0.64
+0.64    23 February 2009
         Correctly specify all build_requires (#245)
         Fix some broken POD (#246)
         Metadata discovery features (action=metadata)
