@@ -78,6 +78,7 @@ templates/spam_detected.tt
 templates/userstats.tt
 templates/wanted_pages.tt
 t/01_load.t
+t/02_pod.t
 t/11_utils.t
 t/12_macros.t
 t/13_cookies.t

@@ -329,7 +329,7 @@ my $build = OpenGuides::Build->new(
         'Test::HTML::Content'                 => 0, # for testing, oddly enough
         'Wiki::Toolkit::Plugin::Ping' => 0, # for pinging external services
         'Geo::HelmertTransform'  => 0,      # for correct WGS84 lat/long
-                                            # when using grid systems
+        'Test::Pod'                           => 0,
 
     },
     dynamic_config => 1,

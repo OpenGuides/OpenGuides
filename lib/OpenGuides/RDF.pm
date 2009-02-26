@@ -267,6 +267,8 @@ all of the following metadata when calling C<write_node>:
 
 =back
 
+=back
+
 =head1 SEE ALSO
 
 =over 4
@@ -285,7 +287,7 @@ The OpenGuides Project (openguides-dev@lists.openguides.org)
 
 =head1 COPYRIGHT
 
-Copyright (C) 2003-2008 The OpenGuides Project.  All Rights Reserved.
+Copyright (C) 2003-2009 The OpenGuides Project.  All Rights Reserved.
 
 This module is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself.

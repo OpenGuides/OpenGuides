@@ -161,8 +161,6 @@ sub write_data {
     }
 }
 
-=over 4
-
 =item B<make_cgi_object>
 
   my $q = OpenGuides::Test->make_cgi_object;
@@ -211,7 +209,7 @@ The OpenGuides Project (openguides-dev@lists.openguides.org)
 
 =head1 COPYRIGHT
 
-  Copyright (C) 2004-2008 The OpenGuides Project.  All Rights Reserved.
+  Copyright (C) 2004-2009 The OpenGuides Project.  All Rights Reserved.
 
 This module is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself.
