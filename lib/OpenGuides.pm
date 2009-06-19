@@ -285,14 +285,9 @@ sub display_node {
                    oldid         => $oldid,
                    enable_gmaps  => 1,
                    wgs84_long    => $wgs84_long,
-                   wgs84_lat     => $wgs84_lat
+                   wgs84_lat     => $wgs84_lat,
+                   empty_node    => !$wiki->node_exists($id)
                );
-
-    $tt_vars{empty_node} = !($tt_vars{content} ||
-                             $tt_vars{coord_field_1_value} ||
-                             $tt_vars{coord_field_2_value} ||
-                             $tt_vars{latitude} ||
-                             $tt_vars{longitude});
 
     # Hide from search engines if showing a specific version.
     $tt_vars{'deter_robots'} = 1 if $args{version};
