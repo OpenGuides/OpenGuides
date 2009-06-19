@@ -288,6 +288,12 @@ sub display_node {
                    wgs84_lat     => $wgs84_lat
                );
 
+    $tt_vars{empty_node} = !($tt_vars{content} ||
+                             $tt_vars{coord_field_1_value} ||
+                             $tt_vars{coord_field_2_value} ||
+                             $tt_vars{latitude} ||
+                             $tt_vars{longitude});
+
     # Hide from search engines if showing a specific version.
     $tt_vars{'deter_robots'} = 1 if $args{version};
 

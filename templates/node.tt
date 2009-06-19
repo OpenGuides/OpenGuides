@@ -68,7 +68,7 @@
     <span class="node_name">[% node_name %]</span></em>
   </h2>
 [% END %]
-[% IF not (content || coord_field_1_value || coord_field_2_value || latitude || longitude) %]
+[% IF empty_node %]
 </div>
 <div id="nonexistent_node_message">We don't have a node called "[% node_name %]". Would you like to <a href="[% full_cgi_url %]?action=edit;id=[% node_param %]">create it</a>?</div>
 [% ELSE %]

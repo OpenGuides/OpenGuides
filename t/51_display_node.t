@@ -13,7 +13,7 @@ if ( $@ ) {
     plan skip_all => "DBD::SQLite could not be used - no database to test with ($error)";
 }
 
-plan tests => 15;
+plan tests => 18;
 
 Wiki::Toolkit::Setup::SQLite::cleardb( { dbname => "t/node.db" } );
 Wiki::Toolkit::Setup::SQLite::setup( { dbname => "t/node.db" } );
@@ -110,3 +110,13 @@ like( $output, qr{\Q<a href="wiki.cgi?Category_Does_Exist"},
     "wrongly-cased categories are linked as they should be" );
 like( $output, qr{\Q<a href="wiki.cgi?Locale_Does_Exist"},
     "wrongly-cased locales are linked as they should be" );
+
+$output = $guide->display_node( id => "Does not exist",
+                                return_output => 1
+                              );
+like( $output, qr{\QWe don't have a node called "Does not exist".},
+    "not found message shows up" );
+unlike( $output, qr{\QRevision 0},
+    "bogus revision number doesn't show up" );
+unlike( $output, qr{\QLast edited},
+    "bogus last edited doesn't show up" );
