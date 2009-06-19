@@ -13,7 +13,7 @@ if ( $@ ) {
     plan skip_all => "DBD::SQLite could not be used - no database to test with ($error)";
 }
 
-plan tests => 18;
+plan tests => 19;
 
 Wiki::Toolkit::Setup::SQLite::cleardb( { dbname => "t/node.db" } );
 Wiki::Toolkit::Setup::SQLite::setup( { dbname => "t/node.db" } );
@@ -120,3 +120,4 @@ unlike( $output, qr{\QRevision 0},
     "bogus revision number doesn't show up" );
 unlike( $output, qr{\QLast edited},
     "bogus last edited doesn't show up" );
+like ( $output, qr{404 Not Found}, "404 status for empty node" );

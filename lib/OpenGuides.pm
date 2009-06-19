@@ -273,6 +273,8 @@ sub display_node {
                             metadata => $node_data{metadata}
                         );
 
+    my $node_exists = $wiki->node_exists($id);
+    my $http_status = $node_exists ? undef : '404 Not Found';
     %tt_vars = (
                    %tt_vars,
                    %metadata_vars,
@@ -286,7 +288,7 @@ sub display_node {
                    enable_gmaps  => 1,
                    wgs84_long    => $wgs84_long,
                    wgs84_lat     => $wgs84_lat,
-                   empty_node    => !$wiki->node_exists($id)
+                   empty_node    => !$node_exists
                );
 
     # Hide from search engines if showing a specific version.
@@ -308,6 +310,7 @@ sub display_node {
                                                   id            => $id,
                                                   template      => "node.tt",
                                                   tt_vars       => \%tt_vars,
+                                                  http_status   => $http_status
                                                 );
             return $output if $return_output;
             print $output;
@@ -363,6 +366,7 @@ sub display_node {
                                                 id            => $id,
                                                 template      => "home_node.tt",
                                                 tt_vars       => \%tt_vars,
+                                                http_status   => $http_status
                                             );
         return $output if $return_output;
         print $output;
@@ -372,6 +376,7 @@ sub display_node {
                                                 id            => $id,
                                                 template      => "node.tt",
                                                 tt_vars       => \%tt_vars,
+                                                http_status   => $http_status
                                             );
         return $output if $return_output;
         print $output;
@@ -2251,12 +2256,13 @@ sub display_admin_interface {
 sub process_template {
     my ($self, %args) = @_;
     my %output_conf = (
-                          wiki     => $self->wiki,
-                          config   => $self->config,
-                          node     => $args{id},
-                          template => $args{template},
-                          vars     => $args{tt_vars},
-                          cookies  => $args{cookies},
+                          wiki        => $self->wiki,
+                          config      => $self->config,
+                          node        => $args{id},
+                          template    => $args{template},
+                          vars        => $args{tt_vars},
+                          cookies     => $args{cookies},
+                          http_status => $args{http_status}
                       );
     if ( $args{content_type} ) {
         $output_conf{content_type} = $args{content_type};
