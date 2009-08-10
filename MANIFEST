@@ -151,5 +151,6 @@ t/81_node_moderate_whitelist.t
 t/83_show_delete_to_admins_only.t
 t/84_navbar_admin.t
 t/85_universal_edit_link.t
+t/86_recent_changes.t
 t/templates/15_test.tt
 wiki.cgi
