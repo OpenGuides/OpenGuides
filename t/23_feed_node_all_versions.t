@@ -4,6 +4,7 @@ use OpenGuides::Config;
 use OpenGuides;
 use OpenGuides::Feed;
 use OpenGuides::Utils;
+use OpenGuides::Test;
 use Test::More;
 
 eval { require DBD::SQLite; };
@@ -25,10 +26,8 @@ plan tests => 14 * scalar @feed_types;
 
 foreach my $feed_type (@feed_types) {
     # Clear out the database from any previous runs.
-    unlink "t/node.db";
-    unlink <t/indexes/*>;
+    OpenGuides::Test::refresh_db();
 
-    Wiki::Toolkit::Setup::SQLite::setup( { dbname => "t/node.db" } );
     my $config = OpenGuides::Config->new(
            vars => {
                      dbtype             => "sqlite",

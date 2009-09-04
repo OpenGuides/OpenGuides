@@ -1,3 +1,4 @@
+use strict;
 use Wiki::Toolkit::Setup::SQLite;
 use OpenGuides;
 use OpenGuides::Test;
@@ -24,8 +25,8 @@ if ( $@ ) {
 
 plan tests => 2;
 
-Wiki::Toolkit::Setup::SQLite::cleardb( { dbname => "t/prefs.db" } );
-Wiki::Toolkit::Setup::SQLite::setup( { dbname => "t/prefs.db" } );
+    OpenGuides::Test::refresh_db();
+
 my $config = OpenGuides::Test->make_basic_config;
 my $guide = OpenGuides->new( config => $config );
 my $wiki = $guide->wiki;

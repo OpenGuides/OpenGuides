@@ -8,6 +8,7 @@ More detailed changelogs can be found at
         Don't display revision info for nodes that don't exist (#193)
         Return HTTP 404 status when displaying a node that doens't exist (#102)
         Add Recent Changes tests (refers to #270)
+        Some test cleanups (#271)
 
 0.64    23 February 2009
         Correctly specify all build_requires (#245)

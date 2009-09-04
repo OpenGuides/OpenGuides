@@ -23,11 +23,9 @@ if ( $@ ) {
 
 plan tests => 10;
 
-# Clear out the database from any previous runs.
-unlink "t/node.db";
-unlink <t/indexes/*>;
+OpenGuides::Test::refresh_db();
 
-Wiki::Toolkit::Setup::SQLite::setup( { dbname => "t/node.db" } );
+
 my $config = OpenGuides::Config->new(
        vars => {
                  dbtype             => "sqlite",
@@ -138,7 +136,7 @@ unlike ($output, qr/First edit/, "showing a page edit twice when show minor edit
 
 
 # set show_minor_edits to 0.
-my $cookie = OpenGuides::CGI->make_prefs_cookie(
+ $cookie = OpenGuides::CGI->make_prefs_cookie(
     config                     => $config,
     username                   => "bob",
     include_geocache_link      => 1,

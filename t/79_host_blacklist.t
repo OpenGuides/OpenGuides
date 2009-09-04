@@ -14,9 +14,7 @@ if ( $@ ) {
 plan tests => 1;
 
 # Clear out the database from any previous runs.
-unlink "t/node.db";
-unlink <t/indexes/*>;
-Wiki::Toolkit::Setup::SQLite::setup( { dbname => "t/node.db" } );
+    OpenGuides::Test::refresh_db();
 
 # Set up a guide which uses a spam detector module.
 my $config = OpenGuides::Test->make_basic_config;

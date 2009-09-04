@@ -14,9 +14,8 @@ if ( $@ ) {
 plan tests => 6;
 
 # Clear out the database from any previous runs.
-unlink "t/node.db";
-# And give us a new one
-Wiki::Toolkit::Setup::SQLite::setup( { dbname => "t/node.db" } );
+
+    OpenGuides::Test::refresh_db();
 
 # Now we can start testing
 my $config = OpenGuides::Test->make_basic_config;

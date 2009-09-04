@@ -15,8 +15,8 @@ if ( $@ ) {
 
 plan tests => 19;
 
-Wiki::Toolkit::Setup::SQLite::cleardb( { dbname => "t/node.db" } );
-Wiki::Toolkit::Setup::SQLite::setup( { dbname => "t/node.db" } );
+    OpenGuides::Test::refresh_db();
+
 my $config = OpenGuides::Config->new(
        vars => {
                  dbtype             => "sqlite",

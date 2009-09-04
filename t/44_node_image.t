@@ -20,9 +20,7 @@ plan tests => 30;
 my ( $config, $guide, $wiki );
 
 # Clear out the database from any previous runs.
-unlink "t/node.db";
-unlink <t/indexes/*>;
-Wiki::Toolkit::Setup::SQLite::setup( { dbname => "t/node.db" } );
+    OpenGuides::Test::refresh_db();
 
 # Make sure node image fields don't show up in edit form if config says
 # they shouldn't.

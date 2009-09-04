@@ -13,7 +13,8 @@ if ( $@ ) {
 
 plan tests => 14;
 
-Wiki::Toolkit::Setup::SQLite::setup( { dbname => "t/node.db" } );
+    OpenGuides::Test::refresh_db();
+
 my $config = OpenGuides::Test->make_basic_config;
 $config->script_name( "wiki.cgi" );
 $config->script_url( "http://example.com/" );
@@ -22,11 +23,6 @@ isa_ok( $guide, "OpenGuides" );
 my $wiki = $guide->wiki;
 isa_ok( $wiki, "Wiki::Toolkit" );
 
-# Clear out the database from any previous runs.
-foreach my $del_node ( $wiki->list_all_nodes ) {
-    print "# Deleting node $del_node\n";
-    $wiki->delete_node( $del_node ) or die "Can't delete $del_node";
-}
 
 
 # Add 3 different pages, one of which with two versions

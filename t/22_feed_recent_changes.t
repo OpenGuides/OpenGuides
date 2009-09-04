@@ -27,10 +27,8 @@ my %content_types = (rss=>'application/rdf+xml', atom=>'application/atom+xml');
 
 foreach my $feed_type (@feed_types) {
     # Clear out the database from any previous runs.
-    unlink "t/node.db";
-    unlink <t/indexes/*>;
+    OpenGuides::Test::refresh_db();
 
-    Wiki::Toolkit::Setup::SQLite::setup( { dbname => "t/node.db" } );
     my $config = OpenGuides::Test->make_basic_config;
     $config->script_name( "wiki.cgi" );
     $config->script_url( "http://example.com/" );

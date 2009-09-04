@@ -2,6 +2,7 @@ use strict;
 use Wiki::Toolkit::Setup::SQLite;
 use OpenGuides::Config;
 use OpenGuides;
+use OpenGuides::Test;
 use Test::More;
 
 eval { require DBD::SQLite; };
@@ -13,7 +14,6 @@ if ( $@ ) {
 
 plan tests => 2;
 
-Wiki::Toolkit::Setup::SQLite::setup( { dbname => "t/node.db" } );
 my $config = OpenGuides::Config->new(
        vars => {
                  dbtype             => "sqlite",
@@ -28,13 +28,11 @@ my $config = OpenGuides::Config->new(
 eval { require Wiki::Toolkit::Search::Plucene; };
 if ( $@ ) { $config->use_plucene ( 0 ) };
         
+    OpenGuides::Test::refresh_db();
+
 my $guide = OpenGuides->new( config => $config );
 my $wiki = $guide->wiki;
 
-# Clear out the database from any previous runs.
-foreach my $del_node ( $wiki->list_all_nodes ) {
-    $wiki->delete_node( $del_node ) or die "Can't delete $del_node";
-}
 
 $wiki->write_node( "Test Page", "#REDIRECT [[Test Page 2]]" )
   or die "Can't write node";

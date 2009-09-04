@@ -15,7 +15,8 @@ plan tests => 8;
 my ( $config, $guide, $wiki );
 
 # Clear out database from previous runs, set up a guide.
-refresh_db();
+    OpenGuides::Test::refresh_db();
+
 $config = OpenGuides::Test->make_basic_config;
 $config->script_url( "http://www.example.com/" );
 $config->script_name( "wiki.cgi" );
@@ -44,7 +45,8 @@ print "# Random node chosen: $node\n";
 ok( $nodes{$node}, "...to an existing node" );
 
 # Clear the database and write some data including categories and locales.
-refresh_db();
+    OpenGuides::Test::refresh_db();
+
 $config = OpenGuides::Test->make_basic_config;
 $config->script_url( "http://www.example.com/" );
 $config->script_name( "wiki.cgi" );
@@ -87,7 +89,8 @@ isnt( $node, "Category Pubs", "category nodes not picked up as random page "
                        . "(this test may sometimes pass when it shouldn't)" );
 
 # Now make sure we can pick things up from specific categories/locales if asked
-refresh_db();
+    OpenGuides::Test::refresh_db();
+
 $config = OpenGuides::Test->make_basic_config;
 $guide = OpenGuides->new( config => $config );
 
@@ -143,11 +146,6 @@ $output = $guide->display_random_page( locale => "Islington",
 unlike( $output, qr/Status: 302/,
        "don't get a redirect if we ask for category/locale with no pages in" );
 
-sub refresh_db {
-    unlink "t/node.db";
-    unlink <t/indexes/*>;
-    Wiki::Toolkit::Setup::SQLite::setup( { dbname => "t/node.db" } );
-}
 
 sub get_node_from_output {
     my $node_param = shift;

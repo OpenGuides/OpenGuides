@@ -16,8 +16,8 @@ if ( $@ ) {
 }
 
 plan tests => 16;
-
-Wiki::Toolkit::Setup::SQLite::setup( { dbname => "t/node.db" } );
+# clear out database
+    OpenGuides::Test::refresh_db();
 
 # Make a guide that works on latitude/longitude, and allows node images.
 my $config = OpenGuides::Test->make_basic_config;
@@ -27,11 +27,6 @@ $config->enable_node_image( 1 );
 my $guide = OpenGuides->new( config => $config );
 my $wiki = $guide->wiki;
 
-# Clear out the database from any previous runs.
-foreach my $del_node ( $wiki->list_all_nodes ) {
-    print "# Deleting node $del_node\n";
-    $wiki->delete_node( $del_node ) or die "Can't delete $del_node";
-}
 
 
 # Write some data.

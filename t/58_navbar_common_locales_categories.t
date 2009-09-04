@@ -50,9 +50,7 @@ plan tests => 4 * keys %pages;
 my ( $config, $guide, $wiki, $output );
 
 # Clear out the database from any previous runs.
-unlink "t/node.db";
-unlink <t/indexes/*>;
-Wiki::Toolkit::Setup::SQLite::setup( { dbname => "t/node.db" } );
+    OpenGuides::Test::refresh_db();
 
 while (my ($page, $get_content) = each %pages) {
 

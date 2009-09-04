@@ -24,10 +24,7 @@ my $guide = OpenGuides->new( config => $config );
 my $wiki = $guide->wiki;
 
 # Clear out the database from any previous runs.
-foreach my $del_node ( $wiki->list_all_nodes ) {
-    print "# Deleting node $del_node\n";
-    $wiki->delete_node( $del_node ) or die "Can't delete $del_node";
-}
+    OpenGuides::Test::refresh_db();
 
 # Make sure the tmp directory exists
 eval {

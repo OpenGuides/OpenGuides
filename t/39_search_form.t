@@ -37,10 +37,8 @@ if ( $@ ) {
 plan tests => 27;
 
 # Clear out the database from any previous runs.
-unlink "t/node.db";
-unlink <t/indexes/*>;
+    OpenGuides::Test::refresh_db();
 
-Wiki::Toolkit::Setup::SQLite::setup( { dbname => "t/node.db" } );
 my $config = OpenGuides::Test->make_basic_config;
 $config->use_plucene( 1 );
 

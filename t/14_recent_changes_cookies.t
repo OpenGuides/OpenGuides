@@ -3,6 +3,7 @@ use Wiki::Toolkit::Setup::SQLite;
 use OpenGuides::Config;
 use OpenGuides;
 use OpenGuides::CGI;
+use OpenGuides::Test;
 use Time::Piece;
 use Time::Seconds;
 use Test::More tests => 11;
@@ -62,8 +63,9 @@ if ( $@ ) {
 SKIP: {
     skip "DBD::SQLite could not be used - no database to test with. ($sqlite_error)", 2
       unless $have_sqlite;
+    OpenGuides::Test::refresh_db();
 
-    Wiki::Toolkit::Setup::SQLite::setup( { dbname => "t/node.db" } );
+
     my $config = OpenGuides::Config->new(
            vars => {
                      dbtype             => "sqlite",

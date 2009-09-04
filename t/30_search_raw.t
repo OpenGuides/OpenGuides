@@ -13,10 +13,8 @@ if ( $@ ) {
 plan tests => 16;
 
 # Clear out the database from any previous runs.
-unlink "t/node.db";
-unlink <t/indexes/*>;
+    OpenGuides::Test::refresh_db();
 
-Wiki::Toolkit::Setup::SQLite::setup( { dbname => "t/node.db" } );
 my $config = OpenGuides::Test->make_basic_config;
 my $guide = OpenGuides->new( config => $config );
 my $search = OpenGuides::Search->new( config => $config );

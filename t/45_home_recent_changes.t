@@ -15,9 +15,7 @@ plan tests => 15;
 my ( $config, $guide, $wiki );
 
 # Clear out the database from any previous runs.
-unlink "t/node.db";
-unlink <t/indexes/*>;
-Wiki::Toolkit::Setup::SQLite::setup( { dbname => "t/node.db" } );
+    OpenGuides::Test::refresh_db();
 
 # Write some data to show up in recent changes.
 $config = OpenGuides::Test->make_basic_config;

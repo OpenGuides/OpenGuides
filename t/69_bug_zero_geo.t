@@ -1,3 +1,4 @@
+use strict;
 use Wiki::Toolkit::Setup::SQLite;
 use OpenGuides::Config;
 use Cwd;
@@ -13,8 +14,8 @@ if ( $@ ) {
 
 plan tests => 6;
 
-Wiki::Toolkit::Setup::SQLite::cleardb( { dbname => "t/node.db" } );
-Wiki::Toolkit::Setup::SQLite::setup( { dbname => "t/node.db" } );
+    OpenGuides::Test::refresh_db();
+
 my $config = OpenGuides::Config->new(
        vars => {
                  dbtype             => "sqlite",

@@ -13,16 +13,13 @@ if ( $@ ) {
 
 plan tests => 5;
 
-Wiki::Toolkit::Setup::SQLite::setup( { dbname => "t/node.db" } );
+# Clear out the database from any previous runs.
+    OpenGuides::Test::refresh_db();
+
 my $config = OpenGuides::Test->make_basic_config;
 my $guide = OpenGuides->new( config => $config );
 my $wiki = $guide->wiki;
 
-# Clear out the database from any previous runs.
-foreach my $del_node ( $wiki->list_all_nodes ) {
-    print "# Deleting node $del_node\n";
-    $wiki->delete_node( $del_node ) or die "Can't delete $del_node";
-}
 
 $wiki->write_node( "I Like Pie", "Best pie is meat pie." )
   or die "Couldn't write node";

@@ -1,3 +1,4 @@
+use strict;
 use Wiki::Toolkit::Setup::SQLite;
 use OpenGuides;
 use OpenGuides::Config;
@@ -17,7 +18,10 @@ if ( $@ ) {
 
 plan tests => 30;
 
-Wiki::Toolkit::Setup::SQLite::setup( { dbname => "t/node.db" } );
+# clear out the database    
+OpenGuides::Test::refresh_db();
+
+
 my $config = OpenGuides::Test->make_basic_config;
 $config->script_url( "http://wiki.example.com/" );
 $config->script_name( "mywiki.cgi" );
@@ -33,10 +37,6 @@ if ( $@ ) { $config->use_plucene ( 0 ) };
 my $guide = OpenGuides->new( config => $config );
 my $wiki = $guide->wiki;
 
-# Clear out the database from any previous runs.
-foreach my $del_node ( $wiki->list_all_nodes ) {
-    $wiki->delete_node( $del_node ) or die "Can't delete $del_node";
-}
 
 my $rdf_writer = eval {
     OpenGuides::RDF->new( wiki => $wiki, config => $config );

@@ -1,6 +1,7 @@
 package OpenGuides::Test;
 
 use OpenGuides::Config;
+use Wiki::Toolkit::Setup::SQLite;
 
 use strict;
 use vars qw( $VERSION );
@@ -23,6 +24,8 @@ only useful to OpenGuides developers.
 
   use OpenGuides;
   use OpenGuides::Test;
+
+  OpenGuides::Test::refresh_db();
 
   my $config = OpenGuides::Test->make_basic_config;
   $config->default_language( "nl" );
@@ -200,6 +203,20 @@ sub make_cgi_object {
 
     return $q;
 }
+
+=item B<refresh_db>
+
+  Openguides::Test::refresh_db();
+
+Unlink the existing SQLite database t/node.db and plucene indexes. Then create a new SQLite database t/node.db 
+
+=cut 
+sub refresh_db {
+    unlink "t/node.db";
+    unlink <t/indexes/*>;
+    Wiki::Toolkit::Setup::SQLite::setup( { dbname => "t/node.db" } );
+}
+
 
 =back
 

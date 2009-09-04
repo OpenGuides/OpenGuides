@@ -2,6 +2,7 @@ use strict;
 use Wiki::Toolkit::Setup::SQLite;
 use OpenGuides::Config;
 use OpenGuides::Utils;
+use OpenGuides::Test;
 use Test::More tests => 10;
 
 eval { my $wiki = OpenGuides::Utils->make_wiki_object; };
@@ -33,9 +34,8 @@ SKIP: {
       unless $have_sqlite;
 
     # Clear out the database from any previous runs.
-    unlink "t/node.db";
-    unlink <t/indexes/*>;
-    Wiki::Toolkit::Setup::SQLite::setup( { dbname => "t/node.db" } );
+    OpenGuides::Test::refresh_db();
+
 
     my $config = OpenGuides::Config->new(
            vars => {
