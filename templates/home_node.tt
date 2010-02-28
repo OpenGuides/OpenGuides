@@ -8,7 +8,7 @@
   [% INCLUDE navbar.tt %]
 [% END %]
 
-[% IF !navbar_on_home_page AND !config.recent_changes_on_home_page %]
+[% IF !navbar_on_home_page AND !config.recent_changes_on_home_page AND !read_only %]
   <div id="home_page_edit_link">
     <a href="[% cgi_url %]?action=edit;id=[% node_param %]">Edit this page</a>
   </div>
@@ -39,8 +39,10 @@
         [% END %]
       </dl>
 
+[% UNLESS read_only %]
       <p><b><a href="[% cgi_url %]?action=edit;id=[% node_param %]">Edit
       this page</a></b></p>
+[% END %]
 
     </div>
   [% END %]

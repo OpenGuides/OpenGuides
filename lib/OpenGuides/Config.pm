@@ -26,7 +26,7 @@ my @variables = qw(
    moderation_requires_password moderate_whitelist
    enable_node_image enable_common_categories enable_common_locales
    spam_detector_module host_checker_module static_path static_url
-   send_moderation_notifications website_link_max_chars
+   send_moderation_notifications website_link_max_chars read_only
 );
 my @questions = map { $_ . "__qu" } @variables;
 OpenGuides::Config->mk_accessors( @variables );
@@ -118,6 +118,7 @@ sub _init {
                      static_path => "/usr/local/share/openguides/static",
                      send_moderation_notifications => 1,
                      website_link_max_chars => 20,
+                     read_only => 0,
                    );
 
     # See if we already have some config variables set.
@@ -205,6 +206,7 @@ sub _init {
         send_moderation_notifications => "Should we send email notifications when a moderated node is edited?",
         website_link_max_chars => "How many characters of the URL of node websites should be displayed?",
         moderate_whitelist => "Enter a comma-separated list of IP addresses able to make changes to moderated nodes and have them show up immediately",
+        read_only => "Should the guide be read-only (no edits permitted)?",
     );
 
     foreach my $var ( keys %questions ) {
@@ -343,6 +345,8 @@ sub script_url {
 
 =item * website_link_max_chars (default: C<20>)
 
+=item * read_only
+
 =back
 
 =head1 AUTHOR
@@ -351,7 +355,7 @@ The OpenGuides Project (openguides-dev@lists.openguides.org)
 
 =head1 COPYRIGHT
 
-     Copyright (C) 2004-2008 The OpenGuides Project.  All Rights Reserved.
+     Copyright (C) 2004-2010 The OpenGuides Project.  All Rights Reserved.
 
 The OpenGuides distribution is free software; you can redistribute it
 and/or modify it under the same terms as Perl itself.

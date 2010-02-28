@@ -288,7 +288,8 @@ sub display_node {
                    enable_gmaps  => 1,
                    wgs84_long    => $wgs84_long,
                    wgs84_lat     => $wgs84_lat,
-                   empty_node    => !$node_exists
+                   empty_node    => !$node_exists,
+                   read_only     => $config->read_only,
                );
 
     # Hide from search engines if showing a specific version.
@@ -543,6 +544,7 @@ sub display_edit_form {
                     edit_type       => $edit_type,
                     moderate        => $moderate,
                     deter_robots    => 1,
+                    read_only       => $config->read_only,
     );
 
     # Override some things if we were supplied with them
@@ -615,7 +617,8 @@ sub preview_edit {
             preview_above_edit_box => $self->get_cookie(
                                                    "preview_above_edit_box" ),
             checksum               => $q->escapeHTML($checksum),
-            moderate               => $moderate
+            moderate               => $moderate,
+            read_only              => $config->read_only,
         );
         my $output = $self->process_template(
                                               id       => $node,
@@ -1511,7 +1514,7 @@ sub commit_node {
         cgi_obj  => $q
     );
 
-    if ( scalar @{$fails} ) {
+    if ( scalar @{$fails} or $config->read_only ) {
         my %vars = (
             validate_failed => $fails
         );
@@ -1522,7 +1525,8 @@ sub commit_node {
                            metadata      => \%new_metadata,
                            vars          => \%vars,
                            checksum      => CGI->escapeHTML($checksum),
-                           return_output => 1
+                           return_output => 1,
+                           read_only     => $config->read_only,
         );
 
         return $output if $return_output;
@@ -2333,7 +2337,7 @@ The OpenGuides Project (openguides-dev@lists.openguides.org)
 
 =head1 COPYRIGHT
 
-     Copyright (C) 2003-2009 The OpenGuides Project.  All Rights Reserved.
+     Copyright (C) 2003-2010 The OpenGuides Project.  All Rights Reserved.
 
 The OpenGuides distribution is free software; you can redistribute it
 and/or modify it under the same terms as Perl itself.

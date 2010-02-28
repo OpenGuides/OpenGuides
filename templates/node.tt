@@ -70,10 +70,16 @@
 [% END %]
 [% IF empty_node %]
 </div>
-<div id="nonexistent_node_message">We don't have a node called "[% node_name %]". Would you like to <a href="[% full_cgi_url %]?action=edit;id=[% node_param %]">create it</a>?</div>
+<div id="nonexistent_node_message">We don't have a node called "[% node_name %]".
+[% UNLESS read_only %]
+Would you like to <a href="[% full_cgi_url %]?action=edit;id=[% node_param %]">create it</a>?
+[% END %]
+</div>
 [% ELSE %]
 <div id="title_edit_link">
+[% UNLESS read_only %]
 <a href="[% full_cgi_url %]?action=edit;id=[% node_param %]">Edit this page</a>
+[% END %]
 </div>
 </div>
 [% INCLUDE display_metadata.tt %]

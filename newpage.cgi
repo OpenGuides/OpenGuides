@@ -39,7 +39,9 @@ sub show_form {
                                             not_deletable    => 1,
                                             deter_robots     => 1,
                                             disallowed_chars => \@badchars,
-                                            pagename         => $pagename }
+                                            pagename         => $pagename,
+                                            read_only        => $config->read_only,
+                                }
     );
 }
 

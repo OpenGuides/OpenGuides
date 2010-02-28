@@ -70,6 +70,7 @@ templates/plain_index.tt
 templates/preferences.tt
 templates/random_page_failure.tt
 templates/rdf_index.tt
+templates/read_only.tt
 templates/recent_changes.tt
 templates/search_results.tt
 templates/site_index.tt

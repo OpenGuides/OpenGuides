@@ -9,6 +9,8 @@ More detailed changelogs can be found at
         Return HTTP 404 status when displaying a node that doesn't exist (#102)
         Add Recent Changes tests (refers to #270)
         Some test cleanups (#271)
+        Add read_only config option to turn off edits on a guide
+          completely (#276)
 
 0.64    23 February 2009
         Correctly specify all build_requires (#245)

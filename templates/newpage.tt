@@ -7,6 +7,9 @@
   <div id="maincontent">
 
     <div id="create_new_page">
+[% IF read_only %]
+[% INCLUDE read_only.tt %]
+[% ELSE %]
       <form action="newpage.cgi" id="new_page_form" method="POST">
         <label for="pagename">Enter the name of the page to make:</label>
         <input type="text" size="50" name="pagename" id="pagename"
@@ -26,6 +29,7 @@
           [% END %]
         </div>
       </div>
+[% END %]
     </div>
 
   </div>

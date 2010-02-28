@@ -49,7 +49,7 @@ my %yn_vars = map { $_ => 1 }
       enable_common_locales recent_changes_on_home_page
       random_page_omits_locales random_page_omits_categories
       content_above_navbar_in_html show_gmap_in_node_display force_wgs84
-      send_moderation_notifications);
+      send_moderation_notifications read_only);
 
 my $skip_config = $force ? 'y' : Module::Build->y_n("Skip OpenGuides configuration?", "n");
 if ( $skip_config ) {
@@ -112,7 +112,7 @@ foreach my $var ( qw(
    licence_name licence_url licence_info_url moderation_requires_password
    enable_node_image enable_common_categories enable_common_locales
    spam_detector_module host_checker_module static_path static_url
-   send_moderation_notifications
+   send_moderation_notifications read_only
   ) ) {
     my $q_method = $var . "__qu";
     my $qu  = $existing_config->$q_method;
@@ -388,6 +388,7 @@ $build->config_data( __templates     => [
                       "preferences.tt",
                       "random_page_failure.tt",
                       "rdf_index.tt",
+                      "read_only.tt",
                       "recent_changes.tt",
                       "search_results.tt",
                       "site_index.tt",

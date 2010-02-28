@@ -24,6 +24,9 @@
     [% INCLUDE delete_link %]
     <p>
       Powered by <a href="[% full_cgi_url%]?action=about">OpenGuides [% openguides_version %]</a>.
+[% IF read_only %]
+This guide is in read-only mode.
+[% END %]
     </p>
     [% IF licence_name %]
       <p>
