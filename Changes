@@ -3,7 +3,7 @@
 More detailed changelogs can be found at
 <http://dev.openguides.org/log/trunk>.
 
-0.65
+0.65    28 February 2010
         Fix some more broken POD and add POD unit test (#268)
         Don't display revision info for nodes that don't exist (#193)
         Return HTTP 404 status when displaying a node that doesn't exist (#102)
