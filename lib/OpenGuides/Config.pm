@@ -3,7 +3,7 @@ use strict;
 use warnings;
 
 use vars qw( $VERSION );
-$VERSION = '0.05';
+$VERSION = '0.06';
 
 use Carp qw( croak );
 use Config::Tiny;

@@ -3,7 +3,7 @@ package OpenGuides::JSON;
 use strict;
 
 use vars qw( $VERSION );
-$VERSION = '0.01';
+$VERSION = '0.02';
 
 use Wiki::Toolkit::Plugin::JSON;
 use Time::Piece;

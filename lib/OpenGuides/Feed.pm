@@ -3,7 +3,7 @@ package OpenGuides::Feed;
 use strict;
 
 use vars qw( $VERSION );
-$VERSION = '0.01';
+$VERSION = '0.02';
 
 use Wiki::Toolkit::Feed::Atom;
 use Wiki::Toolkit::Feed::RSS;
