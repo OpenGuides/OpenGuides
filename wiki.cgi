@@ -10,8 +10,6 @@ $VERSION = '0.65';
 use CGI qw/:standard/;
 use CGI::Carp qw(croak);
 use Wiki::Toolkit;
-use Geography::NationalGrid;
-use Geography::NationalGrid::GB;
 use OpenGuides;
 use OpenGuides::CGI;
 use OpenGuides::Config;

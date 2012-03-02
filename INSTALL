@@ -331,8 +331,8 @@ If you decide to use the British or Irish National Grid, your users
 will be able to choose between entering location data as lat/long
 or as grid co-ordinates.
 
-You must have Geography::NationalGrid::GB installed to use the British
-National Grid, Geography::NationalGrid::IE to use the Irish National
+You must have Geo::Coordinates::OSGB installed to use the British
+National Grid, Geo::Coordinates::ITM to use the Irish National
 Grid, and Geo::Coordinates::UTM to use a UTM ellipsoid.
 
 If you want to use a UTM ellipsoid, WGS-84 is the best choice, as it

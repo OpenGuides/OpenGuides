@@ -19,10 +19,16 @@ if ( $@ ) {
 
 # Strictly speaking we don't need to skip _all_ tests if we don't have
 # the modules below.  Revisit this when not in a hurry.
-# We only actually need them for the tests where lat/long are converted.
-eval { require Geography::NationalGrid; };
+# We only actually need the former two for the National Grid tests and the
+# latter for the UTM tests.
+eval { require Geo::Coordinates::OSGB; };
 if ( $@ ) { 
-    plan skip_all => "Geography::NationalGrid not installed";
+    plan skip_all => "Geo::Coordinates::OSGB not installed";
+}
+
+eval { require Geo::Coordinates::ITM; };
+if ( $@ ) { 
+    plan skip_all => "Geo::Coordinates::ITM not installed";
 }
 
 eval { require Geo::Coordinates::UTM; };

@@ -17,9 +17,9 @@ if ( $@ ) {
     plan skip_all => "Plucene not installed";
 }
 
-eval { require Geography::NationalGrid::GB; };
+eval { require Geo::Coordinates::OSGB; };
 if ( $@ ) {
-    plan skip_all => "Geography::NationalGrid::GB not installed";
+    plan skip_all => "Geo::Coordinates::OSGB not installed";
 }
 
 plan tests => 8;

@@ -28,9 +28,9 @@ my $search = OpenGuides::Search->new( config => $config );
 my $guide = OpenGuides->new( config => $config );
 
 # Test with OS co-ords.
-eval { require Geography::NationalGrid::GB; };
+eval { require Geo::Coordinates::OSGB; };
 SKIP: {
-    skip "Geography::NationalGrid::GB not installed", 3 if $@;
+    skip "Geo::Coordinates::OSGB not installed", 3 if $@;
     $config->geo_handler( 1 );
 
     foreach my $i ( 1 .. 50 ) {
@@ -67,9 +67,9 @@ SKIP: {
 }
 
 # Test with OSIE co-ords.
-eval { require Geography::NationalGrid::IE; };
+eval { require Geo::Coordinates::ITM; };
 SKIP: {
-    skip "Geography::NationalGrid::IE not installed", 3 if $@;
+    skip "Geo::Coordinates::ITM not installed", 3 if $@;
 
     # We must create a new search object after changing the geo_handler
     # in order to force it to create a fresh locator.

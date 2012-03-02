@@ -6,8 +6,6 @@ $VERSION = '0.15';
 
 use Carp qw( croak );
 use CGI; # want to get rid of this and put the burden on the templates
-use Geography::NationalGrid;
-use Geography::NationalGrid::GB;
 use OpenGuides; # for $VERSION for template variable
 use OpenGuides::CGI;
 use Template;
@@ -448,7 +446,8 @@ sub extract_metadata_vars {
 
         my $geo_handler = $config->geo_handler;
         if ( $geo_handler == 1 ) {
-            require Geography::NationalGrid::GB;
+            require Geo::Coordinates::OSGB;
+
             my $os_x   = $q->param("os_x");
             my $os_y   = $q->param("os_y");
             my $lat    = $q->param("latitude");
@@ -462,15 +461,15 @@ sub extract_metadata_vars {
 
             # If we were sent x and y, work out lat/long; and vice versa.
             if ( defined $os_x && length $os_x && defined $os_y && length $os_y ) {
-                my $point = Geography::NationalGrid::GB->new( Easting =>$os_x,
-                                     Northing=>$os_y);
-                $lat  = sprintf("%.6f", $point->latitude);
-                $long = sprintf("%.6f", $point->longitude);
+                ( $lat, $long ) = Geo::Coordinates::OSGB::grid_to_ll(
+                                      $os_x, $os_y );
+                $lat  = sprintf( "%.6f", $lat );
+                $long = sprintf( "%.6f", $long );
             } elsif ( defined $lat && length $lat && defined $long && length $long ) {
-                my $point = Geography::NationalGrid::GB->new(Latitude  => $lat,
-                                                             Longitude => $long);
-                $os_x = $point->easting;
-                $os_y = $point->northing;
+                ( $os_x, $os_y ) = Geo::Coordinates::OSGB::ll_to_grid(
+                                       $lat, $long );
+                $os_x = sprintf( "%d", $os_x );
+                $os_y = sprintf( "%d", $os_y );
             }
             
             if ( defined $os_x && length $os_x && defined $os_y && length $os_y ) {
@@ -495,7 +494,8 @@ sub extract_metadata_vars {
                         );
             }
         } elsif ( $geo_handler == 2 ) {
-            require Geography::NationalGrid::IE;
+            require Geo::Coordinates::ITM;
+
             my $osie_x = $q->param("osie_x");
             my $osie_y = $q->param("osie_y");
             my $lat    = $q->param("latitude");
@@ -507,15 +507,15 @@ sub extract_metadata_vars {
 
             # If we were sent x and y, work out lat/long; and vice versa.
             if ( defined $osie_x && length $osie_x && defined $osie_y && length $osie_y ) {
-                my $point = Geography::NationalGrid::IE->new(Easting=>$osie_x,
-                                   Northing=>$osie_y);
-                $lat = sprintf("%.6f", $point->latitude);
-                $long = sprintf("%.6f", $point->longitude);
+                ( $lat, $long ) = Geo::Coordinates::ITM::grid_to_ll(
+                                      $osie_x, $osie_y );
+                $lat  = sprintf( "%.6f", $lat );
+                $long = sprintf( "%.6f", $long );
             } elsif ( defined $lat && length $lat && defined $long && length $long ) {
-                my $point = Geography::NationalGrid::GB->new(Latitude  => $lat,
-                                                             Longitude => $long);
-                $osie_x = $point->easting;
-                $osie_y = $point->northing;
+                ( $osie_x, $osie_y ) = Geo::Coordinates::ITM::ll_to_grid(
+                                           $lat, $long );
+                $osie_x = sprintf( "%d", $osie_x );
+                $osie_y = sprintf( "%d", $osie_y );
             }
             if ( defined $osie_x && length $osie_x && defined $osie_y && length $osie_y ) {
                 %vars = (
@@ -582,11 +582,36 @@ sub extract_metadata_vars {
         foreach my $var ( qw( latitude longitude ) ) {
             next unless defined $vars{$var} && length $vars{$var};
             $vars{$var."_unmunged"} = $vars{$var};
-            $vars{$var} = Geography::NationalGrid->deg2string($vars{$var});
+            $vars{$var} = _deg2string($vars{$var});
         }
     }
 
     return %vars;
+}
+
+# Slightly modified from the no-longer-available Geography::NationalGrid
+# module, which was written by P Kent and distributed under the Artistic
+# Licence.
+sub _deg2string {
+    my $degrees = shift;
+
+    # make positive
+    my $isneg = 0;
+    if ($degrees < 0) {
+        $isneg = 1;
+        $degrees = abs( $degrees );
+    } elsif ($degrees == 0) {
+        return '0d 0m 0s';
+    }
+
+    my $d = int( $degrees );
+    $degrees -= $d;
+    $degrees *= 60;
+    my $m = int( $degrees );
+    $degrees -= $m;
+    my $s = $degrees * 60;
+
+    return sprintf("%s%dd %um %.2fs", ($isneg?'-':''), $d, $m, $s);
 }
 
 =back

@@ -22,8 +22,8 @@ my $config = OpenGuides::Test->make_basic_config;
 my $guide = OpenGuides->new( config => $config );
 
 SKIP: {
-    eval { require Geography::NationalGrid::GB; };
-    skip "Geography::NationalGrid::GB not installed", 2 if $@;
+    eval { require Geo::Coordinates::OSGB; };
+    skip "Geo::Coordinates::OSGB not installed", 2 if $@;
 
     my $q = CGI->new( "" );
     $q->param( -name => "os_x", -value => " 123456 " );
@@ -43,8 +43,8 @@ SKIP: {
 }
 
 SKIP: {
-    eval { require Geography::NationalGrid::IE; };
-    skip "Geography::NationalGrid::IE not installed", 2 if $@;
+    eval { require Geo::Coordinates::ITM; };
+    skip "Geo::Coordinates::ITM not installed", 2 if $@;
 
     $config->geo_handler( 2 );
     my $q = CGI->new( "" );

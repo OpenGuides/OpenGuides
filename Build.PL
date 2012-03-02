@@ -298,7 +298,6 @@ my $build = OpenGuides::Build->new(
         'File::Spec::Functions'               => 0,
         'File::Temp'                          => 0,
 		'Geo::Coordinates::UTM'               => 0,
-        'Geography::NationalGrid'             => 0,
         'HTML::Entities'                      => 0,
         'LWP::Simple'                         => 0,
         'MIME::Lite'                          => 0,
