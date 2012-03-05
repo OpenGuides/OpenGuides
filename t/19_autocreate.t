@@ -7,7 +7,8 @@ use Test::More;
 eval { require DBD::SQLite; };
 if ( $@ ) {
     my ($error) = $@ =~ /^(.*?)\n/;
-    plan skip_all => "DBD::SQLite could not be used - no database to test with. ($error)";
+    plan skip_all =>
+        "DBD::SQLite could not be used - no database to test with. ($error)";
 }
 
 plan tests => 4;
@@ -18,7 +19,7 @@ my $guide = OpenGuides->new( config => $config );
 my $wiki = $guide->wiki;
 
 # Clear out the database from any previous runs.
-    OpenGuides::Test::refresh_db();
+OpenGuides::Test::refresh_db();
 
 # Write a custom template to autofill content in autocreated nodes.
 eval {
