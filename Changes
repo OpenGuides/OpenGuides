@@ -4,6 +4,10 @@ More detailed changelogs can be found at
 <http://dev.openguides.org/log/trunk>.
 
 0.66    ?
+        Switch to using Geo::Coordinates::OSGB/ITM instead of
+          Geography::NationalGrid (which no longer exists on CPAN).
+        Make sure that whitespace is collapsed in autocreated categories
+          and locales, to avoid creating undeletable pages.
         Add an autocreate_content.tt template to include a map link in content
           for autocreated categories and locales (#275).
 
