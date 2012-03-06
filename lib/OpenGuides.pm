@@ -1744,6 +1744,10 @@ sub _autoCreateCategoryLocale {
                 my $ok = $tt->process( "custom_autocreate_content.tt",
                                        \%tt_vars, \$blurb );
                 if ( !$ok ) {
+                    $ok = $tt->process( "autocreate_content.tt",
+                                        \%tt_vars, \$blurb );
+                }
+                if ( !$ok ) {
                     $blurb = "\@INDEX_LINK [[$node]]";
                 }
                 $wiki->write_node(

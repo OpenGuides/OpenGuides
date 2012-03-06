@@ -347,6 +347,7 @@ $build->config_data( __extra_scripts =>
 $build->config_data( __templates     => [
                       "admin_home.tt",
                       "admin_revert_user.tt",
+                      "autocreate_content.tt",
                       "backlink_results.tt",
                       "banner.tt",
                       "blacklisted_host.tt",

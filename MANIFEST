@@ -29,6 +29,7 @@ preferences.cgi
 search.cgi
 templates/admin_home.tt
 templates/admin_revert_user.tt
+templates/autocreate_content.tt
 templates/backlink_results.tt
 templates/banner.tt
 templates/blacklisted_host.tt
@@ -155,3 +156,4 @@ t/85_universal_edit_link.t
 t/86_recent_changes.t
 t/templates/15_test.tt
 wiki.cgi
+META.json

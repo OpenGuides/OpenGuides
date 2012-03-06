@@ -12,7 +12,7 @@ if ( $@ ) {
         "DBD::SQLite could not be used - no database to test with. ($error)";
 }
 
-plan tests => 12;
+plan tests => 13;
 
 my $config = OpenGuides::Test->make_basic_config;
 $config->custom_template_path( cwd . "/t/templates/" );
@@ -111,10 +111,19 @@ OpenGuides::Test->write_data(
                               guide => $guide,
                               node  => "Bleeding Heart",
                               categories => "Pubs",
+                              locales => "EC1",
                               return_output => 1,
                             );
 $content = $wiki->retrieve_node( "Category Pubs" );
 $content =~ s/\s+$//s;
-$content =~ s/\s+/ /gs;
-is( $content, "\@INDEX_LINK [[Category Pubs]]",
+is( $content, "Things in this category "
+              . "(\@MAP_LINK [[Category Pubs|view them on a map]]):\n"
+              . "\@INDEX_LIST [[Category Pubs]]",
     "Default content is picked up if autocreate template doesn't exist" );
+
+$content = $wiki->retrieve_node( "Locale EC1" );
+$content =~ s/\s+$//s;
+is( $content, "Things in EC1 "
+              . "(\@MAP_LINK [[Locale EC1|view them on a map]]):\n"
+              . "\@INDEX_LIST [[Locale EC1]]",
+    "...and for locales too." );

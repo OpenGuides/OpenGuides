@@ -3,6 +3,10 @@
 More detailed changelogs can be found at
 <http://dev.openguides.org/log/trunk>.
 
+0.66    ?
+        Add an autocreate_content.tt template to include a map link in content
+          for autocreated categories and locales (#275).
+
 0.65    28 February 2010
         Fix some more broken POD and add POD unit test (#268)
         Don't display revision info for nodes that don't exist (#193)
