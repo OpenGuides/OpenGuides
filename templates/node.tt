@@ -1,7 +1,13 @@
 [% USE CGI %]
 [% INCLUDE header.tt %]
 [% INCLUDE banner.tt %]
-<div id="content">
+
+[% IF categories.size OR locales.size %]
+  <div id="content" class="[% FOREACH cat = categories %]cat_[% cat.name.lower.replace( ' ', '_' ) %][%- " " UNLESS (loop.last AND !locales.size) %][% END %][% FOREACH loc=locales %]loc_[% loc.name.lower.replace( ' ', '_' ) %][%- " " UNLESS loop.last %][% END %]">
+[% ELSE %]
+  <div id="content">
+[% END %]
+
 [% IF !config.content_above_navbar_in_html %]
   [% INCLUDE navbar.tt %]
 [% END %]

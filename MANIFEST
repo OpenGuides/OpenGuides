@@ -154,6 +154,7 @@ t/83_show_delete_to_admins_only.t
 t/84_navbar_admin.t
 t/85_universal_edit_link.t
 t/86_recent_changes.t
+t/90_css_category_locale_classes.t
 t/templates/15_test.tt
 wiki.cgi
 META.json
