@@ -38,6 +38,8 @@ sub set_preferences {
         );
         push @cookies, $rc_cookie;
     }
+    # We have to send the username to OpenGuides::Template because they might
+    # have changed it, in which case it won't be in the cookie yet.
     print OpenGuides::Template->output(
         wiki     => $wiki,
         config   => $config,
@@ -46,6 +48,7 @@ sub set_preferences {
         vars     => {
                       not_editable => 1,
                       not_deletable => 1,
+                      username => $prefs{username},
                     }
     );
 }

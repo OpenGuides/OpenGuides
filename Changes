@@ -4,6 +4,7 @@ More detailed changelogs can be found at
 <http://dev.openguides.org/log/trunk>.
 
 0.66    ?
+        All templates now have access to the "username" TT variable.
         Add CSS classes for each category and locale to the "content" div
           (and hence we now require version 2.24 of Template).
         Switch to using Geo::Coordinates::OSGB/ITM instead of

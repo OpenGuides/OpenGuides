@@ -190,9 +190,19 @@ sub output {
         $tt_vars->{node_param} = CGI->escape($args{wiki}->formatter->node_name_to_node_param($args{node}));
     }
 
-    # Now set further TT variables if explicitly supplied - do this last
-    # as these override auto-set ones.
+    # Now set further TT variables if explicitly supplied - do this after the
+    # above auto-setting as these override auto-set ones.
     $tt_vars = { %$tt_vars, %{ $args{vars} || {} } };
+
+    # Finally, dig out the username from the cookie if we haven't already
+    # been sent it in vars.
+    if ( !$tt_vars->{username} ) {
+        my %prefs = OpenGuides::CGI->get_prefs_from_cookie(config => $config);
+        # If there's nothing in there, it defaults to "Anonymous".
+        if ( $prefs{username} ne "Anonymous" ) {
+          $tt_vars->{username} = $prefs{username};
+        }
+    }
 
     my $header = "";
 
