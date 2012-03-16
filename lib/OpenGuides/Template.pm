@@ -124,7 +124,8 @@ sub output {
     my $config = $args{config} or croak "No config supplied";
     my $template_path = $config->template_path;
     my $custom_template_path = $config->custom_template_path || "";
-    my $tt = Template->new( { INCLUDE_PATH => "$custom_template_path:$template_path" } );
+    my $tt = Template->new(
+               { INCLUDE_PATH => "$custom_template_path:$template_path" } );
 
     my $script_name  = $config->script_name;
     my $script_url   = $config->script_url;
@@ -134,9 +135,10 @@ sub output {
     my ($formatting_rules_link, $omit_help_links);
     my $formatting_rules_node = $config->formatting_rules_node;
     $formatting_rules_link = $config->formatting_rules_link;
-    my %cookie_data = OpenGuides::CGI->get_prefs_from_cookie(config=>$config,
-                                                             cookies => $args{cookies},
-                                                            );
+    my %cookie_data = OpenGuides::CGI->get_prefs_from_cookie(
+                          config  => $config,
+                          cookies => $args{cookies},
+    );
     if ( $cookie_data{omit_help_links} ) {
         $omit_help_links = 1;
     } else {
@@ -366,11 +368,13 @@ sub extract_metadata_vars {
                                   : $q->param("website");
     my $formatted_website_text = "";
     if ( $website && $website ne "http://" && is_web_uri( $website ) ) {
-        my $trunc_website = substr( $website, 0, $config->website_link_max_chars );
+        my $trunc_website = substr( $website, 0,
+                                    $config->website_link_max_chars );
         unless ($website eq $trunc_website ) {
             $trunc_website .= '...';
         }
-        $formatted_website_text = '<a href="' . $website . '">' . $trunc_website . '</a>';
+        $formatted_website_text = '<a href="' . $website . '">'
+                                  . $trunc_website . '</a>';
     }
 
     my $hours_text = $args{metadata} ? $metadata{opening_hours_text}[0]
@@ -431,8 +435,10 @@ sub extract_metadata_vars {
                         coord_field_1       => "osie_x",
                         coord_field_2       => "osie_y",
                         dist_field          => "osie_dist",
-                        coord_field_1_name  =>"Irish National Grid X coordinate",
-                        coord_field_2_name  =>"Irish National Grid Y coordinate",
+                        coord_field_1_name
+                                       => "Irish National Grid X coordinate",
+                        coord_field_2_name
+                                       =>"Irish National Grid Y coordinate",
                         coord_field_1_value => $metadata{osie_x}[0],
                         coord_field_2_value => $metadata{osie_y}[0],
                     );
@@ -451,7 +457,8 @@ sub extract_metadata_vars {
                     );
         }
     } else {
-        foreach my $var ( qw( phone fax address postcode map_link website summary) ) {
+        foreach my $var ( qw( phone fax address postcode map_link website
+                              summary) ) {
             $vars{$var} = $q->param($var);
         }
 
@@ -471,19 +478,22 @@ sub extract_metadata_vars {
             $os_y =~ s/\s+//g;
 
             # If we were sent x and y, work out lat/long; and vice versa.
-            if ( defined $os_x && length $os_x && defined $os_y && length $os_y ) {
+            if ( defined $os_x && length $os_x
+                   && defined $os_y && length $os_y ) {
                 ( $lat, $long ) = Geo::Coordinates::OSGB::grid_to_ll(
                                       $os_x, $os_y );
                 $lat  = sprintf( "%.6f", $lat );
                 $long = sprintf( "%.6f", $long );
-            } elsif ( defined $lat && length $lat && defined $long && length $long ) {
+            } elsif ( defined $lat && length $lat
+                        && defined $long && length $long ) {
                 ( $os_x, $os_y ) = Geo::Coordinates::OSGB::ll_to_grid(
                                        $lat, $long );
                 $os_x = sprintf( "%d", $os_x );
                 $os_y = sprintf( "%d", $os_y );
             }
             
-            if ( defined $os_x && length $os_x && defined $os_y && length $os_y ) {
+            if ( defined $os_x && length $os_x
+                   && defined $os_y && length $os_y ) {
                 %vars = (
                             %vars,
                             latitude  => $lat,
@@ -517,18 +527,21 @@ sub extract_metadata_vars {
             $osie_y =~ s/\s+//g;
 
             # If we were sent x and y, work out lat/long; and vice versa.
-            if ( defined $osie_x && length $osie_x && defined $osie_y && length $osie_y ) {
+            if ( defined $osie_x && length $osie_x
+                   && defined $osie_y && length $osie_y ) {
                 ( $lat, $long ) = Geo::Coordinates::ITM::grid_to_ll(
                                       $osie_x, $osie_y );
                 $lat  = sprintf( "%.6f", $lat );
                 $long = sprintf( "%.6f", $long );
-            } elsif ( defined $lat && length $lat && defined $long && length $long ) {
+            } elsif ( defined $lat && length $lat && defined $long
+                        && length $long ) {
                 ( $osie_x, $osie_y ) = Geo::Coordinates::ITM::ll_to_grid(
                                            $lat, $long );
                 $osie_x = sprintf( "%d", $osie_x );
                 $osie_y = sprintf( "%d", $osie_y );
             }
-            if ( defined $osie_x && length $osie_x && defined $osie_y && length $osie_y ) {
+            if ( defined $osie_x && length $osie_x
+                   && defined $osie_y && length $osie_y ) {
                 %vars = (
                             %vars,
                             latitude  => $lat,
@@ -543,8 +556,10 @@ sub extract_metadata_vars {
                             coord_field_1       => "osie_x",
                             coord_field_2       => "osie_y",
                             dist_field          => "osie_dist",
-                            coord_field_1_name  => "Irish National Grid X coordinate",
-                            coord_field_2_name  => "Irish National Grid Y coordinate",
+                            coord_field_1_name
+                                         => "Irish National Grid X coordinate",
+                            coord_field_2_name
+                                         => "Irish National Grid Y coordinate",
                             coord_field_1_value => $osie_x,
                             coord_field_2_value => $osie_y,
                         );
@@ -554,7 +569,8 @@ sub extract_metadata_vars {
             my $lat    = $q->param("latitude");
             my $long   = $q->param("longitude");
             
-            if ( defined $lat && length $lat && defined $long && length $long ) {
+            if ( defined $lat && length $lat
+                   && defined $long && length $long ) {
                 # Trim whitespace.
                 $lat =~ s/\s+//g;
                 $long =~ s/\s+//g;
