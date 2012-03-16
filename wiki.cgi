@@ -2,8 +2,7 @@
 
 use strict;
 use warnings;
-use sigtrap die => 'normal-signals';                                            
-
+use sigtrap die => 'normal-signals';
 use vars qw( $VERSION );
 $VERSION = '0.65';
 
