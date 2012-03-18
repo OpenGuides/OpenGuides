@@ -30,14 +30,20 @@ eval {
     $guide = OpenGuides->new( config => $config );
     $wiki = $guide->wiki;
     $formatter = $wiki->formatter;
-
-    # Get CGI object, find out what to do.
     $q = CGI->new;
 
-    # Note $q->param('keywords') gives you the entire param string.
-    # We need this to do URLs like foo.com/wiki.cgi?This_Page
-    my $node = $q->param('id') || $q->param('title') || $q->param('keywords') || '';
-    $node = $formatter->node_param_to_node_name( $node );
+    # See if we need to redirect due to spaces in URL.
+    my $redirect = OpenGuides::CGI->check_spaces_redirect(
+                                         cgi_obj => $q, wiki => $wiki );
+
+    if ( $redirect ) {
+        print $q->redirect( -uri => $redirect, -status => 303 );
+        exit 0;
+    }
+
+    # No redirect - carry on.
+    my $node = OpenGuides::CGI->extract_node_name(
+                                         cgi_obj => $q, wiki => $wiki );
 
     # If we did a post, then CGI->param probably hasn't fully de-escaped,
     #  in the same way as a get would've done

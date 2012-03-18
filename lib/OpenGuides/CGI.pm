@@ -71,6 +71,142 @@ Tracking visits to Recent Changes:
 
 =over 4
 
+=item B<extract_node_param>
+
+    my $config_file = $ENV{OPENGUIDES_CONFIG_FILE} || "wiki.conf";
+    my $config = OpenGuides::Config->new( file => $config_file );
+    my $guide = OpenGuides->new( config => $config );
+    my $wiki = $guide->wiki;
+
+    my $q = CGI->new;
+
+    my $node_param = OpenGuides::CGI->extract_node_param(
+                        wiki => $wiki, cgi_obj => $q );
+
+Returns the title, id, or keywords parameter from the URL.  Normally
+this will be something like "British_Museum", i.e. with underscores
+instead of spaces.  However if the URL does contain spaces (encoded as
+%20 or +), the return value will be e.g. "British Museum" instead.
+
+Croaks unless a L<Wiki::Toolkit> object is supplied as C<wiki> and a
+L<CGI> object is supplied as C<cgi_obj>.
+
+=cut
+
+sub extract_node_param {
+    my ($class, %args) = @_;
+    my $wiki = $args{wiki} or croak "No wiki supplied";
+    croak "wiki not a Wiki::Toolkit object"
+        unless UNIVERSAL::isa( $wiki, "Wiki::Toolkit" );
+    my $q = $args{cgi_obj} or croak "No cgi_obj supplied";
+    croak "cgi_obj not a CGI object"
+        unless UNIVERSAL::isa( $q, "CGI" );
+
+    # Note $q->param( "keywords" ) gives you the entire param string.
+    # We need this to do URLs like foo.com/wiki.cgi?This_Page
+    my $param = $q->param( "id" )
+                || $q->param( "title" )
+                || join( " ", $q->param( "keywords" ) )
+                || "";
+    $param =~ s/%20/ /g;
+    $param =~ s/\+/ /g;
+    return $param;
+}
+
+=item B<extract_node_name>
+
+    my $config_file = $ENV{OPENGUIDES_CONFIG_FILE} || "wiki.conf";
+    my $config = OpenGuides::Config->new( file => $config_file );
+    my $guide = OpenGuides->new( config => $config );
+    my $wiki = $guide->wiki;
+
+    my $q = CGI->new;
+
+    my $node_name = OpenGuides::CGI->extract_node_name(
+                        wiki => $wiki, cgi_obj => $q );
+
+Returns the name of the node the user wishes to display/manipulate, as
+we expect it to be stored in the database.  Normally this will be
+something like "British Museum", i.e. with spaces in.  Croaks unless a
+L<Wiki::Toolkit> object is supplied as C<wiki> and a L<CGI> object is
+supplied as C<cgi_obj>.
+
+=cut
+
+sub extract_node_name {
+    my ($class, %args) = @_;
+    # The next call will validate our args for us and croak if necessary.
+    my $param = $class->extract_node_param( %args );
+
+    # Sometimes people type spaces instead of underscores.
+    $param =~ s/ /_/g;
+    $param =~ s/%20/_/g;
+    $param =~ s/\+/_/g;
+
+    my $formatter = $args{wiki}->formatter;
+    return $formatter->node_param_to_node_name( $param );
+}
+
+=item B<check_spaces_redirect>
+
+    my $config_file = $ENV{OPENGUIDES_CONFIG_FILE} || "wiki.conf";
+    my $config = OpenGuides::Config->new( file => $config_file );
+    my $guide = OpenGuides->new( config => $config );
+
+    my $q = CGI->new;
+
+    my $url = OpenGuides::CGI->check_spaces_redirect(
+                                 wiki => $wiki, cgi_obj => $q );
+
+If the user seems to have typed a URL with spaces in the node param
+instead of underscores, this method will return the URL with the
+underscores put in.  Otherwise, it returns false.
+
+=cut
+
+sub check_spaces_redirect {
+    my ($class, %args) = @_;
+    my $wiki = $args{wiki};
+    my $q = $args{cgi_obj};
+
+    my $name = $class->extract_node_name( wiki => $wiki, cgi_obj => $q );
+    my $param = $class->extract_node_param( wiki => $wiki, cgi_obj => $q );
+
+    # If we can't figure out the name or param, it's safest to do nothing.
+    if ( !$name || !$param ) {
+        return 0;
+    }
+
+    # If the name has no spaces in, or the name and param differ, we're
+    # probably OK.
+    if ( ( $name !~ / / ) || ( $name ne $param ) ) {
+        return 0;
+    }
+
+    # Make a new CGI object to manipulate, to avoid action-at-a-distance.
+    my $new_q = CGI->new( $q );
+    my $formatter = $wiki->formatter;
+    my $real_param = $formatter->node_name_to_node_param( $name );
+
+    if ( $q->param( "id" ) ) {
+        $new_q->param( -name => "id", -value => $real_param );
+    } elsif ( $q->param( "title" ) ) {
+        $new_q->param( -name => "title", -value => $real_param );
+    } else {
+        # OK, we have the keywords case; the entire param string is the
+        # node param.  So just delete all existing parameters and stick
+        # the node param back in.
+        $new_q->delete_all();
+        $new_q->param( -name => "id", -value => $real_param );
+    }
+
+    my $url = $new_q->self_url;
+
+    # Escaped commas are ugly.
+    $url =~ s/%2C/,/g;
+    return $url;
+}
+
 =item B<make_prefs_cookie>
 
   my $cookie = OpenGuides::CGI->make_prefs_cookie(
