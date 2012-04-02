@@ -16,6 +16,7 @@ More detailed changelogs can be found at
           and locales, to avoid creating undeletable pages.
         Add an autocreate_content.tt template to include a map link in content
           for autocreated categories and locales (#275).
+        Make sure the show_missing_metadata action skips redirects.
 
 0.65    28 February 2010
         Fix some more broken POD and add POD unit test (#268)
