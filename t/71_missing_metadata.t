@@ -24,7 +24,9 @@ isa_ok( $wiki, "Wiki::Toolkit" );
 
 
 
-# Add 3 different pages, one of which with two versions
+# Add four different pages, one of which with two versions, one of which
+# a redirect.  The redirect should not show up on any "missing metadata"
+# searches, regardless of the condition of the page it points to.
 $wiki->write_node( "Test Page", "foo", undef,
                    { category => "Alpha", lat=>"" } )
   or die "Couldn't write node";
@@ -44,7 +46,12 @@ my %data = $wiki->retrieve_node( "Locale Bar" );
 $wiki->write_node( "Locale Bar", "foo version 2", $data{checksum},
                    { category => "Locales", lat=>"8.88" } )
   or die "Couldn't write locale for the 2nd time";
-
+OpenGuides::Test->write_data(
+                              guide => $guide,
+                              node  => "Redirect Test",
+                              content => "#REDIRECT [[Test Page]]",
+                              return_output => 1,
+                            );
 
 # Try without search parameters
 my %ttvars = eval {
@@ -112,7 +119,7 @@ is( $nodes[1]->{'name'}, "Test Page 3", "Right nodes" );
 my $output = eval {
     $guide->show_missing_metadata( return_output=>1 );
 };
-is( $@, "", "->how_missing_metadata doesn't die" );
+is( $@, "", "->show_missing_metadata doesn't die" );
 
 like( $output, qr|Missing Metadata|, "Right page" );
 like( $output, qr|Metadata Type|, "Has prompts" );
@@ -121,6 +128,6 @@ unlike( $output, qr|<h3>Pages</h3>|, "Didn't search" );
 $output = eval {
     $guide->show_missing_metadata( return_output=>1, metadata_type=>'lat' );
 };
-is( $@, "", "->how_missing_metadata doesn't die" );
+is( $@, "", "->show_missing_metadata doesn't die" );
 like( $output, qr|<h3>Pages</h3>|, "searched" );
 like( $output, qr|Test Page|, "had node" );
