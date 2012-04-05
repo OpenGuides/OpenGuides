@@ -20,25 +20,6 @@ if ( $@ ) {
     plan skip_all => "Test::HTML::Content not installed";
 }
 
-# Strictly speaking we don't need to skip _all_ tests if we don't have
-# the modules below.  Revisit this when not in a hurry.
-# We only actually need the former two for the National Grid tests and the
-# latter for the UTM tests.
-eval { require Geo::Coordinates::OSGB; };
-if ( $@ ) { 
-    plan skip_all => "Geo::Coordinates::OSGB not installed";
-}
-
-eval { require Geo::Coordinates::ITM; };
-if ( $@ ) { 
-    plan skip_all => "Geo::Coordinates::ITM not installed";
-}
-
-eval { require Geo::Coordinates::UTM; };
-if ( $@ ) { 
-    plan skip_all => "Geo::Coordinates::UTM not installed";
-}
-
 plan tests => 27;
 
 # Clear out the database from any previous runs.

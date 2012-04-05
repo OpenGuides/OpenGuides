@@ -13,10 +13,6 @@ if ( $@ ) {
     plan skip_all => "DBD::SQLite could not be used - no database to test with ($error)";
 } 
 
-eval { require Geo::Coordinates::UTM; };
-if ( $@ ) { 
-    plan skip_all => "Geo::Coordinates::UTM not installed";
-}
 
 plan tests => 4;
 

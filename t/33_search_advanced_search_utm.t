@@ -16,11 +16,6 @@ if ( $@ ) {
     plan skip_all => "Plucene not installed";
 }
 
-eval { require Geo::Coordinates::UTM; };
-if ( $@ ) {
-    plan skip_all => "Geo::Coordinates::UTM not installed";
-}
-
 plan tests => 4;
 
 # Clear out the database from any previous runs.

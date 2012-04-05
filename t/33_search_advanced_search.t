@@ -17,10 +17,6 @@ if ( $@ ) {
     plan skip_all => "Plucene not installed";
 }
 
-eval { require Geo::Coordinates::OSGB; };
-if ( $@ ) {
-    plan skip_all => "Geo::Coordinates::OSGB not installed";
-}
 
 plan tests => 8;
 

@@ -50,9 +50,7 @@ my %details = $guide->wiki->retrieve_node("Test Node");
 
 is( @{$details{metadata}->{os_x}}[0], 0, "Zero os_x saved" );
 is( @{$details{metadata}->{os_y}}[0], 0, "Zero os_y saved" );
-SKIP: {
-	eval { require Geo::Coordinates::ITM; };
-	skip "Geo::Coordinates::ITM is not installed", 2 if $@;
+
 $config->{geo_handler} = 2;
 
 Wiki::Toolkit::Setup::SQLite::cleardb( { dbname => "t/node.db" } );
@@ -76,7 +74,6 @@ $output = $guide->commit_node(
 
 is( @{$details{metadata}->{osie_x}}[0], 0, "Zero osie_x saved" );
 is( @{$details{metadata}->{osie_y}}[0], 0, "Zero osie_y saved" );
-}
 $config->{geo_handler} = 3;
 
 Wiki::Toolkit::Setup::SQLite::cleardb( { dbname => "t/node.db" } );
