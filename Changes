@@ -3,7 +3,7 @@
 More detailed changelogs can be found at
 <http://dev.openguides.org/log/trunk>.
 
-0.66    ?
+0.66    12 April 2012
         All templates now have access to the "username" TT variable.
         Node name parameters in URLs are now accepted with spaces instead of
           underscores, to take account of people typing manually - these will

@@ -74,7 +74,6 @@ $output = $guide->commit_node(
 
 is( @{$details{metadata}->{osie_x}}[0], 0, "Zero osie_x saved" );
 is( @{$details{metadata}->{osie_y}}[0], 0, "Zero osie_y saved" );
-
 $config->{geo_handler} = 3;
 
 Wiki::Toolkit::Setup::SQLite::cleardb( { dbname => "t/node.db" } );

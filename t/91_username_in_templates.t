@@ -27,7 +27,10 @@ OpenGuides::Test->write_data(
                               node  => "Ship Of Fools",
                               return_output => 1,
                             );
-
+# Make sure the tmp directory exists
+eval {
+    mkdir cwd . "/t/templates/tmp";
+};
 # Write a custom banner template that includes the username.
 eval {
     unlink cwd . "/t/templates/tmp/custom_banner.tt";

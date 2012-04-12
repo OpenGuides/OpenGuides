@@ -297,7 +297,6 @@ my $build = OpenGuides::Build->new(
         $drivers{$dbtype}                     => 0,
         'File::Spec::Functions'               => 0,
         'File::Temp'                          => 0,
-		'Geo::Coordinates::UTM'               => 0,
         'HTML::Entities'                      => 0,
         'LWP::Simple'                         => 0,
         'MIME::Lite'                          => 0,
@@ -311,6 +310,9 @@ my $build = OpenGuides::Build->new(
         'Data::Validate::URI'                 => 0,
         'Net::Netmask'                        => 0,
         'List::Util'                          => 0,
+	'Geo::Coordinates::UTM'               => 0,
+        'Geo::Coordinates::OSGB'              => 0,
+        'Geo::Coordinates::ITM'               => 0,
         },
     build_requires => {
         'Module::Build' => '0.26', # API change for accessing config data
@@ -356,6 +358,7 @@ $build->config_data( __templates     => [
                       "delete_password_wrong.tt",
                       "differences.tt",
                       "display_metadata.tt",
+                      "metadata.tt",
                       "edit_form.tt",
                       "edit_form_actions.tt",
                       "error.tt",

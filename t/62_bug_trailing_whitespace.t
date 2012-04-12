@@ -21,10 +21,6 @@ plan tests => 8;
 my $config = OpenGuides::Test->make_basic_config;
 my $guide = OpenGuides->new( config => $config );
 
-SKIP: {
-    eval { require Geo::Coordinates::OSGB; };
-    skip "Geo::Coordinates::OSGB not installed", 2 if $@;
-
     my $q = CGI->new( "" );
     $q->param( -name => "os_x", -value => " 123456 " );
     $q->param( -name => "os_y", -value => " 654321 " );
@@ -40,11 +36,8 @@ SKIP: {
     is( $metadata_vars{os_x}, "123456",
         "leading and trailing spaces stripped from os_x when processed" );
     is( $metadata_vars{os_y}, "654321", "...and os_y" );
-}
 
-SKIP: {
-    eval { require Geo::Coordinates::ITM; };
-    skip "Geo::Coordinates::ITM not installed", 2 if $@;
+
 
     $config->geo_handler( 2 );
     my $q = CGI->new( "" );
@@ -62,11 +55,6 @@ SKIP: {
     is( $metadata_vars{osie_x}, "100000",
         "leading and trailing spaces stripped from osie_x when processed" );
     is( $metadata_vars{osie_y}, "200000", "...and osie_y" );
-}
-
-SKIP: {
-    eval { require Geo::Coordinates::UTM; };
-    skip "Geo::Coordinates::UTM not installed", 2 if $@;
 
     $config->geo_handler( 3 );
     my $q = CGI->new( "" );
@@ -84,7 +72,6 @@ SKIP: {
     is( $metadata_vars{latitude}, "1.463113",
         "leading and trailing spaces stripped from latitude when processed" );
     is( $metadata_vars{longitude}, "-0.215293", "...and longitude" );
-}
 
 OpenGuides::Test->write_data(
                               guide => $guide,
