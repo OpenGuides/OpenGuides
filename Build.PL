@@ -358,6 +358,7 @@ $build->config_data( __templates     => [
                       "delete_password_wrong.tt",
                       "differences.tt",
                       "display_metadata.tt",
+                      "metadata.tt",
                       "edit_form.tt",
                       "edit_form_actions.tt",
                       "error.tt",

@@ -46,6 +46,7 @@ templates/header.tt
 templates/home_node.tt
 templates/map_index.tt
 templates/missing_metadata.tt
+templates/metadata.tt
 templates/moderate_confirm.tt
 templates/moderate_password_wrong.tt
 templates/navbar.tt
