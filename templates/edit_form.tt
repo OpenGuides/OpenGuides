@@ -171,8 +171,8 @@
 		 }
 
 	     $(document).ready(function() {
-		    $("#pick_locale").html("<a href='javascript:pick_locale()'>pick Locale</a>");
-		    $("#pick_category").html("<a href='javascript:pick_category()'>pick Category</a>");
+		    $("#pick_locale").html("<a href='javascript:pick_locale()'>pick Locale<\/a>");
+		    $("#pick_category").html("<a href='javascript:pick_category()'>pick Category<\/a>");
 		 });
 	  </script>
 
