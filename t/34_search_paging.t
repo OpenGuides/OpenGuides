@@ -67,7 +67,7 @@ my $guide = OpenGuides->new( config => $config );
     # We must create a new search object after changing the geo_handler
     # in order to force it to create a fresh locator.
     $config->geo_handler( 2 );
-    my $search = OpenGuides::Search->new( config => $config );
+    $search = OpenGuides::Search->new( config => $config );
 
     foreach my $i ( 1 .. 50 ) {
         OpenGuides::Test->write_data(
@@ -78,7 +78,7 @@ my $guide = OpenGuides->new( config => $config );
                                     );
     }
     
-    my $output = $search->run(
+    $output = $search->run(
                                return_output => 1,
                                vars          => {
                                                   osie_dist => 1500,
@@ -105,7 +105,7 @@ my $guide = OpenGuides->new( config => $config );
     # We must create a new search object after changing the geo_handler
     # in order to force it to create a fresh locator.
     $config->geo_handler( 3 );
-    my $search = OpenGuides::Search->new( config => $config );
+    $search = OpenGuides::Search->new( config => $config );
 
     foreach my $i ( 1 .. 50 ) {
         OpenGuides::Test->write_data(
@@ -116,7 +116,7 @@ my $guide = OpenGuides->new( config => $config );
                                     );
     }
     
-    my $output = $search->run(
+    $output = $search->run(
                                return_output => 1,
                                vars          => {
                                                   latlong_dist => 1500,

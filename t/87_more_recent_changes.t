@@ -135,7 +135,7 @@ unlike ($output, qr/First edit/, "showing a page edit twice when show minor edit
 
 
 # set show_minor_edits to 0.
-my $cookie = OpenGuides::CGI->make_prefs_cookie(
+$cookie = OpenGuides::CGI->make_prefs_cookie(
     config                     => $config,
     username                   => "bob",
     include_geocache_link      => 1,

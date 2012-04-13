@@ -40,13 +40,13 @@ my $guide = OpenGuides->new( config => $config );
 
 
     $config->geo_handler( 2 );
-    my $q = CGI->new( "" );
+    $q = CGI->new( "" );
     $q->param( -name => "osie_x", -value => " 100000 " );
     $q->param( -name => "osie_y", -value => " 200000 " );
     $q->param( -name => "categories", -value => "" ); #avoid uninit val warning
     $q->param( -name => "locales", -value => "" );    #avoid uninit val warning
 
-    my %metadata_vars = OpenGuides::Template->extract_metadata_vars(
+    %metadata_vars = OpenGuides::Template->extract_metadata_vars(
         wiki    => $guide->wiki,
         config  => $config,
         cgi_obj => $q,
@@ -57,13 +57,13 @@ my $guide = OpenGuides->new( config => $config );
     is( $metadata_vars{osie_y}, "200000", "...and osie_y" );
 
     $config->geo_handler( 3 );
-    my $q = CGI->new( "" );
+    $q = CGI->new( "" );
     $q->param( -name => "latitude", -value => " 1.463113 " );
     $q->param( -name => "longitude", -value => " -0.215293 " );
     $q->param( -name => "categories", -value => "" ); #avoid uninit val warning
     $q->param( -name => "locales", -value => "" );    #avoid uninit val warning
 
-    my %metadata_vars = OpenGuides::Template->extract_metadata_vars(
+    %metadata_vars = OpenGuides::Template->extract_metadata_vars(
         wiki    => $guide->wiki,
         config  => $config,
         cgi_obj => $q,
