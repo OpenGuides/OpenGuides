@@ -11,7 +11,7 @@ if ( $@ ) {
     plan skip_all => "DBD::SQLite could not be used - no database to test with ($error)";
 }
 
-plan tests => 27; # 29 when all enabled
+plan tests => 40;
 
 # Clear out the database from any previous runs.
 OpenGuides::Test::refresh_db();
@@ -26,29 +26,64 @@ isa_ok( $wiki, "Wiki::Toolkit" );
 
 
 $wiki->write_node( "Test Page", "foo", undef,
-                   { category => "Alpha", latitude=>51.754349, longitude=>-1.258200 } )
+                   { category => "Alpha", locale => "Assam",
+                     latitude => 51.754349, longitude => -1.258200 } )
   or die "Couldn't write node";
 $wiki->write_node( "Test Page 2", "foo", undef,
-                   { category => "Alpha" } )
+                   { category => "Alpha", locale => "Assam" } )
+  or die "Couldn't write node";
+$wiki->write_node( "Test Page 3", "foo", undef,
+                   { category => "Beta", locale => "Bangalore",
+                     latitude => 51.8, longitude => -0.8 } )
   or die "Couldn't write node";
 
+# Make sure that old-style invocations redirect to new.
+my $output = $guide->show_index( type => "category", value => "Alpha",
+                                 return_output => 1, intercept_redirect => 1 );
+like( $output, qr/Status: 301/,
+      "Old-style category index search prints a redirect" );
+like( $output, qr/cat=alpha/, "...and includes the correct param/value pair" );
+
+$output = $guide->show_index( type => "locale", value => "Assam",
+                              return_output => 1, intercept_redirect => 1,
+                              format => "map" );
+like( $output, qr/Status: 301/,
+      "Old-style locale index search prints a redirect" );
+like( $output, qr/loc=assam/, "...and includes the correct param/value pair" );
+like( $output, qr/format=map/, "...format parameter included too" );
+
 # Test the normal, HTML version
-my $output = eval {
+$output = eval {
     $guide->show_index(
-                        type          => "category",
-                        value         => "Alpha",
+                        cat           => "Alpha",
                         return_output => 1,
                       );
 };
 is( $@, "", "->show_index doesn't die" );
-like( $output, qr|wiki.cgi\?Test_Page|,
-      "...and includes correct links" );
+like( $output, qr|wiki.cgi\?Test_Page|, "...and includes correct links" );
+unlike( $output, qr|wiki.cgi\?Test_Page_3|, "...but not incorrect ones" );
 unlike( $output, qr|<title>\s*-|, "...sets <title> correctly" );
+
+# Test links in the header.
+like( $output, qr|<link rel="alternate[^>]*action=index;cat=alpha;format=rss|,
+      "RSS link correct in header" );
+like( $output, qr|<link rel="alternate[^>]*action=index;cat=alpha;format=atom|,
+      "Atom link correct in header" );
+
+# Test links in the footer.
+my $footer = $output;
+$footer =~ s/^.*This list is available as//s;
+$footer =~ s|</p>.*$||s;
+like( $footer, qr|action=index;cat=alpha;format=rdf|,
+      "RDF link correct in footer" );
+like( $footer, qr|action=index;cat=alpha;format=rss|,
+      "RSS link correct in footer" );
+like( $footer, qr|action=index;cat=alpha;format=atom|,
+      "Atom link correct in footer" );
 
 # Test the RDF version
 $output = $guide->show_index(
-                              type          => "category",
-                              value         => "Alpha",
+                              cat           => "Alpha",
                               return_output => 1,
                               format        => "rdf"
                             );
@@ -62,8 +97,7 @@ is( 2, scalar @entries, "Right number of nodes included in rdf" );
 # Test the RSS version
 $output = eval {
     $guide->show_index(
-                        type          => "category",
-                        value         => "Alpha",
+                        cat           => "Alpha",
                         return_output => 1,
                         format        => "rss",
                       );
@@ -72,15 +106,15 @@ is( $@, "", "->show_index doesn't die when asked for rss" );
 like( $output, qr|Content-Type: application/rdf\+xml|,
       "RSS output gets content-type of application/rdf+xml" );
 like( $output, "/\<rdf\:RDF.*?http\:\/\/purl.org\/rss\//s", "Really is rss" );
-#like( $output, qr|<title>Category Alpha</title>|, "Right rss title" );
+like( $output, qr|<title>Test - Index of Category Alpha</title>|,
+      "Right rss title" );
 @entries = ($output =~ /(\<\/item\>)/g);
 is( 2, scalar @entries, "Right number of nodes included in rss" );
 
 # Test the Atom version
 $output = eval {
     $guide->show_index(
-                        type          => "category",
-                        value         => "Alpha",
+                        cat           => "Alpha",
                         return_output => 1,
                         format        => "atom",
                       );
@@ -89,7 +123,8 @@ is( $@, "", "->show_index doesn't die when asked for atom" );
 like( $output, qr|Content-Type: application/atom\+xml|,
       "Atom output gets content-type of application/atom+xml" );
 like( $output, qr|<feed|, "Really is atom" );
-#like( $output, qr|<title>Category Alpha</title>|, "Right atom title" );
+like( $output, qr|<title>Test - Index of Category Alpha</title>|,
+      "Right atom title" );
 @entries = ($output =~ /(\<entry\>)/g);
 is( 2, scalar @entries, "Right number of nodes included in atom" );
 
@@ -116,6 +151,7 @@ SKIP: {
     $output = eval {
         $guide->show_index(
                             return_output => 1,
+                            loc           => "assam",
                             format        => "map",
                           );
     };

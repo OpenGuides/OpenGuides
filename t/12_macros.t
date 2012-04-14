@@ -11,7 +11,7 @@ if ( $@ ) {
     plan skip_all => "DBD::SQLite could not be used - no database to test with. ($error)";
 }
 
-plan tests => 15;
+plan tests => 19;
 
 SKIP: {
     # Clear out the database from any previous runs.
@@ -34,11 +34,14 @@ SKIP: {
                                   );
     like( $output, qr/View all pages in Category Foo/,
           "\@INDEX_LINK has right default link text" );
+    like( $output, qr/action=index;cat=foo/, "...and URL looks right" );
+
     $output = $guide->display_node(
                                     return_output => 1,
                                     id            => "Test 2",
                                   );
-    like( $output, qr/>Bars<\/a>/, "...and can be overridden" );
+    like( $output, qr/>Bars<\/a>/, "Default link text can be overridden" );
+    like( $output, qr/action=index;cat=bar/, "...and URL looks right" );
 
     # Test @INDEX_LIST
     $wiki->write_node( "Test 3", "\@INDEX_LIST [[Category Foo]]" )
@@ -100,11 +103,14 @@ SKIP: {
                                   );
     like( $output, qr/View map of pages in Category Foo/,
           "\@MAP_LINK has right default link text" );
+    like( $output, qr/\bcat=foo\b/, "...and URL looks right" );
+
     $output = $guide->display_node(
                                     return_output => 1,
                                     id            => "Test 2",
                                   );
-    like( $output, qr/>Map<\/a>/, "...and can be overridden" );
+    like( $output, qr/>Map<\/a>/, "Default link text can be overridden" );
+    like( $output, qr/\bcat=foo\b/, "...and URL looks right" );
 
     # Test @RANDOM_PAGE_LINK
     OpenGuides::Test->write_data(

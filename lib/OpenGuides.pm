@@ -846,42 +846,49 @@ sub show_backlinks {
 
 =item B<show_index>
 
+  # Show everything in Category: Pubs.
   $guide->show_index(
-                        type   => "category",
-                        value  => "pubs",
+                        cat => "pubs",
                     );
 
-  # RDF version.
+  # RDF version of things in Locale: Holborn.
   $guide->show_index(
-                        type   => "locale",
-                        value  => "Holborn",
+                        loc  => "Holborn",
                         format => "rdf",
                     );
 
   # RSS / Atom version (recent changes style).
   $guide->show_index(
-                        type   => "locale",
-                        value  => "Holborn",
+                        loc    => "Holborn",
                         format => "rss",
                     );
 
   # Or return output as a string (useful for writing tests).
   $guide->show_index(
-                        type          => "category",
-                        value         => "pubs",
+                        cat           => "pubs",
                         return_output => 1,
                     );
 
   # Or return the template variables (again, useful for writing tests).
   $guide->show_index(
-                        type           => "category",
-                        value          => "pubs",
+                        cat            => "pubs",
                         format         => "map"
                         return_tt_vars => 1,
                     );
 
-If either the C<type> or the C<value> parameter is omitted, then all pages
-will be returned.
+If neither C<cat> or C<loc> is supplied, then all pages will be returned.
+
+The recommended format of parameters to this method changed to the
+above in version 0.67 of OpenGuides, though older invocations are
+still supported and will redirect to the new URL format.
+
+If you pass the C<return_output> or C<return_tt_vars> parameters, and a
+redirect is required, this method will fake the redirect and return the
+output/variables that will actually end up being viewed by the user.  If
+instead you want to see the HTTP headers that will be printed in order to
+perform the redirect, pass the C<intercept_redirect> parameter as well. The
+C<intercept_redirect> parameter has no effect if no redirect is required, or
+if the C<return_output>/C<return_tt_vars> parameter is omitted.
 
 =cut
 
@@ -904,29 +911,49 @@ sub show_index {
             };
             $tt_vars{not_editable} = 1;
         } else {
-            @selnodes = $wiki->list_nodes_by_metadata(
-                metadata_type  => $args{type},
-                metadata_value => $args{value},
-                ignore_case    => 1
-            );
-            my $name = ucfirst($args{type}) . " $args{value}";
+            return $self->_do_old_style_index_search( %args );
+        }
+    } else {
+        # OK, we either show everything, or do a new-style cat/loc search.
+        my $cat = $args{cat} || "";
+        my $loc = $args{loc} || "";
+        my ( $type, $value );
+        if ( !$cat && !$loc ) {
+            @selnodes = $wiki->list_all_nodes();
+        } else {
+            if ( $cat ) {
+                @selnodes = $wiki->list_nodes_by_metadata(
+                    metadata_type  => "category",
+                    metadata_value => $cat,
+                    ignore_case    => 1
+                );
+                $type = "category";
+                $value = $cat;
+            } else {
+                @selnodes = $wiki->list_nodes_by_metadata(
+                    metadata_type  => "locale",
+                    metadata_value => $loc,
+                    ignore_case    => 1
+                );
+                $type = "locale";
+                $value = $loc;
+            }
+            my $name = ucfirst($type) . " $value";
             my $url = $self->config->script_name
                       . "?"
-                      . ucfirst( $args{type} )
+                      . ucfirst( $type )
                       . "_"
                       . uri_escape(
-                                      $formatter->node_name_to_node_param($args{value})
+                                   $formatter->node_name_to_node_param($value)
                                   );
             $tt_vars{criterion} = {
-                type  => $args{type},
-                value => $args{value}, # for RDF version
+                type  => $type,
+                value => $value, # for RDF version
                 name  => CGI->escapeHTML( $name ),
                 url   => $url
             };
             $tt_vars{not_editable} = 1;
         }
-    } else {
-        @selnodes = $wiki->list_all_nodes();
     }
 
     my @nodes = map {
@@ -1024,10 +1051,15 @@ sub show_index {
             # They really wanted a recent changes style rss/atom feed
             my $feed_type = $args{format};
             my ($feed,$content_type) = $self->get_feed_and_content_type($feed_type);
-            $feed->set_feed_name_and_url_params(
-                        "Index of $args{type} $args{value}",
-                        "action=index;index_type=$args{type};index_value=$args{value}"
-            );
+            my ($name, $params );
+            if ( $args{cat} ) {
+                $name = "Index of Category $args{cat}";
+                $params = "action=index;cat=$args{cat}";
+            } else {
+                $name = "Index of Locale $args{loc}";
+                $params = "action=index;loc=$args{loc}";
+            }
+            $feed->set_feed_name_and_url_params( $name, $params );
 
             # Grab the actual node data out of @nodes
             my @node_data;
@@ -1058,6 +1090,28 @@ sub show_index {
     my $output = $self->process_template( %conf );
     return $output if $args{return_output};
     print $output;
+}
+
+# Deal with legacy URLs/tests.
+sub _do_old_style_index_search {
+    my ( $self, %args ) = @_;
+    if ( ( $args{return_output} || $args{return_tt_vars} ) ) {
+        if ( $args{intercept_redirect} ) {
+            return $self->redirect_index_search( %args );
+        } else {
+            my $type = delete $args{type};
+            my $value = delete $args{value};
+            if ( $type eq "category" ) {
+                return $self->show_index( %args, cat => $value );
+            } elsif ( $type eq "locale" ) {
+                return $self->show_index( %args, loc => $value );
+            } else {
+                return $self->show_index( %args );
+            }
+        }
+    } else {
+        print $self->redirect_index_search( %args );
+    }
 }
 
 =item B<show_metadata>
@@ -2322,6 +2376,29 @@ sub process_template {
         $output_conf{content_type} = $args{content_type};
     }
     return OpenGuides::Template->output( %output_conf );
+}
+
+# Redirection for legacy URLs.
+sub redirect_index_search {
+    my ( $self, %args ) = @_;
+    my $type   = lc( $args{type} ) || "";
+    my $value  = lc( $args{value} ) || "";
+    my $format = lc( $args{format} ) || "";
+
+    my $script_url = $self->config->script_url;
+    my $script_name = $self->config->script_name;
+
+    my $url = "$script_url$script_name?action=index";
+
+    if ( $type eq "category" ) {
+        $url .= ";cat=$value";
+    } elsif ( $type eq "locale" ) {
+        $url .= ";loc=$value";
+    }
+    if ( $format ) {
+        $url .= ";format=$format";
+    }
+    return CGI->redirect( -uri => $url, -status => 301 );
 }
 
 sub redirect_to_node {

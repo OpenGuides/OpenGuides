@@ -85,9 +85,12 @@ eval {
         show_needing_moderation();
     } elsif ($action eq 'index') {
         $guide->show_index(
+                            cat    => $q->param( "cat" ) || "",
+                            loc    => $q->param( "loc" ) || "",
+                            format => $format,
+                            # Next two for backwards compatibility (deprecated)
                             type   => $q->param("index_type") || "Full",
                             value  => $q->param("index_value") || "",
-                            format => $format,
                           );
     } elsif ($action eq 'random') {
         print $guide->display_random_page(

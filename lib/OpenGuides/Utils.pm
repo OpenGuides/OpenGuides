@@ -130,8 +130,9 @@ sub make_wiki_object {
                   if ( UNIVERSAL::isa( $_[0], "Wiki::Toolkit" ) ) {
                       shift; # just throw it away
                   }
+                  my $type = ( lc( $_[0] ) eq "category" ) ? "cat" : "loc";
                   my $link_title = $_[2] || "View all pages in $_[0] $_[1]";
-                  return qq(<a href="$script_name?action=index;index_type=) . uri_escape(lc($_[0])) . qq(;index_value=) . uri_escape($_[1]) . qq(">$link_title</a>);
+                  return qq(<a href="$script_name?action=index;$type=) . uri_escape( lc( $_[1] ) ) . qq(">$link_title</a>);
                 },
         qr/\@INDEX_LIST\s+\[\[(Category|Locale)\s+([^\]]+)]]/ =>
              sub {
@@ -168,9 +169,11 @@ sub make_wiki_object {
                       if ( UNIVERSAL::isa( $_[0], "Wiki::Toolkit" ) ) {
                           shift; # don't need $wiki
                       }
+
+                      my $type = ( lc( $_[0] ) eq "category" ) ? "cat" : "loc";
                       my $link_title = $_[2]
                                        || "View map of pages in $_[0] $_[1]";
-                      return qq(<a href="$script_name?action=index;format=map;index_type=) . uri_escape(lc($_[0])) . qq(;index_value=) . uri_escape($_[1]) . qq(">$link_title</a>);
+                      return qq(<a href="$script_name?action=index;format=map;$type=) . uri_escape( lc( $_[1] ) ) . qq(">$link_title</a>);
                 },
         qr/\@RANDOM_PAGE_LINK(?:\s+\[\[(Category|Locale)\s+([^\]|]+)\|?([^\]]+)?\]\])?/ =>
                 sub {

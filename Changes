@@ -3,6 +3,14 @@
 More detailed changelogs can be found at
 <http://dev.openguides.org/log/trunk>.
 
+0.67    ?
+        action=index now uses a new form of parameters - instead of e.g.
+            action=index;index_type=locale;index_value=holborn
+          you should use
+            action=index;loc=holborn
+          Format params such as format=map work as before.  Old-style URLs
+          will automatically redirect to new-style ones.
+
 0.66    12 April 2012
         All templates now have access to the "username" TT variable.
         Node name parameters in URLs are now accepted with spaces instead of
