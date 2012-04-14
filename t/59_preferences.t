@@ -56,10 +56,10 @@ $config->gmaps_api_key( "" );
 $config->show_gmap_in_node_display( 1 );
 $config->use_leaflet( 1 );
 
-my $cookie = OpenGuides::CGI->make_prefs_cookie(
-                                                 config => $config,
-                                                 display_google_maps => 1,
-                                               );
+$cookie = OpenGuides::CGI->make_prefs_cookie(
+                                              config => $config,
+                                              display_google_maps => 1,
+                                            );
 $ENV{HTTP_COOKIE} = $cookie;
 Test::HTML::Content::tag_ok( get_output($wiki, $config),
   "input", { type => "checkbox", name => "display_google_maps" },
