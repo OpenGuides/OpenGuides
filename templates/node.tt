@@ -71,9 +71,9 @@
 
 <div id="node_title">
 [% IF current %]
-  [% IF backlinks_in_title AND is_indexable_node %]
+  [% IF config.backlinks_in_title AND is_indexable_node %]
     <h2 class="node_name"><a href="[% cgi_url %]?action=index;index_type=[% CGI.escape(index_type) %];index_value=[% CGI.escape(index_value) %]">[% node_name %]</a></h2>
-  [% ELSIF backlinks_in_title %]
+  [% ELSIF config.backlinks_in_title %]
     <h2 class="node_name"><a href="[% cgi_url %]?action=show_backlinks;id=[% CGI.escape(node_name) %]">[% node_name %]</a></h2>
   [% ELSE %]
     <h2 class="node_name">[% node_name %]</h2>
