@@ -1,3 +1,16 @@
+NOTE: as of version 0.67, OpenGuides has switched from the Google Maps API
+to the open source Leaflet mapping library.  Our Google Maps support is
+out of date and no longer maintained.  To ensure you're using the latest
+mapping code, set
+
+  use_leaflet = 1
+
+in your wiki.conf.
+
+The instructions below are retained for the benefit of legacy users.
+
+----------------------------------------------------------------------
+
 As of 0.52, OpenGuides supports Google Maps using the API. The support has a
 few rough edges that still need ironing out, mostly relating to ellipsoids,
 and for that reason they aren't exposed by default.

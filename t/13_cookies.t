@@ -68,7 +68,7 @@ is( $prefs{cookie_expires}, "never", "...and requested cookie expiry" );
 is( $prefs{track_recent_changes_views}, "rc_pref",
                                      "...and recent changes tracking" );
 is( $prefs{display_google_maps}, "gm_pref",
-                                     "...and Google Maps display preference" );
+                                     "...and map display preference" );
 is( $prefs{is_admin}, "admin_pref",
                                      "...and admin preference" );
 # Now make sure that true/false preferences are taken account of when

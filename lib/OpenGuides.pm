@@ -14,7 +14,7 @@ use URI::Escape;
 
 use vars qw( $VERSION );
 
-$VERSION = '0.66';
+$VERSION = '0.67';
 
 =head1 NAME
 
@@ -872,6 +872,14 @@ sub show_backlinks {
                         return_output => 1,
                     );
 
+  # Or return the template variables (again, useful for writing tests).
+  $guide->show_index(
+                        type           => "category",
+                        value          => "pubs",
+                        format         => "map"
+                        return_tt_vars => 1,
+                    );
+
 If either the C<type> or the C<value> parameter is omitted, then all pages
 will be returned.
 
@@ -881,6 +889,7 @@ sub show_index {
     my ($self, %args) = @_;
     my $wiki = $self->wiki;
     my $formatter = $wiki->formatter;
+    my $use_leaflet = $self->config->use_leaflet;
     my %tt_vars;
     my @selnodes;
 
@@ -927,7 +936,9 @@ sub show_index {
                             param     => $formatter->node_name_to_node_param($_) }
                         } sort @selnodes;
 
-    # Convert the lat+long to WGS84 as required
+    # Convert the lat+long to WGS84 as required.  If displaying a map
+    # using Leaflet, also grab the min and max lat and long.
+    my ( $min_lat, $max_lat, $min_long, $max_long );
     for(my $i=0; $i<scalar @nodes;$i++) {
         my $node = $nodes[$i];
         if($node) {
@@ -943,6 +954,28 @@ sub show_index {
 
             push @{$nodes[$i]->{node_data}->{metadata}->{wgs84_long}}, $wgs84_long;
             push @{$nodes[$i]->{node_data}->{metadata}->{wgs84_lat}},  $wgs84_lat;
+            if ( $use_leaflet ) {
+                if ( defined $wgs84_lat && $wgs84_lat =~ /^[-.\d]+$/
+                     && defined $wgs84_long && $wgs84_long =~ /^[-.\d]+$/ ) {
+                    $node->{has_geodata} = 1;
+                    $node->{wgs84_lat} = $wgs84_lat;
+                    $node->{wgs84_long} = $wgs84_long;
+                    if ( !defined $min_lat ) {
+                        $min_lat = $max_lat = $wgs84_lat;
+                    } elsif ( $wgs84_lat < $min_lat ) {
+                        $min_lat = $wgs84_lat;
+                    } elsif ( $wgs84_lat > $max_lat ) {
+                        $max_lat = $wgs84_lat;
+                    }
+                    if ( !defined $min_long ) {
+                        $min_long = $max_long = $wgs84_long;
+                    } elsif ( $wgs84_long < $min_long ) {
+                        $min_long = $wgs84_long;
+                    } elsif ( $wgs84_long > $max_long ) {
+                        $max_long = $wgs84_long;
+                    }
+                }
+            }
         }
     }
 
@@ -961,18 +994,32 @@ sub show_index {
             $template = "plain_index.tt";
             $conf{content_type} = "text/plain";
         } elsif ( $args{format} eq "map" ) {
-            my $q = CGI->new;
-            $tt_vars{zoom} = $q->param('zoom') || '';
-            $tt_vars{lat} = $q->param('lat') || '';
-            $tt_vars{long} = $q->param('long') || '';
-            $tt_vars{map_type} = $q->param('map_type') || '';
-            $tt_vars{centre_long} = $self->config->centre_long;
-            $tt_vars{centre_lat} = $self->config->centre_lat;
-            $tt_vars{default_gmaps_zoom} = $self->config->default_gmaps_zoom;
-            $tt_vars{enable_gmaps} = 1;
             $tt_vars{display_google_maps} = 1; # override for this page
-            $template = "map_index.tt";
-            
+            if ( $use_leaflet ) {
+                if ( defined $min_lat ) {
+                    %tt_vars = ( %tt_vars,
+                        min_lat     => $min_lat,
+                        max_lat     => $max_lat,
+                        min_long    => $min_long,
+                        max_long    => $max_long,
+                        centre_lat  => ( ( $max_lat + $min_lat ) / 2 ),
+                        centre_long => ( ( $max_long + $min_long ) / 2 ),
+                    );
+                }
+                $template = "map_index_leaflet.tt";
+            } else {
+                my $q = CGI->new;
+                $tt_vars{zoom} = $q->param('zoom') || '';
+                $tt_vars{lat} = $q->param('lat') || '';
+                $tt_vars{long} = $q->param('long') || '';
+                $tt_vars{map_type} = $q->param('map_type') || '';
+                $tt_vars{centre_long} = $self->config->centre_long;
+                $tt_vars{centre_lat} = $self->config->centre_lat;
+                $tt_vars{default_gmaps_zoom}
+                                      = $self->config->default_gmaps_zoom;
+                $tt_vars{enable_gmaps} = 1;
+                $template = "map_index.tt";
+            }
         } elsif( $args{format} eq "rss" || $args{format} eq "atom") {
             # They really wanted a recent changes style rss/atom feed
             my $feed_type = $args{format};
@@ -999,6 +1046,8 @@ sub show_index {
     } else {
         $template = "site_index.tt";
     }
+
+    return %tt_vars if $args{return_tt_vars};
 
     %conf = (
                 %conf,

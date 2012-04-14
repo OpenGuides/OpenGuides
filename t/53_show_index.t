@@ -11,10 +11,10 @@ if ( $@ ) {
     plan skip_all => "DBD::SQLite could not be used - no database to test with ($error)";
 }
 
-plan tests => 23; # 25 when all enabled
+plan tests => 27; # 29 when all enabled
 
 # Clear out the database from any previous runs.
-    OpenGuides::Test::refresh_db();
+OpenGuides::Test::refresh_db();
 
 my $config = OpenGuides::Test->make_basic_config;
 $config->script_name( "wiki.cgi" );
@@ -107,8 +107,11 @@ eval {
 };
 
 SKIP: {
-    skip "No Helmert Transform provider installed, can't test geo stuff", 6
+    skip "No Helmert Transform provider installed, can't test geo stuff", 10
       unless $has_helmert;
+
+    # This is testing the legacy stuff.
+    $config->use_leaflet( 0 );
 
     $output = eval {
         $guide->show_index(
@@ -116,14 +119,30 @@ SKIP: {
                             format        => "map",
                           );
     };
-    is( $@, "", "->show_index doesn't die when asked for map" );
+    is( $@, "", "Using GMaps: ->show_index doesn't die when asked for map" );
     like( $output, qr|Content-Type: text/html|,
-          "Map output gets content-type of text/html" );
-    like( $output, qr|new GMap|, "Really is google map" );
+          "...map output gets content-type of text/html" );
+    like( $output, qr|new GMap|, "...really is google map" );
     my @points = ($output =~ /point\d+ = (new GPoint\(.*?, .*?\))/g);
-    is( 1, scalar @points, "Right number of nodes included on map" );
+    is( 1, scalar @points, "...right number of nodes included on map" );
 
     # -1.259687,51.754813
-    like( $points[0], qr|51.75481|, "Has latitude");
-    like( $points[0], qr|-1.25968|, "Has longitude");
+    like( $points[0], qr|51.75481|, "...has latitude");
+    like( $points[0], qr|-1.25968|, "...has longitude");
+
+    # But we don't want the GMaps stuff if we're using Leaflet.
+    $config->use_leaflet( 1 );
+
+    $output = eval {
+        $guide->show_index(
+                            return_output => 1,
+                            format        => "map",
+                          );
+    };
+
+    is( $@, "", "Using Leaflet: ->show_index doesn't die when asked for map" );
+    like( $output, qr|Content-Type: text/html|,
+          "...map output gets content-type of text/html" );
+    unlike( $output, qr|new GMap|, "...no invocation of GMap constructor" );
+    unlike ( $output, qr|new GPoint|, "...nor GPoint" );
 }

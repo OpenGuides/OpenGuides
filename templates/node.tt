@@ -16,21 +16,36 @@
 <div id="redirect_message">(redirected from <a href="[% full_cgi_url %]?id=[% oldid %];redirect=0">[% oldid.replace('_', ' ') %]</a>)</div>
 [% END %]
 
-[% IF wgs84_lat AND wgs84_long AND display_google_maps and gmaps_api_key %]
-  <div id="map" style="float:right; width: 300px; height: 200px"></div>
-  <script defer="defer" type="text/javascript">
-  //<![CDATA[
-    var map = new GMap(document.getElementById("map"));
-    map.addControl(new GSmallMapControl());
-    map.centerAndZoom(new GPoint([% wgs84_long %], [% wgs84_lat %]), 3);
-    var point0 = new GPoint([% wgs84_long %], [% wgs84_lat %]);
-    var marker0 = new GMarker(point0,baseIcon);
-    GEvent.addListener(marker0, "click", function() {
-      marker0.openInfoWindowHtml("[% node_name %]");
-      });
-    map.addOverlay(marker0);
-  //]]>
-  </script>
+[% IF wgs84_lat AND wgs84_long AND display_google_maps %]
+  [% IF config.use_leaflet %]
+    <div id="node_map_canvas" style="float:right; width: 300px; height: 200px"></div>
+    <script type="text/javascript">
+      map_div_id = 'node_map_canvas';
+      centre_lat = [% wgs84_lat %];
+      centre_long = [% wgs84_long %];
+      function add_markers() {
+        var position = new L.LatLng( [% wgs84_lat %], [% wgs84_long %] );
+        marker = new L.Marker( position, { icon: new gicon() } );
+        map.addLayer( marker );
+        marker.bindPopup( '[% node_name %]' );
+      }
+    </script>
+  [% ELSIF gmaps_api_key %]
+    <div id="map" style="float:right; width: 300px; height: 200px"></div>
+    <script defer="defer" type="text/javascript">
+    //<![CDATA[
+      var map = new GMap(document.getElementById("map"));
+      map.addControl(new GSmallMapControl());
+      map.centerAndZoom(new GPoint([% wgs84_long %], [% wgs84_lat %]), 3);
+      var point0 = new GPoint([% wgs84_long %], [% wgs84_lat %]);
+      var marker0 = new GMarker(point0,baseIcon);
+      GEvent.addListener(marker0, "click", function() {
+        marker0.openInfoWindowHtml("[% node_name %]");
+        });
+      map.addOverlay(marker0);
+    //]]>
+    </script>
+  [% END %]
 [% END %]
 
 [% IF node_image %]

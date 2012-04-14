@@ -223,17 +223,37 @@ This refers to turning titles into links which bring up a list of referring
 pages. This was the convention with older wikis ("C2" refers to the original
 wiki at http://c2.com/cgi/wiki), but is not intuitive.
 
+  "Do you want to use the Leaflet mapping library?"
+
+Answer "y" or "n", but "y" is recommended.  In version 0.67 of OpenGuides,
+we switched from using the Google Maps API to the open source Leaflet mapping
+library.  For now, Google Maps support is retained for legacy reasons, but is
+deprecated and will be removed in the future.  We therefore recommend that
+you answer "y" to this question.
+
+  "Would you like to display a map on every node that has geodata?"
+
+Answer "y" or "n".  Note that an answer of "y" will only take effect if you've
+either chosen to use the Leaflet mapping library, or you've supplied a Google
+Maps API key.  Note further that users can choose to turn this off in their
+preferences.
+ 
   "Do you have a Google Maps API key to use with this guide?"
 
-If you want Google Maps integration, you need to register with Google to get
-an API key. Visit http://www.google.com/apis/maps/signup.html and follow the
+As of version 0.67 of OpenGuides, we recommend using the Leaflet mapping
+library instead of Google Maps - our Google Maps support is out of date and
+no longer maintained.  However, if you do want to use Google Maps, you need
+to register with Google to get an API key. Visit
+http://www.google.com/apis/maps/signup.html and follow the
 instructions. Paste the great long string into the console window where you
 are installing. See README.GMAPS for more information.
 
   "What is the longitude of the centre point of a map to draw for your guide?"
   "What is the latitude of the centre point of a map to draw for your guide?"
 
-It's probably a good idea to pick some notionally central point for your
+This is only necessary if you're using Google Maps - our Leaflet code will
+figure this out for you.  If you do choose to use Google Maps, it's probably
+a good idea to pick some notionally central point for your
 guide. For example, Carfax for Oxford, Charing Cross for London. As a
 convenience, you may paste in a Google Maps URL for the centre longitude
 question and the (long,lat) will be parsed out from the URL.
@@ -243,12 +263,6 @@ question and the (long,lat) will be parsed out from the URL.
 
 The defaults are probably appropriate in most cases.
 
-  "Would you like to display a Google Map on every node that has geodata?"
-
-Answer "y" or "n".  Note that an answer of "y" will only take effect if you've
-supplied a Google Maps API key above.  Note further that users can choose to
-turn this off in their preferences.
- 
   "Forcibly treat stored lat/long data as if they used the WGS84 ellipsoid?"
 
 Default this answer if you don't know what it means.
@@ -336,7 +350,7 @@ National Grid, Geo::Coordinates::ITM to use the Irish National
 Grid, and Geo::Coordinates::UTM to use a UTM ellipsoid.
 
 If you want to use a UTM ellipsoid, WGS-84 is the best choice, as it
-will allow you to use the Google Maps support with the minimum of fuss.
+will allow you to use the mapping support with the minimum of fuss.
 
 * Dependency errors
 

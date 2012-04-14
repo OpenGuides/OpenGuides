@@ -46,7 +46,7 @@ EOF
 my %yn_vars = map { $_ => 1 }
    qw(use_plucene enable_page_deletion navbar_on_home_page backlinks_in_title
       moderation_requires_password enable_node_image enable_common_categories
-      enable_common_locales recent_changes_on_home_page
+      enable_common_locales recent_changes_on_home_page use_leaflet
       random_page_omits_locales random_page_omits_categories
       content_above_navbar_in_html show_gmap_in_node_display force_wgs84
       send_moderation_notifications read_only);
@@ -97,6 +97,9 @@ push @answers, { question => $dbtype_qu,
 
 my $install_directory; # used to suggest template paths
 my $use_plucene = 1; # keep track of this so we know what to put in prereqs
+my $use_leaflet; # if true, we skip the GMaps questions
+my %gmaps_vars = map { $_ => 1 } qw( gmaps_api_key centre_long centre_lat
+                                default_gmaps_zoom default_gmaps_search_zoom );
 my $centre_lat = ''; # contains centre lat derived from Google Maps URL
 foreach my $var ( qw(
    dbname dbuser dbpass dbhost dbport script_name
@@ -106,8 +109,8 @@ foreach my $var ( qw(
    recent_changes_on_home_page random_page_omits_locales
    random_page_omits_categories content_above_navbar_in_html home_name
    site_desc default_city default_country contact_email default_language
-   formatting_rules_node backlinks_in_title gmaps_api_key centre_long
-   centre_lat show_gmap_in_node_display default_gmaps_zoom
+   formatting_rules_node backlinks_in_title use_leaflet gmaps_api_key
+   centre_long centre_lat show_gmap_in_node_display default_gmaps_zoom
    default_gmaps_search_zoom force_wgs84 google_analytics_key
    licence_name licence_url licence_info_url moderation_requires_password
    enable_node_image enable_common_categories enable_common_locales
@@ -145,6 +148,15 @@ foreach my $var ( qw(
         push @answers, { question => $qu,
                          variable => $var,
                          value => 1 };
+        next;
+    }
+
+    # If we're using Leaflet, we can skip the GMaps stuff.  Don't erase any
+    # previous answers from their config file though.
+    if ( $use_leaflet && $gmaps_vars{$var} ) {
+        push @answers, { question => $qu,
+                         variable => $var,
+                         value => $val };
         next;
     }
 
@@ -196,6 +208,10 @@ foreach my $var ( qw(
     # Keep track of chosen search method so we know what to put in prereqs.
     # From Module::Build docs: ->y_n returns a Perl boolean true or false.
     $use_plucene = 1 if $var eq "use_plucene" and $val;
+
+    # If they've just chosen to use Leaflet, we won't need to ask any of the
+    # GMaps questions.
+    $use_leaflet = 1 if $var eq "use_leaflet" and $val;
 
     # Make sure that script_url ends in a /
     if ( $var eq "script_url" and $val !~ /\/$/ ) {
@@ -366,6 +382,7 @@ $build->config_data( __templates     => [
                       "header.tt",
                       "home_node.tt",
                       "map_index.tt",
+                      "map_index_leaflet.tt",
                       "missing_metadata.tt",
                       "moderate_confirm.tt",
                       "moderate_password_wrong.tt",
@@ -402,7 +419,7 @@ $build->config_data( __templates     => [
     ] );
 
 $build->config_data( __static_files => [
-    # XXX to be supplied when we have some
+        "map-leaflet.js",
     ] );
 
 # Finally write the build script.

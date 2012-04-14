@@ -1,0 +1,57 @@
+[% INCLUDE header.tt page_title = criterion.name || "Map of all nodes" %]
+[% INCLUDE banner.tt %]
+<div id="content">
+
+  <div id="maincontent">
+
+    <div id="map_index_node_list" style="height:400px; overflow:auto;float:right; width:30%">
+      <ul>
+        [% i = 0 %]
+        [% FOREACH node = nodes %]
+          [% i = i + 1 %]
+          <li>
+            [% IF node.has_geodata %]
+              <a href="#" onclick="return show_marker( [% i %] )">[% node.name | html %]</a>
+            [% ELSE %]
+              [% node.name | html %] (not on map &#8212;
+                <a href="?[% node.param %]">view info</a>)
+            [% END %]
+          </li>
+        [% END %]
+      </ul>
+    </div>
+
+    <div id="map_index_canvas" style="width:60%; height:450px"></div>
+
+    <script type="text/javascript">
+
+      map_div_id = 'map_index_canvas';
+      centre_lat = [% centre_lat %];
+      centre_long = [% centre_long %];
+
+      function add_markers() {
+        var node;
+        [% i = 0 %]
+        [% FOREACH node = nodes %]
+          [% i = i + 1 %]
+          [% IF node.has_geodata %]
+            node = {
+              name: '[% node.name | html %]',
+              param: '[% node.param %]',
+              [% address = node.node_data.metadata.address.list.first %]
+              [% IF address %]
+                address: '[% address | html %]',
+              [% END %]
+              lat: [% node.wgs84_lat %],
+              long: [% node.wgs84_long %],
+            };
+            add_marker( [% i %], node );
+          [% END %]
+        [% END %]
+      }
+    </script>
+
+  </div>
+</div>
+
+[% INCLUDE footer.tt %]
