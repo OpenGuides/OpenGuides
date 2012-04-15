@@ -10,6 +10,7 @@ More detailed changelogs can be found at
             action=index;loc=holborn
           Format params such as format=map work as before.  Old-style URLs
           will automatically redirect to new-style ones.
+	Added project metadata to Build.PL (#285).
 
 0.66    12 April 2012
         All templates now have access to the "username" TT variable.
