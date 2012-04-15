@@ -349,6 +349,18 @@ my $build = OpenGuides::Build->new(
         'Test::Pod'                           => 0,
 
     },
+  meta_merge     => {
+    resources => {
+      MailingList => 'openguides-dev@lists.openguides.org',
+      homepage => 'http://openguides.org',
+      bugtracker => 'http://dev.openguides.org',
+      repository  => {
+        url  => 'https://urchin.earth.li/svn/openguides',
+        web  => 'http://dev.openguides.org/browser',
+        type => 'svn',
+    },
+    }
+  },
     dynamic_config => 1,
     create_makefile_pl => "passthrough"
 );
