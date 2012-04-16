@@ -1052,6 +1052,8 @@ sub show_index {
                         centre_lat  => ( ( $max_lat + $min_lat ) / 2 ),
                         centre_long => ( ( $max_long + $min_long ) / 2 ),
                     );
+                } else {
+                    $tt_vars{no_nodes_on_map} = 1;
                 }
                 $template = "map_index_leaflet.tt";
             } else {

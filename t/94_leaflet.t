@@ -11,7 +11,7 @@ if ( $@ ) {
         "DBD::SQLite could not be used - no database to test with. ($error)";
 }
 
-plan tests => 18;
+plan tests => 21;
 
 my $config = OpenGuides::Test->make_basic_config;
 $config->static_url( "http://example.com/static" );
@@ -149,3 +149,15 @@ ok( $node_hash{"Zero Lat"}{has_geodata},
     "Nodes with zero latitude have has_geodata set." );
 ok( $node_hash{"Zero Long"}{has_geodata},
     "Nodes with zero longitude have has_geodata set." );
+
+# Map shouldn't be displayed if none of the nodes have geodata.
+%tt_vars = $guide->show_index( type => "locale", value => "Addiscombe",
+                               format => "map", return_tt_vars => 1 );
+ok( $tt_vars{no_nodes_on_map},
+    "no_nodes_on_map template variable is set when no nodes have geodata" );
+$output = $guide->show_index( type => "locale", value => "Addiscombe",
+                              format => "map", return_output => 1 );
+unlike( $output, qr/not on map/,
+        "...and no warning about individual things not being on the map" );
+unlike( $output, qr/centre_lat/,
+        "...and no attempt to set centre_lat JavaScript variable" );
