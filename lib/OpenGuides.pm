@@ -851,6 +851,12 @@ sub show_backlinks {
                         cat => "pubs",
                     );
 
+  # Show all pubs in Holborn.
+  $guide->show_index(
+                        cat => "pubs",
+                        loc => "holborn",
+                    );
+
   # RDF version of things in Locale: Holborn.
   $guide->show_index(
                         loc  => "Holborn",
@@ -917,41 +923,55 @@ sub show_index {
         # OK, we either show everything, or do a new-style cat/loc search.
         my $cat = $args{cat} || "";
         my $loc = $args{loc} || "";
-        my ( $type, $value );
+        my ( $type, $value, @names, @criteria );
         if ( !$cat && !$loc ) {
             @selnodes = $wiki->list_all_nodes();
         } else {
+            my ( @catnodes, @locnodes );
             if ( $cat ) {
-                @selnodes = $wiki->list_nodes_by_metadata(
+                @catnodes = $wiki->list_nodes_by_metadata(
                     metadata_type  => "category",
                     metadata_value => $cat,
                     ignore_case    => 1
                 );
-                $type = "category";
-                $value = $cat;
-            } else {
-                @selnodes = $wiki->list_nodes_by_metadata(
+                my $name = "Category " . ucfirst( $cat );
+                push @criteria, {
+                    type  => "category",
+                    value => $cat,
+                    name  => $name,
+                    param => $formatter->node_name_to_node_param( $name ),
+                };
+                push @names, $name;
+            }
+            if ( $loc ) {
+                @locnodes = $wiki->list_nodes_by_metadata(
                     metadata_type  => "locale",
                     metadata_value => $loc,
                     ignore_case    => 1
                 );
-                $type = "locale";
-                $value = $loc;
+                my $name = "Locale " . ucfirst( $loc );
+                push @criteria, {
+                    type  => "locale",
+                    value => $loc,
+                    name  => $name,
+                    param => $formatter->node_name_to_node_param( $name ),
+                };
+                push @names, $name;
             }
-            my $name = ucfirst($type) . " $value";
-            my $url = $self->config->script_name
-                      . "?"
-                      . ucfirst( $type )
-                      . "_"
-                      . uri_escape(
-                                   $formatter->node_name_to_node_param($value)
-                                  );
-            $tt_vars{criterion} = {
-                type  => $type,
-                value => $value, # for RDF version
-                name  => CGI->escapeHTML( $name ),
-                url   => $url
-            };
+            if ( $cat && !$loc ) {
+                @selnodes = @catnodes;
+            } elsif ( $loc && !$cat ) {
+                @selnodes = @locnodes;
+            } else {
+                # Intersect the category and locale results.
+                my %count = ();
+                foreach my $node ( @catnodes, @locnodes ) { $count{$node}++; }
+                foreach my $node ( keys %count ) {
+                    push @selnodes, $node if $count{$node} > 1;
+                }
+            }
+            $tt_vars{criteria_title} = join( " and ", @names );
+            $tt_vars{criteria} = \@criteria;
             $tt_vars{not_editable} = 1;
         }
     }

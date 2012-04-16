@@ -1,8 +1,21 @@
-[% INCLUDE header.tt page_title = criterion.name || "Map of all nodes" %]
+[% page_title = "Map of $criteria_title - $site_name" %]
+[% INCLUDE header.tt %]
 [% INCLUDE banner.tt %]
 <div id="content">
 
   <div id="maincontent">
+
+  <h2>Map of
+      [% IF criteria %]
+        [% links = [] %]
+        [% FOREACH criterion = criteria %]
+          [% links.push( '<a href="' _ cgi_url _ '?' _ criterion.param _ '">' _ criterion.name _ '</a>' ) %]
+        [% END %]
+        [% links.join( ' and ' ) %]
+      [% ELSE %]
+        all nodes
+      [% END %]
+  </h2>
 
     <div id="map_index_node_list" style="height:400px; overflow:auto;float:right; width:30%">
       <ul>

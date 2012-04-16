@@ -10,8 +10,8 @@
 >
 
 <rdf:Description rdf:about="">
-[% IF criterion %]
-  <dc:title>[% CGI.escapeHTML(criterion.name) %]</dc:title>
+[% IF criteria_title %]
+  <dc:title>[% CGI.escapeHTML( criteria_title ) %]</dc:title>
 [% ELSE %]
   <dc:title>RDF index</dc:title>
 [% END %]

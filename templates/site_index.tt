@@ -1,13 +1,17 @@
-[% IF criterion %]
-  [% IF criterion.type == 'category' %]
-    [% my_params = ';cat=' _ criterion.value.lower %]
-  [% ELSIF criterion.type == 'locale' %]
-    [% my_params = ';loc=' _ criterion.value.lower %]
-  [% END %]
+[% my_feed_base = cgi_url _ '?action=index' %]
 
+[% FOREACH criterion = criteria %]
+  [% IF criterion.type == 'category' %]
+    [% my_feed_base = my_feed_base _ ';cat=' _ criterion.value.lower %]
+  [% ELSIF criterion.type == 'locale' %]
+    [% my_feed_base = my_feed_base _ ';loc=' _ criterion.value.lower %]
+  [% END %]
+[% END %]
+
+[% IF criteria %]
   [% INCLUDE header.tt 
-      page_title = "Index of $criterion.name - $site_name"
-      feed_base = "$cgi_url?action=index" _ my_params
+      page_title = "Index of $criteria_title - $site_name"
+      feed_base = my_feed_base
    %]
 [% ELSE %]
   [% INCLUDE header.tt page_title = "Things within $limit of $origin - $site_name" %]
@@ -17,13 +21,13 @@
 [% INCLUDE navbar.tt %]
 <div id="maincontent">
 <h2>Node List
-  [%- IF criterion -%]
-    [%- IF criterion.url -%]
-      - <a href="[% criterion.url %]">[%- criterion.name -%]</a>
-    [%- ELSE -%]
-      - [%- criterion.name -%]
-    [%- END -%]
-  [%- END -%]
+  [% IF criteria %]
+    [% links = [] %]
+    [% FOREACH criterion = criteria %]
+      [% links.push( '<a href="' _ cgi_url _ '?' _ criterion.param _ '">' _ criterion.name _ '</a>' ) %]
+    [% END %]
+    - [% links.join( ' and ' ) %]
+  [% END %]
   [%- IF origin -%]
     - Things within [%- limit -%] of <a href="[% cgi_url %]?[%- origin_param -%]">[%- origin -%]</a>
   [%- END -%]
@@ -37,15 +41,14 @@
 </ol>
 </div>
 
-[%# my_params is set at the top of this file %]
+[%# my_feed_base is set at the top of this file %]
 <p>
   This list is available as
-  <a href="[% cgi_url %]?action=index[% my_params %];format=rdf">rdf</a>,
+  <a href="[% my_feed_base %];format=rdf">rdf</a>,
   or as a
-  <a href="[% cgi_url %]?action=index[% my_params %];format=rss">rss feed</a>,
+  <a href="[% my_feed_base %];format=rss">rss feed</a>,
   or as an
-  <a href="[% cgi_url %]?action=index[% my_params %];format=atom">atom
-  feed</a>.
+  <a href="[% my_feed_base %];format=atom">atom feed</a>.
 </p>
 
 [% INCLUDE footer.tt %]
