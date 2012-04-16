@@ -1,0 +1,17 @@
+div#map_index_node_list {
+  height: 400px;
+  overflow: auto;
+  float: right;
+  width: 30%;
+}
+
+div#map_index_canvas {
+  width: 60%;
+  height: 450px;
+}
+
+div#node_map_canvas {
+  float: right;
+  width: 300px;
+  height: 200px;
+}

@@ -18,7 +18,7 @@
 
 [% IF wgs84_lat AND wgs84_long AND display_google_maps %]
   [% IF config.use_leaflet %]
-    <div id="node_map_canvas" style="float:right; width: 300px; height: 200px"></div>
+    <div id="node_map_canvas"></div>
     <script type="text/javascript">
       map_div_id = 'node_map_canvas';
       centre_lat = [% wgs84_lat %];

@@ -432,6 +432,7 @@ $build->config_data( __templates     => [
 
 $build->config_data( __static_files => [
         "map-leaflet.js",
+        "openguides-base.css",
     ] );
 
 # Finally write the build script.

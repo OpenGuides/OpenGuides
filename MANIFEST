@@ -28,6 +28,7 @@ newpage.cgi
 preferences.cgi
 search.cgi
 static/map-leaflet.js
+static/openguides-base.js
 templates/admin_home.tt
 templates/admin_revert_user.tt
 templates/autocreate_content.tt

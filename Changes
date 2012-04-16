@@ -5,9 +5,11 @@ More detailed changelogs can be found at
 
 0.67    ?
         Switched from the Google Maps API to the Leaflet mapping library.
-          To make this work, set use_leaflet = 1 in your wiki.conf.  Google
-          Maps support is retained for those who fear change, but is no longer
-          actively maintained.
+          To make this work, set use_leaflet = 1 in your wiki.conf, and ensure
+          that div#map_index_canvas is given a non-zero height in your
+          stylesheet (you may also want to style div#map_index_node_list and
+          div#node_map_canvas).  Google Maps support is retained for those
+          who fear change, but is no longer actively maintained.
         Added support for indexing on category and locale at the same time.
           As part of this, action=index now uses a new form of parameters, so
           instead of e.g.
@@ -19,6 +21,7 @@ More detailed changelogs can be found at
           Format params such as format=map work as before.  Old-style URLs
           will automatically redirect to new-style ones.
 	Added project metadata to Build.PL (#285).
+        Added a basic stylesheet, installed into the static_path directory.
 
 0.66    12 April 2012
         All templates now have access to the "username" TT variable.
