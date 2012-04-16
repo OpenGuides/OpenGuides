@@ -4,6 +4,10 @@ More detailed changelogs can be found at
 <http://dev.openguides.org/log/trunk>.
 
 0.67    ?
+        Switched from the Google Maps API to the Leaflet mapping library.
+          To make this work, set use_leaflet = 1 in your wiki.conf.  Google
+          Maps support is retained for those who fear change, but is no longer
+          actively maintained.
         Added support for indexing on category and locale at the same time.
           As part of this, action=index now uses a new form of parameters, so
           instead of e.g.
