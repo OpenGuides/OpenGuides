@@ -41,7 +41,7 @@ function add_marker( i, node ) {
   marker = new L.Marker( position, { icon: new gicon() } );
   map.addLayer( marker );
 
-  content = node.name;
+  content = '<a href="?' + node.param + '">' + node.name + '</a><br />' + node.address;
   marker.bindPopup( content );
 
   markers[ i ] = marker;
