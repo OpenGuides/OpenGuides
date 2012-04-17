@@ -20,16 +20,17 @@
 <div id="content">
 [% INCLUDE navbar.tt %]
 <div id="maincontent">
-<h2>Node List
+<h2>Index of
   [% IF criteria %]
     [% links = [] %]
     [% FOREACH criterion = criteria %]
       [% links.push( '<a href="' _ cgi_url _ '?' _ criterion.param _ '">' _ criterion.name _ '</a>' ) %]
     [% END %]
-    - [% links.join( ' and ' ) %]
-  [% END %]
-  [%- IF origin -%]
-    - Things within [%- limit -%] of <a href="[% cgi_url %]?[%- origin_param -%]">[%- origin -%]</a>
+    [% links.join( ' and ' ) %]
+  [% ELSIF origin -%]
+    things within [%- limit -%] of <a href="[% cgi_url %]?[%- origin_param -%]">[%- origin -%]</a>
+  [% ELSE %]
+    everything on this guide
   [%- END -%]
 </h2>
 <ol>
@@ -41,14 +42,16 @@
 </ol>
 </div>
 
-[%# my_feed_base is set at the top of this file %]
-<p>
-  This list is available as
-  <a href="[% my_feed_base %];format=rdf">rdf</a>,
-  or as a
-  <a href="[% my_feed_base %];format=rss">rss feed</a>,
-  or as an
-  <a href="[% my_feed_base %];format=atom">atom feed</a>.
-</p>
+<div id="site_index_feeds">
+  [%# my_feed_base is set at the top of this file %]
+  <p>
+    This list is available as
+    <a href="[% my_feed_base %];format=rdf">rdf</a>,
+    or as a
+    <a href="[% my_feed_base %];format=rss">rss feed</a>,
+    or as an
+    <a href="[% my_feed_base %];format=atom">atom feed</a>.
+  </p>
+</div>
 
 [% INCLUDE footer.tt %]

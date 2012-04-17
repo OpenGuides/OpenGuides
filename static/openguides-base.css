@@ -1,12 +1,51 @@
+body {
+  background-color: #bfabd3;
+}
+
+div#body_wrapper {
+  background: #ebc0fb;
+  margin-left: 5%;
+  margin-right: 5%;
+  margin-top: 1.5em;
+  border: thin solid black;
+}
+
+div#banner {
+  padding: 0.1em 1em 0.1em 1em;
+  border-bottom: thin solid black;
+}
+
+div#banner a {
+  text-decoration: none;
+  color: #000000;
+}
+
+div#summary {
+  display: none;
+}
+
+div#maincontent {
+  float: left;
+  width: 77%;
+}
+
+div#content {
+  padding-left: 1em;
+}
+
+div#recent_changes_feeds, div#site_index_feeds {
+  clear: both;
+}
+
 div#map_index_node_list {
-  height: 400px;
+  height: 450px;
   overflow: auto;
   float: right;
-  width: 30%;
+  width: 20%;
 }
 
 div#map_index_canvas {
-  width: 60%;
+  width: 75%;
   height: 450px;
 }
 
@@ -14,4 +53,22 @@ div#node_map_canvas {
   float: right;
   width: 300px;
   height: 200px;
+  border: thin solid black;
+  margin-top: 1em;
+}
+
+div#navbar {
+  border-left: thin solid black;
+  border-bottom: thin solid black;
+  padding: 1em;
+  float: right;
+  width: 18%;
+}
+
+div.navbar_site_name {
+  display: none;
+}
+
+.hidden {
+  display: none;
 }

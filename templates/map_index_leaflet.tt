@@ -1,11 +1,13 @@
 [% page_title = "Map of $criteria_title - $site_name" %]
 [% INCLUDE header.tt %]
 [% INCLUDE banner.tt %]
+
+[%# NOTE: the "content" div is closed off in footer.tt %]
 <div id="content">
 
-  <div id="maincontent">
+  <div id="maincontent_no_navbar">
 
-  <h2>Map of
+    <h2>Map of
       [% IF criteria %]
         [% links = [] %]
         [% FOREACH criterion = criteria %]
@@ -15,7 +17,7 @@
       [% ELSE %]
         all nodes
       [% END %]
-  </h2>
+    </h2>
 
     <div id="map_index_node_list">
       <ul>
@@ -76,6 +78,5 @@
     </div>
 
   </div>
-</div>
 
 [% INCLUDE footer.tt %]
