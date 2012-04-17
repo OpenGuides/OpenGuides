@@ -28,7 +28,7 @@ newpage.cgi
 preferences.cgi
 search.cgi
 static/map-leaflet.js
-static/openguides-base.js
+static/openguides-base.css
 templates/admin_home.tt
 templates/admin_revert_user.tt
 templates/autocreate_content.tt
@@ -159,6 +159,8 @@ t/83_show_delete_to_admins_only.t
 t/84_navbar_admin.t
 t/85_universal_edit_link.t
 t/86_recent_changes.t
+t/87_more_recent_changes.t
+t/88_recent_changes_overtime.t
 t/90_css_category_locale_classes.t
 t/91_username_in_templates.t
 t/92_node_name_from_cgi_obj.t
