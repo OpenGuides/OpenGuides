@@ -167,7 +167,7 @@ sub _init {
         enable_page_deletion => "Do you want to enable page deletion?",
         moderation_requires_password => "Is the admin password required for moderating pages?",
         admin_pass => "Please specify a password for the site admin.",
-        stylesheet_url => "What's the URL of the site's stylesheet?",
+        stylesheet_url => "What's the URL of the site's stylesheet?  If you don't enter one here, the basic OpenGuides stylesheet will be used instead.",
         enable_node_image => "Should nodes be allowed to have an externally hosted image?",
         enable_common_categories => "Do you want a common list of categories shown on all node pages?",
         enable_common_locales => "Do you want a common list of locales shown on all node pages?",

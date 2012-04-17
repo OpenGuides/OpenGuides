@@ -154,6 +154,7 @@ t/77_send_email.t
 t/78_about.t
 t/79_host_blacklist.t
 t/81_node_moderate_whitelist.t
+t/82_stylesheet.t
 t/83_show_delete_to_admins_only.t
 t/84_navbar_admin.t
 t/85_universal_edit_link.t

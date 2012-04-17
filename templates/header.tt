@@ -29,6 +29,8 @@ locales.size > 0 %][% FOREACH locale = locales %][% locale.name %][%-
 
   [% IF stylesheet %]
     <link rel="stylesheet" href="[% stylesheet %]" type="text/css" title="Stylesheet for [% site_name %]" />
+  [% ELSE %]
+    <link rel="stylesheet" href="[% config.static_url %]openguides-base.css" type="text/css" title="Basic OpenGuides stylesheet" />
   [% END %]
   [% IF config.use_leaflet %]
     <link rel="stylesheet" href="http://code.leafletjs.com/leaflet-0.3.1/leaflet.css" />
