@@ -5,13 +5,15 @@ use OpenGuides::Test;
 use Test::More;
 
 eval { require DBD::SQLite; };
-
 if ( $@ ) {
     my ($error) = $@ =~ /^(.*?)\n/;
     plan skip_all => "DBD::SQLite could not be used - no database to test with ($error)";
 }
 
-plan tests => 42;
+eval { require Test::HTML::Content; };
+my $thc = $@ ? 0 : 1;
+
+plan tests => 44;
 
 # Clear out the database from any previous runs.
 OpenGuides::Test::refresh_db();
@@ -80,6 +82,15 @@ like( $footer, qr|action=index;cat=alpha;format=rss|,
       "RSS link correct in footer" );
 like( $footer, qr|action=index;cat=alpha;format=atom|,
       "Atom link correct in footer" );
+
+# When using leaflet, test link to map version in body.
+SKIP: {
+    skip "Test::HTML::Content not available", 1 unless $thc;
+    $config->use_leaflet( 1 );
+    Test::HTML::Content::link_ok( $output,
+        "http://example.com/wiki.cgi?action=index;cat=alpha;format=map",
+        "We have a link to the map version" );
+}
 
 # Test the RDF version
 $output = $guide->show_index(
@@ -191,3 +202,10 @@ like( $output,
 like( $output,
       qr|<link rel="alternate[^>]*action=index;loc=assam;format=atom|,
       "Atom link correct in header" );
+
+SKIP: {
+    skip "Test::HTML::Content not available", 1 unless $thc;
+    Test::HTML::Content::link_ok( $output,
+        "http://example.com/wiki.cgi?action=index;loc=assam",
+        "We have a link to the non-map version" );
+}

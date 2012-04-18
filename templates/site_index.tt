@@ -21,6 +21,7 @@
   [% ELSE %]
     everything on this guide
   [%- END -%]
+  (<a href="[% feed_base %];format=map">view on a map</a>)
 </h2>
 <ol>
   [% FOREACH node = nodes %]

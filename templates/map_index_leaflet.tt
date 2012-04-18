@@ -17,6 +17,7 @@
       [% ELSE %]
         all nodes
       [% END %]
+      (<a href="[% feed_base %]">view as a list</a>)
     </h2>
 
     <div id="map_index_node_list">
