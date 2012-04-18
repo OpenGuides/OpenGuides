@@ -1,4 +1,5 @@
 use strict;
+use JSON;
 use OpenGuides;
 use OpenGuides::CGI;
 use OpenGuides::Test;
@@ -16,7 +17,7 @@ if ( $@ ) {
     plan skip_all => "Test::HTML::Content not available.";
 }
 
-plan tests => 15;
+plan tests => 18;
 
 my $config = OpenGuides::Test->make_basic_config;
 my $guide = OpenGuides->new( config => $config );
@@ -105,3 +106,16 @@ like( $output,
       qr|<dc:title>Category Pubs and Locale Waddon</dc:title>|,
       "Page title is correct on RDF version." );
 
+# Test the JSON version.
+$output = $guide->show_index( cat => "pubs", loc => "waddon", format => "json",
+                              return_output => 1 );
+unlike( $output, qr/error/i, "JSON format invocation doesn't cause error." );
+
+# Need to strip out the Content-Type: header or the decoder gets confused.
+$output =~ s/^Content-Type:.*\n//s;
+my $parsed = eval {
+    local $SIG{__WARN__} = sub { die $_[0]; };
+    decode_json( $output );
+};
+ok( !$@, "...and its output looks like JSON." );
+is( scalar @$parsed, 1, "...and has the right number of nodes." );

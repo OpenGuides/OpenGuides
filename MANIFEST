@@ -45,6 +45,7 @@ templates/edit_form_actions.tt
 templates/error.tt
 templates/footer.tt
 templates/header.tt
+templates/json_index.tt
 templates/home_node.tt
 templates/map_index.tt
 templates/map_index_leaflet.tt

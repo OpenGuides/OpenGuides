@@ -22,6 +22,8 @@ More detailed changelogs can be found at
           will automatically redirect to new-style ones.
 	Added project metadata to Build.PL (#285).
         Added a basic stylesheet, installed into the static_path directory.
+        Fixed the JSON output for action=index (using a new dependency on
+          Template::Plugin::JSON).
 
 0.66    12 April 2012
         All templates now have access to the "username" TT variable.

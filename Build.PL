@@ -314,12 +314,14 @@ my $build = OpenGuides::Build->new(
         'File::Spec::Functions'               => 0,
         'File::Temp'                          => 0,
         'HTML::Entities'                      => 0,
+        'JSON'                                => 0, # W::T::P::JSON uses anyway
         'LWP::Simple'                         => 0,
         'MIME::Lite'                          => 0,
         'Parse::RecDescent'                   => 0,
         $search_module                        => 0,
         'POSIX'                               => 0,
         'Template'                            => '2.24', # for .lower vmethod
+        'Template::Plugin::JSON'              => 0,
         'Time::Piece'                         => 0,
         'URI::Escape'                         => 0,
         'XML::RSS'                            => 0,
@@ -386,6 +388,7 @@ $build->config_data( __templates     => [
                       "delete_password_wrong.tt",
                       "differences.tt",
                       "display_metadata.tt",
+                      "json_index.tt",
                       "metadata.tt",
                       "edit_form.tt",
                       "edit_form_actions.tt",
