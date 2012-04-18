@@ -142,7 +142,7 @@ eval {
 };
 
 SKIP: {
-    skip "No Helmert Transform provider installed, can't test geo stuff", 12
+    skip "No Helmert Transform provider installed, can't test geo stuff", 6
       unless $has_helmert;
 
     # This is testing the legacy stuff.
@@ -165,29 +165,29 @@ SKIP: {
     # -1.259687,51.754813
     like( $points[0], qr|51.75481|, "...has latitude");
     like( $points[0], qr|-1.25968|, "...has longitude");
-
-    # But we don't want the GMaps stuff if we're using Leaflet.
-    $config->use_leaflet( 1 );
-
-    $output = eval {
-        $guide->show_index(
-                            return_output => 1,
-                            loc           => "assam",
-                            format        => "map",
-                          );
-    };
-
-    is( $@, "", "Using Leaflet: ->show_index doesn't die when asked for map" );
-    like( $output, qr|Content-Type: text/html|,
-          "...map output gets content-type of text/html" );
-    unlike( $output, qr|new GMap|, "...no invocation of GMap constructor" );
-    unlike ( $output, qr|new GPoint|, "...nor GPoint" );
-
-    # Test links in the header (only implemented for Leaflet).
-    like( $output,
-          qr|<link rel="alternate[^>]*action=index;loc=assam;format=rss|,
-          "RSS link correct in header" );
-    like( $output,
-          qr|<link rel="alternate[^>]*action=index;loc=assam;format=atom|,
-          "Atom link correct in header" );
 }
+
+# But we don't want the GMaps stuff if we're using Leaflet.
+$config->use_leaflet( 1 );
+
+$output = eval {
+    $guide->show_index(
+                        return_output => 1,
+                        loc           => "assam",
+                        format        => "map",
+                      );
+};
+
+is( $@, "", "Using Leaflet: ->show_index doesn't die when asked for map" );
+like( $output, qr|Content-Type: text/html|,
+      "...map output gets content-type of text/html" );
+unlike( $output, qr|new GMap|, "...no invocation of GMap constructor" );
+unlike ( $output, qr|new GPoint|, "...nor GPoint" );
+
+# Test links in the header (only implemented for Leaflet).
+like( $output,
+      qr|<link rel="alternate[^>]*action=index;loc=assam;format=rss|,
+      "RSS link correct in header" );
+like( $output,
+      qr|<link rel="alternate[^>]*action=index;loc=assam;format=atom|,
+      "Atom link correct in header" );
