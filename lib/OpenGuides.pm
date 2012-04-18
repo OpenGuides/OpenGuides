@@ -974,6 +974,16 @@ sub show_index {
             $tt_vars{criteria} = \@criteria;
             $tt_vars{not_editable} = 1;
         }
+        my $feed_base = $self->config->script_url
+                        . $self->config->script_name . "?action=index";
+        foreach my $criterion ( @criteria ) {
+            if ( $criterion->{type} eq "category" ) {
+              $feed_base .= ";cat=" . lc( $criterion->{value} );
+            } elsif ( $criterion->{type} eq "locale" ) {
+              $feed_base .= ";loc=" . lc( $criterion->{value} );
+            }
+        }
+        $tt_vars{feed_base} = $feed_base;
     }
 
     my @nodes = map {

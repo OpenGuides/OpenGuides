@@ -1,17 +1,6 @@
-[% my_feed_base = cgi_url _ '?action=index' %]
-
-[% FOREACH criterion = criteria %]
-  [% IF criterion.type == 'category' %]
-    [% my_feed_base = my_feed_base _ ';cat=' _ criterion.value.lower %]
-  [% ELSIF criterion.type == 'locale' %]
-    [% my_feed_base = my_feed_base _ ';loc=' _ criterion.value.lower %]
-  [% END %]
-[% END %]
-
 [% IF criteria %]
   [% INCLUDE header.tt 
       page_title = "Index of $criteria_title - $site_name"
-      feed_base = my_feed_base
    %]
 [% ELSE %]
   [% INCLUDE header.tt page_title = "Things within $limit of $origin - $site_name" %]
@@ -43,14 +32,13 @@
 </div>
 
 <div id="site_index_feeds">
-  [%# my_feed_base is set at the top of this file %]
   <p>
     This list is available as
-    <a href="[% my_feed_base %];format=rdf">rdf</a>,
+    <a href="[% feed_base %];format=rdf">rdf</a>,
     or as a
-    <a href="[% my_feed_base %];format=rss">rss feed</a>,
+    <a href="[% feed_base %];format=rss">rss feed</a>,
     or as an
-    <a href="[% my_feed_base %];format=atom">atom feed</a>.
+    <a href="[% feed_base %];format=atom">atom feed</a>.
   </p>
 </div>
 

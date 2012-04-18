@@ -11,7 +11,7 @@ if ( $@ ) {
     plan skip_all => "DBD::SQLite could not be used - no database to test with ($error)";
 }
 
-plan tests => 40;
+plan tests => 42;
 
 # Clear out the database from any previous runs.
 OpenGuides::Test::refresh_db();
@@ -172,6 +172,7 @@ SKIP: {
     $output = eval {
         $guide->show_index(
                             return_output => 1,
+                            loc           => "assam",
                             format        => "map",
                           );
     };
@@ -181,4 +182,12 @@ SKIP: {
           "...map output gets content-type of text/html" );
     unlike( $output, qr|new GMap|, "...no invocation of GMap constructor" );
     unlike ( $output, qr|new GPoint|, "...nor GPoint" );
+
+    # Test links in the header (only implemented for Leaflet).
+    like( $output,
+          qr|<link rel="alternate[^>]*action=index;loc=assam;format=rss|,
+          "RSS link correct in header" );
+    like( $output,
+          qr|<link rel="alternate[^>]*action=index;loc=assam;format=atom|,
+          "Atom link correct in header" );
 }
