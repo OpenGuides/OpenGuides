@@ -20,6 +20,8 @@
       (<a href="[% feed_base %]">view as a list</a>)
     </h2>
 
+    [% INCLUDE index_form.tt %]
+
     <div id="map_index_node_list">
       <ul>
         [% IF no_nodes_on_map %]

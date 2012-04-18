@@ -396,6 +396,7 @@ $build->config_data( __templates     => [
                       "footer.tt",
                       "header.tt",
                       "home_node.tt",
+                      "index_form.tt",
                       "map_index.tt",
                       "map_index_leaflet.tt",
                       "missing_metadata.tt",

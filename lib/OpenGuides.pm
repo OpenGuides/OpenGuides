@@ -983,6 +983,10 @@ sub show_index {
               $feed_base .= ";loc=" . lc( $criterion->{value} );
             }
         }
+        my @dropdowns = OpenGuides::CGI->make_index_form_dropdowns(
+                guide => $self,
+                selected => \@criteria );
+        $tt_vars{index_form_fields} = \@dropdowns;
         $tt_vars{feed_base} = $feed_base;
     }
 

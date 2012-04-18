@@ -4,6 +4,7 @@ use vars qw( $VERSION );
 $VERSION = '0.10';
 
 use Carp qw( croak );
+use CGI;
 use CGI::Cookie;
 
 =head1 NAME
@@ -433,6 +434,103 @@ sub _get_rc_cookie_name {
     my $site_name = $args{config}->site_name
         or croak "No site name in config";
     return $site_name . "_last_rc_visit";
+}
+
+=item B<make_index_form_dropdowns>
+
+    my @dropdowns = OpenGuides::CGI->make_index_form_dropdowns (
+        guide    => $guide,
+        selected => [
+                      { type => "category", value => "pubs" },
+                      { type => "locale", value => "holborn" },
+                    ],
+    );
+    %tt_vars = ( %tt_vars, dropdowns => \@dropdowns );
+
+    # In the template
+    [% FOREACH dropdown = dropdowns %]
+      [% dropdown.type.ucfirst | html %]:
+      [% dropdown.html %]
+      <br />
+    [% END %]
+
+Makes HTML dropdown selects suitable for passing to an indexing template.
+
+The C<selected> argument is optional; if supplied, it gives default values
+for the dropdowns.  At least one category and one locale dropdown will be
+returned; if no defaults are given for either then they'll default to
+everything/everywhere.
+
+=cut
+
+sub make_index_form_dropdowns {
+    my ( $class, %args ) = @_;
+    my @selected = @{$args{selected} || [] };
+    my $guide = $args{guide};
+    my @dropdowns;
+    my ( $got_cat, $got_loc );
+    foreach my $criterion ( @selected ) {
+        my $type = $criterion->{type} || "";
+        my $value = $criterion->{value} || "";
+        my $html;
+        if ( $type eq "category" ) {
+            $html = $class->_make_dropdown_html(
+                        %$criterion, guide => $guide );
+            $got_cat = 1;
+        } elsif ( $type eq "locale" ) {
+            $html = $class->_make_dropdown_html(
+                        %$criterion, guide => $guide );
+            $got_loc = 1;
+        } else {
+            warn "Unknown or missing criterion type: $type";
+        }
+        if ( $html ) {
+            push @dropdowns, { type => $type, html => $html };
+        }
+    }
+    if ( !$got_cat ) {
+        push @dropdowns, { type => "category", html =>
+            $class->_make_dropdown_html( type => "category", guide => $guide )
+        };
+    }
+    if ( !$got_loc ) {
+        push @dropdowns, { type => "locale", html =>
+            $class->_make_dropdown_html( type => "locale", guide => $guide )
+        };
+    }
+    # List the category dropdowns before the locale dropdowns, for consistency.
+    @dropdowns = sort { $a->{type} cmp $b->{type} } @dropdowns;
+    return @dropdowns;
+}
+
+sub _make_dropdown_html {
+    my ( $class, %args ) = @_;
+    my ( $field_name, $any_label );
+
+    if ( $args{type} eq "locale" ) {
+        $args{type} = "locales"; # hysterical raisins
+        $any_label = " -- anywhere -- ";
+        $field_name = "loc";
+    } else {
+        $any_label = " -- anything -- ";
+        $field_name = "cat";
+    }
+
+    my @options = $args{guide}->wiki->list_nodes_by_metadata(
+        metadata_type => "category",
+        metadata_value => $args{type},
+        ignore_case => 1,
+    );
+    @options = map { s/^Category //; s/^Locale //; $_ } @options;
+    my %labels = map { lc( $_ ) => $_ } @options;
+    my @values = sort keys %labels;
+    my $default = lc( $args{value} ) || "";
+
+    my $q = CGI->new( "" );
+    return $q->popup_menu( -name => $field_name,
+                           -values => [ "", @values ],
+                           -labels => { "" => $any_label, %labels },
+                           -default => $default );
 }
 
 =back

@@ -23,6 +23,9 @@
   [%- END -%]
   (<a href="[% feed_base %];format=map">view on a map</a>)
 </h2>
+
+[% INCLUDE index_form.tt %]
+
 <ol>
   [% FOREACH node = nodes %]
      <li><a href="[% cgi_url %]?[% node.param %]">[% node.name %]</a>

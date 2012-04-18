@@ -47,6 +47,7 @@ templates/footer.tt
 templates/header.tt
 templates/json_index.tt
 templates/home_node.tt
+templates/index_form.tt
 templates/map_index.tt
 templates/map_index_leaflet.tt
 templates/missing_metadata.tt
@@ -168,6 +169,7 @@ t/92_node_name_from_cgi_obj.t
 t/93_redirect_without_spaces.t
 t/94_leaflet.t
 t/95_multiple_index.t
+t/96_show_index_form.t
 t/templates/15_test.tt
 wiki.cgi
 META.json
