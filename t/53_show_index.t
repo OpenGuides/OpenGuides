@@ -142,7 +142,7 @@ eval {
 };
 
 SKIP: {
-    skip "No Helmert Transform provider installed, can't test geo stuff", 10
+    skip "No Helmert Transform provider installed, can't test geo stuff", 12
       unless $has_helmert;
 
     # This is testing the legacy stuff.
