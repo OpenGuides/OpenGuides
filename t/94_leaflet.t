@@ -113,8 +113,9 @@ is( $tt_vars{centre_long}, 0.2, "centre_long set correctly" );
 # markers to the map.
 $output = $guide->show_index( type => "locale", value => "Waddon",
                               format => "map", return_output => 1 );
-like( $output, qr/name:\s*'Red\s+Lion'/, "Name added to JavaScript object." );
-like( $output, qr/address:\s*'High\s+Street'/,
+like( $output, qr/name:\s*["']Red\s+Lion["']/,
+      "Name added to JavaScript object." );
+like( $output, qr/address:\s*["']High\s+Street["']/,
       "Address added to JavaScript object." );
 
 # Make sure nodes with no geodata get linked to despite not being on the map.

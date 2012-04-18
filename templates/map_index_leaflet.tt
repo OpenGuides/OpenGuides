@@ -1,3 +1,5 @@
+[% USE JSON.Escape %]
+
 [% page_title = "Map of $criteria_title - $site_name" %]
 [% INCLUDE header.tt %]
 [% INCLUDE banner.tt %]
@@ -63,14 +65,14 @@
               [% i = i + 1 %]
               [% IF node.has_geodata %]
                 node = {
-                  name: '[% node.name | html %]',
-                  param: '[% node.param %]',
+                  name: [% node.name.json %],
+                  param: [% node.param.json %],
                   [% address = node.node_data.metadata.address.list.first %]
                   [% IF address %]
-                    address: '[% address | html %]',
+                    address: [% address.json %],
                   [% END %]
-                  lat: [% node.wgs84_lat %],
-                  long: [% node.wgs84_long %],
+                  lat: [% node.wgs84_lat.json %],
+                  long: [% node.wgs84_long.json %],
                 };
                 add_marker( [% i %], node );
               [% END %]

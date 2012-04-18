@@ -1,1 +1,1 @@
-[% USE JSON %][% nodes.json %]
+[% USE JSON.Escape %][% nodes.json %]
