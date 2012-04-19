@@ -11,7 +11,7 @@ if ( $@ ) {
         "DBD::SQLite could not be used - no database to test with. ($error)";
 }
 
-plan tests => 21;
+plan tests => 23;
 
 my $config = OpenGuides::Test->make_basic_config;
 $config->static_url( "http://example.com/static" );
@@ -130,6 +130,7 @@ OpenGuides::Test->write_data(
                               latitude      => 0,
                               longitude     => -0.2,
                               locales       => "Zero Land",
+                              categories    => "Numerical Nodes",
                               return_output => 1,
                             );
 
@@ -150,6 +151,16 @@ ok( $node_hash{"Zero Lat"}{has_geodata},
     "Nodes with zero latitude have has_geodata set." );
 ok( $node_hash{"Zero Long"}{has_geodata},
     "Nodes with zero longitude have has_geodata set." );
+
+# Check capitalisation.
+$output = $guide->show_index( type => "category", value => "numerical nodes",
+                               format => "map", return_output => 1 );
+like( $output, qr/Category\s+Numerical\s+Nodes/,
+      "Multi-word categories are capitalised properly." );
+$output = $guide->show_index( type => "locale", value => "zero land",
+                               format => "map", return_output => 1 );
+like( $output, qr/Locale\s+Zero\s+Land/,
+      "Multi-word locales are capitalised properly." );
 
 # Map shouldn't be displayed if none of the nodes have geodata.
 %tt_vars = $guide->show_index( type => "locale", value => "Addiscombe",

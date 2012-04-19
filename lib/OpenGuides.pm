@@ -934,7 +934,8 @@ sub show_index {
                     metadata_value => $cat,
                     ignore_case    => 1
                 );
-                my $name = "Category " . ucfirst( $cat );
+                my $name = "Category $cat";
+                $name =~ s/(\s\w)/\U$1/g;
                 push @criteria, {
                     type  => "category",
                     value => $cat,
@@ -949,7 +950,8 @@ sub show_index {
                     metadata_value => $loc,
                     ignore_case    => 1
                 );
-                my $name = "Locale " . ucfirst( $loc );
+                my $name = "Locale $loc";
+                $name =~ s/(\s\w)/\U$1/g;
                 push @criteria, {
                     type  => "locale",
                     value => $loc,
