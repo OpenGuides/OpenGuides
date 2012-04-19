@@ -81,7 +81,7 @@ like( $output, qr|http://example.com/static/map-leaflet.js|,
       "...as is our own Leaflet map JavaScript." );
 
 # Make sure the map doesn't try to show nodes with missing or broken geodata.
-my %tt_vars = $guide->show_index( type => "locale", value => "Croydon",
+my %tt_vars = $guide->show_index( loc => "Croydon",
                                   format => "map", return_tt_vars => 1 );
 my @nodes = @{$tt_vars{nodes}};
 is( scalar @nodes, 4, "Right number of nodes in TT variables." );
@@ -92,7 +92,7 @@ ok( !$node_hash{"Lost Lion"}{has_geodata},
     "Nodes with no geodata don't have has_geodata set." );
 
 # And check again in the HTML, in case of template bugs.
-$output = $guide->show_index( type => "locale", value => "Croydon",
+$output = $guide->show_index( loc => "Croydon",
                               format => "map", return_output => 1 );
 unlike( $output, qr|name:\s*Lost\s+Lion|,
         "Nodes with no geodata are not passed to JavaScript object." );
@@ -111,7 +111,7 @@ is( $tt_vars{centre_long}, 0.2, "centre_long set correctly" );
 
 # Make sure name and address are passed through to the JavaScript for adding
 # markers to the map.
-$output = $guide->show_index( type => "locale", value => "Waddon",
+$output = $guide->show_index( loc => "Waddon",
                               format => "map", return_output => 1 );
 like( $output, qr/name:\s*["']Red\s+Lion["']/,
       "Name added to JavaScript object." );
@@ -119,7 +119,7 @@ like( $output, qr/address:\s*["']High\s+Street["']/,
       "Address added to JavaScript object." );
 
 # Make sure nodes with no geodata get linked to despite not being on the map.
-$output = $guide->show_index( type => "locale", value => "Addiscombe",
+$output = $guide->show_index( loc => "Addiscombe",
                               format => "map", return_output => 1 );
 like( $output, qr|Lost_Lion|, "Nodes with no geodata still get linked." );
 
@@ -143,7 +143,7 @@ OpenGuides::Test->write_data(
                               return_output => 1,
                             );
 
-%tt_vars = $guide->show_index( type => "locale", value => "Zero Land",
+%tt_vars = $guide->show_index( loc => "Zero Land",
                                format => "map", return_tt_vars => 1 );
 @nodes = @{$tt_vars{nodes}};
 %node_hash = map { $_->{name} => $_ } @nodes;
@@ -153,21 +153,21 @@ ok( $node_hash{"Zero Long"}{has_geodata},
     "Nodes with zero longitude have has_geodata set." );
 
 # Check capitalisation.
-$output = $guide->show_index( type => "category", value => "numerical nodes",
+$output = $guide->show_index( cat => "numerical nodes",
                                format => "map", return_output => 1 );
 like( $output, qr/Category\s+Numerical\s+Nodes/,
       "Multi-word categories are capitalised properly." );
-$output = $guide->show_index( type => "locale", value => "zero land",
+$output = $guide->show_index( loc => "zero land",
                                format => "map", return_output => 1 );
 like( $output, qr/Locale\s+Zero\s+Land/,
       "Multi-word locales are capitalised properly." );
 
 # Map shouldn't be displayed if none of the nodes have geodata.
-%tt_vars = $guide->show_index( type => "locale", value => "Addiscombe",
+%tt_vars = $guide->show_index( loc => "Addiscombe",
                                format => "map", return_tt_vars => 1 );
 ok( $tt_vars{no_nodes_on_map},
     "no_nodes_on_map template variable is set when no nodes have geodata" );
-$output = $guide->show_index( type => "locale", value => "Addiscombe",
+$output = $guide->show_index( loc => "Addiscombe",
                               format => "map", return_output => 1 );
 unlike( $output, qr/not on map/,
         "...and no warning about individual things not being on the map" );
