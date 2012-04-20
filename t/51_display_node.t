@@ -13,7 +13,7 @@ if ( $@ ) {
     plan skip_all => "DBD::SQLite could not be used - no database to test with ($error)";
 }
 
-plan tests => 19;
+plan tests => 20;
 
     OpenGuides::Test::refresh_db();
 
@@ -121,3 +121,17 @@ unlike( $output, qr{\QRevision 0},
 unlike( $output, qr{\QLast edited},
     "bogus last edited doesn't show up" );
 like ( $output, qr{404 Not Found}, "404 status for empty node" );
+
+# Make sure categories with numbers in are sorted correctly.  Guess which pub
+# I was in when I decided to finally fix this bug.
+OpenGuides::Test->write_data(
+                              guide => $guide,
+                              node => "Dog And Bull",
+                              categories => "GBG\r\nGBG2008\r\nGBG2011\r\nGBG2012\r\nGBG2007\r\nGBG2010\r\nGBG2009",
+                              return_output => 1,
+                            );
+
+%tt_vars = $guide->display_node( id => "Dog And Bull", return_tt_vars => 1 );
+is_deeply( $tt_vars{category},
+           [ qw( GBG GBG2007 GBG2008 GBG2009 GBG2010 GBG2011 GBG2012 ) ],
+           "categories with numbers in sorted correctly" );

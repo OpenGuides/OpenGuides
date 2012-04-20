@@ -317,8 +317,8 @@ sub extract_metadata_vars {
     # a URL too.  This is ick.
     my (@catlist, @loclist);
     if ( $args{metadata} ) {
-        @catlist = @{ $metadata{category} || [] };
-        @loclist = @{ $metadata{locale}   || [] };
+        @catlist = sort @{ $metadata{category} || [] };
+        @loclist = sort @{ $metadata{locale}   || [] };
     } else {
         my $categories_text = $q->param('categories');
         my $locales_text    = $q->param('locales');
