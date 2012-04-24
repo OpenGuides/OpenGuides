@@ -283,8 +283,8 @@ sub make_prefs_cookie {
 Croaks unless an L<OpenGuides::Config> object is supplied as C<config>.
 Returns default values for any parameter not specified in cookie.
 
-If C<cookies> is provided, this overrides any cookies submitted by the
-browser.
+If C<cookies> is provided, and includes a preferences cookie, this overrides
+any preferences cookie submitted by the browser.
 
 =cut
 
@@ -301,8 +301,9 @@ sub get_prefs_from_cookie {
         }
         %cookies = map { $_->name => $_ } @{ $cookies };
     }
-    else {
-        %cookies = CGI::Cookie->fetch;
+    if ( !$cookies{$cookie_name} ) {
+        my %stored_cookies = CGI::Cookie->fetch;
+        $cookies{$cookie_name} = $stored_cookies{$cookie_name};
     }
     my %data;
     if ( $cookies{$cookie_name} ) {

@@ -40,11 +40,19 @@
       <tr>
         <td></td>
         <td><span class="recentchanges_user">
+          [% host_link = '<a href="' _ cgi_url _ '?host=' _ node.host _ ';action=userstats">' %]
+          [% IF node.host.length AND node.host.length > 15 %]
+            [% host_link = host_link _ '<span title="' _ node.host _ '">' _ node.host.substr( 0, 12 ) _ '...</span></a>' %]
+          [% ELSE %]
+            [% host_link = host_link _ node.host _ '</a>' %]
+          [% END %]
           [% IF (node.username != 'Anonymous') %]
             <a href="[% cgi_url %]?username=[% node.username %];action=userstats">[% node.username %]</a>
-            (<a href="[% cgi_url %]?host=[% node.host %];action=userstats">[% node.host %]</a>)
-          [% ELSE %]
-            <a href="[% cgi_url %]?host=[% node.host %];action=userstats">[% node.host %]</a>
+            [% IF is_admin %]
+              ([% host_link %])
+            [% END %]
+          [% ELSIF is_admin %]
+            [% host_link %]
           [% END %]
           </span> [% IF node.comment %]- [% END %]<span class="recentchanges_comment">[% node.comment %]</span>
         </td>
