@@ -18,11 +18,10 @@ if ( $@ ) {
 }
 
 
-plan tests => 8;
+plan tests => 9;
 
 # Clear out the database from any previous runs.
-
-    OpenGuides::Test::refresh_db();
+OpenGuides::Test::refresh_db();
 
 my $config = OpenGuides::Config->new(
        vars => {
@@ -100,6 +99,15 @@ is_deeply( \@found,
 is_deeply( \@ordered,
            [ "Crabtree Tavern", "Hammersmith Bridge", "Blue Anchor" ],
            "...and returns them in the right order" );
+my $output = $search->run(
+                            return_output => 1,
+                            vars => {
+                                      latitude     => 51.484320,
+                                      longitude    => -0.223484,
+                                      latlong_dist => 1000,
+                                    },
+                          );
+unlike( $output, qr|(score:\s+)|, "...no spurious 'scores' printed" );
 
 %tt_vars = $search->run(
                          return_tt_vars => 1,
