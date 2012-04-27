@@ -21,7 +21,7 @@ if ( $@ ) {
 }
 
 
-plan tests => 10;
+plan tests => 14;
 
 OpenGuides::Test::refresh_db();
 
@@ -158,3 +158,35 @@ TODO: {
     local $TODO = "http://dev.openguides.org/ticket/270";
     unlike ($output, qr/First edit/, "showing a page edit twice when not showing minor edits"); 
 }
+
+# Now write a node that will Auto Create a locale, and check the
+# Recent Changes output with minor edits and admin links switched on.
+# We can't use OG::Test->write_data() for this, because it calls
+# make_cgi_object(), which overwrites REMOTE_ADDR (and we want to test
+# output of IP address).
+$q = OpenGuides::Test->make_cgi_object();
+$q->param( -name => "username", -value => "Anonymous" );
+$q->param( -name => "locales", -value => "London" );
+my $test_host = "198.51.100.255";
+$ENV{REMOTE_ADDR} = $test_host;
+$guide->commit_node( id => "A Pub", cgi_obj => $q, return_output => 1 );
+$ENV{HTTP_COOKIE} = OpenGuides::CGI->make_prefs_cookie(
+    config => $config, show_minor_edits_in_rc => 1, is_admin => 1 );
+$output = $guide->display_recent_changes( return_output => 1 );
+like( $output, qr|Auto\s+Create|,
+      "Auto Create stuff shown on Recent Changes." );
+unlike( $output, qr|host=;action=userstats|,
+        "...and no spurious link to host userstats" );
+
+# Make sure IP addresses always show up for anonymous edits.
+$ENV{HTTP_COOKIE} = OpenGuides::CGI->make_prefs_cookie(
+    config => $config, is_admin => 1 );
+$output = $guide->display_recent_changes( return_output => 1 );
+like( $output, qr|$test_host|,
+      "IP addresses show for anon edits when admin links switched on" );
+$ENV{HTTP_COOKIE} = OpenGuides::CGI->make_prefs_cookie(
+    config => $config, is_admin => 0 );
+$output = $guide->display_recent_changes( return_output => 1 );
+like( $output, qr|$test_host|,
+      "...also when admin links switched off" );
+
