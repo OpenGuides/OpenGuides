@@ -92,6 +92,9 @@
   [% END %]
     version [% version %] of
     <span class="node_name">[% node_name %]</span></em>
+    <span class="current_version_title_link">
+      <a href="[% cgi_url %]?[% node_param %]">(view current version)</a>
+    </span>
   </h2>
 [% END %]
 [% IF empty_node %]

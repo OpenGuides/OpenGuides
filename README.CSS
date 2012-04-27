@@ -120,6 +120,11 @@ input.hidden
     Purpose: Defines content that will be hidden for users with a
              CSS-conforming user agent
 
+span.current_version_title_link
+    Used in: node.tt
+    Purpose: On display of historical versions of nodes, provides a link to
+             the current version.
+
 span.node_name
     Used in: backlink_results.tt delete_confirm.tt delete_done.tt
              differences.tt node_history.tt
