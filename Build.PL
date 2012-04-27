@@ -15,7 +15,8 @@ my $force;
 
 GetOptions('force' => \$force);
 
-unless ($force) {
+
+unless ($force || $ENV{'AUTOMATED_TESTING'}) {
 	print <<EOF;
 
 Beginning install process... if you already have an OpenGuides
@@ -51,7 +52,7 @@ my %yn_vars = map { $_ => 1 }
       content_above_navbar_in_html show_gmap_in_node_display force_wgs84
       send_moderation_notifications read_only);
 
-my $skip_config = $force ? 'y' : Module::Build->y_n("Skip OpenGuides configuration?", "n");
+my $skip_config = $force || $ENV{AUTOMATED_TESTING} ? 'y' : Module::Build->y_n("Skip OpenGuides configuration?", "n");
 if ( $skip_config ) {
     print <<EOF;
 ===========================================================================
