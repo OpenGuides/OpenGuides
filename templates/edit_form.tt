@@ -34,6 +34,7 @@
       [% IF summary %]
         <div id="summary">[% summary %]</div>
       [% END %]
+      [% INCLUDE node_image.tt %]
       [% INCLUDE display_metadata.tt %]
       [% preview_html %]
     </div>
@@ -416,6 +417,7 @@
       [% IF summary %]
         <div id="summary">[% summary %]</div>
       [% END %]
+      [% INCLUDE node_image.tt %]
       [% INCLUDE display_metadata.tt %]
       [% preview_html %]
     </div>

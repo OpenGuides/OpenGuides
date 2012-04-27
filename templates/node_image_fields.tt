@@ -2,7 +2,7 @@
   <legend>Image to illustrate this page</legend>
 
   <div class="edit_form_group" id="node_image_group">
-    <label for="node_image">
+    <label for="node_image_input">
       [% IF conflict %]
         Current image:
       [% ELSE %]
@@ -10,7 +10,7 @@
       [% END %]
     </label>
     <div class="edit_box">
-      <input type="text" size="50" id="node_image" name="node_image"
+      <input type="text" size="50" id="node_image_input" name="node_image"
        value="[% node_image %]" />
       [% INCLUDE node_photo_notes.tt %]
     </div>
@@ -25,7 +25,7 @@
   </div>
   
   <div class="edit_form_group" id="node_image_copyright_group">
-    <label for="node_image_copyright">
+    <label for="node_image_copyright_input">
       [% IF conflict %]
         Current copyright holder:
       [% ELSE %]
@@ -33,7 +33,7 @@
       [% END %]
     </label>
     <div class="edit_box">
-      <input type="text" size="50" id="node_image_copyright"
+      <input type="text" size="50" id="node_image_copyright_input"
        name="node_image_copyright" value="[% node_image_copyright %]" />
     </div>
     [% IF conflict %]

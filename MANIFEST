@@ -69,6 +69,7 @@ templates/needing_moderation.tt
 templates/newpage.tt
 templates/node.tt
 templates/node_history.tt
+templates/node_image.tt
 templates/node_image_fields.tt
 templates/node_photo_notes.tt
 templates/node_rdf.tt

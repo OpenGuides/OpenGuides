@@ -418,6 +418,7 @@ $build->config_data( __templates     => [
                       "newpage.tt",
                       "node.tt",
                       "node_history.tt",
+                      "node_image.tt",
                       "node_image_fields.tt",
                       "node_photo_notes.tt",
                       "node_rdf.tt",
