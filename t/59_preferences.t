@@ -1,20 +1,14 @@
 use strict;
-use Wiki::Toolkit::Setup::SQLite;
+use JSON;
 use OpenGuides;
+use OpenGuides::JSON;
 use OpenGuides::Test;
 use Test::More;
 
 eval { require DBD::SQLite; };
-
 if ( $@ ) {
     my ($error) = $@ =~ /^(.*?)\n/;
     plan skip_all => "DBD::SQLite could not be used - no database to test with ($error)";
-}
-
-eval { require DBD::SQLite; };
-if ( $@ ) {
-    plan skip_all => "DBD::SQLite not installed - no database to test with";
-    exit 0;
 }
 
 eval { require Test::HTML::Content; };
@@ -23,9 +17,9 @@ if ( $@ ) {
     exit 0;
 }
 
-plan tests => 4;
+plan tests => 12;
 
-    OpenGuides::Test::refresh_db();
+OpenGuides::Test::refresh_db();
 
 my $config = OpenGuides::Test->make_basic_config;
 my $guide = OpenGuides->new( config => $config );
@@ -69,6 +63,59 @@ $config->show_gmap_in_node_display( 0 );
 Test::HTML::Content::no_tag( get_output($wiki, $config),
   "input", { type => "checkbox", name => "display_google_maps" },
   "...but not when node maps are globally disabled." );
+
+# Test JSON version of prefs page.
+my $json_writer = OpenGuides::JSON->new( wiki   => $wiki,
+                                         config => $config );
+delete $ENV{HTTP_COOKIE};
+my $output = eval {
+    $json_writer->make_prefs_json();
+};
+ok( !$@, "->make_prefs_json() doesn't die when no cookie set." );
+if ( $@ ) { warn "#   Error was: $@"; }
+# Need to strip out the Content-Type: header or the decoder gets confused.
+$output =~ s/^Content-Type:.*\n//s;
+my $parsed = eval {
+    local $SIG{__WARN__} = sub { die $_[0]; };
+    decode_json( $output );
+};
+ok( !$@, "...and its output looks like JSON." );
+if ( $@ ) { warn "#   Warning was: $@"; }
+ok( $parsed->{username}, "...and a username is included in the output" );
+#use Data::Dumper; print Dumper $parsed; exit 0;
+
+$ENV{HTTP_COOKIE} = OpenGuides::CGI->make_prefs_cookie( config => $config );
+$output = eval {
+    $json_writer->make_prefs_json();
+};
+ok( !$@, "->make_prefs_json() doesn't die when cookie set with all defaults.");
+if ( $@ ) { warn "#   Error was: $@"; }
+$output =~ s/^Content-Type:.*\n//s;
+$parsed = eval {
+    local $SIG{__WARN__} = sub { die $_[0]; };
+    decode_json( $output );
+};
+ok( !$@, "...and its output looks like JSON." );
+if ( $@ ) { warn "#   Warning was: $@"; }
+# We don't get a username set in this case.
+
+$ENV{HTTP_COOKIE} = OpenGuides::CGI->make_prefs_cookie( config => $config,
+    username => "Kake" );
+$output = eval {
+    $json_writer->make_prefs_json();
+};
+ok( !$@,
+    "->make_prefs_json() doesn't die when cookie set with given username.");
+if ( $@ ) { warn "#   Error was: $@"; }
+$output =~ s/^Content-Type:.*\n//s;
+$parsed = eval {
+    local $SIG{__WARN__} = sub { die $_[0]; };
+    decode_json( $output );
+};
+ok( !$@, "...and its output looks like JSON." );
+if ( $@ ) { warn "#   Warning was: $@"; }
+is( $parsed->{username}, "Kake",
+    "...and the correct username is included in the output" );
 
 sub get_output {
     my ($wiki, $config) = @_;

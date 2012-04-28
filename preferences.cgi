@@ -6,6 +6,7 @@ use sigtrap die => 'normal-signals';
 use CGI;
 use OpenGuides::Config;
 use OpenGuides::CGI;
+use OpenGuides::JSON;
 use OpenGuides::Utils;
 use OpenGuides::Template;
 
@@ -14,9 +15,15 @@ my $config = OpenGuides::Config->new( file => $config_file );
 my $wiki = OpenGuides::Utils->make_wiki_object( config => $config );
 my $cgi = CGI->new();
 my $action = $cgi->param('action') || '';
+my $format = $cgi->param('format') || '';
 
 if ( $action eq "set_preferences" ) {
     set_preferences();
+} elsif ( $action eq "show" && $format eq "json" ) {
+    my $json_writer = OpenGuides::JSON->new( wiki   => $wiki,
+                                             config => $config );
+    print "Content-type: text/javascript\n\n";
+    print $json_writer->make_prefs_json();
 } else {
     show_form();
 }

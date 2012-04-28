@@ -24,6 +24,7 @@ More detailed changelogs can be found at
         Added a basic stylesheet, installed into the static_path directory.
         Fixed the JSON output for action=index (using a new dependency on
           Template::Plugin::JSON::Escape).
+        Added JSON output for the preferences page (#293).
         IP addresses no longer show on recent changes for people without the
           admin preference set.
 

@@ -9,6 +9,8 @@ use Wiki::Toolkit::Plugin::JSON;
 use Time::Piece;
 use URI::Escape;
 use Carp 'croak';
+use JSON;
+use OpenGuides::CGI;
 
 sub new {
     my ( $class, @args ) = @_;
@@ -143,6 +145,13 @@ sub json_maker {
     return $self->{json_maker};
 }
 
+sub make_prefs_json {
+    my $self = shift;
+    my %prefs = OpenGuides::CGI->get_prefs_from_cookie(
+        config => $self->{config} );
+    return encode_json( \%prefs );
+}
+
 sub make_recentchanges_json {
     my ( $self, %args ) = @_;
 
@@ -244,6 +253,15 @@ all of the following metadata when calling C<write_node>:
 
 Returns a raw L<Wiki::Toolkit::Plugin::JSON> object created with the values you
 invoked this module with.
+
+=item B<make_prefs_json>
+
+    my $json_writer = OpenGuides::JSON->new( wiki   => $wiki,
+                                             config => $config );
+    print $json_writer->make_prefs_json();
+
+Retrieves the preferences from any stored preferences cookie, supplies
+defaults for any preferences not set, returns the result as JSON.
 
 =item B<make_recentchanges_json>
 
