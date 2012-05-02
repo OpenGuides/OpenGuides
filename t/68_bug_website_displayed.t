@@ -11,12 +11,13 @@ if ( $@ ) {
     plan skip_all => "DBD::SQLite could not be used - no database to test with ($error)";
 }
 
-plan tests => 2;
+plan tests => 5;
 
-    OpenGuides::Test::refresh_db();
+OpenGuides::Test::refresh_db();
 
 my $config = OpenGuides::Test->make_basic_config;
 my $guide = OpenGuides->new( config => $config );
+$config->website_link_max_chars( 23 );
 
 $guide->wiki->write_node( "South Croydon Station", "A sleepy main-line station in what is arguably the nicest part of Croydon.", undef, { website => "http://example.com/" } ) or die "Couldn't write node";
 $guide->wiki->write_node( "North Croydon Station", "A busy main-line station in what is arguably the furthest North part of Croydon.", undef, { website => "http://longer.example.com/asdfasdf" } ) or die "Couldn't write node";
@@ -33,3 +34,28 @@ $output = $guide->display_node(
                               );
 
 like( $output, qr#Website:</span> <span class="url"><a href="http://longer.example.com/asdfasdf">http://longer.exampl...</a>#, "website correctly truncated" );
+
+# Make sure website isn't truncated unnecessarily, e.g. that we don't end up
+# just replacing the final three characters with the ellipsis.  Our full URL
+# has 34 characters.
+$config->website_link_max_chars( 33 );
+my %tt_vars = $guide->display_node( id => "North Croydon Station",
+                                    return_tt_vars => 1 );
+is( $tt_vars{formatted_website_text},
+    '<a href="http://longer.example.com/asdfasdf">http://longer.example.com/asdf...</a>',
+    "Website truncated correctly when 1 character longer than allowed." );
+
+$config->website_link_max_chars( 34 );
+%tt_vars = $guide->display_node( id => "North Croydon Station",
+                                 return_tt_vars => 1 );
+is( $tt_vars{formatted_website_text},
+    '<a href="http://longer.example.com/asdfasdf">http://longer.example.com/asdfasdf</a>',
+    "Website not truncated when exact length allowed." );
+
+$config->website_link_max_chars( 35 );
+%tt_vars = $guide->display_node( id => "North Croydon Station",
+                                 return_tt_vars => 1 );
+is( $tt_vars{formatted_website_text},
+    '<a href="http://longer.example.com/asdfasdf">http://longer.example.com/asdfasdf</a>',
+    "Website not truncated when 1 character shorter than allowed." );
+

@@ -118,7 +118,7 @@ sub _init {
                      host_checker_module => "",
                      static_path => "/usr/local/share/openguides/static",
                      send_moderation_notifications => 1,
-                     website_link_max_chars => 20,
+                     website_link_max_chars => 25,
                      read_only => 0,
                    );
 
@@ -357,7 +357,7 @@ sub static_url {
 
 =item * moderate_whitelist
 
-=item * website_link_max_chars (default: C<20>)
+=item * website_link_max_chars (default: C<25>)
 
 =item * read_only
 

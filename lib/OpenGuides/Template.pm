@@ -368,10 +368,10 @@ sub extract_metadata_vars {
                                   : $q->param("website");
     my $formatted_website_text = "";
     if ( $website && $website ne "http://" && is_web_uri( $website ) ) {
-        my $trunc_website = substr( $website, 0,
-                                    $config->website_link_max_chars );
-        unless ($website eq $trunc_website ) {
-            $trunc_website .= '...';
+        my $maxlen = $config->website_link_max_chars;
+        my $trunc_website = $website;
+        if ( length( $website ) > $maxlen ) {
+            $trunc_website = substr( $website, 0, $maxlen - 3 ) . "...";
         }
         $formatted_website_text = '<a href="' . $website . '">'
                                   . $trunc_website . '</a>';

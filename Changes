@@ -27,6 +27,9 @@ More detailed changelogs can be found at
         Added JSON output for the preferences page (#293).
         IP addresses no longer show on recent changes for people without the
           admin preference set.
+        Website truncation on node display is now a little more intelligent
+          (you can still tweak this by setting website_link_max_chars in
+          your wiki.conf).
 
 0.66    12 April 2012
         All templates now have access to the "username" TT variable.
