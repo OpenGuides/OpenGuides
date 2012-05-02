@@ -370,8 +370,9 @@ sub extract_metadata_vars {
     if ( $website && $website ne "http://" && is_web_uri( $website ) ) {
         my $maxlen = $config->website_link_max_chars;
         my $trunc_website = $website;
-        if ( length( $website ) > $maxlen ) {
-            $trunc_website = substr( $website, 0, $maxlen - 3 ) . "...";
+        $trunc_website =~ s|http://(www.)?||;
+        if ( length( $trunc_website ) > $maxlen ) {
+            $trunc_website = substr( $trunc_website, 0, $maxlen - 3 ) . "...";
         }
         $formatted_website_text = '<a href="' . $website . '">'
                                   . $trunc_website . '</a>';
