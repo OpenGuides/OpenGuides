@@ -121,6 +121,10 @@
 
     <input type="submit" value="Set it" class="form_button" />
     <input type="hidden" name="action" value="set_preferences">
+    [% IF return_to_url %]
+      <input type="hidden" name="return_to_url"
+             value="[% return_to_url | html %]" />
+    [% END %]
   </form>
 
 [% ELSE %]
@@ -192,7 +196,7 @@
   </p>
 
 <ul>
-  <li><a href="[% full_cgi_url %]">Return to [% site_name %]</a></li>
+  <li><a href="[% IF return_to_url %][% return_to_url | html %][% ELSE %][% full_cgi_url %][% END %]">Return to [% site_name %]</a></li>
   <li><a href="preferences.cgi">Change preferences</a></li>
 </ul>
 

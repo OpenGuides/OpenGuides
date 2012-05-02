@@ -30,6 +30,8 @@ More detailed changelogs can be found at
         Website truncation on node display is now a little more intelligent
           (you can still tweak this by setting website_link_max_chars in
           your wiki.conf).
+        The preferences page now remembers what page the user got to it from,
+          and sends them back there.
 
 0.66    12 April 2012
         All templates now have access to the "username" TT variable.

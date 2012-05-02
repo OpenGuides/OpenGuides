@@ -652,15 +652,25 @@ sub display_prefs_form {
     my $config = $self->config;
     my $wiki = $self->wiki;
 
+    my $from = $ENV{HTTP_REFERER} || "";
+    my $url_base = $config->script_url . $config->script_name;
+    if ( $from !~ /^$url_base/ ) {
+        $from = "";
+    }
+
+    my %tt_vars = (
+                    not_editable  => 1,
+                    show_form     => 1,
+                    not_deletable => 1,
+                    return_to_url => $from,
+    );
+    return %tt_vars if $args{return_tt_vars};
+
     my $output = OpenGuides::Template->output(
         wiki      => $wiki,
         config    => $config,
         template  => "preferences.tt",
-	vars      => { 
-                       not_editable  => 1,
-                       show_form     => 1,
-                       not_deletable => 1,
-                     },
+	vars      => \%tt_vars,
         noheaders => $args{noheaders},
     );
     return $output if $args{return_output};

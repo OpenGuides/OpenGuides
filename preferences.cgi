@@ -57,6 +57,7 @@ sub set_preferences {
                       not_editable => 1,
                       not_deletable => 1,
                       username => $prefs{username},
+                      return_to_url => $cgi->param( "return_to_url" ) || "",
                     }
     );
 }

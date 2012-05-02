@@ -17,13 +17,41 @@ if ( $@ ) {
     exit 0;
 }
 
-plan tests => 12;
+plan tests => 17;
 
 OpenGuides::Test::refresh_db();
 
 my $config = OpenGuides::Test->make_basic_config;
 my $guide = OpenGuides->new( config => $config );
 my $wiki = $guide->wiki;
+
+# Make sure "return_to" TT var is set iff referrer domain is correct.
+$config->script_url( "http://example.com/" );
+$config->script_name( "wiki.cgi" );
+my $good_return_to = "http://example.com/wiki.cgi?Test_Page";
+my $evil_return_to = "http://example.org/naughty-script";
+
+$ENV{HTTP_REFERER} = $good_return_to;
+my %tt_vars = $guide->display_prefs_form( return_tt_vars => 1 );
+is( $tt_vars{return_to_url}, $good_return_to,
+    "Return URL set when referrer matches script URL/name" );
+my $output = $guide->display_prefs_form( return_output => 1, noheaders => 1 );
+Test::HTML::Content::tag_ok( $output,
+  "input", { type => "hidden", name => "return_to_url" },
+    "...corresponding hidden input is there in the form" );
+Test::HTML::Content::tag_ok( $output,
+  "input", { type => "hidden", name => "return_to_url",
+             value => $good_return_to },
+    "...with correct value" );
+
+$ENV{HTTP_REFERER} = $evil_return_to;
+%tt_vars = $guide->display_prefs_form( return_tt_vars => 1 );
+ok( !$tt_vars{return_to_url},
+    "Return URL not set when referrer doesn't match script URL/name" );
+$output = $guide->display_prefs_form( return_output => 1, noheaders => 1 );
+Test::HTML::Content::no_tag( $output,
+  "input", { type => "hidden", name => "return_to_url" },
+    "...and no corresponding hidden input in form" );
 
 # If we have a google API key and node maps are enabled, we should see the
 # checkbox for this pref.
@@ -35,7 +63,7 @@ my $cookie = OpenGuides::CGI->make_prefs_cookie(
                                                  display_google_maps => 1,
                                                );
 $ENV{HTTP_COOKIE} = $cookie;
-my $output = $guide->display_prefs_form( return_output => 1, noheaders => 1 );
+$output = $guide->display_prefs_form( return_output => 1, noheaders => 1 );
 Test::HTML::Content::tag_ok( $output,
   "input", { type => "checkbox", name => "display_google_maps" },
   "Node map preference checkbox shown when we have a GMaps API key." );
