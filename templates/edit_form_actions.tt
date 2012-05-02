@@ -4,7 +4,7 @@
      class="form_button" />
   </div>
   <div class="cancel_edit">
-    (<a href="[% cgi_url %]?[% node_param %]">cancel edit</a>)
+    <a href="[% cgi_url %]?[% node_param %]">Cancel edit</a>
   </div>
   <div class="commit_edit">
     [% IF moderate %]

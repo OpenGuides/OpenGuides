@@ -42,6 +42,7 @@ templates/differences.tt
 templates/display_metadata.tt
 templates/edit_form.tt
 templates/edit_form_actions.tt
+templates/edit_form_preview.tt
 templates/error.tt
 templates/footer.tt
 templates/header.tt

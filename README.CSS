@@ -36,7 +36,7 @@ div.preview_edit
     Used in: edit_form_actions.tt
     Purpose: Contains a button for previewing an edit.
 div.cancel_edit
-    Used in: edit_form_actions.tt
+    Used in: edit_form_actions.tt, edit_form_preview.tt
     Purpose: Contains a link for cancelling an edit.
 div.commit_edit
     Used in: edit_form_actions.tt
@@ -58,6 +58,11 @@ div.conflict_group
 div.conflict_box
     Used in: edit_form.tt node_image_fields.tt
     Purpose: Contains details of an edit conflict for a single type of data.
+
+div.jump_to_edit_form
+    Used in: edit_form_preview.tt
+    Purpose: Contains a link to jump up or down the page to the edit form,
+             when previewing one's edits.
 
 div.licence_and_moderation_notes
     Used in: edit_form.tt
@@ -81,6 +86,16 @@ div.navbar_group_title
 div.navbar_item
     Used in: navbar_*.tt
     Purpose: Defines an item in the navigation bar
+
+div.preview
+    Used in: edit_form_preview.tt
+    Purpose: Container for use with #maincontent when the content is being
+             previewed while editing.
+
+div.preview_actions
+    Used in: edit_form_preview.tt
+    Purpose: Groups together links for cancelling an edit and for jumping
+             up/down the page to the edit form, when previewing one's edits.
 
 div.warning_text
     Used in: edit_form.tt

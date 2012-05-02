@@ -393,6 +393,7 @@ $build->config_data( __templates     => [
                       "metadata.tt",
                       "edit_form.tt",
                       "edit_form_actions.tt",
+                      "edit_form_preview.tt",
                       "error.tt",
                       "footer.tt",
                       "header.tt",

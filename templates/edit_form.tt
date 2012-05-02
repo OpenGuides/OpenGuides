@@ -29,18 +29,10 @@
   [% END %]
 
   [% IF preview_html AND preview_above_edit_box %]
-    <div id="maincontent">
-      <h2>Preview</h2>
-      [% IF summary %]
-        <div id="summary">[% summary %]</div>
-      [% END %]
-      [% INCLUDE node_image.tt %]
-      [% INCLUDE display_metadata.tt %]
-      [% preview_html %]
-    </div>
-    <br clear="all" />
+    [% INCLUDE edit_form_preview.tt %]
   [% END %]
 
+  <a name="edit_form_anchor"></a>
   <form id="edit_page_form" action="[% cgi_url %]" method="post"
    enctype="application/x-www-form-urlencoded">
 
@@ -412,16 +404,7 @@
   </form>
 
   [% IF preview_html AND NOT preview_above_edit_box %]
-    <div id="maincontent">
-      <h2>Preview</h2>
-      [% IF summary %]
-        <div id="summary">[% summary %]</div>
-      [% END %]
-      [% INCLUDE node_image.tt %]
-      [% INCLUDE display_metadata.tt %]
-      [% preview_html %]
-    </div>
-    <br clear="all" />
+    [% INCLUDE edit_form_preview.tt %]
   [% END %]
 [% END %]
 [% INCLUDE footer.tt omit_footer_search_form = 1 %]
