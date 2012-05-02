@@ -35,13 +35,15 @@ my $cookie = OpenGuides::CGI->make_prefs_cookie(
                                                  display_google_maps => 1,
                                                );
 $ENV{HTTP_COOKIE} = $cookie;
-Test::HTML::Content::tag_ok( get_output($wiki, $config),
+my $output = $guide->display_prefs_form( return_output => 1, noheaders => 1 );
+Test::HTML::Content::tag_ok( $output,
   "input", { type => "checkbox", name => "display_google_maps" },
   "Node map preference checkbox shown when we have a GMaps API key." );
 
 # But not if the node map is globally disabled
 $config->show_gmap_in_node_display( 0 );
-Test::HTML::Content::no_tag( get_output($wiki, $config),
+$output = $guide->display_prefs_form( return_output => 1, noheaders => 1 );
+Test::HTML::Content::no_tag( $output,
   "input", { type => "checkbox", name => "display_google_maps" },
   "...but not when node maps are globally disabled." );
 
@@ -55,12 +57,14 @@ $cookie = OpenGuides::CGI->make_prefs_cookie(
                                               display_google_maps => 1,
                                             );
 $ENV{HTTP_COOKIE} = $cookie;
-Test::HTML::Content::tag_ok( get_output($wiki, $config),
+$output = $guide->display_prefs_form( return_output => 1, noheaders => 1 );
+Test::HTML::Content::tag_ok( $output,
   "input", { type => "checkbox", name => "display_google_maps" },
   "Node map preference checkbox shown when we're using Leaflet." );
 
 $config->show_gmap_in_node_display( 0 );
-Test::HTML::Content::no_tag( get_output($wiki, $config),
+$output = $guide->display_prefs_form( return_output => 1, noheaders => 1 );
+Test::HTML::Content::no_tag( $output,
   "input", { type => "checkbox", name => "display_google_maps" },
   "...but not when node maps are globally disabled." );
 
@@ -68,7 +72,7 @@ Test::HTML::Content::no_tag( get_output($wiki, $config),
 my $json_writer = OpenGuides::JSON->new( wiki   => $wiki,
                                          config => $config );
 delete $ENV{HTTP_COOKIE};
-my $output = eval {
+$output = eval {
     $json_writer->make_prefs_json();
 };
 ok( !$@, "->make_prefs_json() doesn't die when no cookie set." );
@@ -116,19 +120,3 @@ ok( !$@, "...and its output looks like JSON." );
 if ( $@ ) { warn "#   Warning was: $@"; }
 is( $parsed->{username}, "Kake",
     "...and the correct username is included in the output" );
-
-sub get_output {
-    my ($wiki, $config) = @_;
-
-    return OpenGuides::Template->output(
-        wiki         => $wiki,
-        config       => $config,
-        template     => "preferences.tt",
-        noheaders    => 1,
-        vars         => {
-                          not_editable => 1,
-                          show_form    => 1
-                        },
-    );
-}
-

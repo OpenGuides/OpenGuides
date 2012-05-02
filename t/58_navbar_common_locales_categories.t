@@ -26,18 +26,8 @@ sub get_recent_changes {
 }
 
 sub get_preferences {
-    my ($guide) = @_;
-
-    return OpenGuides::Template->output(
-        wiki         => $guide->wiki,
-        config       => $guide->config,
-        template     => "preferences.tt",
-        noheaders    => 1,
-        vars         => {
-                          not_editable => 1,
-                          show_form    => 1
-                        },
-    );
+    my $guide = shift;
+    return $guide->display_prefs_form( return_output => 1, noheaders => 1 );
 }
 
 my %pages = (

@@ -637,6 +637,36 @@ sub preview_edit {
     }
 }
 
+=item B<display_prefs_form>
+
+  $guide->display_prefs_form;
+
+Displays a form that lets the user view and set their preferences.  The
+C<return_output> and C<return_tt_vars> parameters can be used to return
+the output or template variables, instead of printing the output to STDOUT.
+
+=cut
+
+sub display_prefs_form {
+    my ($self, %args) = @_;
+    my $config = $self->config;
+    my $wiki = $self->wiki;
+
+    my $output = OpenGuides::Template->output(
+        wiki      => $wiki,
+        config    => $config,
+        template  => "preferences.tt",
+	vars      => { 
+                       not_editable  => 1,
+                       show_form     => 1,
+                       not_deletable => 1,
+                     },
+        noheaders => $args{noheaders},
+    );
+    return $output if $args{return_output};
+    print $output;
+}
+
 =item B<display_recent_changes>  
 
   $guide->display_recent_changes;
