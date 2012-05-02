@@ -366,11 +366,17 @@ sub extract_metadata_vars {
 
     my $website = $args{metadata} ? $metadata{website}[0]
                                   : $q->param("website");
+    # Do truncation for website name display.  Max length of field is set in
+    # conf file (website_link_max_chars).  Leading http:// and www. if present
+    # is stripped; trailing / is also stripped if it's the only / in the URL.
     my $formatted_website_text = "";
     if ( $website && $website ne "http://" && is_web_uri( $website ) ) {
         my $maxlen = $config->website_link_max_chars;
         my $trunc_website = $website;
         $trunc_website =~ s|http://(www.)?||;
+        if ( $trunc_website =~ tr|/|| == 1 ) {
+            $trunc_website =~ s|/$||;
+        }
         if ( length( $trunc_website ) > $maxlen ) {
             $trunc_website = substr( $trunc_website, 0, $maxlen - 3 ) . "...";
         }

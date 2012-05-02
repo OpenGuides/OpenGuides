@@ -11,7 +11,7 @@ if ( $@ ) {
     plan skip_all => "DBD::SQLite could not be used - no database to test with ($error)";
 }
 
-plan tests => 6;
+plan tests => 7;
 
 OpenGuides::Test::refresh_db();
 
@@ -24,12 +24,16 @@ $guide->wiki->write_node( "East Croydon Station",
   "A busy main-line station that actually exists.", undef,
   { website => "http://www.example.com/foo" } )
     or die "Couldn't write node";
+$guide->wiki->write_node( "West Croydon Station",
+  "Another main-line station that actually exists.", undef,
+  { website => "http://www.example.com/bar/" } )
+    or die "Couldn't write node";
 
 $config->website_link_max_chars( 20 );
 my %tt_vars = $guide->display_node( id => "South Croydon Station",
                                     return_tt_vars => 1 );
 is( $tt_vars{formatted_website_text},
-    '<a href="http://example.com/">example.com/</a>',
+    '<a href="http://example.com/">example.com</a>',
     "Website correctly displayed when no need for truncation," );
 
 %tt_vars = $guide->display_node( id => "East Croydon Station",
@@ -37,6 +41,12 @@ is( $tt_vars{formatted_website_text},
 is( $tt_vars{formatted_website_text},
     '<a href="http://www.example.com/foo">example.com/foo</a>',
     "Website correctly truncated when there's a leading www" );
+
+%tt_vars = $guide->display_node( id => "West Croydon Station",
+                                    return_tt_vars => 1 );
+is( $tt_vars{formatted_website_text},
+    '<a href="http://www.example.com/bar/">example.com/bar/</a>',
+    "Trailing slash not stripped unless it's immediately after domain name" );
 
 %tt_vars = $guide->display_node( id => "North Croydon Station",
                                     return_tt_vars => 1 );
