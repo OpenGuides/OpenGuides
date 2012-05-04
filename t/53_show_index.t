@@ -59,6 +59,7 @@ $output = eval {
     $guide->show_index(
                         cat           => "Alpha",
                         return_output => 1,
+                        noheaders     => 1,
                       );
 };
 is( $@, "", "->show_index doesn't die" );
@@ -205,6 +206,13 @@ like( $output,
 
 SKIP: {
     skip "Test::HTML::Content not available", 1 unless $thc;
+    # Do this again to get a version without headers, so T::H::C doesn't whine.
+    $output = $guide->show_index(
+                                  return_output => 1,
+                                  loc           => "assam",
+                                  format        => "map",
+                                  noheaders     => 1,
+                                );
     Test::HTML::Content::link_ok( $output,
         "http://example.com/wiki.cgi?action=index;loc=assam",
         "We have a link to the non-map version" );

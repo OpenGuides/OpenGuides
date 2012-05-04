@@ -52,6 +52,7 @@ close FILE or die $!;
 my $output = $guide->display_node(
                                    id            => $config->home_name,
                                    return_output => 1,
+                                   noheaders     => 1,
                                  );
 $output =~ s/^Content-Type.*[\r\n]+//m;
 Test::HTML::Content::tag_ok( $output, "meta", { name => "foo" },

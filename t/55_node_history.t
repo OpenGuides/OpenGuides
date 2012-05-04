@@ -31,6 +31,7 @@ my $output = $guide->display_node(
                                    id => "South Croydon Station",
                                    version => 1,
                                    return_output => 1,
+                                   noheaders => 1,
                                  );
 like( $output, qr'South_Croydon_Station',
       "node param escaped properly in links in historic view" );

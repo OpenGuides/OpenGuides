@@ -6,7 +6,6 @@ use Wiki::Toolkit::Setup::SQLite;
 use OpenGuides::Config;
 use OpenGuides::CGI;
 
-
 eval { require DBD::SQLite; };
 if ( $@ ) {
     plan skip_all => "DBD::SQLite not installed - no database to test with";
@@ -43,20 +42,19 @@ sub get_preferences {
     );
 }
 
-
 plan tests => 4;
 
 my ( $config, $guide, $wiki, $output );
 
 # Clear out the database from any previous runs.
-    OpenGuides::Test::refresh_db();
+OpenGuides::Test::refresh_db();
 
-
-    # Make a guide 
-    $config = OpenGuides::Test->make_basic_config;
+# Make a guide 
+$config = OpenGuides::Test->make_basic_config;
 $config->enable_page_deletion( 1 );
-    $guide = OpenGuides->new( config => $config );
-    # set is_admin to 1
+$guide = OpenGuides->new( config => $config );
+
+# set is_admin to 1
 my $cookie = OpenGuides::CGI->make_prefs_cookie(
     config                     => $config,
     username                   => "bob",
@@ -75,23 +73,25 @@ OpenGuides::Test->write_data(
                               node       => "Test Page",
                             );
 
-    $output = $guide->display_node(
-                                   return_output => 1,
-                                   id => "Test Page",
-                                 );
-# check delete link is shown in footer
-    Test::HTML::Content::tag_ok( $output, "div", { id => "footer_delete_link" },
-                                 "delete link in footer for admin" );
+$output = $guide->display_node(
+                                return_output => 1,
+                                noheaders => 1,
+                                id => "Test Page",
+                              );
 
-    $output = $guide->list_all_versions(
-                                   return_output => 1,
-                                   id => "Test Page",
-                                 );
- like( $output, qr/version=1;action=delete/,
-		"delete links on history page"); 
+# check delete link is shown in footer
+Test::HTML::Content::tag_ok( $output, "div", { id => "footer_delete_link" },
+                             "delete link in footer for admin" );
+
+$output = $guide->list_all_versions(
+                                     return_output => 1,
+                                     id => "Test Page",
+                                   );
+like( $output, qr/version=1;action=delete/,
+      "delete links on history page" ); 
 
 # set is_admin to 0
- $cookie = OpenGuides::CGI->make_prefs_cookie(
+$cookie = OpenGuides::CGI->make_prefs_cookie(
     config                     => $config,
     username                   => "bob",
     include_geocache_link      => 1,
@@ -105,16 +105,18 @@ OpenGuides::Test->write_data(
 );
 $ENV{HTTP_COOKIE} = $cookie;
 
-     $output = $guide->display_node(
-                                   return_output => 1,
-                                   id => "Test Page",
-                                 );
+$output = $guide->display_node(
+                                return_output => 1,
+                                noheaders => 1,
+                                id => "Test Page",
+                              );
+
 # check that the delete link in footer isnt shown
-    Test::HTML::Content::no_tag( $output, "div", { id => "footer_delete_link" },
-					"delete link in footer not shown");
-    $output = $guide->list_all_versions(
-                                   return_output => 1,
-                                   id => "Test Page",
-                                 );
- unlike( $output, qr/version=1;action=delete/,
-		"no delete links on history page"); 
+Test::HTML::Content::no_tag( $output, "div", { id => "footer_delete_link" },
+                             "delete link in footer not shown");
+$output = $guide->list_all_versions(
+                                     return_output => 1,
+                                     id => "Test Page",
+                                   );
+unlike( $output, qr/version=1;action=delete/,
+        "no delete links on history page"); 

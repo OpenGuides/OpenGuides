@@ -6,7 +6,6 @@ use Wiki::Toolkit::Setup::SQLite;
 use OpenGuides::Config;
 use OpenGuides::CGI;
 
-
 eval { require DBD::SQLite; };
 if ( $@ ) {
     plan skip_all => "DBD::SQLite not installed - no database to test with";
@@ -43,19 +42,18 @@ sub get_preferences {
     );
 }
 
-
 plan tests => 2;
 
 my ( $config, $guide, $wiki, $output );
 
 # Clear out the database from any previous runs.
-    OpenGuides::Test::refresh_db();
+OpenGuides::Test::refresh_db();
 
+# Make a guide 
+$config = OpenGuides::Test->make_basic_config;
+$guide = OpenGuides->new( config => $config );
 
-    # Make a guide 
-    $config = OpenGuides::Test->make_basic_config;
-    $guide = OpenGuides->new( config => $config );
-    # set is_admin to 1
+# set is_admin to 1
 my $cookie = OpenGuides::CGI->make_prefs_cookie(
     config                     => $config,
     username                   => "bob",
@@ -74,15 +72,18 @@ OpenGuides::Test->write_data(
                               node       => "Test Page",
                             );
 
-    $output = $guide->display_node(
-                                   return_output => 1,
-                                   id => "Test Page",
-                                 );
+$output = $guide->display_node(
+                                return_output => 1,
+                                noheaders => 1,
+                                id => "Test Page",
+                              );
+
 # check navbar_admin div is shown.
-    Test::HTML::Content::tag_ok( $output, "div", { id => "navbar_admin" },
-                                 "admin section displayed in navbar" );
+Test::HTML::Content::tag_ok( $output, "div", { id => "navbar_admin" },
+                             "admin section displayed in navbar" );
+
 # set is_admin to 0
- $cookie = OpenGuides::CGI->make_prefs_cookie(
+$cookie = OpenGuides::CGI->make_prefs_cookie(
     config                     => $config,
     username                   => "bob",
     include_geocache_link      => 1,
@@ -96,10 +97,12 @@ OpenGuides::Test->write_data(
 );
 $ENV{HTTP_COOKIE} = $cookie;
 
-     $output = $guide->display_node(
-                                   return_output => 1,
-                                   id => "Test Page",
-                                 );
+$output = $guide->display_node(
+                                return_output => 1,
+                                noheaders => 1,
+                                id => "Test Page",
+                              );
+
 # check that the navbar_admin div isnt shown
-    Test::HTML::Content::no_tag( $output, "div", { id => "navbar_admin" },
-					"navbar not shown");
+Test::HTML::Content::no_tag( $output, "div", { id => "navbar_admin" },
+                             "navbar not shown" );

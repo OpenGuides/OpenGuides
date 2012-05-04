@@ -54,7 +54,8 @@ OpenGuides::Test->write_data(
 my %tt_vars = $guide->show_index( cat => "pubs", return_tt_vars => 1 );
 is( scalar @{$tt_vars{nodes}}, 2,
     "Right number of nodes returned in pure category search" );
-my $output = $guide->show_index( cat => "pubs", return_output => 1 );
+my $output = $guide->show_index( cat => "pubs", return_output => 1,
+                                 noheaders => 1 );
 Test::HTML::Content::title_ok( $output, "Index of Category Pubs - Test",
     "...and page title is correct" );
 Test::HTML::Content::link_ok( $output, $config->script_name . "?Category_Pubs",
@@ -63,7 +64,8 @@ Test::HTML::Content::link_ok( $output, $config->script_name . "?Category_Pubs",
 %tt_vars = $guide->show_index( loc => "waddon", return_tt_vars => 1 );
 is( scalar @{$tt_vars{nodes}}, 2,
     "Right number of nodes returned in pure locale search" );
-$output = $guide->show_index( loc => "waddon", return_output => 1 );
+$output = $guide->show_index( loc => "waddon", return_output => 1,
+                              noheaders => 1 );
 Test::HTML::Content::title_ok( $output, "Index of Locale Waddon - Test",
     "...and page title is correct" );
 Test::HTML::Content::link_ok( $output, $config->script_name . "?Locale_Waddon",
@@ -74,7 +76,7 @@ Test::HTML::Content::link_ok( $output, $config->script_name . "?Locale_Waddon",
 is( scalar @{$tt_vars{nodes}}, 1,
     "Right number of nodes returned in category+locale search" );
 $output = $guide->show_index( cat => "pubs", loc => "waddon",
-                              return_output => 1 );
+                              return_output => 1, noheaders => 1 );
 Test::HTML::Content::title_ok( $output,
      "Index of Category Pubs and Locale Waddon - Test",
      "...and page title is correct" );
@@ -90,7 +92,7 @@ $config->use_leaflet( 1 );
 is( scalar @{$tt_vars{nodes}}, 1,
     "Right number of nodes returned in category+locale search with map" );
 $output = $guide->show_index( cat => "pubs", loc => "waddon", format => "map",
-                              return_output => 1 );
+                              return_output => 1, noheaders => 1 );
 Test::HTML::Content::title_ok( $output,
      "Map of Category Pubs and Locale Waddon - Test",
      "...and page title is correct" );
@@ -108,11 +110,9 @@ like( $output,
 
 # Test the JSON version.
 $output = $guide->show_index( cat => "pubs", loc => "waddon", format => "json",
-                              return_output => 1 );
+                              return_output => 1, noheaders => 1 );
 unlike( $output, qr/error/i, "JSON format invocation doesn't cause error." );
 
-# Need to strip out the Content-Type: header or the decoder gets confused.
-$output =~ s/^Content-Type:.*\n//s;
 my $parsed = eval {
     local $SIG{__WARN__} = sub { die $_[0]; };
     decode_json( $output );

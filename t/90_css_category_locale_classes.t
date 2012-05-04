@@ -34,7 +34,8 @@ OpenGuides::Test->write_data(
                               return_output => 1,
                             );
 
-my $output = $guide->display_node( id => "Crown", return_output => 1 );
+my $output = $guide->display_node( id => "Crown", return_output => 1,
+                                   noheaders => 1 );
 Test::HTML::Content::tag_ok( $output, "div",
   { id => "content", class => "cat_pubs loc_cornmarket" },
   "Node in one locale and one category has CSS classes for both." );
@@ -47,7 +48,8 @@ OpenGuides::Test->write_data(
                               locales => "Magdalen Street",
                               return_output => 1,
                             );
-$output = $guide->display_node( id => "Debenhams", return_output => 1 );
+$output = $guide->display_node( id => "Debenhams", return_output => 1,
+                                noheaders => 1 );
 Test::HTML::Content::tag_ok( $output, "div",
   { id => "content", class => "cat_baby_changing loc_magdalen_street" },
   "...and spaces in locale/category names are replaced by underscores." );

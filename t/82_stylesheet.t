@@ -31,7 +31,8 @@ OpenGuides::Test->write_data( guide => $guide, node => "Red Lion",
 
 # Display it, and make sure we get the openguides-base.css in there.
 $config->static_url( "http://example.org/static/" );
-my $output = $guide->display_node( id => "Red Lion", return_output => 1 );
+my $output = $guide->display_node( id => "Red Lion", return_output => 1,
+                                   noheaders => 1 );
 Test::HTML::Content::tag_ok( $output, "link",
     { rel => "stylesheet",
       href => "http://example.org/static/openguides-base.css" },
@@ -39,7 +40,8 @@ Test::HTML::Content::tag_ok( $output, "link",
 
 # Make sure the guide's own stylesheet overrides this though.
 $config->stylesheet_url( "http://example.com/styles.css" );
-$output = $guide->display_node( id => "Red Lion", return_output => 1 );
+$output = $guide->display_node( id => "Red Lion", return_output => 1,
+                                noheaders => 1 );
 Test::HTML::Content::no_tag( $output, "link",
     { rel => "stylesheet", href => "openguides-base.css" },
     "...but not when one is provided" );

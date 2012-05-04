@@ -156,6 +156,13 @@ sub differ {
                           return_output => 1,
                       );
 
+  # Return output as a string with HTTP headers omitted (for tests).
+  $guide->display_node(
+                          id            => "Calthorpe Arms",
+                          return_output => 1,
+                          noheaders     => 1,
+                      );
+
   # Or return the hash of variables that will be passed to the template
   # (not including those set additionally by OpenGuides::Template).
   $guide->display_node(
@@ -176,6 +183,9 @@ C<return_output> parameter is omitted.
 (At the moment, C<return_tt_vars> acts as if the C<intercept_redirect>
 parameter was passed.)
 
+The C<noheaders> parameter only takes effect if C<return_output> is true
+and C<intercept_redirect> is false or omitted.
+
 If you have specified the C<host_checker_module> option in your
 C<wiki.conf>, this method will attempt to call the <blacklisted_host>
 method of that module to determine whether the host requesting the node
@@ -191,6 +201,8 @@ sub display_node {
     my ($self, %args) = @_;
     my $return_output = $args{return_output} || 0;
     my $intercept_redirect = $args{intercept_redirect};
+    my $noheaders = ( $return_output && !$intercept_redirect
+                      && $args{noheaders} );
     my $version = $args{version};
     my $id = $args{id} || $self->config->home_name;
     my $wiki = $self->wiki;
@@ -212,12 +224,13 @@ sub display_node {
 
     if ( $is_blacklisted ) {
         my $output = OpenGuides::Template->output(
-            wiki     => $self->wiki,
-            config   => $config,
-            template => "blacklisted_host.tt",
-            vars     => {
-                          not_editable => 1,
-                        },
+            wiki      => $self->wiki,
+            config    => $config,
+            template  => "blacklisted_host.tt",
+            vars      => {
+                           not_editable => 1,
+                         },
+            noheaders => $noheaders,
         );
         return $output if $return_output;
         print $output;
@@ -262,7 +275,7 @@ sub display_node {
                                         latitude => $metadata{latitude}[0],
                                         config => $config);
     if ($args{format} && $args{format} eq 'raw') {
-        print "Content-Type: text/plain\n\n";
+        print "Content-Type: text/plain\n\n" unless $noheaders;
         print $node_data{content};
         return 0;
     }
@@ -364,20 +377,22 @@ sub display_node {
         }
         return %tt_vars if $args{return_tt_vars};
         my $output = $self->process_template(
-                                                id            => $id,
-                                                template      => "home_node.tt",
-                                                tt_vars       => \%tt_vars,
-                                                http_status   => $http_status
+                                              id          => $id,
+                                              template    => "home_node.tt",
+                                              tt_vars     => \%tt_vars,
+                                              http_status => $http_status,
+                                              noheaders   => $noheaders,
                                             );
         return $output if $return_output;
         print $output;
     } else {
         return %tt_vars if $args{return_tt_vars};
         my $output = $self->process_template(
-                                                id            => $id,
-                                                template      => "node.tt",
-                                                tt_vars       => \%tt_vars,
-                                                http_status   => $http_status
+                                              id          => $id,
+                                              template    => "node.tt",
+                                              tt_vars     => \%tt_vars,
+                                              http_status => $http_status,
+                                              noheaders   => $noheaders,
                                             );
         return $output if $return_output;
         print $output;
@@ -644,6 +659,8 @@ sub preview_edit {
 Displays a form that lets the user view and set their preferences.  The
 C<return_output> and C<return_tt_vars> parameters can be used to return
 the output or template variables, instead of printing the output to STDOUT.
+The C<noheaders> parameter can also be used in conjunction with
+C<return_output>, if you wish to omit all HTTP headers.
 
 =cut
 
@@ -931,6 +948,13 @@ sub show_backlinks {
                         return_output => 1,
                     );
 
+  # Return output as a string with HTTP headers omitted (for tests).
+  $guide->show_index(
+                        cat           => "pubs",
+                        return_output => 1,
+                        noheaders     => 1,
+                    );
+
   # Or return the template variables (again, useful for writing tests).
   $guide->show_index(
                         cat            => "pubs",
@@ -948,9 +972,13 @@ If you pass the C<return_output> or C<return_tt_vars> parameters, and a
 redirect is required, this method will fake the redirect and return the
 output/variables that will actually end up being viewed by the user.  If
 instead you want to see the HTTP headers that will be printed in order to
-perform the redirect, pass the C<intercept_redirect> parameter as well. The
-C<intercept_redirect> parameter has no effect if no redirect is required, or
-if the C<return_output>/C<return_tt_vars> parameter is omitted.
+perform the redirect, pass the C<intercept_redirect> parameter as well.
+
+The C<intercept_redirect> parameter has no effect if no redirect is required,
+or if the C<return_output>/C<return_tt_vars> parameter is omitted.
+
+The C<noheaders> parameter only takes effect if C<return_output> is true
+and C<intercept_redirect> is false or omitted.
 
 =cut
 
@@ -1180,6 +1208,10 @@ sub show_index {
                 template    => $template,
                 tt_vars     => \%tt_vars,
             );
+
+    if ( $args{return_output} && !$args{intercept_redirect} ) {
+        $conf{noheaders} = $args{noheaders};
+    }
 
     my $output = $self->process_template( %conf );
     return $output if $args{return_output};
@@ -2464,7 +2496,8 @@ sub process_template {
                           template    => $args{template},
                           vars        => $args{tt_vars},
                           cookies     => $args{cookies},
-                          http_status => $args{http_status}
+                          http_status => $args{http_status},
+                          noheaders   => $args{noheaders},
                       );
     if ( $args{content_type} ) {
         $output_conf{content_type} = $args{content_type};
