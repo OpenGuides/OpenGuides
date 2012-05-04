@@ -149,12 +149,8 @@ $cookie = OpenGuides::CGI->make_prefs_cookie(
 );
 $ENV{HTTP_COOKIE} = $cookie;
 
-
-TODO: {
-    local $TODO = "http://dev.openguides.org/ticket/270";
 $output = $guide->display_recent_changes( return_output => 1 );
 like ($output, qr/<td class="recentchanges_node_name">/, "expecting a table defintion for an edit");
 like ($output, qr/Second edit/, "expecting at least one edit"); 
 unlike ($output, qr/First edit/, "showing a page edit twice when not showing minor edits"); 
 unlike ($output, qr/Third edit/, "showing a page edit twice when not showing minor edits");
-} 

@@ -153,10 +153,7 @@ is( $node{version}, 2, "Second version" );
 $output = $guide->display_recent_changes( return_output => 1 );
 # check recent changes renders properly
 like ($output, qr/24 hours/, "pages changed in the last 24 hours"); 
-TODO: {
-    local $TODO = "http://dev.openguides.org/ticket/270";
 unlike ($output, qr/Echidnas rock/, "not showing multiple edits");
-}
 like ($output, qr/last week/, "edits in the last week"); 
 like ($output, qr/last fortnight/, "edits in the last fornight"); 
 unlike ($output, qr/last 30 days/, "no edits in the last 30 days"); 

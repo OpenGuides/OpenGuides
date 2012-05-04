@@ -694,8 +694,10 @@ sub display_recent_changes {
     my $id = $args{id} || $self->config->home_name;
     my $return_output = $args{return_output} || 0;
     my (%tt_vars, %recent_changes);
+    # NB the $q stuff below should be removed - we should _always_ do this via
+    # an argument to the method.
     my $q = CGI->new;
-    my $since = $q->param("since");
+    my $since = $args{since} || $q->param("since");
     if ( $since ) {
         $tt_vars{since} = $since;
         my $t = localtime($since); # overloaded by Time::Piece
@@ -703,59 +705,30 @@ sub display_recent_changes {
         my %criteria = ( since => $since );   
         $criteria{metadata_was} = { edit_type => "Normal edit" }
           unless $minor_edits;
-        my @rc = $self->{wiki}->list_recent_changes( %criteria );
-
-        my $base_url = $config->script_name . '?';
-        
-        @rc = map {
-            {
-              name        => CGI->escapeHTML($_->{name}),
-              last_modified => CGI->escapeHTML($_->{last_modified}),
-              version     => CGI->escapeHTML($_->{version}),
-              comment     => OpenGuides::Utils::parse_change_comment(
-                  CGI->escapeHTML($_->{metadata}{comment}[0]),
-                  $base_url,
-              ),
-              username    => CGI->escapeHTML($_->{metadata}{username}[0]),
-              host        => CGI->escapeHTML($_->{metadata}{host}[0]),
-              username_param => CGI->escape($_->{metadata}{username}[0]),
-              edit_type   => CGI->escapeHTML($_->{metadata}{edit_type}[0]),
-              url         => $base_url
-      . CGI->escape($wiki->formatter->node_name_to_node_param($_->{name})),
-        }
-                   } @rc;
+        my @rc = $self->_get_recent_changes(
+                     config => $config, criteria => \%criteria );
         if ( scalar @rc ) {
             $recent_changes{since} = \@rc; 
         }
     } else {
+        # Look at day, week, fortnight, month separately, but make sure things
+        # don't appear in e.g. "week" if we've already seen them in "day".
+        my %seen;
         for my $days ( [0, 1], [1, 7], [7, 14], [14, 30] ) {
             my %criteria = ( between_days => $days );
             $criteria{metadata_was} = { edit_type => "Normal edit" }
               unless $minor_edits;
-            my @rc = $self->{wiki}->list_recent_changes( %criteria );
-
-            my $base_url = $config->script_name . '?';
-            
-            @rc = map {
-            {
-              name        => CGI->escapeHTML($_->{name}),
-              last_modified => CGI->escapeHTML($_->{last_modified}),
-              version     => CGI->escapeHTML($_->{version}),
-              comment     => OpenGuides::Utils::parse_change_comment(
-                  CGI->escapeHTML($_->{metadata}{comment}[0]),
-                  $base_url,
-              ),
-              username    => CGI->escapeHTML($_->{metadata}{username}[0]),
-              host        => CGI->escapeHTML($_->{metadata}{host}[0]),
-              username_param => CGI->escape($_->{metadata}{username}[0]),
-              edit_type   => CGI->escapeHTML($_->{metadata}{edit_type}[0]),
-              url         => $base_url
-      . CGI->escape($wiki->formatter->node_name_to_node_param($_->{name})),
-        }
-                       } @rc;
-            if ( scalar @rc ) {
-                $recent_changes{$days->[1]} = \@rc;
-        }
+            my @rc = $self->_get_recent_changes(
+                         config => $config, criteria => \%criteria );
+            my @filtered;
+            foreach my $node ( @rc ) {
+                next if $seen{$node->{name}};
+                $seen{$node->{name}}++;
+                push @filtered, $node;
+            }
+            if ( scalar @filtered ) {
+                $recent_changes{$days->[1]} = \@filtered;
+            }
         }
     }
     $tt_vars{not_editable} = 1;
@@ -775,6 +748,49 @@ sub display_recent_changes {
     my $output = $self->process_template( %processing_args );
     return $output if $return_output;
     print $output;
+}
+
+sub _get_recent_changes {
+    my ( $self, %args ) = @_;
+    my $wiki = $self->wiki;
+    my $formatter = $wiki->formatter;
+    my $config = $self->config;
+    my %criteria = %{ $args{criteria} };
+
+    my @rc = $wiki->list_recent_changes( %criteria );
+    my $base_url = $config->script_name . '?';
+
+    # If using metadata_was then we need to pick out just the most recent
+    # versions.
+    if ( $criteria{metadata_was} ) {
+        my %seen;
+        my @filtered;
+        foreach my $node ( @rc ) {
+            next if $seen{$node->{name}};
+            $seen{$node->{name}}++;
+            push @filtered, $node;
+        }
+        @rc = @filtered;
+    }
+
+    @rc = map {
+        {
+          name => CGI->escapeHTML($_->{name}),
+          last_modified => CGI->escapeHTML($_->{last_modified}),
+          version => CGI->escapeHTML($_->{version}),
+          comment => OpenGuides::Utils::parse_change_comment(
+                         CGI->escapeHTML($_->{metadata}{comment}[0]),
+                         $base_url,
+                     ),
+          username => CGI->escapeHTML($_->{metadata}{username}[0]),
+          host => CGI->escapeHTML($_->{metadata}{host}[0]),
+          username_param => CGI->escape($_->{metadata}{username}[0]),
+          edit_type => CGI->escapeHTML($_->{metadata}{edit_type}[0]),
+          url => $base_url
+                . CGI->escape($formatter->node_name_to_node_param($_->{name})),
+        }
+    } @rc;
+    return @rc;
 }
 
 =item B<display_diffs>
