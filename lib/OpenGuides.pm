@@ -2508,9 +2508,9 @@ sub process_template {
 # Redirection for legacy URLs.
 sub redirect_index_search {
     my ( $self, %args ) = @_;
-    my $type   = lc( $args{type} ) || "";
-    my $value  = lc( $args{value} ) || "";
-    my $format = lc( $args{format} ) || "";
+    my $type   = lc( $args{type} || "" );
+    my $value  = lc( $args{value} || "" );
+    my $format = lc( $args{format} || "" );
 
     my $script_url = $self->config->script_url;
     my $script_name = $self->config->script_name;

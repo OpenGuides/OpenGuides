@@ -525,7 +525,7 @@ sub _make_dropdown_html {
     @options = map { s/^Category //; s/^Locale //; $_ } @options;
     my %labels = map { lc( $_ ) => $_ } @options;
     my @values = sort keys %labels;
-    my $default = lc( $args{value} ) || "";
+    my $default = lc( $args{value} || "");
 
     my $q = CGI->new( "" );
     return $q->popup_menu( -name => $field_name,
