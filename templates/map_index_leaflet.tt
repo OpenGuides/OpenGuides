@@ -1,6 +1,10 @@
 [% USE JSON.Escape %]
 
-[% page_title = "Map of $criteria_title - $site_name" %]
+[% IF criteria %]
+  [% page_title = "Map of $criteria_title - $site_name" %]
+[% ELSE %]
+  [% page_title = "Map of all nodes - $site_name" %]
+[% END %]
 [% INCLUDE header.tt %]
 [% INCLUDE banner.tt %]
 

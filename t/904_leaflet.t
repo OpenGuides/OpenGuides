@@ -11,7 +11,10 @@ if ( $@ ) {
         "DBD::SQLite could not be used - no database to test with. ($error)";
 }
 
-plan tests => 23;
+eval { require Test::HTML::Content; };
+my $thc = $@ ? 0 : 1;
+
+plan tests => 25;
 
 my $config = OpenGuides::Test->make_basic_config;
 $config->static_url( "http://example.com/static" );
@@ -173,3 +176,13 @@ unlike( $output, qr/not on map/,
         "...and no warning about individual things not being on the map" );
 unlike( $output, qr/centre_lat/,
         "...and no attempt to set centre_lat JavaScript variable" );
+
+# Check titles when showing map of everything.
+$output = $guide->show_index( format => "map", noheaders => 1,
+                              return_output => 1 );
+SKIP: {
+    skip "Test::HTML::Content not available", 1 unless $thc;
+    Test::HTML::Content::title_ok( $output, qr/Map of all nodes/,
+       "<title> correct when showing map of everything" );
+}
+like( $output, qr/<h2>Map\s+of\s+all\s+nodes/, "...as is <h2> title" );
