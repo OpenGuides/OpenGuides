@@ -56,7 +56,14 @@
         <p class="no_nodes_on_map">No pages with geodata - nothing to display
         on map!</p>
       [% ELSE %]
+        <span id="map_index_no_js">
+          <p>Sorry! JavaScript is required to view the map - you may prefer to
+          <a href="[% feed_base %]">view the results as a list</a> instead.</p>
+        </span>
+
         <script type="text/javascript">
+
+          $('#map_index_no_js').hide();
 
           map_div_id = 'map_index_canvas';
           centre_lat = [% centre_lat %];
