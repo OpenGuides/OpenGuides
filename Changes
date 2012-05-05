@@ -32,6 +32,8 @@ More detailed changelogs can be found at
           your wiki.conf).
         The preferences page now remembers what page the user got to it from,
           and sends them back there.
+        Fixed bug with recent changes display when minor edit suppressed (for
+          which we require version 0.80 of Wiki::Toolkit).
 
 0.66    12 April 2012
         All templates now have access to the "username" TT variable.
