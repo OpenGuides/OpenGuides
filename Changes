@@ -35,6 +35,7 @@ More detailed changelogs can be found at
           and sends them back there.
         Fixed bug with recent changes display when minor edit suppressed (for
           which we require version 0.80 of Wiki::Toolkit).
+	Renumber tests so we have more room (#297).
 
 0.66    12 April 2012
         All templates now have access to the "username" TT variable.

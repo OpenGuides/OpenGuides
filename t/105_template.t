@@ -28,14 +28,14 @@ ok( $@, "->output croaks if no template file supplied" );
 eval {
     OpenGuides::Template->output( wiki     => $wiki,
                                   config   => $config,
-                                  template => "15_test.tt" );
+                                  template => "105_test.tt" );
 };
 is( $@, "", "...but not if one is" );
 
 my $output = OpenGuides::Template->output(
     wiki     => $wiki,
     config   => $config,
-    template => "15_test.tt",
+    template => "105_test.tt",
     vars     => { foo => "bar" }
 );
 like( $output, qr/^Content-Type: text\/html/,
@@ -45,7 +45,7 @@ like( $output, qr/FOO: bar/, "variables substituted" );
 $output = OpenGuides::Template->output(
     wiki         => $wiki,
     config       => $config,
-    template     => "15_test.tt",
+    template     => "105_test.tt",
     content_type => ""
 );
 unlike( $output, qr/^Content-Type: text\/html/,
@@ -54,7 +54,7 @@ unlike( $output, qr/^Content-Type: text\/html/,
 $output = OpenGuides::Template->output(
     wiki          => $wiki,
     config        => $config,
-    template      => "15_test.tt",
+    template      => "105_test.tt",
     noheaders      => 1,
     http_response => 500
 );
@@ -73,7 +73,7 @@ like( $output, qr/Failed to process template/, "fails nice on TT error" );
 $output = OpenGuides::Template->output(
     wiki     => $wiki,
     config   => $config,
-    template => "15_test.tt"
+    template => "105_test.tt"
 );
 
 like( $output, qr/SITE NAME: Wiki::Toolkit Test Site/, "site_name var set" );
@@ -98,7 +98,7 @@ $output = OpenGuides::Template->output(
     wiki     => $wiki,
     config   => $config,
     node     => "Test Node",
-    template => "15_test.tt"
+    template => "105_test.tt"
 );
 
 like( $output, qr/NODE NAME: Test Node/, "node_name var set" );
@@ -109,7 +109,7 @@ my $cookie = CGI::Cookie->new( -name => "x", -value => "y" );
 $output = OpenGuides::Template->output(
     wiki     => $wiki,
     config   => $config,
-    template => "15_test.tt",
+    template => "105_test.tt",
     cookies  => $cookie
 );
 like( $output, qr/Set-Cookie: $cookie/, "cookie in header" );
@@ -128,7 +128,7 @@ $config = OpenGuides::Config->new(
 $output = OpenGuides::Template->output(
     wiki     => $wiki,
     config   => $config,
-    template => "15_test.tt"
+    template => "105_test.tt"
 );
 like ( $output, qr/FORMATTING RULES LINK: http:\/\/www.example.com\/wikitext/,
       "formatting_rules_link var honoured for explicit URLs" );
@@ -145,7 +145,7 @@ $config = OpenGuides::Config->new(
 $output = OpenGuides::Template->output(
     wiki     => $wiki,
     config   => $config,
-    template => "15_test.tt"
+    template => "105_test.tt"
 );
 like( $output, qr/HOME LINK: http:\/\/wiki.example.com/,
       "home_link var set OK when script_name blank" );
@@ -163,7 +163,7 @@ $config = OpenGuides::Config->new(
 $output = OpenGuides::Template->output(
     wiki     => $wiki,
     config   => $config,
-    template => "15_test.tt"
+    template => "105_test.tt"
 );
 like( $output, qr/FULL CGI URL: http:\/\/wiki.example.com\/wiki.cgi/,
       "full_cgi_url OK when trailing '/' missed off script_url" );
@@ -177,7 +177,7 @@ $ENV{HTTP_COOKIE} = $cookie;
 $output = OpenGuides::Template->output(
     wiki     => $wiki,
     config   => $config,
-    template => "15_test.tt"
+    template => "105_test.tt"
 );
 like( $output, qr/FORMATTING RULES LINK: /,
       "formatting_rules_link TT var blank as set in cookie" );
@@ -186,7 +186,7 @@ like( $output, qr/FORMATTING RULES LINK: /,
 $output = OpenGuides::Template->output(
     wiki     => $wiki,
     config   => $config,
-    template => "15_test.tt",
+    template => "105_test.tt",
     vars     => { omit_formatting_link => "fish" },
 );
 like( $output, qr/OMIT FORMATTING LINK: fish/,
@@ -205,7 +205,7 @@ $config = OpenGuides::Config->new(
 $output = OpenGuides::Template->output(
     wiki     => $wiki,
     config   => $config,
-    template => "15_test.tt",
+    template => "105_test.tt",
 );
 like( $output, qr/ENABLE PAGE DELETION: 0/,
       "enable_page_deletion var set correctly when not specified in conf" );
@@ -214,7 +214,7 @@ $config->enable_page_deletion( "n" );
 $output = OpenGuides::Template->output(
     wiki     => $wiki,
     config   => $config,
-    template => "15_test.tt",
+    template => "105_test.tt",
 );
 like( $output, qr/ENABLE PAGE DELETION: 0/,
       "enable_page_deletion var set correctly when set to 'n' in conf" );
@@ -223,7 +223,7 @@ $config->enable_page_deletion( "y" );
 $output = OpenGuides::Template->output(
     wiki     => $wiki,
     config   => $config,
-    template => "15_test.tt",
+    template => "105_test.tt",
 );
 like( $output, qr/ENABLE PAGE DELETION: 1/,
       "enable_page_deletion var set correctly when set to 'y' in conf" );
@@ -232,7 +232,7 @@ $config->enable_page_deletion( 0 );
 $output = OpenGuides::Template->output(
     wiki     => $wiki,
     config   => $config,
-    template => "15_test.tt",
+    template => "105_test.tt",
 );
 like( $output, qr/ENABLE PAGE DELETION: 0/,
       "enable_page_deletion var set correctly when set to '0' in conf" );
@@ -241,7 +241,7 @@ $config->enable_page_deletion( 1 );
 $output = OpenGuides::Template->output(
     wiki     => $wiki,
     config   => $config,
-    template => "15_test.tt",
+    template => "105_test.tt",
 );
 like( $output, qr/ENABLE PAGE DELETION: 1/,
       "enable_page_deletion var set correctly when set to '1' in conf" );
