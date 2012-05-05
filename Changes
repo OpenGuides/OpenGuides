@@ -21,6 +21,7 @@ More detailed changelogs can be found at
           Format params such as format=map work as before.  Old-style URLs
           will automatically redirect to new-style ones.
 	Added project metadata to Build.PL (#285).
+	Skip Build.PL questions if AUTOMATED_TESTING=1 (#291)
         Added a basic stylesheet, installed into the static_path directory.
         Fixed the JSON output for action=index (using a new dependency on
           Template::Plugin::JSON::Escape).
