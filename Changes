@@ -3,7 +3,7 @@
 More detailed changelogs can be found at
 <http://dev.openguides.org/log/trunk>.
 
-0.67    ?
+0.67    07 May 2012
         Switched from the Google Maps API to the Leaflet mapping library.
           To make this work, set use_leaflet = 1 in your wiki.conf, and ensure
           that div#map_index_canvas is given a non-zero height in your
