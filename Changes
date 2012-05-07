@@ -20,8 +20,8 @@ More detailed changelogs can be found at
             action=index;cat=pubs;loc=holborn
           Format params such as format=map work as before.  Old-style URLs
           will automatically redirect to new-style ones.
-	Added project metadata to Build.PL (#285).
-	Skip Build.PL questions if AUTOMATED_TESTING=1 (#291)
+        Added project metadata to Build.PL (#285).
+        Skip Build.PL questions if AUTOMATED_TESTING=1 (#291)
         Added a basic stylesheet, installed into the static_path directory.
         Fixed the JSON output for action=index (using a new dependency on
           Template::Plugin::JSON::Escape).
@@ -35,8 +35,8 @@ More detailed changelogs can be found at
           and sends them back there.
         Fixed bug with recent changes display when minor edit suppressed (for
           which we require version 0.80 of Wiki::Toolkit).
-	Renumber tests so we have more room (#297).
-	Fix warnings in tests due to undef values being lower cased (#298).
+        Renumber tests so we have more room (#297).
+        Fix warnings in tests due to undef values being lower cased (#298).
 
 0.66    12 April 2012
         All templates now have access to the "username" TT variable.
