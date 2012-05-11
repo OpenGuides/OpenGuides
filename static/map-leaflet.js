@@ -27,10 +27,12 @@ $(
         layers: [ osm_layer ],
       } );
 
-      if ( min_lat ) {
+      if ( min_lat && ( min_lat != max_lat ) ) {
         var bounds = new L.LatLngBounds( new L.LatLng( min_lat, min_long ),
                                          new L.LatLng( max_lat, max_long ) );
         map.fitBounds( bounds );
+      } else if ( min_lat == max_lat ) {
+        map.setView( new L.LatLng( min_lat, min_long ), 18 );
       } else {
         map.setView( map_centre, 13 );
       }
