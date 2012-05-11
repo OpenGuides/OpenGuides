@@ -89,7 +89,6 @@
             Current locales:
           [% ELSE %]
             Locales (one per line) (<a href="[% full_cgi_url %]?Category_Locales" target="_blank">view all locales in a new window)</a>:
-            <span id="pick_locale"></span>
           [% END %]
         </label>
         <div class="edit_box">
@@ -114,7 +113,6 @@
             Current categories:
           [% ELSE %]
             Categories (one per line) (<a href="[% full_cgi_url %]?Category_Category" target="_blank">view all categories in a new window)</a>:
-            <span id="pick_category"></span>
           [% END %]
         </label>
         <div class="edit_box">
@@ -132,42 +130,6 @@
           </div>
         [% END %]
       </div>
-
-	  <script type="text/javascript">
-	     function pick(metadata_type, textbox_id) {
-		    var textbox = document.getElementById(textbox_id);
-
-			// For adding the new metadata to the textarea
-			var add_md = function(picked) {
-			   var last = textbox.value.substring(textbox.value.length - 1);
-			   if(last == "\r" || last == "\n") {
-			      // Already has new line
-			   } else {
-			      textbox.value = textbox.value + "\r\n";
-			   }
-
-			   textbox.value = textbox.value + picked;
-			};
-
-			// Fetch the data
-			$.getJSON("[% cgi_url %]?action=metadata;format=json;type=" + metadata_type, function(data) {
-//				alert(data[metadata_type][0]);
-//				add_md(data[metadata_type][1]);
-			});
-		 }
-
-	     function pick_locale() {
-		    pick("locale", "locales");
-		 }
-	     function pick_category() {
-		    pick("category", "categories");
-		 }
-
-	     $(document).ready(function() {
-		    $("#pick_locale").html("<a href='javascript:pick_locale()'>pick Locale<\/a>");
-		    $("#pick_category").html("<a href='javascript:pick_category()'>pick Category<\/a>");
-		 });
-	  </script>
 
       <div class="edit_form_group" id="summary_group">
         [% IF conflict %]
