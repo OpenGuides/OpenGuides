@@ -55,8 +55,10 @@ This guide is in read-only mode.
     </script>
 
     <script type="text/javascript">
-    var pageTracker = _gat._getTracker("[% config.google_analytics_key %]");
-    pageTracker._trackPageview();
+      try {
+       var pageTracker = _gat._getTracker("[% config.google_analytics_key %]");
+       pageTracker._trackPageview();
+      } catch(err) {}
     </script>
   [% END %]
 
