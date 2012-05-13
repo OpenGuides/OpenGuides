@@ -341,7 +341,7 @@ sub get_prefs_from_hash {
                      # when that bug gets fixed
                      show_minor_edits_in_rc     => 1,
                      default_edit_type          => "normal",
-                     cookie_expires             => "month",
+                     cookie_expires             => "never",
                      track_recent_changes_views => 0,
                      display_google_maps        => 1,
                      is_admin                   => 0,

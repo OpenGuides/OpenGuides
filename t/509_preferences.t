@@ -17,7 +17,7 @@ if ( $@ ) {
     exit 0;
 }
 
-plan tests => 17;
+plan tests => 21;
 
 OpenGuides::Test::refresh_db();
 
@@ -95,6 +95,37 @@ $output = $guide->display_prefs_form( return_output => 1, noheaders => 1 );
 Test::HTML::Content::no_tag( $output,
   "input", { type => "checkbox", name => "display_google_maps" },
   "...but not when node maps are globally disabled." );
+
+# Make sure the default is for preferences to never expire.
+delete $ENV{HTTP_COOKIE};
+$output = $guide->display_prefs_form( return_output => 1, noheaders => 1 );
+Test::HTML::Content::tag_ok( $output,
+  "option", { value => "never", "selected" => "1" },
+  "Default for preferences expiry choice is \"never\"." );
+
+$cookie = OpenGuides::CGI->make_prefs_cookie( config => $config,
+                                              cookie_expires => "never" );
+$ENV{HTTP_COOKIE} = $cookie;
+$output = $guide->display_prefs_form( return_output => 1, noheaders => 1 );
+Test::HTML::Content::tag_ok( $output,
+  "option", { value => "never", "selected" => "1" },
+  "...choice set to \"never\" if already set as such in cookie" );
+
+$cookie = OpenGuides::CGI->make_prefs_cookie( config => $config,
+                                              cookie_expires => "year" );
+$ENV{HTTP_COOKIE} = $cookie;
+$output = $guide->display_prefs_form( return_output => 1, noheaders => 1 );
+Test::HTML::Content::tag_ok( $output,
+  "option", { value => "year", "selected" => "1" },
+  "...choice set to \"year\" if already set as such in cookie" );
+
+$cookie = OpenGuides::CGI->make_prefs_cookie( config => $config,
+                                              cookie_expires => "month" );
+$ENV{HTTP_COOKIE} = $cookie;
+$output = $guide->display_prefs_form( return_output => 1, noheaders => 1 );
+Test::HTML::Content::tag_ok( $output,
+  "option", { value => "month", "selected" => "1" },
+  "...choice set to \"month\" if already set as such in cookie" );
 
 # Test JSON version of prefs page.
 my $json_writer = OpenGuides::JSON->new( wiki   => $wiki,

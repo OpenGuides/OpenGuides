@@ -103,18 +103,18 @@
     <p>
       <label for="cookie_expires">Preferences expire:</label>
       <select name="cookie_expires" id="cookie_expires">
-        [% IF prefs.cookie_expires == 'never' %]
-          <option value="month">in one month</option>
+        [% IF prefs.cookie_expires == 'month' %]
+          <option value="month" selected="1">in one month</option>
           <option value="year">in one year</option>
-          <option value="never" selected="1">never</option>
+          <option value="never">never</option>
         [% ELSIF prefs.cookie_expires == "year" %]
           <option value="month">in one month</option>
           <option value="year" selected="1">in one year</option>
           <option value="never">never</option>
         [% ELSE %]
-          <option value="month" selected="1">in one month</option>
+          <option value="month">in one month</option>
           <option value="year">in one year</option>
-          <option value="never">never</option>
+          <option value="never" selected="1">never</option>
         [% END %]
       </select>
     </p>
