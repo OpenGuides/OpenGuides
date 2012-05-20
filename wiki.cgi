@@ -32,13 +32,18 @@ eval {
     $formatter = $wiki->formatter;
     $q = CGI->new;
 
-    # See if we need to redirect due to spaces in URL.
-    my $redirect = OpenGuides::CGI->check_spaces_redirect(
+    # See if we need to redirect due to spaces in URL.  Don't do this for
+    # POST requests though - it leads to all the data being stuffed into the
+    # URL, which breaks things if there's a lot of data.
+    my $request_method = $q->request_method() || "";
+    unless ( $request_method eq "POST" ) {
+      my $redirect = OpenGuides::CGI->check_spaces_redirect(
                                          cgi_obj => $q, wiki => $wiki );
 
-    if ( $redirect ) {
-        print $q->redirect( -uri => $redirect, -status => 303 );
-        exit 0;
+      if ( $redirect ) {
+          print $q->redirect( -uri => $redirect, -status => 303 );
+          exit 0;
+      }
     }
 
     # No redirect - carry on.
@@ -47,7 +52,6 @@ eval {
 
     # If we did a post, then CGI->param probably hasn't fully de-escaped,
     #  in the same way as a get would've done
-    my $request_method = $q->request_method() || '';
     if($request_method eq 'POST') {
         $node = uri_unescape($node);
     }
