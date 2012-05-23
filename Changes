@@ -3,6 +3,9 @@
 More detailed changelogs can be found at
 <http://dev.openguides.org/log/trunk>.
 
+0.69    ?
+
+
 0.68    21 May 2012
         Made sure that maps are centred and zoomed properly even when they only
           contain one point.
