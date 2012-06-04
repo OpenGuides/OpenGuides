@@ -11,8 +11,8 @@ if ( $@ ) {
     plan skip_all => "DBD::SQLite could not be used - no database to test with ($error)";
 }
 
-plan tests => 26;
-    OpenGuides::Test::refresh_db();
+plan tests => 27;
+OpenGuides::Test::refresh_db();
 
 my $config = OpenGuides::Test->make_basic_config;
 $config->script_name( "wiki.cgi" );
@@ -21,8 +21,6 @@ my $guide = OpenGuides->new( config => $config );
 isa_ok( $guide, "OpenGuides" );
 my $wiki = $guide->wiki;
 isa_ok( $wiki, "Wiki::Toolkit" );
-
-
 
 # Add four different pages, one of which with two versions, one of which
 # a redirect.  The redirect should not show up on any "missing metadata"
@@ -96,6 +94,11 @@ is( $nodes[1]->{'name'}, "Locale Bar", "Right nodes" );
 is( $nodes[2]->{'name'}, "Test Page", "Right nodes" );
 is( $nodes[3]->{'name'}, "Test Page 3", "Right nodes" );
 
+# Make sure they're returned in alphabetical order.
+my @nodenames = map { $_->{name} } @{$ttvars{nodes}};
+is_deeply( \@nodenames,
+           [ "Category Foo", "Locale Bar", "Test Page", "Test Page 3" ],
+           "Nodes are returned in alphabetical order" );
 
 # Try again, but exclude locale and category
 %ttvars = eval {

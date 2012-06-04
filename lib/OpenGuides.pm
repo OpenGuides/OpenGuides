@@ -2279,7 +2279,7 @@ sub show_missing_metadata {
 
     # Build nice edit etc links for our nodes
     my @tt_nodes;
-    for my $node (@nodes) {
+    for my $node (sort @nodes) {
         my %n;
 
         # Make the URLs
