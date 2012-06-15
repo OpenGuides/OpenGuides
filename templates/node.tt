@@ -1,4 +1,5 @@
 [% USE CGI %]
+[% USE JSON.Escape %]
 [% INCLUDE header.tt %]
 [% INCLUDE banner.tt %]
 
@@ -27,7 +28,7 @@
         var position = new L.LatLng( [% wgs84_lat %], [% wgs84_long %] );
         marker = new L.Marker( position, { icon: new gicon() } );
         map.addLayer( marker );
-        marker.bindPopup( '[% node_name %]' );
+        marker.bindPopup( [% node_name.json %] );
       }
     </script>
   [% ELSIF gmaps_api_key %]

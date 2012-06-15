@@ -5,6 +5,7 @@ More detailed changelogs can be found at
 
 0.69    ?
         The output of the "show_missing_metadata" action is now alphabetised.
+        Fixed a JavaScript escaping issue for nodes with apostrophes in names.
 
 0.68    21 May 2012
         Made sure that maps are centred and zoomed properly even when they only
