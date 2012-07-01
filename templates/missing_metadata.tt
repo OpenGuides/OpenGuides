@@ -5,10 +5,13 @@
 <div id="maincontent">
 <h2>Pages Missing Metadata</h2>
 
-[% options = [ "category", "locale", "address", "postcode", "phone",
-               "latitude", "longitude", "os_x", "os_y" ] %]
+[% options = [ "category", "locale", "address", "postcode", "phone", "fax",
+               "website", "hours", "summary", "latitude", "longitude",
+               "os_x", "os_y", "map_link", "node_image" ] %]
 
-[% labels = { phone => "Telephone Number", os_x => "OS X", os_y => "OS Y" } %]
+[% labels = { phone => "Telephone Number", hours => "Opening Hours",
+              os_x => "OS X", os_y => "OS Y", map_link => "Map Link",
+              node_image => "Image" } %]
 
 <form method="get" action="[% script_name %]">
   <input type="hidden" name="action" value="show_missing_metadata" />
