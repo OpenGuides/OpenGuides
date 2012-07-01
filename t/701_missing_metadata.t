@@ -22,8 +22,8 @@ isa_ok( $guide, "OpenGuides" );
 my $wiki = $guide->wiki;
 isa_ok( $wiki, "Wiki::Toolkit" );
 
-# Add four different pages, one of which with two versions, one of which
-# a redirect.  The redirect should not show up on any "missing metadata"
+# Add four different pages, one of which has two versions, and one of which
+# is a redirect.  The redirect should not show up on any "missing metadata"
 # searches, regardless of the condition of the page it points to.
 $wiki->write_node( "Test Page", "foo", undef,
                    { category => "Alpha", lat=>"" } )
