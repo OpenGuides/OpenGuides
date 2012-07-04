@@ -1083,9 +1083,9 @@ sub show_index {
                             param     => $formatter->node_name_to_node_param($_) }
                         } sort @selnodes;
 
-    # Convert the lat+long to WGS84 as required.  If displaying a map
-    # using Leaflet, also grab the min and max lat and long.
-    my ( $min_lat, $max_lat, $min_long, $max_long );
+    # Convert the lat+long to WGS84 as required, and count how many nodes
+    # we have for the map (if using Leaflet).
+    my $nodes_on_map;
     for(my $i=0; $i<scalar @nodes;$i++) {
         my $node = $nodes[$i];
         if($node) {
@@ -1107,20 +1107,7 @@ sub show_index {
                     $node->{has_geodata} = 1;
                     $node->{wgs84_lat} = $wgs84_lat;
                     $node->{wgs84_long} = $wgs84_long;
-                    if ( !defined $min_lat ) {
-                        $min_lat = $max_lat = $wgs84_lat;
-                    } elsif ( $wgs84_lat < $min_lat ) {
-                        $min_lat = $wgs84_lat;
-                    } elsif ( $wgs84_lat > $max_lat ) {
-                        $max_lat = $wgs84_lat;
-                    }
-                    if ( !defined $min_long ) {
-                        $min_long = $max_long = $wgs84_long;
-                    } elsif ( $wgs84_long < $min_long ) {
-                        $min_long = $wgs84_long;
-                    } elsif ( $wgs84_long > $max_long ) {
-                        $max_long = $wgs84_long;
-                    }
+                    $nodes_on_map++;
                 }
             }
         }
@@ -1143,15 +1130,17 @@ sub show_index {
         } elsif ( $args{format} eq "map" ) {
             $tt_vars{display_google_maps} = 1; # override for this page
             if ( $use_leaflet ) {
-                if ( defined $min_lat ) {
-                    %tt_vars = ( %tt_vars,
-                        min_lat     => $min_lat,
-                        max_lat     => $max_lat,
-                        min_long    => $min_long,
-                        max_long    => $max_long,
-                        centre_lat  => ( ( $max_lat + $min_lat ) / 2 ),
-                        centre_long => ( ( $max_long + $min_long ) / 2 ),
-                    );
+                if ( $nodes_on_map ) {
+                    my @points = map {
+                    {  wgs84_lat =>
+                           $_->{node_data}->{metadata}->{wgs84_lat}[0],
+                      wgs84_long =>
+                           $_->{node_data}->{metadata}->{wgs84_long}[0]
+                    }
+                                     } @nodes;
+                    my %minmaxdata = OpenGuides::Utils->get_wgs84_min_max(
+                        nodes => \@points );
+                    %tt_vars = ( %tt_vars, %minmaxdata );
                 } else {
                     $tt_vars{no_nodes_on_map} = 1;
                 }

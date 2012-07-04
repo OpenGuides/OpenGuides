@@ -107,6 +107,7 @@ t/205_write_geo_data.t
 t/206_geo_data_search_form.t
 t/207_geo_data_edit_form.t
 t/208_wgs84_coords.t
+t/209_max_min_wgs84_coords.t
 t/300_search_raw.t
 t/301_search.t
 t/302_search_simple_metadata.t
