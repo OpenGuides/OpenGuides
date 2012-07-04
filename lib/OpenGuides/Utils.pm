@@ -358,6 +358,8 @@ and centre latitude and longitude.
 The hashes in the C<nodes> argument can include other key/value pairs;
 these will just be ignored.
 
+Returns false if it can't find any valid geodata in the nodes.
+
 =cut
 
 sub get_wgs84_min_max {
@@ -372,6 +374,11 @@ sub get_wgs84_min_max {
                 grep { defined $_ && /^[-.\d]+$/ }
                 map { $_->{wgs84_long} }
                 @nodes;
+
+    if ( !scalar @lats || !scalar @longs ) {
+        return;
+    }
+
     my %data = ( min_lat  => $lats[0],  max_lat  => $lats[$#lats],
                  min_long => $longs[0], max_long => $longs[$#longs] );
     $data{centre_lat} = ( $data{min_lat} + $data{max_lat} ) / 2;
