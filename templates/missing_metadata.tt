@@ -1,8 +1,14 @@
 [% INCLUDE header.tt page_title = "Missing Metadata - $site_name" %]
 [% INCLUDE banner.tt %]
 <div id="content">
-[% INCLUDE navbar.tt %]
-<div id="maincontent">
+
+[% IF no_nodes_on_map OR !show_map %]
+  [% INCLUDE navbar.tt %]
+  <div id="maincontent">
+[% ELSE %]
+  <div id="maincontent_no_navbar">
+[% END %]
+
 <h2>Pages Missing Metadata</h2>
 
 [% options = [ "category", "locale", "address", "postcode", "phone", "fax",
@@ -43,6 +49,12 @@
     <label for="exclude_categories">Exclude Categories:</label>
     <input type="checkbox" name="exclude_categories" id="exclude_categories" [% IF exclude_categories %]checked="true"[% END %] />
   </div>
+  [% IF config.use_leaflet %]
+    <div>
+      <label for="show_map">Show results on a map:</label>
+      <input type="checkbox" name="format" value="map" id="show_map"[% IF show_map %] checked="true"[% END %] />
+    </div>
+  [% END %]
   <div>
     <input type="submit" value="Find Nodes" />
   </div>
@@ -50,17 +62,26 @@
 
 [% IF done_search %]
   <h3>Pages</h3>
-  <a name="nodes"></a>
-  <table id="nodes">
-  <tr><th>Node name</th><th>View</th><th>Edit</th></tr>
-    [% FOREACH node = nodes %]
-      <tr>
-       <td><a href="[% node.view_url %]">[% node.name %]</a></td>
-       <td><a href="[% node.view_url %]">view</a></td>
-       <td><a href="[% node.edit_url %]">edit</a></td>
-      </tr>
+  [% IF show_map %]
+    [% IF config.use_leaflet %]
+      [% INCLUDE search_results_leaflet.tt %]
+    [% ELSE %]
+      <span class="map_results_no_leaflet">Sorry!  Map output is only available
+      for sites using the Leaflet mapping library.</span>
     [% END %]
-  </table>
+  [% ELSE %]
+    <a name="nodes"></a>
+    <table id="nodes">
+    <tr><th>Node name</th><th>View</th><th>Edit</th></tr>
+      [% FOREACH node = nodes %]
+        <tr>
+         <td><a href="[% node.view_url %]">[% node.name %]</a></td>
+         <td><a href="[% node.view_url %]">view</a></td>
+         <td><a href="[% node.edit_url %]">edit</a></td>
+        </tr>
+      [% END %]
+    </table>
+  [% END %]
 [% END %]
 
 </div>

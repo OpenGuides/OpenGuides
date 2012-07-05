@@ -2240,12 +2240,17 @@ sub show_missing_metadata {
     my $wiki = $self->wiki;
     my $formatter = $self->wiki->formatter;
     my $script_name = $self->config->script_name;
+    my $use_leaflet = $self->config->use_leaflet;
 
-    my ($metadata_type, $metadata_value, $exclude_locales, $exclude_categories)
-        = @args{ qw( metadata_type metadata_value exclude_locales exclude_categories ) };
+    my ( $metadata_type, $metadata_value, $exclude_locales,
+         $exclude_categories, $format)
+        = @args{ qw( metadata_type metadata_value exclude_locales
+                     exclude_categories format ) };
+    $format ||= "";
 
     my @nodes;
     my $done_search = 0;
+    my $nodes_on_map;
 
     # Only search if they supplied at least a metadata type
     if($metadata_type) {
@@ -2257,28 +2262,35 @@ sub show_missing_metadata {
         );
 
         # Filter out redirects; also filter out locales/categories if required.
-        foreach my $node ( @all_nodes ) {
+        foreach my $node ( sort @all_nodes ) {
             next if ( $exclude_locales && $node =~ /^Locale / );
             next if ( $exclude_categories && $node =~ /^Category / );
-            my $content = $wiki->retrieve_node( $node );
-            next if OpenGuides::Utils->detect_redirect( content => $content );
-            push @nodes, $node;
+            my %data = $wiki->retrieve_node( $node );
+            next if OpenGuides::Utils->detect_redirect(
+                        content => $data{content} );
+            my $node_param = $formatter->node_name_to_node_param( $node );
+            my %this_node = (
+                name => $node,
+                param => $node_param,
+                address => $data{metadata}{address}[0],
+                view_url => "$script_name?$node_param",
+                edit_url => "$script_name?id=$node_param;action=edit",
+            );
+            if ( $format eq "map" && $use_leaflet ) {
+                my ( $wgs84_long, $wgs84_lat )
+                    = OpenGuides::Utils->get_wgs84_coords(
+                          latitude  => $data{metadata}{latitude}[0],
+                          longitude => $data{metadata}{longitude}[0],
+                          config    => $self->config );
+                if ( defined $wgs84_lat ) {
+                    $this_node{has_geodata} = 1;
+                    $this_node{wgs84_lat} = $wgs84_lat;
+                    $this_node{wgs84_long} = $wgs84_long;
+                    $nodes_on_map++;
+                }
+            }
+            push @nodes, \%this_node;
         }
-    }
-
-    # Build nice edit etc links for our nodes
-    my @tt_nodes;
-    for my $node (sort @nodes) {
-        my %n;
-
-        # Make the URLs
-        my $node_param = uri_escape( $formatter->node_name_to_node_param( $node ) );
-
-        # Save into the hash
-        $n{'name'} = $node;
-        $n{'view_url'} = $script_name . "?id=" . $node_param;
-        $n{'edit_url'} = $script_name . "?id=" . $node_param . ";action=edit";
-        push @tt_nodes, \%n;
     }
 
     # Set up our TT variables, including the search parameters
@@ -2286,16 +2298,31 @@ sub show_missing_metadata {
                       not_editable  => 1,
                       not_deletable => 1,
                       deter_robots  => 1,
-
-                      nodes => \@tt_nodes,
+                      nodes         => \@nodes,
                       done_search    => $done_search,
+                      no_nodes_on_map => !$nodes_on_map,
                       metadata_type  => $metadata_type,
                       metadata_value => $metadata_value,
                       exclude_locales => $exclude_locales,
                       exclude_categories => $exclude_categories,
-
                       script_name => $script_name
                   );
+
+    # Figure out the map boundaries and centre, if applicable.
+    if ( $format eq "map" ) {
+        if ( $use_leaflet ) {
+            my %minmaxdata = OpenGuides::Utils->get_wgs84_min_max(
+                nodes => \@nodes );
+            if ( scalar %minmaxdata ) {
+                %tt_vars = ( %tt_vars, %minmaxdata );
+            }
+            $tt_vars{display_google_maps} = 1; # to get the JavaScript in
+        }
+        # Set the show_map var even if we don't have Leaflet enabled, so
+        # people aren't left wondering why there's no map.
+        $tt_vars{show_map} = 1;
+    }
+
     return %tt_vars if $return_tt_vars;
 
     # Render to the page
@@ -2303,6 +2330,7 @@ sub show_missing_metadata {
                                            id       => "",
                                            template => "missing_metadata.tt",
                                            tt_vars  => \%tt_vars,
+                                           noheaders => $args{noheaders} || 0,
                                         );
     return $output if $return_output;
     print $output;

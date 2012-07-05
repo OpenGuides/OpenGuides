@@ -82,6 +82,7 @@ templates/rdf_index.tt
 templates/read_only.tt
 templates/recent_changes.tt
 templates/search_results.tt
+templates/search_results_leaflet.tt
 templates/site_index.tt
 templates/search.tt
 templates/spam_detected.tt
@@ -158,6 +159,7 @@ t/706_detect_spam.t
 t/707_send_email.t
 t/708_about.t
 t/709_host_blacklist.t
+t/710_missing_metadata_map.t
 t/801_node_moderate_whitelist.t
 t/802_stylesheet.t
 t/803_show_delete_to_admins_only.t

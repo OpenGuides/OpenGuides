@@ -426,6 +426,7 @@ $build->config_data( __templates     => [
                       "read_only.tt",
                       "recent_changes.tt",
                       "search_results.tt",
+                      "search_results_leaflet.tt",
                       "site_index.tt",
                       "search.tt",
                       "spam_detected.tt",
