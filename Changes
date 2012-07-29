@@ -3,9 +3,12 @@
 More detailed changelogs can be found at
 <http://dev.openguides.org/log/trunk>.
 
+0.70    ?
+        Updated URLs for Leaflet JavaScript and CSS.
+
 0.69    07 July 2012
         The output of the "show_missing_metadata" action is now alphabetised.
-          There's also now an option to view the results on a map. (#296 & #294)
+        There's also now an option to view the results on a map. (#296 & #294).
         Fixed a JavaScript escaping issue for nodes with apostrophes in names.
 
 0.68    21 May 2012
