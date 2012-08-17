@@ -130,6 +130,7 @@ t/406_map_in_node_display.t
 t/407_navbar_placement.t
 t/408_google_analytics.t
 t/409_custom_header.t
+t/410_meta_description.t
 t/500_http_response_codes.t
 t/501_display_node.t
 t/502_display_diffs.t

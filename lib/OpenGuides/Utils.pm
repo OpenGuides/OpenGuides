@@ -386,6 +386,49 @@ sub get_wgs84_min_max {
     return %data;
 }
 
+=item B<get_index_page_description>
+
+    $tt_vars{page_description} =
+        OpenGuides::Utils->get_index_page_description(
+            format => "map",
+            criteria => [ type => "locale", value => "croydon" ],
+    );
+
+Returns a sentence that can be used as a summary of what's shown on an
+index page.
+
+=cut
+
+sub get_index_page_description {
+    my ( $class, %args ) = @_;
+    my $desc = ( $args{format} eq "map" ) ? "Map" : "List";
+    $desc .= " of all our pages";
+
+    my ( @cats, @locs );
+    foreach my $criterion ( @{$args{criteria}} ) {
+        my ( $type, $name ) = ( $criterion->{type}, $criterion->{name} );
+        if ( $type eq "category" ) {
+            $name =~ s/Category //;
+            push @cats, $name;
+        } else {
+            $name =~ s/Locale //;
+            push @locs, $name;
+        }
+    }
+
+    if ( scalar @cats ) {
+        $desc .= " labelled with: " . join( ", ", @cats );
+        if ( scalar @locs ) {
+            $desc .= ", and";
+        }
+    }
+    if ( scalar @locs ) {
+        $desc .= " located in: " . join( ", ", @locs );
+    }
+    $desc .= ".";
+    return $desc;
+}
+
 =item B<detect_redirect>
 
     $redir = OpenGuides::Utils->detect_redirect( content => "foo" );

@@ -15,9 +15,13 @@
   [% IF contact_email %]
     <link rev="made" href="mailto:[% contact_email %]" />
   [% END %]
-  [% IF summary %]
+
+  [% IF page_description %]
+    <meta name="description" content="[% page_description %]" />
+  [% ELSIF summary %]
     <meta name="description" content="[% summary %]" />
   [% END %]
+
   [% IF (categories.size AND categories.size > 0)
      OR (locales.size AND locales.size > 0) %]
     <meta name="keywords" content="[% IF categories.size AND
