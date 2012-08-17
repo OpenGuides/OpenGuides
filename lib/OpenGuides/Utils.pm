@@ -137,32 +137,15 @@ sub make_wiki_object {
         qr/\@INDEX_LIST\s+\[\[(Category|Locale)\s+([^\]]+)]]/ =>
              sub {
                    my ($wiki, $type, $value) = @_;
-
-                   # We may be being called by Wiki::Toolkit::Plugin::Diff,
-                   # which doesn't know it has to pass us $wiki
-                   unless ( UNIVERSAL::isa( $wiki, "Wiki::Toolkit" ) ) {
-                       return "(unprocessed INDEX_LIST macro)";
-		   }
-
-                   my @nodes = sort $wiki->list_nodes_by_metadata(
-                       metadata_type  => $type,
-                       metadata_value => $value,
-                       ignore_case    => 1,
-                   );
-                   unless ( scalar @nodes ) {
-                       return "\n* No pages currently in "
-                              . lc($type) . " $value\n";
-                   }
-                   my $return = "\n";
-                   foreach my $node ( @nodes ) {
-                       $return .= "* "
-                               . $wiki->formatter->format_link(
-                                                                wiki => $wiki,
-                                                                link => $node,
-                                                              )
-                                . "\n";
-	           }
-                   return $return;
+                   return $class->do_index_list_macro(
+                       wiki => $wiki, type => $type, value => $value,
+                       include_prefix => 1 );
+                 },
+        qr/\@INDEX_LIST_NO_PREFIX\s+\[\[(Category|Locale)\s+([^\]]+)]]/ =>
+             sub {
+                   my ($wiki, $type, $value) = @_;
+                   return $class->do_index_list_macro(
+                       wiki => $wiki, type => $type, value => $value );
                  },
         qr/\@MAP_LINK\s+\[\[(Category|Locale)\s+([^\]|]+)\|?([^\]]+)?\]\]/ =>
                 sub {
@@ -261,6 +244,41 @@ sub make_wiki_object {
 
     my $wiki = Wiki::Toolkit->new( %conf );
     return $wiki;
+}
+
+sub do_index_list_macro {
+    my ( $class, %args ) = @_;
+    my ( $wiki, $type, $value, $include_prefix )
+        = @args{ qw( wiki type value include_prefix ) };
+
+    # We may be being called by Wiki::Toolkit::Plugin::Diff,
+    # which doesn't know it has to pass us $wiki
+    if ( !UNIVERSAL::isa( $wiki, "Wiki::Toolkit" ) ) {
+        if ( $args{include_prefix} ) {
+            return "(unprocessed INDEX_LIST macro)";
+        } else {
+            return "(unprocessed INDEX_LIST_NO_PREFIX macro)";
+        }
+    }
+
+    my @nodes = sort $wiki->list_nodes_by_metadata(
+        metadata_type  => $type,
+        metadata_value => $value,
+        ignore_case    => 1,
+    );
+    unless ( scalar @nodes ) {
+        return "\n* No pages currently in " . lc($type) . " $value\n";
+    }
+    my $return = "\n";
+    foreach my $node ( @nodes ) {
+        my $title = $node;
+        $title =~ s/^(Category|Locale) // unless $args{include_prefix};
+        $return .= "* "
+                . $wiki->formatter->format_link( wiki => $wiki,
+                                                 link => "$node|$title" )
+                . "\n";
+    }
+    return $return;
 }
 
 =item B<get_wgs84_coords>

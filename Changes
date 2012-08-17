@@ -6,6 +6,7 @@ More detailed changelogs can be found at
 0.70    ?
         Updated URLs for Leaflet JavaScript and CSS.
         Added meta descriptions to headers of map and list index pages.
+        Implemented new @INDEX_LIST_NO_PREFIX macro.
 
 0.69    07 July 2012
         The output of the "show_missing_metadata" action is now alphabetised.

@@ -11,7 +11,7 @@ if ( $@ ) {
     plan skip_all => "DBD::SQLite could not be used - no database to test with. ($error)";
 }
 
-plan tests => 19;
+plan tests => 27;
 
 SKIP: {
     # Clear out the database from any previous runs.
@@ -22,35 +22,42 @@ SKIP: {
     my $wiki = $guide->wiki;
 
     # Test @INDEX_LINK
-    $wiki->write_node( "Test 1", "\@INDEX_LINK [[Category Foo]]" )
+    $wiki->write_node( "Category Alpha", "\@INDEX_LINK [[Category Alpha]]",
+                       undef, { category => "category" } )
       or die "Can't write node";
-    $wiki->write_node( "Test 2", "\@INDEX_LINK [[Category Bar|Bars]]" )
+
+    $wiki->write_node( "Category Beta", "\@INDEX_LINK [[Category Beta|Betas]]",
+                       undef, { category => "category" } )
       or die "Can't write node";
 
     my $output;
     $output = $guide->display_node(
                                     return_output => 1,
-                                    id            => "Test 1",
+                                    id            => "Category Alpha",
                                   );
-    like( $output, qr/View all pages in Category Foo/,
+    like( $output, qr/View all pages in Category Alpha/,
           "\@INDEX_LINK has right default link text" );
-    like( $output, qr/action=index;cat=foo/, "...and URL looks right" );
+    like( $output, qr/action=index;cat=alpha/, "...and URL looks right" );
 
     $output = $guide->display_node(
                                     return_output => 1,
-                                    id            => "Test 2",
+                                    id            => "Category Beta",
                                   );
-    like( $output, qr/>Bars<\/a>/, "Default link text can be overridden" );
-    like( $output, qr/action=index;cat=bar/, "...and URL looks right" );
+    like( $output, qr/>Betas<\/a>/, "Default link text can be overridden" );
+    like( $output, qr/action=index;cat=beta/, "...and URL looks right" );
 
     # Test @INDEX_LIST
-    $wiki->write_node( "Test 3", "\@INDEX_LIST [[Category Foo]]" )
+    $wiki->write_node( "Category Foo", "\@INDEX_LIST [[Category Foo]]",
+                       undef, { category => "category" } )
       or die "Can't write node";
-    $wiki->write_node( "Test 4", "\@INDEX_LIST [[Locale Bar]]" )
+    $wiki->write_node( "Locale Bar", "\@INDEX_LIST [[Locale Bar]]",
+                       undef, { category => "locales" } )
       or die "Can't write node";
-    $wiki->write_node( "Test 5", "\@INDEX_LIST [[Category Nonexistent]]" )
+    $wiki->write_node( "Category Empty", "\@INDEX_LIST [[Category Empty]]",
+                       undef, { category => "foo" } )
       or die "Can't write node";
-    $wiki->write_node( "Test 6", "\@INDEX_LIST [[Locale Nonexistent]]" )
+    $wiki->write_node( "Locale Empty", "\@INDEX_LIST [[Locale Empty]]",
+                       undef, { locale => "bar" } )
       or die "Can't write node";
     $wiki->write_node( "Wibble", "wibble", undef,
                        {
@@ -59,27 +66,86 @@ SKIP: {
                        }
                      )
       or die "Can't write node";
+
     $output = $guide->display_node(
                                     return_output => 1,
-                                    id            => "Test 3",
+                                    id            => "Category Foo",
                                   );
     like ( $output, qr|<a href=".*">Wibble</a>|,
-           '@INDEX_LIST works for categories' );
+           '@INDEX_LIST works for regular pages in categories' );
+    like ( $output, qr|<a href=".*">Category Empty</a>|,
+           '...and for category pages in categories' );
     $output = $guide->display_node(
                                     return_output => 1,
-                                    id            => "Test 5",
+                                    id            => "Category Empty",
                                   );
     like ( $output, qr|No pages currently in category|,
            "...and fails nicely if no pages in category" );
     $output = $guide->display_node(
                                     return_output => 1,
-                                    id            => "Test 4",
+                                    id            => "Locale Bar",
                                   );
     like ( $output, qr|<a href=".*">Wibble</a>|,
-           '@INDEX_LIST works for locales' );
+           '@INDEX_LIST works for regular pages in locales' );
+    like ( $output, qr|<a href=".*">Locale Empty</a>|,
+           '...and for locale pages in locales' );
     $output = $guide->display_node(
                                     return_output => 1,
-                                    id            => "Test 6",
+                                    id            => "Locale Empty",
+                                  );
+    like ( $output, qr|No pages currently in locale|,
+           "...and fails nicely if no pages in locale" );
+
+    # Test @INDEX_LIST_NO_PREFIX
+    $wiki->write_node( "Category Foo NP",
+                       "\@INDEX_LIST_NO_PREFIX [[Category Foo NP]]",
+                       undef, { category => "category" } )
+      or die "Can't write node";
+    $wiki->write_node( "Locale Bar NP",
+                       "\@INDEX_LIST_NO_PREFIX [[Locale Bar NP]]",
+                       undef, { category => "locales" } )
+      or die "Can't write node";
+    $wiki->write_node( "Category Empty NP",
+                      "\@INDEX_LIST_NO_PREFIX [[Category Empty NP]]",
+                       undef, { category => "foo np" } )
+      or die "Can't write node";
+    $wiki->write_node( "Locale Empty NP",
+                       "\@INDEX_LIST_NO_PREFIX [[Locale Empty NP]]",
+                       undef, { locale => "bar np" } )
+      or die "Can't write node";
+    $wiki->write_node( "Wibble NP", "wibble", undef,
+                       {
+                         category => "foo np",
+                         locale   => "bar np",
+                       }
+                     )
+      or die "Can't write node";
+
+    $output = $guide->display_node(
+                                    return_output => 1,
+                                    id            => "Category Foo NP",
+                                  );
+    like ( $output, qr|<a href=".*">Wibble NP</a>|,
+           '@INDEX_LIST_NO_PREFIX works for regular pages in categories' );
+    like ( $output, qr|<a href=".*">Empty NP</a>|,
+           '...and for category pages in categories' );
+    $output = $guide->display_node(
+                                    return_output => 1,
+                                    id            => "Category Empty NP",
+                                  );
+    like ( $output, qr|No pages currently in category|,
+           "...and fails nicely if no pages in category" );
+    $output = $guide->display_node(
+                                    return_output => 1,
+                                    id            => "Locale Bar NP",
+                                  );
+    like ( $output, qr|<a href=".*">Wibble NP</a>|,
+           '@INDEX_LIST_NO_PREFIX works for regular pages in locales' );
+    like ( $output, qr|<a href=".*">Empty NP</a>|,
+           '...and for locale pages in locales' );
+    $output = $guide->display_node(
+                                    return_output => 1,
+                                    id            => "Locale Empty NP",
                                   );
     like ( $output, qr|No pages currently in locale|,
            "...and fails nicely if no pages in locale" );
