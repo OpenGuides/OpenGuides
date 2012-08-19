@@ -4,8 +4,23 @@ More detailed changelogs can be found at
 <http://dev.openguides.org/log/trunk>.
 
 0.70    ?
+        New elements allowed in page content: span, dl, dt, dd (fixes #303).
+        Changed external link formatting; they're now given a class of
+          "external" and the previous hardcoded square brackets are no more.
+          If you want the old behaviour back, put this in your CSS (with
+          "black" replaced by whatever colour you have your body text in):
+              a.external:before {
+                content: "[";
+                color: black;
+              }
+
+              a.external:after {
+                content: "]";
+                color: black;
+              }
         Updated URLs for Leaflet JavaScript and CSS.
-        Added meta descriptions to headers of map and list index pages.
+        Added meta descriptions to headers of map and list index pages
+          (fixes #301).
         Implemented new @INDEX_LIST_NO_PREFIX macro.
 
 0.69    07 July 2012

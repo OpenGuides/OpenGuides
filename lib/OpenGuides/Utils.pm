@@ -230,12 +230,14 @@ sub make_wiki_object {
         implicit_links      => 0,
         allowed_tags        => [qw(a p b strong i em pre small img table td
                                    tr th br hr ul li center blockquote kbd
-                                   div code strike sub sup font)],
+                                   div code span strike sub sup font dl dt dd
+                                  )],
         macros              => \%macros,
         pass_wiki_to_macros => 1,
         node_prefix         => "$script_name?",
         edit_prefix         => "$script_name?action=edit;id=",
         munge_urls          => 1,
+        external_link_class => "external",
     );
 
     my %conf = ( store     => $store,
