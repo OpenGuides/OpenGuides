@@ -18,7 +18,8 @@ More detailed changelogs can be found at
                 content: "]";
                 color: black;
               }
-        Updated URLs for Leaflet JavaScript and CSS.
+        Updated to use version 0.4 of Leaflet (needed for plugins used on a
+          couple of live guides).
         Added meta descriptions to headers of map and list index pages
           (fixes #301).
         Implemented new @INDEX_LIST_NO_PREFIX macro.
