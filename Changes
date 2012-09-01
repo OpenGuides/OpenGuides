@@ -3,6 +3,9 @@
 More detailed changelogs can be found at
 <http://dev.openguides.org/log/trunk>.
 
+0.71    ?
+        Added scale to category/locale index maps.
+
 0.70    26 August 2012
         New elements allowed in page content: span, dl, dt, dd (fixes #303).
         Changed external link formatting; they're now given a class of

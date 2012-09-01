@@ -45,6 +45,8 @@ $(
       } );
       map.addControl( layersControl );
 
+      L.control.scale().addTo(map);
+
       add_markers();
     }
   }
