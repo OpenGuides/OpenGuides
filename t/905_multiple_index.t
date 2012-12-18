@@ -56,7 +56,7 @@ is( scalar @{$tt_vars{nodes}}, 2,
     "Right number of nodes returned in pure category search" );
 my $output = $guide->show_index( cat => "pubs", return_output => 1,
                                  noheaders => 1 );
-Test::HTML::Content::title_ok( $output, "Index of Category Pubs - Test",
+Test::HTML::Content::tag_ok( $output, 'title', {}, "Index of Category Pubs - Test",
     "...and page title is correct" );
 Test::HTML::Content::link_ok( $output, $config->script_name . "?Category_Pubs",
     "...and we link to the category page." );
@@ -66,7 +66,7 @@ is( scalar @{$tt_vars{nodes}}, 2,
     "Right number of nodes returned in pure locale search" );
 $output = $guide->show_index( loc => "waddon", return_output => 1,
                               noheaders => 1 );
-Test::HTML::Content::title_ok( $output, "Index of Locale Waddon - Test",
+Test::HTML::Content::tag_ok( $output, 'title', {}, "Index of Locale Waddon - Test",
     "...and page title is correct" );
 Test::HTML::Content::link_ok( $output, $config->script_name . "?Locale_Waddon",
     "...and we link to the locale page." );
@@ -77,7 +77,7 @@ is( scalar @{$tt_vars{nodes}}, 1,
     "Right number of nodes returned in category+locale search" );
 $output = $guide->show_index( cat => "pubs", loc => "waddon",
                               return_output => 1, noheaders => 1 );
-Test::HTML::Content::title_ok( $output,
+Test::HTML::Content::tag_ok( $output, 'title', {},
      "Index of Category Pubs and Locale Waddon - Test",
      "...and page title is correct" );
 Test::HTML::Content::link_ok( $output, $config->script_name . "?Category_Pubs",
@@ -93,7 +93,7 @@ is( scalar @{$tt_vars{nodes}}, 1,
     "Right number of nodes returned in category+locale search with map" );
 $output = $guide->show_index( cat => "pubs", loc => "waddon", format => "map",
                               return_output => 1, noheaders => 1 );
-Test::HTML::Content::title_ok( $output,
+Test::HTML::Content::tag_ok( $output, 'title', {},
      "Map of Category Pubs and Locale Waddon - Test",
      "...and page title is correct" );
 Test::HTML::Content::link_ok( $output, $config->script_name . "?Category_Pubs",

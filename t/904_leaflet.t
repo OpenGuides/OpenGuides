@@ -182,7 +182,7 @@ $output = $guide->show_index( format => "map", noheaders => 1,
                               return_output => 1 );
 SKIP: {
     skip "Test::HTML::Content not available", 1 unless $thc;
-    Test::HTML::Content::title_ok( $output, qr/Map of all nodes/,
+    Test::HTML::Content::tag_ok( $output, 'title', {}, qr/Map of all nodes/,
        "<title> correct when showing map of everything" );
 }
 like( $output, qr/<h2>Map\s+of\s+all\s+nodes/, "...as is <h2> title" );
