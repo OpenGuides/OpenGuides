@@ -71,7 +71,7 @@ locales.size > 0 %][% FOREACH locale = locales %][% locale.name %][%-
   [% END %]
   [% UNLESS not_editable %]
     <link rel="alternate" type="application/wiki" title="Edit this page!"
-     href="[% source_site or full_cgi_url %]?id=[% node_param %];action=edit">
+     href="[% source_site or full_cgi_url %]?id=[% node_param %];action=edit" />
   [% END %]
 
   [% IF display_google_maps %]

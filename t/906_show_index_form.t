@@ -35,7 +35,7 @@ my @dropdowns = eval {
     OpenGuides::CGI->make_index_form_dropdowns( guide => $guide );
 };
 ok( !$@, "->make_index_form_dropdowns doesn't die when no criteria supplied" );
-my $html = join( " ", ( map { $_->{html} } @dropdowns ) );
+my $html = '<html>' . join( " ", ( map { $_->{html} } @dropdowns ) ) . '</html>';
 Test::HTML::Content::tag_ok( $html, "select", { name => "cat" },
                              "...and we have a 'cat' select" );
 like( $html, qr/apples.*bananas.*cherries/is,
@@ -63,7 +63,7 @@ Test::HTML::Content::tag_ok( $loc_dropdowns[0]{html}, "option",
     );
 };
 ok( !$@, "->make_index_form_dropdowns doesn't die when category supplied" );
-$html = join( " ", ( map { $_->{html} } @dropdowns ) );
+$html = '<html>' . join( " ", ( map { $_->{html} } @dropdowns ) ) . '</html>';
 Test::HTML::Content::tag_ok( $html, "select", { name => "cat" },
                              "...and we have a 'cat' select" );
 like( $html, qr/apples.*bananas.*cherries/is,
@@ -97,7 +97,7 @@ Test::HTML::Content::tag_ok( $loc_dropdowns[0]{html}, "option",
     );
 };
 ok( !$@, "->make_index_form_dropdowns doesn't die when locale supplied" );
-$html = join( " ", ( map { $_->{html} } @dropdowns ) );
+$html = '<html>' . join( " ", ( map { $_->{html} } @dropdowns ) ). '</html>';
 Test::HTML::Content::tag_ok( $html, "select", { name => "cat" },
                              "...and we have a 'cat' select" );
 like( $html, qr/apples.*bananas.*cherries/is,
@@ -135,7 +135,7 @@ Test::HTML::Content::tag_ok( $cat_dropdowns[0]{html}, "option",
 };
 ok( !$@,
   "->make_index_form_dropdowns doesn't die when locale and categorysupplied" );
-$html = join( " ", ( map { $_->{html} } @dropdowns ) );
+$html = '<html>' . join( " ", ( map { $_->{html} } @dropdowns ) ). '</html>';
 Test::HTML::Content::tag_ok( $html, "select", { name => "cat" },
                              "...and we have a 'cat' select" );
 like( $html, qr/apples.*bananas.*cherries/is,

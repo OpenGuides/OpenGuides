@@ -5,6 +5,8 @@ More detailed changelogs can be found at
 
 0.71    ?
         Added scale to category/locale index maps.
+        Fix several test failures triggered by the stricter
+          Test::HTML::Content (et al) found in current Debian unstable.
 
 0.70    26 August 2012
         New elements allowed in page content: span, dl, dt, dd (fixes #303).

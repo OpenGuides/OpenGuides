@@ -122,7 +122,8 @@ is( $nodes[1]->{'name'}, "Test Page 3", "Right nodes" );
 
 # Test the normal, HTML version
 my $output = eval {
-    $guide->show_missing_metadata( return_output=>1 );
+    $guide->show_missing_metadata( return_output=>1,
+                                   noheaders => 1);
 };
 is( $@, "",
     "->show_missing_metadata doesn't die when called with no metadata_type" );
@@ -134,7 +135,8 @@ like( $output, qr|Telephone Number|, "...correct labels in the dropdown" );
 
 $output = eval {
     $guide->show_missing_metadata( return_output => 1,
-                                   metadata_type => "latitude" );
+                                   metadata_type => "latitude",
+                                   noheaders => 1);
 };
 is( $@, "", "->show_missing_metadata doesn't die when called with "
             . "metadata_type 'latitude'" );
