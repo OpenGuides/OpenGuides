@@ -11,6 +11,9 @@ More detailed changelogs can be found at
         Work around a "No such method textContent" bug in
           Test::HTML::Content when XML::LibXML is not installed
         Respect destdir when installing scripts, templates, etc
+        Use mkpath to create the custom template directory rather than
+          mkdir, for cases where the parent directory doesn't already
+          exist
 
 0.70    26 August 2012
         New elements allowed in page content: span, dl, dt, dd (fixes #303).

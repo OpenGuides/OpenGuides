@@ -338,6 +338,7 @@ my $build = OpenGuides::Build->new(
         'Class::Accessor'                     => 0,
         'Config::Tiny'                        => 0,
         'Data::Dumper'                        => 0,
+        'File::Path'                          => 0,
         },
     configure_requires => {
         'Config::Tiny'                        => 0,

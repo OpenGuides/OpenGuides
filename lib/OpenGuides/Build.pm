@@ -7,6 +7,7 @@ $VERSION = '0.02';
 
 use Module::Build;
 use OpenGuides::Config;
+use File::Path;
 use base 'Module::Build';
 
 sub ACTION_install {
@@ -155,7 +156,7 @@ sub ACTION_install_extras {
     } else {
         unless (-d $custom_template_path) {
             print "Creating directory $custom_template_path.\n";
-            mkdir $custom_template_path or warn "Could not make $custom_template_path";
+            File::Path::mkpath $custom_template_path or warn "Could not make $custom_template_path";
         }
     }
 
