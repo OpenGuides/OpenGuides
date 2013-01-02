@@ -9,7 +9,8 @@ More detailed changelogs can be found at
           Test::HTML::Content (et al) mode used when XML::LibXML is
           not installed
         Work around a "No such method textContent" bug in
-        Test::HTML::Content when XML::LibXML is not installed
+          Test::HTML::Content when XML::LibXML is not installed
+        Respect destdir when installing scripts, templates, etc
 
 0.70    26 August 2012
         New elements allowed in page content: span, dl, dt, dd (fixes #303).

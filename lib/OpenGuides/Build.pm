@@ -58,12 +58,12 @@ sub ACTION_install_extras {
     my $config = OpenGuides::Config->new( file => "wiki.conf" );
 
     # Install the scripts where we were told to.
-    my $install_directory    = $config->install_directory;
+    my $install_directory    = File::Spec->catdir($self->destdir, $config->install_directory);
     my $script_name          = $config->script_name;
-    my $template_path        = $config->template_path;
-    my $custom_template_path = $config->custom_template_path;
+    my $template_path        = File::Spec->catdir($self->destdir, $config->template_path);
+    my $custom_template_path = File::Spec->catdir($self->destdir, $config->custom_template_path);
     my $custom_lib_path      = $config->custom_lib_path;
-    my $static_path          = $config->static_path;
+    my $static_path          = File::Spec->catdir($self->destdir, $config->static_path);
     my @extra_scripts        = @{ $self->config_data( "__extra_scripts" ) };
     my @templates            = @{ $self->config_data( "__templates" ) };
     my @static_files         = @{ $self->config_data( "__static_files" ) };
