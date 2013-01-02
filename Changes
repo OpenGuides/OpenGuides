@@ -10,7 +10,8 @@ More detailed changelogs can be found at
           not installed
         Work around a "No such method textContent" bug in
           Test::HTML::Content when XML::LibXML is not installed
-        Respect destdir when installing scripts, templates, etc
+        Respect destdir when installing scripts, templates, etc and
+          when initialising SQLite databases
         Use mkpath to create the custom template directory rather than
           mkdir, for cases where the parent directory doesn't already
           exist
