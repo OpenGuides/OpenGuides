@@ -358,7 +358,7 @@ my $build = OpenGuides::Build->new(
       MailingList => 'openguides-dev@lists.openguides.org',
       homepage => 'http://openguides.org',
       bugtracker => 'http://dev.openguides.org',
-      repository  => 'https://urchin.earth.li/svn/openguides', 
+      repository  => 'git@github.com:OpenGuides/OpenGuides.git', 
     }
   },
     dynamic_config => 1,
