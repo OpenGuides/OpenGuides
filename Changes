@@ -3,7 +3,7 @@
 More detailed changelogs can be found at
 <http://dev.openguides.org/log/trunk>.
 
-0.71    ?
+0.71    16 March 2013
         Added scale to category/locale index maps.
         Fix several test failures triggered by the stricter
           Test::HTML::Content (et al) mode used when XML::LibXML is
