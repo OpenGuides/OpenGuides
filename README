@@ -49,3 +49,4 @@ CREDITS
     (among others). Much of the Module::Build stuff copied from the Siesta
     project <http://siesta.unixbeard.net/>
 
+Build Status: https://api.travis-ci.org/OpenGuides/OpenGuides.png?branch=master
