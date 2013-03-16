@@ -5,3 +5,4 @@ perl:
   - "5.12"
   - "5.10"
 env: AUTOMATED_TESTING=1
+before_install: cpanm --quiet --notest Config::Tiny Geo::HelmertTransform Test::HTML::Content Wiki::Toolkit::Plugin::Ping
