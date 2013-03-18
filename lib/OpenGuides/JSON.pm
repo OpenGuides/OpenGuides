@@ -101,7 +101,7 @@ sub emit_json {
     $data->{timestamp} = $node_data{last_modified};
 
     # Make a Time::Piece object.
-    my $timestamp_fmt = $Wiki::Toolkit;
+    my $timestamp_fmt = $Wiki::Toolkit::Store::Database::timestamp_fmt;
 
     if ( $data->{timestamp} ) {
         my $time = Time::Piece->strptime( $data->{timestamp}, $timestamp_fmt );
