@@ -2593,7 +2593,7 @@ L<http://dev.openguides.org/>
 
 =over 4
 
-=item * The Open Guide to London, at L<http://london.openguides.org/>, is the first and biggest OpenGuides site.
+=item * The Randomness Guide to London, at L<http://london.randomness.org.uk/>, possinly the biggest OpenGuides site.
 
 =item * A list of live OpenGuides installs is available at L<http://openguides.org/>.
 
