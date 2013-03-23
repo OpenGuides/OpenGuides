@@ -52,7 +52,7 @@ is( $@, "", "->get_last_recent_changes_visit_from_cookie doesn't die if no cooki
 
 # Now test that the prefs option is taken note of.
 my $have_sqlite = 1;
-my $sqlite_error;   
+my $sqlite_error;
 
 eval { require DBD::SQLite; };
 if ( $@ ) {
@@ -80,7 +80,7 @@ SKIP: {
     );
     eval { require Wiki::Toolkit::Search::Plucene; };
     if ( $@ ) { $config->use_plucene ( 0 ) };
-    
+
     my $guide = OpenGuides->new( config => $config );
 
     my $prefs_cookie = OpenGuides::CGI->make_prefs_cookie(

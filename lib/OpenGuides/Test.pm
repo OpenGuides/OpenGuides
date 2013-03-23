@@ -134,7 +134,7 @@ sub write_data {
     my $node  = delete $args{node};
 
     my $q = $class->make_cgi_object( %args );
-    
+
     # Get the checksum of the current contents if necessary.
     unless ( $args{omit_checksum} ) {
         my $wiki = $guide->wiki;
@@ -143,7 +143,7 @@ sub write_data {
             $q->param( -name => "checksum", -value => $data{checksum} );
         }
     }
- 
+
     if ( $args{return_output} ) {
         return $guide->commit_node(
                                           return_output => 1,
@@ -208,9 +208,9 @@ sub make_cgi_object {
 
   Openguides::Test::refresh_db();
 
-Unlink the existing SQLite database t/node.db and plucene indexes. Then create a new SQLite database t/node.db 
+Unlink the existing SQLite database t/node.db and plucene indexes. Then create a new SQLite database t/node.db
 
-=cut 
+=cut
 sub refresh_db {
     unlink "t/node.db";
     unlink <t/indexes/*>;

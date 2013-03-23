@@ -131,7 +131,7 @@ $output = $search->run(
                         vars          => { search => '"monkey brains"' },
                        );
 like( $output,
-      qr/[lL]ocation: http:\/\/example.com\/wiki.cgi\?Monkey_Brains/,    
+      qr/[lL]ocation: http:\/\/example.com\/wiki.cgi\?Monkey_Brains/,
       "phrase search returns right results and redirects to page"
     );
 

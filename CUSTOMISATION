@@ -43,7 +43,7 @@ The custom templates currently supported are:
        e.g. "Category" - note that the first letter is capitalised
      - [% index_value %]
        e.g. "Vegan-friendly" - capitalisation just as typed in the edit form
-     - [% node_name %] 
+     - [% node_name %]
        e.g. "Category Vegan-Friendly" - the full, "official" name of the
        autocreated node
 

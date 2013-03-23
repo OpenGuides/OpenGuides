@@ -65,7 +65,7 @@ EOF
 
 my @answers;
 
-# It is an ancient Configurer, and he chooseth one of three. 
+# It is an ancient Configurer, and he chooseth one of three.
 my $dbtype;
 my $dbtype_qu = $existing_config->dbtype__qu;
 if ( $skip_config ) {
@@ -178,7 +178,7 @@ foreach my $var ( qw(
     if ( $var eq 'centre_lat' && $centre_lat ) {
         $val = $centre_lat;
         next;
-    }    
+    }
 
     # Here is where we actually ask the questions.
     unless ( $skip_config ) {
@@ -295,7 +295,7 @@ my $build = OpenGuides::Build->new(
     dist_version_from => "wiki.cgi",
     license => "perl",
     requires => {
-        'Algorithm::Diff'                     => '0.13',  # for sdiff 
+        'Algorithm::Diff'                     => '0.13',  # for sdiff
         'CGI'                                 => '2.92',  # avoid escapeHTML bug
         'CGI::Carp'                           => 0,
         'CGI::Cookie'                         => 0,
@@ -358,7 +358,7 @@ my $build = OpenGuides::Build->new(
       MailingList => 'openguides-dev@lists.openguides.org',
       homepage => 'http://openguides.org',
       bugtracker => 'http://dev.openguides.org',
-      repository  => 'git@github.com:OpenGuides/OpenGuides.git', 
+      repository  => 'git@github.com:OpenGuides/OpenGuides.git',
     }
   },
     dynamic_config => 1,
@@ -371,7 +371,7 @@ $build->add_to_cleanup( "t/prefs.db" );
 $build->add_to_cleanup( "t/templates/tmp/" );
 
 # Tell OpenGuides::Build which additional scripts and templates to install.
-$build->config_data( __extra_scripts => 
+$build->config_data( __extra_scripts =>
                       [ "wiki.conf", "preferences.cgi", "search.cgi",
                         "newpage.cgi" ] );
 $build->config_data( __templates     => [

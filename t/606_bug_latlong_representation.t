@@ -11,7 +11,7 @@ eval { require DBD::SQLite; };
 if ( $@ ) {
     my ($error) = $@ =~ /^(.*?)\n/;
     plan skip_all => "DBD::SQLite could not be used - no database to test with ($error)";
-} 
+}
 
 
 plan tests => 4;

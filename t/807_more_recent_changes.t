@@ -51,7 +51,7 @@ my $feed = OpenGuides::Feed->new( wiki   => $wiki,
 
 # Write the first version
 my $guide = OpenGuides->new( config => $config );
-    
+
 # Set up CGI parameters ready for a node write.
 my $q = OpenGuides::Test->make_cgi_object(
     content => "foo",
@@ -130,8 +130,8 @@ my $cookie = OpenGuides::CGI->make_prefs_cookie(
 $output = $guide->display_recent_changes( return_output => 1 );
 
 like ($output, qr/<td class="recentchanges_node_name">/, "expecting a table defintion for an edit");
-like ($output, qr/Third edit/, "showing the most recent minor edit"); 
-unlike ($output, qr/First edit/, "showing a page edit twice when show minor edits enabled. "); 
+like ($output, qr/Third edit/, "showing the most recent minor edit");
+unlike ($output, qr/First edit/, "showing a page edit twice when show minor edits enabled. ");
 
 
 # set show_minor_edits to 0.
@@ -151,6 +151,6 @@ $ENV{HTTP_COOKIE} = $cookie;
 
 $output = $guide->display_recent_changes( return_output => 1 );
 like ($output, qr/<td class="recentchanges_node_name">/, "expecting a table defintion for an edit");
-like ($output, qr/Second edit/, "expecting at least one edit"); 
-unlike ($output, qr/First edit/, "showing a page edit twice when not showing minor edits"); 
+like ($output, qr/Second edit/, "expecting at least one edit");
+unlike ($output, qr/First edit/, "showing a page edit twice when not showing minor edits");
 unlike ($output, qr/Third edit/, "showing a page edit twice when not showing minor edits");

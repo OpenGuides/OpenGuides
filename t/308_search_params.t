@@ -13,7 +13,7 @@ if ( $@ ) {
 }
 
 eval { require Wiki::Toolkit::Search::Plucene; };
-if ( $@ ) { 
+if ( $@ ) {
     plan skip_all => "Plucene not installed";
 }
 

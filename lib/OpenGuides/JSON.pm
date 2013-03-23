@@ -187,7 +187,7 @@ developers.
     my $wiki = Wiki::Toolkit->new( ... );
     my $config = OpenGuides::Config->new( file => "wiki.conf" );
     my $json_writer = OpenGuides::JSON->new( wiki   => $wiki,
-                                         config => $config ); 
+                                         config => $config );
 
     # JSON version of a node.
     print "Content-Type: application/javascript\n\n";
@@ -205,7 +205,7 @@ developers.
 =item B<new>
 
     my $json_writer = OpenGuides::JSON->new( wiki   => $wiki,
-                                           config => $config ); 
+                                           config => $config );
 
 C<wiki> must be a L<Wiki::Toolkit> object and C<config> must be an
 L<OpenGuides::Config> object.  Both arguments mandatory.
@@ -286,9 +286,9 @@ defaults for any preferences not set, returns the result as JSON.
 
     print "Last-Modified: " . $json_writer->json_timestamp( %args ) . "\n\n";
 
-Returns the timestamp of the RSS feed in POSIX::strftime style ("Tue, 29 Feb 2000 
+Returns the timestamp of the RSS feed in POSIX::strftime style ("Tue, 29 Feb 2000
 12:34:56 GMT"), which is equivalent to the timestamp of the most recent item
-in the feed. Takes the same arguments as make_recentchanges_json(). You will most 
+in the feed. Takes the same arguments as make_recentchanges_json(). You will most
 likely need this to print a Last-Modified HTTP header so user-agents can determine
 whether they need to reload the feed or not.
 
@@ -319,7 +319,7 @@ under the same terms as Perl itself.
 
 =head1 CREDITS
 
-Code in this module is mostly pirated from OpenGuides::RDF, those authors deserve all the credit. Chris Prather 
+Code in this module is mostly pirated from OpenGuides::RDF, those authors deserve all the credit. Chris Prather
 did the pirating.
 
 =cut

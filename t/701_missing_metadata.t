@@ -68,7 +68,7 @@ is( $ttvars{'done_search'}, 0, "Didn't search" );
 %ttvars = eval {
        $guide->show_missing_metadata(
                                 metadata_type => 'latitude',
-                                return_tt_vars => 1 
+                                return_tt_vars => 1
         );
 };
 
@@ -84,7 +84,7 @@ is( $nodes[1]->{'name'}, "Test Page 3", "Right nodes" );
        $guide->show_missing_metadata(
                                 metadata_type => 'latitude',
                                 metadata_value => '22.22',
-                                return_tt_vars => 1 
+                                return_tt_vars => 1
         );
 };
 
@@ -109,7 +109,7 @@ is_deeply( \@nodenames,
                                 metadata_value => '22.22',
                                 exclude_locales => 1,
                                 exclude_categories => 2,
-                                return_tt_vars => 1 
+                                return_tt_vars => 1
         );
 };
 

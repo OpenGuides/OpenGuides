@@ -54,7 +54,7 @@ my $guide = OpenGuides->new( config => $config );
 
 # Generate 3 nodes
 $guide->wiki->write_node( "Wombats","Wombats are cool",undef, { username => "bob", comment => "wombats rock", edit_type => "Normal edit" } ) or die "Can't write node";
-    
+
 $guide->wiki->write_node( "Armadillos","Armadillos are cool",undef, { username => "bob", comment => "Armadillos rock", edit_type => "Normal edit" } ) or die "Can't write node";
 
 $guide->wiki->write_node( "Echidnas","Echidnas are cool",undef, { username => "bob", comment => "Echidnas rock", edit_type => "Normal edit" } ) or die "Can't write node";
@@ -81,12 +81,12 @@ is( $node{version}, 1, "First version" );
 my $dbh = DBI->connect("dbi:SQLite:dbname=t/node.db", "", "",
                     { RaiseError => 1, AutoCommit => 1 });
 
-$dbh->do("update content set modified = datetime('now','-13 day') where node_id = 1"); 
-$dbh->do("update node set modified = datetime('now','-13 day') where id = 1"); 
-$dbh->do("update content set modified = datetime('now','-2 day') where node_id = 2"); 
-$dbh->do("update node set modified = datetime('now','-2 day') where id = 2"); 
-$dbh->do("update content set modified = datetime('now','-25 day') where node_id = 3"); 
-$dbh->do("update node set modified = datetime('now','-25 day') where id = 3"); 
+$dbh->do("update content set modified = datetime('now','-13 day') where node_id = 1");
+$dbh->do("update node set modified = datetime('now','-13 day') where id = 1");
+$dbh->do("update content set modified = datetime('now','-2 day') where node_id = 2");
+$dbh->do("update node set modified = datetime('now','-2 day') where id = 2");
+$dbh->do("update content set modified = datetime('now','-25 day') where node_id = 3");
+$dbh->do("update node set modified = datetime('now','-25 day') where id = 3");
 
 #check we only find 1 node in each time period
 my @nodes;
@@ -116,10 +116,10 @@ my $cookie = OpenGuides::CGI->make_prefs_cookie(
 my $output = $guide->display_recent_changes( return_output => 1 );
 
 # check recent changes renders properly
-unlike ($output, qr/24 hours/, "no pages changed in the last 24 hours"); 
-like ($output, qr/last week/, "edits in the last week"); 
-like ($output, qr/last fortnight/, "edits in the last fornight"); 
-like ($output, qr/last 30 days/, "edits in the last 30 days"); 
+unlike ($output, qr/24 hours/, "no pages changed in the last 24 hours");
+like ($output, qr/last week/, "edits in the last week");
+like ($output, qr/last fortnight/, "edits in the last fornight");
+like ($output, qr/last 30 days/, "edits in the last 30 days");
 
 # set show_minor_edits to 0.
 $cookie = OpenGuides::CGI->make_prefs_cookie(
@@ -140,23 +140,23 @@ $ENV{HTTP_COOKIE} = $cookie;
 
 $output = $guide->display_recent_changes( return_output => 1 );
 # check recent changes renders properly
-unlike ($output, qr/24 hours/, "no pages changed in the last 24 hours"); 
-like ($output, qr/last week/, "edits in the last week"); 
-like ($output, qr/last fortnight/, "edits in the last fornight"); 
-like ($output, qr/last 30 days/, "edits in the last 30 days"); 
+unlike ($output, qr/24 hours/, "no pages changed in the last 24 hours");
+like ($output, qr/last week/, "edits in the last week");
+like ($output, qr/last fortnight/, "edits in the last fornight");
+like ($output, qr/last 30 days/, "edits in the last 30 days");
 
-# make an extra edit now. 
+# make an extra edit now.
 my %data = $wiki->retrieve_node( "Echidnas" );
 $guide->wiki->write_node( "Echidnas","Echidnas are so cool", $data{checksum}, { username => "bob", comment => "Echidnas suck", edit_type => "Normal edit" } ) or die "Can't write node";
 %node = $wiki->retrieve_node("Echidnas");
 is( $node{version}, 2, "Second version" );
 $output = $guide->display_recent_changes( return_output => 1 );
 # check recent changes renders properly
-like ($output, qr/24 hours/, "pages changed in the last 24 hours"); 
+like ($output, qr/24 hours/, "pages changed in the last 24 hours");
 unlike ($output, qr/Echidnas rock/, "not showing multiple edits");
-like ($output, qr/last week/, "edits in the last week"); 
-like ($output, qr/last fortnight/, "edits in the last fornight"); 
-unlike ($output, qr/last 30 days/, "no edits in the last 30 days"); 
+like ($output, qr/last week/, "edits in the last week");
+like ($output, qr/last fortnight/, "edits in the last fornight");
+unlike ($output, qr/last 30 days/, "no edits in the last 30 days");
 
 $cookie = OpenGuides::CGI->make_prefs_cookie(
     config                     => $config,
@@ -174,8 +174,8 @@ $ENV{HTTP_COOKIE} = $cookie;
 $output = $guide->display_recent_changes( return_output => 1 );
 
 # check recent changes renders properly
-like ($output, qr/24 hours/, "pages changed in the last 24 hours"); 
+like ($output, qr/24 hours/, "pages changed in the last 24 hours");
 unlike ($output, qr/Echidnas rock/, "not showing multiple edits");
-like ($output, qr/last week/, "edits in the last week"); 
-like ($output, qr/last fortnight/, "edits in the last fornight"); 
-unlike ($output, qr/last 30 days/, "no edits in the last 30 days"); 
+like ($output, qr/last week/, "edits in the last week");
+like ($output, qr/last fortnight/, "edits in the last fornight");
+unlike ($output, qr/last 30 days/, "no edits in the last 30 days");

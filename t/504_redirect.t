@@ -27,7 +27,7 @@ my $config = OpenGuides::Config->new(
 );
 eval { require Wiki::Toolkit::Search::Plucene; };
 if ( $@ ) { $config->use_plucene ( 0 ) };
-        
+
     OpenGuides::Test::refresh_db();
 
 my $guide = OpenGuides->new( config => $config );

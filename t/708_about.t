@@ -14,7 +14,7 @@ my $guide = OpenGuides->new(config => $config);
 
 my $output = $guide->display_about(return_output => 1);
 
-like( $output, qr|My site</a></h1>.*<h2>is powered by|ms, 
+like( $output, qr|My site</a></h1>.*<h2>is powered by|ms,
     "HTML about text is displayed, including the site name" );
 
 $output = $guide->display_about(return_output => 1,
