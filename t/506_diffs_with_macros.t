@@ -106,26 +106,26 @@ __DATA__
  xmlns:admin="http://webns.net/mvcb/"
 >
 
-<channel rdf:about="http://london.openguides.org/kakemirror/?RecentChanges">
+<channel rdf:about="http://london.randomness.org.uk/kakemirror/?RecentChanges">
 <title>The Open Guide to London - Kake's Mirror</title>
-<link>http://london.openguides.org/kakemirror/?RecentChanges</link>
+<link>http://london.randomness.org.uk/kakemirror/?RecentChanges</link>
 <description></description>
 <dc:date>2004-12-14T12:59:42</dc:date>
 <wiki:interwiki></wiki:interwiki>
 <items>
  <rdf:Seq>
-  <rdf:li rdf:resource="http://london.openguides.org/kakemirror/?id=Buckingham_Arms%2C_SW1H_9EU;version=9" />
-  <rdf:li rdf:resource="http://london.openguides.org/kakemirror/?id=Buckingham_Arms%2C_SW1H_9EU;version=8" />
-  <rdf:li rdf:resource="http://london.openguides.org/kakemirror/?id=Star_Tavern%2C_SW1X_8HT;version=14" />
-  <rdf:li rdf:resource="http://london.openguides.org/kakemirror/?id=Star_Tavern%2C_SW1X_8HT;version=13" />
-  <rdf:li rdf:resource="http://london.openguides.org/kakemirror/?id=Star_Tavern%2C_SW1X_8HT;version=12" />
+  <rdf:li rdf:resource="http://london.randomness.org.uk/kakemirror/?id=Buckingham_Arms%2C_SW1H_9EU;version=9" />
+  <rdf:li rdf:resource="http://london.randomness.org.uk/kakemirror/?id=Buckingham_Arms%2C_SW1H_9EU;version=8" />
+  <rdf:li rdf:resource="http://london.randomness.org.uk/kakemirror/?id=Star_Tavern%2C_SW1X_8HT;version=14" />
+  <rdf:li rdf:resource="http://london.randomness.org.uk/kakemirror/?id=Star_Tavern%2C_SW1X_8HT;version=13" />
+  <rdf:li rdf:resource="http://london.randomness.org.uk/kakemirror/?id=Star_Tavern%2C_SW1X_8HT;version=12" />
  </rdf:Seq>
 </items>
 </channel>
 
-<item rdf:about="http://london.openguides.org/kakemirror/?id=Buckingham_Arms%2C_SW1H_9EU;version=9">
+<item rdf:about="http://london.randomness.org.uk/kakemirror/?id=Buckingham_Arms%2C_SW1H_9EU;version=9">
 <title>Buckingham Arms, SW1H 9EU</title>
-<link>http://london.openguides.org/kakemirror/?id=Buckingham_Arms%2C_SW1H_9EU;version=9</link>
+<link>http://london.randomness.org.uk/kakemirror/?id=Buckingham_Arms%2C_SW1H_9EU;version=9</link>
 <description>extraneous : [bob]</description>
 <dc:date>2004-12-12T13:25:27</dc:date>
 <dc:contributor>bob</dc:contributor>
@@ -136,9 +136,9 @@ __DATA__
 <wiki:diff></wiki:diff>
 </item>
 
-<item rdf:about="http://london.openguides.org/kakemirror/?id=Buckingham_Arms%2C_SW1H_9EU;version=8">
+<item rdf:about="http://london.randomness.org.uk/kakemirror/?id=Buckingham_Arms%2C_SW1H_9EU;version=8">
 <title>Buckingham Arms, SW1H 9EU</title>
-<link>http://london.openguides.org/kakemirror/?id=Buckingham_Arms%2C_SW1H_9EU;version=8</link>
+<link>http://london.randomness.org.uk/kakemirror/?id=Buckingham_Arms%2C_SW1H_9EU;version=8</link>
 <description> [Martin]</description>
 <dc:date>2004-12-11T14:05:38</dc:date>
 <dc:contributor>Martin</dc:contributor>
@@ -149,9 +149,9 @@ __DATA__
 <wiki:diff></wiki:diff>
 </item>
 
-<item rdf:about="http://london.openguides.org/kakemirror/?id=Star_Tavern%2C_SW1X_8HT;version=14">
+<item rdf:about="http://london.randomness.org.uk/kakemirror/?id=Star_Tavern%2C_SW1X_8HT;version=14">
 <title>Star Tavern, SW1X 8HT</title>
-<link>http://london.openguides.org/kakemirror/?id=Star_Tavern%2C_SW1X_8HT;version=14</link>
+<link>http://london.randomness.org.uk/kakemirror/?id=Star_Tavern%2C_SW1X_8HT;version=14</link>
 <description>De-bobbed the bob bits. [Kake]</description>
 <dc:date>2004-12-10T14:29:13</dc:date>
 <dc:contributor>Kake</dc:contributor>
@@ -162,9 +162,9 @@ __DATA__
 <wiki:diff></wiki:diff>
 </item>
 
-<item rdf:about="http://london.openguides.org/kakemirror/?id=Star_Tavern%2C_SW1X_8HT;version=13">
+<item rdf:about="http://london.randomness.org.uk/kakemirror/?id=Star_Tavern%2C_SW1X_8HT;version=13">
 <title>Star Tavern, SW1X 8HT</title>
-<link>http://london.openguides.org/kakemirror/?id=Star_Tavern%2C_SW1X_8HT;version=13</link>
+<link>http://london.randomness.org.uk/kakemirror/?id=Star_Tavern%2C_SW1X_8HT;version=13</link>
 <description>More comments. [Kake]</description>
 <dc:date>2004-12-10T14:27:41</dc:date>
 <dc:contributor>Kake</dc:contributor>
@@ -175,9 +175,9 @@ __DATA__
 <wiki:diff></wiki:diff>
 </item>
 
-<item rdf:about="http://london.openguides.org/kakemirror/?id=Star_Tavern%2C_SW1X_8HT;version=12">
+<item rdf:about="http://london.randomness.org.uk/kakemirror/?id=Star_Tavern%2C_SW1X_8HT;version=12">
 <title>Star Tavern, SW1X 8HT</title>
-<link>http://london.openguides.org/kakemirror/?id=Star_Tavern%2C_SW1X_8HT;version=12</link>
+<link>http://london.randomness.org.uk/kakemirror/?id=Star_Tavern%2C_SW1X_8HT;version=12</link>
 <description>updated [bob]</description>
 <dc:date>2004-12-10T14:18:51</dc:date>
 <dc:contributor>bob</dc:contributor>
