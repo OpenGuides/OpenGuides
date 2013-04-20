@@ -27,12 +27,23 @@
         <span class="adr"><span class="street-address">[% CGI.escapeHTML(address) %]</span></span><!--, [% default_city %] --> [%# uncomment at left to show city %]
         [% IF map_link %]
           <a href="[% map_link %]">(map of this place)</a>
+        [% ELSE %]
+          [% TRY %]
+            [% SET auto_map_link_in_address = 1 %]
+            [% INCLUDE custom_auto_map_link.tt %]
+          [% CATCH %]
+          [% END %]
         [% END %]
       </li>
     [% ELSIF map_link %]
       <li class="map">
         <span class="metadata_label"><a href="[% map_link %]">Map of this place</a></span>
       </li>
+    [% ELSE %]
+         [% TRY %]
+           [% INCLUDE custom_auto_map_link.tt %]
+         [% CATCH %]
+         [% END %]
     [% END %]
     [% IF postcode %]
       <li class="postcode">
