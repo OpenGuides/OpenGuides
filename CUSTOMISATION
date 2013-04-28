@@ -47,11 +47,6 @@ The custom templates currently supported are:
        e.g. "Category Vegan-Friendly" - the full, "official" name of the
        autocreated node
 
- - custom_auto_map_link.tt
-   Used to include map links when the node doesn't have an explicit
-   one set. If the template is being called from without an address class,
-   the auto_map_link_in_address TT variable will be set.
-
 Requests for further custom inserts are welcomed.
 
 If you include your own versions of other (non custom_) templates in
