@@ -46,6 +46,7 @@ OpenGuides::Test->write_data(
                               longitude     => 0.6,
                               locales       => "Croydon",
                               phone         => '123',
+                              return_output => 1,
                             );
 
 OpenGuides::Test->write_data(
@@ -65,6 +66,7 @@ OpenGuides::Test->write_data(
                               longitude     => 0.6,
                               locales       => "Croydon",
                               map_link      => 'http://maps.example.org/Pink_Lion_Croydon',
+                              return_output => 1,
                             );
 
 
