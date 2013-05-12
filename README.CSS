@@ -231,9 +231,14 @@ div#create_new_page
              about disallowed characters.
 
 div#find_within_distance
-    Used in: node.tt
+    Used in: node_location_search.tt
     Purpose: A section of the node display that allows the user to search
              for other nodes close by
+
+div#node_location_search
+    Used in: node_location_search.tt
+    Purpose: A section of the node display that contains location based 
+             searches. 
 
 div#footer
     Used in: footer.tt

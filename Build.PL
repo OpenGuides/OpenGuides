@@ -419,6 +419,7 @@ $build->config_data( __templates     => [
                       "node_image.tt",
                       "node_image_fields.tt",
                       "node_photo_notes.tt",
+                      "node_location_search.tt",
                       "node_rdf.tt",
                       "openguides_information_boxes.tt",
                       "preferences.tt",
