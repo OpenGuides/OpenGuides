@@ -177,6 +177,7 @@ t/903_redirect_without_spaces.t
 t/904_leaflet.t
 t/905_multiple_index.t
 t/906_show_index_form.t
+t/907_auto_map_link.t
 t/templates/105_test.tt
 wiki.cgi
 META.json

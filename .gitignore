@@ -1,0 +1,7 @@
+Build
+_build/
+blib/
+t/indexes/
+t/node.db
+t/templates/tmp/
+wiki.conf
