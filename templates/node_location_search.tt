@@ -18,4 +18,8 @@
       </form>
     </div>
   [% END %]
+  [% TRY %]
+    [% INCLUDE custom_node_location_search.tt %]
+  [% CATCH %]
+  [% END %]
 </div>
