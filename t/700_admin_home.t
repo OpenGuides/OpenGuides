@@ -8,7 +8,7 @@ eval { require DBD::SQLite; };
 if ( $@ ) {
     my ($error) = $@ =~ /^(.*?)\n/;
     plan skip_all => "DBD::SQLite could not be used - no database to test with ($error)";
-} 
+}
 
 plan tests => 12;
 
@@ -27,22 +27,22 @@ isa_ok( $wiki, "Wiki::Toolkit" );
 # Add 3 different pages, one of which with two versions
 OpenGuides::Test->write_data(
      guide         => $guide,
-     node          => "Test Page", 
+     node          => "Test Page",
      categories    => "Alpha",
      return_output => 1  );
 OpenGuides::Test->write_data(
       guide        => $guide,
-      node         =>  "Test Page 2", 
+      node         =>  "Test Page 2",
       categories    => "Alpha",
       return_output => 1  );
 OpenGuides::Test->write_data(
       guide      => $guide,
-      node       =>  "Locale Bar", 
+      node       =>  "Locale Bar",
       categories  => "Locales",
       return_output => 1  );
 OpenGuides::Test->write_data(
       guide      => $guide,
-      node       =>  "Locale Bar", 
+      node       =>  "Locale Bar",
       categories  => "Locales",
      return_output => 1  );
 

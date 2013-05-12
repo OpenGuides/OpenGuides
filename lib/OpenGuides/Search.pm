@@ -512,7 +512,7 @@ sub _run_phrase_search {
             delete $contents_res{$node};
             next;
         }
-        
+
         # It'll be a real phrase (as opposed to a word) if it has a space in it.
         # In this case, dump out the nodes that don't match the search exactly.
         # I don't know why the phrase searching isn't working properly.  Fix later.

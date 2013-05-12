@@ -143,7 +143,7 @@ Test::HTML::Content::tag_ok( $output, "a",
                              "...ditto node_image_url" );
 
 # Now try to commit some edits without giving the checksum.
-$output = OpenGuides::Test->write_data( 
+$output = OpenGuides::Test->write_data(
                                         guide => $guide,
                                         node => "Red Lion",
                                         node_image => "http://eg.com/foo.jpg",

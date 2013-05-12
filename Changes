@@ -140,9 +140,9 @@ More detailed changelogs can be found at
           our system.
         * Replace map XMLNS with dedicated vocabulary.
           (http://downlode.org/Code/RDF/Map/)
-        * Replace usage of weakly-modeled and unavailable Wordnet vocabulary 
+        * Replace usage of weakly-modeled and unavailable Wordnet vocabulary
           for "neighborhood" value with WAIL term.
-        * Replace usage of unmodeled and unmaintained ChefMoz vocabulary for 
+        * Replace usage of unmodeled and unmaintained ChefMoz vocabulary for
           opening hours value and replace with Dublin Core "available" term.
         * Replace unnecessary instances of rdf:ID with rdf:nodeID.
         * Model relationship of neighborhood to parent city.
@@ -271,25 +271,25 @@ More detailed changelogs can be found at
         Add an optional new config parameter, ping_services, which is a list
           of services (defined in Wiki::Toolkit::Plugin::Ping) to ping when
           a node is written. Allows you to ping pingerati etc on changes.
-        Helmert Transforms, so that British National grid users can have 
+        Helmert Transforms, so that British National grid users can have
         accurate Google Maps tie-ins.
         dbencoding config variable to tell OpenGuides what charset your
           database encoding is.
         As a consequence declare the charset correctly in the XML feeds.
         Other minor UI improvements
         Redesigned node history view a la MediaWiki for greater clarity.
-        
+
 
 0.57    12 September 2006
         New interfaces:
         * Admin interface.
         * Show nodes missing metadata.
         * Moderate edits (based on Wiki::Toolkit moderation).
-        NOTE: these functions should be considered unstable, and may change 
+        NOTE: these functions should be considered unstable, and may change
           over future releases.
 
         Lots more Atom and RSS feeds, including for searching.
-        Four new config file options: moderation_requires_password, 
+        Four new config file options: moderation_requires_password,
           enable_node_image, enable_common_categories, enable_common_locales
         Search::InvertedIndex support is deprecated as of this release.
           Please upgrade to Plucene if you are still using it.
@@ -303,7 +303,7 @@ More detailed changelogs can be found at
         Versioned dependency on Wiki::Toolkit to avoid development
           versions.
         Support generating feeds of a node's version listing, in addition
-          to feeds of the recent changes. For more information on OpenGuides 
+          to feeds of the recent changes. For more information on OpenGuides
           feeds, see http://dev.openguides.org/wiki/FeedsIntro
 
 0.54_02 8 June 2006
@@ -353,7 +353,7 @@ More detailed changelogs can be found at
         #67 Default website for a page is now http://
         Fixed mod_perl redirect bug.
         Fixed test failure with CGI.pm 3.16.
-        #87 Edit on mirrored pages now goes to source site 
+        #87 Edit on mirrored pages now goes to source site
         #66 Locales in RDF now use dc:title, not foaf:name
 
 0.51    15 November 2005
@@ -361,8 +361,8 @@ More detailed changelogs can be found at
           * The preferred way to get RecentChanges is now to pass the CGI the
             parameter "action=rc", rather than just using the page name
             "RecentChanges". However, this method will still work for the time
-            being. Similarly, the URL parameter for the RecentChanges RSS feed 
-            has changed from "action=rss" to "action=rc;format=rss". Requests 
+            being. Similarly, the URL parameter for the RecentChanges RSS feed
+            has changed from "action=rss" to "action=rc;format=rss". Requests
             for the former will be redirected to the latter.
 
         New features:
@@ -372,36 +372,36 @@ More detailed changelogs can be found at
           * New "summary" metadata field for one-line summaries of nodes:
             - Added summary field to RDF as dc:description.
             - Show node summary in search results.
-          * New "format=raw" option for outputting wiki text of a node. 
+          * New "format=raw" option for outputting wiki text of a node.
           * RSS feed now contains DOAP (http://usefulinc.com/doap) metadata.
-        
+
         RDF bugfixes:
           * Locales, address and summary fields now XML-escaped properly.
           * Added "address" field that was missing from the RDF node view.
           * Update URL for Dublin Core elements in RDF index view.
           * Fixed URL in the RSS <channel> element to point to the RSS URL,
             not the RecentChanges page URL.
-        
+
         Search bugfixes:
-          * Fixed bug that was breaking coordinate entry fields on search page if 
+          * Fixed bug that was breaking coordinate entry fields on search page if
             lat/lon was being used.
           * Fixed bug in OpenGuides::SuperSearch that wasn't passing "latitude"
             and "longitude" values to the search template when a distance
             search was being done.
-        
+
         Minor improvements:
           * Replace underscores in node names in "redirected from" message
             with spaces.
           * "Redirected from" message now links to a rendered version of
             the old page rather than the editing view.
-        
+
         Miscellaneous bugfixes:
           * Fixed problem with newer Text::Wikiformat and blank nodes.
           * Fixed bug in navbar template that caused warnings in the tests.
-        
+
 0.50    2 October 2005
         Remove rogue ampersand that had crept into the RSS feed.
-        
+
 0.49    24 July 2005
         Added updated prerequisite on CGI::Wiki::Plugin::RSS::ModWiki (fixes
           a test failure).
@@ -412,9 +412,9 @@ More detailed changelogs can be found at
             rdf:Description in RDF node listings.
           * Fixed bug that was causing all nodes to be flagged as a
             geo:SpatialThing whether they were or not.
-          * Ensured that ampersands and greater/less than symbols were properly 
+          * Ensured that ampersands and greater/less than symbols were properly
             escaped so as not to be XML-toxic.
-          * Added geo:lat, geo:long and RSS link attributes to items in 
+          * Added geo:lat, geo:long and RSS link attributes to items in
             category/locale listings to facilitate integration with mapping
             applications.
           * Added owl:sameAs property to RDF output for nodes that are redirects
@@ -468,7 +468,7 @@ More detailed changelogs can be found at
         Update feedback details and include URL of RT queue.
         Added missing tests to MANIFEST so they are included with the
           distribution.
-    
+
 0.45    1 December 2004
         Made the geolocation stuff work worldwide.  Squeeeeeee!
         You can now choose between doing your distance calculations with
@@ -488,7 +488,7 @@ More detailed changelogs can be found at
         Improved the efficiency of the search.
         Fixed a couple of minor bugs in the search - note that node.tt
           and supersearch.tt have changed.
-        Change the default indexer for new installs to Plucene.    
+        Change the default indexer for new installs to Plucene.
         Only run certain search-related tests if Plucene is installed.
 
 0.43    21 October 2004
@@ -582,7 +582,7 @@ More detailed changelogs can be found at
         Internal rejigging - extracted some methods from wiki.cgi to
           OpenGuides.pm.
         Added new preference for default edit type.
-        Reinstate apparently lost change from 0.26 to show IP rather than 
+        Reinstate apparently lost change from 0.26 to show IP rather than
           "Anonymous" in RecentChanges.
         More informative <title> tags for non-node (e.g. node version
           history) pages.
@@ -599,23 +599,23 @@ More detailed changelogs can be found at
           pages, using CGI::Wiki::Plugin::RSS::Reader. This allows you
           to do this to produce a list of up to ten hyperlinks:
             @RSS [http://example.com/example.rss]
-       
-        Numerous template tweaks to comply with the W3C's Web Content 
+
+        Numerous template tweaks to comply with the W3C's Web Content
           Accessibility Guidelines (http://www.w3.org/TR/WAI-WEBCONTENT/):
           - summaries for all HTML tables
-          - labels for all form input elements and some textual additions 
-            to templates, such as '/' separators between navbar items, 
-            because the guidelines specify links should not only be 
+          - labels for all form input elements and some textual additions
+            to templates, such as '/' separators between navbar items,
+            because the guidelines specify links should not only be
             separated by whitespace. If you don't want these to appear,
-            put the following in your stylesheet and they'll be hidden by 
-            CSS (but will still appear for people using textual browsers or 
+            put the following in your stylesheet and they'll be hidden by
+            CSS (but will still appear for people using textual browsers or
             screen readers): ".hidden { display: none }".
-          - the "lang" element (a two-letter code identifying the language 
-            you're writing pages in) will now be added to the <html> tag on 
-            all pages; a new question has been added to the configuration 
+          - the "lang" element (a two-letter code identifying the language
+            you're writing pages in) will now be added to the <html> tag on
+            all pages; a new question has been added to the configuration
             script to ask for it and it will be stored in wiki.conf.
             ***         YOU WILL NEED TO RUN BUILD.PL AGAIN.          ***
-            *** Remember to keep a backup copy of your old wiki.conf! ***   
+            *** Remember to keep a backup copy of your old wiki.conf! ***
 
         Improved navigation for search results (next and previous n hits).
           Removed underscores from page names in search results.
@@ -623,26 +623,26 @@ More detailed changelogs can be found at
         Overhauled RDF output. Changes:
           - everything is no longer classified as a restaurant(!)
           - empty tags are no longer generated
-          - show categories, locales and OS x/y coords in invididual 
+          - show categories, locales and OS x/y coords in invididual
             node RDF view
           - switch to W3C contact namespace for addressing data
           - move homepage tag out of wiki metadata
           - remove nonexistent "gs:" namespace from category indices
           - logical structure improvements (subjects of pages are now
             identified as spatial things if they are, or are RDF
-            descriptions if they're not, instead of being anonymous 
+            descriptions if they're not, instead of being anonymous
             FOAF topics)
           - include city and country in RDF only for spatial things.
 
         Fixed bug that prevented automatic database initialization on
           SQLite databases.
         Doc fix for private installations.
-        Removed the following characters from the list of forbidden ones in 
+        Removed the following characters from the list of forbidden ones in
           node names in newpage.cgi (a restriction which dates from all the way
           back when we were using UseModWiki): " ! $ ^ ~ @ [ ] { }
         Removed newlines from output of search box macro.
         Reimplemented diffing using CGI::Wiki::Plugin::Diff as it seems the
-          change in 0.30 got lost. Removed OpenGuides::Diff.pm as we should not 
+          change in 0.30 got lost. Removed OpenGuides::Diff.pm as we should not
           be distributing it.
 
 0.30    29 December 2003
@@ -655,15 +655,15 @@ More detailed changelogs can be found at
           Added new banner template for page headers. Also ensured presence
           of navigation bar is consistent.
           *** INCOMPATIBLE CHANGE: *** The navbar class in the stylesheet
-          has been renamed to, unsurprisingly, "navbar", for consistency 
+          has been renamed to, unsurprisingly, "navbar", for consistency
           (from "toolbar"). *** YOU WILL NEED TO REWRITE YOUR STYLESHEET. ***
           You are advised to create a duplicate wiki.cgi that reads its data
           from your database but its stylesheet and templates from the new
           ones in order to test them *before* deploying them.
 
         Added "FAQ", "How To Get Started" and "Wiki Etiquette" to the
-          navigation, under "Help" - these won't exist unless you create them 
-          on your site, so at first the links serve as examples of 
+          navigation, under "Help" - these won't exist unless you create them
+          on your site, so at first the links serve as examples of
           documentation you can provide.
         Modified preferences.cgi so that all the help links in the navbar
           can be hidden, not just the text formatting link.
@@ -734,7 +734,7 @@ More detailed changelogs can be found at
           version that didn't have unescape.
         Added a link on RecentChanges to the RSS version, and put an
           autodiscovery tag for the RSS in the head section.
-        Changed diff feature to hide checksums, which aren't necessary for 
+        Changed diff feature to hide checksums, which aren't necessary for
           the user to see. Fixed a minor bug in the node history template so
           that the diff links compare the selected version against the previous
           one, not the original one every time.
@@ -745,7 +745,7 @@ More detailed changelogs can be found at
 0.19    10 July 2003
         Extra checks that script_url ends in a '/'.
         Fixed small bug with edit conflict form - map link field was missing.
-        Moved "content" div in a couple of templates to fix incorrect nesting. 
+        Moved "content" div in a couple of templates to fix incorrect nesting.
         @INDEX_LINK macros now have optional title text like so:
           @INDEX_LINK [[Category Pubs|Pubs]]
         Added preferences option for including or excluding text formatting

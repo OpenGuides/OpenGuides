@@ -21,7 +21,7 @@ sub get_recent_changes {
 
     my $output = $guide->display_recent_changes( return_output => 1 );
     $output =~ s/^Content-Type.*[\r\n]+//m;
-    
+
     return $output;
 }
 

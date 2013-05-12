@@ -59,7 +59,7 @@ foreach my $feed_type (@feed_types) {
 
     # Now write some data: 3 versions of one node, and 1 of another
     my $guide = OpenGuides->new( config => $config );
-        
+
     # Set up CGI parameters ready for a node write.
     # Most of these are in here to avoid uninitialised value warnings.
     my $q = CGI->new;
@@ -125,7 +125,7 @@ foreach my $feed_type (@feed_types) {
                                    return_output      => 1,
                                    feed_type          => $feed_type,
                                    feed_listing       => "node_all_versions",
-                                   name               => "Badgers" 
+                                   name               => "Badgers"
                                  );
     unlike( $output, qr/<title>Wombats/, "Was on Badgers, so no wombats" );
     like( $output, qr/<title>Badgers/, "Badgers correctly found" );
@@ -135,7 +135,7 @@ foreach my $feed_type (@feed_types) {
                                    return_output      => 1,
                                    feed_type          => $feed_type,
                                    feed_listing       => "node_all_versions",
-                                   name               => "Wombats" 
+                                   name               => "Wombats"
                                  );
     unlike( $output, qr/<title>Badgers/, "Was on Wombats, so no badgers" );
     like( $output, qr/<title>Wombats/, "Wombats correctly found" );

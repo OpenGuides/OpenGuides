@@ -24,7 +24,7 @@ sub _init {
     my ($self, %args) = @_;
 
     my $wiki = $args{wiki};
-    
+
     unless ( $wiki && UNIVERSAL::isa( $wiki, "Wiki::Toolkit" ) ) {
       croak "No Wiki::Toolkit object supplied.";
     }
@@ -41,14 +41,14 @@ sub _init {
         my ($node_name, $version) = @_;
 
         my $config = $self->{config};
-    
+
         my $node_url = $config->script_url . uri_escape($config->script_name) . '?';
         $node_url .= 'id=' if defined $version;
         $node_url .= uri_escape($self->{wiki}->formatter->node_name_to_node_param($node_name));
         $node_url .= ';version=' . uri_escape($version) if defined $version;
 
         $node_url;
-      };  
+      };
     $self->{site_name}        = $config->site_name;
     $self->{default_city}     = $config->default_city     || "";
     $self->{default_country}  = $config->default_country  || "";
@@ -168,7 +168,7 @@ sub emit_rdfxml {
 
         my $user_id = $username;
         $user_id =~ s/\s+/_/g;
-        
+
         $tt_vars{contributors}{$username} ||=
             {
               username => encode_entities_numeric($username),
@@ -210,7 +210,7 @@ developers.
     my $wiki = Wiki::Toolkit->new( ... );
     my $config = OpenGuides::Config->new( file => "wiki.conf" );
     my $rdf_writer = OpenGuides::RDF->new( wiki   => $wiki,
-                                         config => $config ); 
+                                         config => $config );
 
     # RDF version of a node.
     print "Content-Type: application/rdf+xml\n\n";
@@ -223,7 +223,7 @@ developers.
 =item B<new>
 
     my $rdf_writer = OpenGuides::RDF->new( wiki   => $wiki,
-                                           config => $config ); 
+                                           config => $config );
 
 C<wiki> must be a L<Wiki::Toolkit> object and C<config> must be an
 L<OpenGuides::Config> object.  Both arguments mandatory.
@@ -294,8 +294,8 @@ under the same terms as Perl itself.
 
 =head1 CREDITS
 
-Code in this module written by Kake Pugh and Earle Martin.  Dan Brickley, Matt 
-Biddulph and other inhabitants of #swig on irc.freenode.net gave useful feedback 
+Code in this module written by Kake Pugh and Earle Martin. Dan Brickley, Matt
+Biddulph and other inhabitants of #swig on irc.freenode.net gave useful feedback
 and advice.
 
 =cut

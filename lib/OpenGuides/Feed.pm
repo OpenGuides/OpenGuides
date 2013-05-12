@@ -27,7 +27,7 @@ sub _init {
     my ($self, %args) = @_;
 
     my $wiki = $args{wiki};
-    
+
     unless ( $wiki && UNIVERSAL::isa( $wiki, "Wiki::Toolkit" ) ) {
        croak "No Wiki::Toolkit object supplied.";
     }
@@ -44,14 +44,14 @@ sub _init {
         my ($node_name, $version) = @_;
 
         my $config = $self->{config};
-    
+
         my $node_url = $config->script_url . uri_escape($config->script_name) . '?';
         $node_url .= 'id=' if defined $version;
         $node_url .= uri_escape($self->{wiki}->formatter->node_name_to_node_param($node_name));
         $node_url .= ';version=' . uri_escape($version) if defined $version;
 
         $node_url;
-      };  
+      };
     $self->{site_name}        = $config->site_name . " - Recent Changes";
     $self->{default_city}     = $config->default_city      || "";
     $self->{default_country}  = $config->default_country   || "";
@@ -104,15 +104,15 @@ Passes additional arguments through to the underlying Wiki::Toolkit::Feed
 
 sub make_feed {
     my ($self, %args) = @_;
-    
+
     my $feed_type = $args{feed_type};
     my $feed_listing = $args{feed_listing};
-    
+
     my %known_listings = (
                           'recent_changes' => 1,
                           'node_all_versions' => 1,
                          );
-                      
+
     croak "No feed listing specified" unless $feed_listing;
     croak "Unknown feed listing: $feed_listing" unless $known_listings{$feed_listing};
 
@@ -157,7 +157,7 @@ sub build_feed_for_nodes {
 
 =item B<build_mini_feed_for_nodes>
 
-For the given feed type, build a mini feed (name and distance) from the 
+For the given feed type, build a mini feed (name and distance) from the
  supplied list of nodes.
 Will figure out the feed timestamp from the newest node, and output a
  last modified header based on this.
@@ -239,7 +239,7 @@ sub default_content_type {
 =item B<fetch_maker>
 
 For the given feed type, identify and return the maker routine for feeds
-of that type. 
+of that type.
 
 my $maker = $feed->fetch_maker("rss");
 my $feed_contents = maker->node_all_versions(%options);
@@ -264,7 +264,7 @@ sub fetch_maker {
 
 sub atom_maker {
     my $self = shift;
-  
+
     unless ($self->{atom_maker}) {
         $self->{atom_maker} = Wiki::Toolkit::Feed::Atom->new(
             wiki                => $self->{wiki},
@@ -280,7 +280,7 @@ sub atom_maker {
             encoding            => $self->{config}->http_charset,
         );
     }
-    
+
     $self->{atom_maker};
 }
 
@@ -301,7 +301,7 @@ sub rss_maker {
             encoding            => $self->{config}->http_charset,
         );
     }
-    
+
     $self->{rss_maker};
 }
 
@@ -322,7 +322,7 @@ OpenGuides::Feed - generate data feeds for OpenGuides in various formats.
 
 =head1 DESCRIPTION
 
-Produces RSS 1.0 and Atom 1.0 feeds for OpenGuides.  Distributed and 
+Produces RSS 1.0 and Atom 1.0 feeds for OpenGuides.  Distributed and
 installed as part of the OpenGuides project, not intended for independent
 installation.  This documentation is probably only useful to OpenGuides
 developers.
@@ -337,11 +337,11 @@ developers.
     my $config = OpenGuides::Config->new( file => "wiki.conf" );
     my $feed = OpenGuides::Feed->new( wiki       => $wiki,
                                       config     => $config,
-                                      og_version => '1.0', ); 
+                                      og_version => '1.0', );
 
     # Ten most recent changes in RSS format.
     my %args = ( items     => 10,
-                 feed_type => 'rss', 
+                 feed_type => 'rss',
                  also_return_timestamp => 1 );
     my ($feed_output,$feed_timestamp) = $feed->make_feed( %args );
 
@@ -357,7 +357,7 @@ developers.
 
     my $feed = OpenGuides::Feed->new( wiki       => $wiki,
                                       config     => $config,
-                                      og_version => '1.0', ); 
+                                      og_version => '1.0', );
 
 C<wiki> must be a L<Wiki::Toolkit> object and C<config> must be an
 L<OpenGuides::Config> object.  Both of these arguments are mandatory.
@@ -409,9 +409,9 @@ meaningful values if your arguments relate to recent changes.
 
     print "Last-Modified: " . $feed->feed_timestamp( %args ) . "\n\n";
 
-Returns the timestamp of something in POSIX::strftime style ("Tue, 29 Feb 2000 
-12:34:56 GMT"). Takes the same arguments as make_recentchanges_rss(). 
-You will most likely need this to print a Last-Modified HTTP header so 
+Returns the timestamp of something in POSIX::strftime style ("Tue, 29 Feb 2000
+12:34:56 GMT"). Takes the same arguments as make_recentchanges_rss().
+You will most likely need this to print a Last-Modified HTTP header so
 user-agents can determine whether they need to reload the feed or not.
 
 =back

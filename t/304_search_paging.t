@@ -39,7 +39,7 @@ my $guide = OpenGuides->new( config => $config );
                                       categories => "Pubs",
                                     );
     }
-    
+
     my $output = $search->run(
                                return_output => 1,
                                vars          => {
@@ -77,7 +77,7 @@ my $guide = OpenGuides->new( config => $config );
                                       osie_y     => 200005,
                                     );
     }
-    
+
     $output = $search->run(
                                return_output => 1,
                                vars          => {
@@ -115,7 +115,7 @@ my $guide = OpenGuides->new( config => $config );
                                       longitude  => -0.118,
                                     );
     }
-    
+
     $output = $search->run(
                                return_output => 1,
                                vars          => {

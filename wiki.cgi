@@ -204,7 +204,7 @@ eval {
                             type   => $q->param("type") || "",
                             format => $format,
                           );
-    } elsif ($action eq 'display') { 
+    } elsif ($action eq 'display') {
         if ( $format and $format eq "rdf" ) {
             display_node_rdf( node => $node );
         } elsif ( $format and $format eq "json" ) {
@@ -225,13 +225,13 @@ eval {
                                      );
             } else {
                 my $redirect;
-                
+
                 if ((defined $q->param("redirect")) && ($q->param("redirect") == 0)) {
                   $redirect = 0;
                 } else {
-                  $redirect = 1;                
+                  $redirect = 1;
                 }
-                
+
                 $guide->display_node(
                                       id       => $node,
                                       version  => $version,
@@ -240,7 +240,7 @@ eval {
                                     );
             }
         }
-    } else { 
+    } else {
         # Fallback: redirect to the display page, preserving all vars
         # except for the action, which we override.
         # Note: $q->Vars needs munging if we need to support any
@@ -250,7 +250,7 @@ eval {
         my $redir_target = $script_url . $script_name . '?';
         my @args = map { "$_=" . $params->{$_} } keys %{$params};
         $redir_target .= join ';', @args;
-        
+
         print $q->redirect(
             -uri => $redir_target,
             -status => 303
@@ -316,13 +316,13 @@ sub display_node_rdf {
     print $rdf_writer->emit_rdfxml( node => $args{node} );
 }
 
-sub display_node_json { 
-    my %args = @_; 
-    my $json_writer = OpenGuides::JSON->new( wiki => $wiki, 
-                                             config => $config ); 
-    print "Content-type: text/javascript\n\n"; 
-    print $json_writer->emit_json( node => $args{node} ); 
-} 
+sub display_node_json {
+    my %args = @_;
+    my $json_writer = OpenGuides::JSON->new( wiki => $wiki,
+                                             config => $config );
+    print "Content-type: text/javascript\n\n";
+    print $json_writer->emit_json( node => $args{node} );
+}
 
 sub process_template {
     my ($template, $node, $vars, $conf, $omit_header) = @_;

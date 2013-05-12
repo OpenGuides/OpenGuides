@@ -18,7 +18,7 @@ if ( $@ ) {
 
 plan tests => 30;
 
-# clear out the database    
+# clear out the database
 OpenGuides::Test::refresh_db();
 
 

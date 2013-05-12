@@ -9,7 +9,7 @@
 
         - Secondly, you need to replace
             <a href="[% catloc_link %]Category_[% cat %]">
-          with 
+          with
             <a href="[% config.script_url _ config.script_name %]?id=Category_[% cat %]">
 
 0.60    The edit form now uses stylable <div>s rather than tables.  You will
