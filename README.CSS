@@ -254,7 +254,7 @@ div#metadata
 
 div#navbar_parent
     Used in: navbar.tt
-    Purpose: Parent of the navigation bar. If you want to pull bits of the 
+    Purpose: Parent of the navigation bar. If you want to pull bits of the
               navigation out, and put them next to the main nav bar, you'll
               want to make this the size of two parts combined, then size
               them within this.
@@ -417,7 +417,7 @@ input#go
 input#hours
     Used in: edit_form.tt
     Purpose: An input field for the opening hours of a node
-    
+
 input#latlong
     Used in: preferences.tt
     Purpose: An input field for the display preferences of latitude and

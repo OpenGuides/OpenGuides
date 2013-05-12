@@ -28,7 +28,7 @@ my $output = $guide->display_edit_form(
                                         id => "Crabtree Tavern",
                                         return_output => 1,
                                       );
-                                       
+
 # Strip Content-Type header to stop Test::HTML::Content getting confused.
 $output =~ s/^Content-Type.*[\r\n]+//m;
 

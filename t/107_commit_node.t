@@ -47,7 +47,7 @@ my $feed = OpenGuides::Feed->new( wiki   => $wiki,
 
 # Write the first version
 my $guide = OpenGuides->new( config => $config );
-    
+
 # Set up CGI parameters ready for a node write.
 my $q = OpenGuides::Test->make_cgi_object(
     content => "foo",

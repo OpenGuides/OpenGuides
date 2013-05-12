@@ -130,7 +130,7 @@ sub output {
     my $script_name  = $config->script_name;
     my $script_url   = $config->script_url;
     my $default_city = $config->default_city;
-    
+
     # Check cookie to see if we need to set the formatting_rules_link.
     my ($formatting_rules_link, $omit_help_links);
     my $formatting_rules_node = $config->formatting_rules_node;
@@ -158,7 +158,7 @@ sub output {
     my $is_admin = 0;
     if ( $cookie_data{is_admin} ) {
         $is_admin = 1;
-    } 
+    }
 
     my $tt_vars = {
         config                => $config,
@@ -247,9 +247,9 @@ sub output {
     $tt->process( $args{template}, $tt_vars, \$output );
 
     my $contact_email = $config->contact_email;
-    
+
     $output ||= qq(<html><head><title>ERROR</title></head><body><p>
-    Sorry!  Something went wrong.  Please contact the site administrator 
+    Sorry!  Something went wrong.  Please contact the site administrator
     at <a href="mailto:$contact_email">$contact_email</a> and quote the
     following error message:</p><blockquote>Failed to process template: )
         . $tt->error
@@ -389,7 +389,7 @@ sub extract_metadata_vars {
 
     my $summary = $args{metadata} ? $metadata{summary}[0]
                                   : $q->param("summary");
-                                  
+
     my %vars = (
         categories             => \@categories,
         locales                => \@locales,
@@ -416,7 +416,7 @@ sub extract_metadata_vars {
     if (exists $metadata{source}) {
         ($vars{source_site}) = $metadata{source}[0] =~ /^(.*?)(?:\?|$)/;
     }
-    
+
     if ( $args{metadata} ) {
         foreach my $var ( qw( phone fax address postcode os_x os_y osie_x
                               osie_y latitude longitude map_link website
@@ -498,7 +498,7 @@ sub extract_metadata_vars {
                 $os_x = sprintf( "%d", $os_x );
                 $os_y = sprintf( "%d", $os_y );
             }
-            
+
             if ( defined $os_x && length $os_x
                    && defined $os_y && length $os_y ) {
                 %vars = (
@@ -575,7 +575,7 @@ sub extract_metadata_vars {
             require Geo::Coordinates::UTM;
             my $lat    = $q->param("latitude");
             my $long   = $q->param("longitude");
-            
+
             if ( defined $lat && length $lat
                    && defined $long && length $long ) {
                 # Trim whitespace.

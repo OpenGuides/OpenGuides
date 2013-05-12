@@ -23,7 +23,7 @@ sub get_recent_changes {
 
     my $output = $guide->display_recent_changes( return_output => 1 );
     $output =~ s/^Content-Type.*[\r\n]+//m;
-    
+
     return $output;
 }
 
@@ -49,7 +49,7 @@ my ( $config, $guide, $wiki, $output );
 # Clear out the database from any previous runs.
 OpenGuides::Test::refresh_db();
 
-# Make a guide 
+# Make a guide
 $config = OpenGuides::Test->make_basic_config;
 $config->enable_page_deletion( 1 );
 $guide = OpenGuides->new( config => $config );
@@ -88,7 +88,7 @@ $output = $guide->list_all_versions(
                                      id => "Test Page",
                                    );
 like( $output, qr/version=1;action=delete/,
-      "delete links on history page" ); 
+      "delete links on history page" );
 
 # set is_admin to 0
 $cookie = OpenGuides::CGI->make_prefs_cookie(
@@ -119,4 +119,4 @@ $output = $guide->list_all_versions(
                                      id => "Test Page",
                                    );
 unlike( $output, qr/version=1;action=delete/,
-        "no delete links on history page"); 
+        "no delete links on history page");

@@ -37,7 +37,7 @@ probably only useful to OpenGuides developers.
       locator     => $locator,
       categoriser => $categoriser );
   $wiki->register_plugin( plugin => $crawler );
- 
+
 =head1 METHODS
 
 =over 4

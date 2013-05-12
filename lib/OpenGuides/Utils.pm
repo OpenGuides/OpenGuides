@@ -175,7 +175,7 @@ sub make_wiki_object {
                       }
                       return qq(<a href="$link">$link_title</a>);
                 },
-        qr/\@INCLUDE_NODE\s+\[\[([^\]|]+)\]\]/ => 
+        qr/\@INCLUDE_NODE\s+\[\[([^\]|]+)\]\]/ =>
             sub {
                   my ($wiki, $node) = @_;
                   my %node_data = $wiki->retrieve_node( $node );
@@ -331,7 +331,7 @@ sub get_wgs84_coords {
                     return undef;
                 }
 
-                my ($lat,$long,$h) = 
+                my ($lat,$long,$h) =
                     Geo::HelmertTransform::convert_datum($datum_helper,$wgs84_helper,$oldlat,$oldlong,0);
                 return ($long,$lat);
             };
@@ -339,9 +339,9 @@ sub get_wgs84_coords {
     }
     # Give up, return undef
     unless($helmert) {
-       return undef; 
+       return undef;
     }
-    
+
 
     if ($config->geo_handler == 1) {
         # Do conversion here
@@ -521,8 +521,8 @@ sub validate_edit {
 =item B<parse_change_comment>
 
     my $change_comment = parse_change_comment($string, $base_url);
-    
-Given a base URL (for example, C<http://example.com/wiki.cgi?>), takes a string, 
+
+Given a base URL (for example, C<http://example.com/wiki.cgi?>), takes a string,
 replaces C<[[page]]> and C<[[page|titled link]]> with
 
     <a href="http://example.com/wiki.cgi?page">page</a>
@@ -536,13 +536,13 @@ use in page change comments.
 
 =cut
 
-sub parse_change_comment {   
+sub parse_change_comment {
     my ($comment, $base_url) = @_;
 
     my @links = $comment =~ m{\[\[(.*?)\]\]}g;
 
     # It's not all that great having to reinvent the wheel in this way, but
-    # Text::WikiFormat won't let you specify the subset of wiki notation that 
+    # Text::WikiFormat won't let you specify the subset of wiki notation that
     # you're interested in. C'est la vie.
     foreach (@links) {
         if (/(.*?)\|(.*)/) {

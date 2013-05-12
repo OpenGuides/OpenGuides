@@ -189,7 +189,7 @@ and C<intercept_redirect> is false or omitted.
 If you have specified the C<host_checker_module> option in your
 C<wiki.conf>, this method will attempt to call the <blacklisted_host>
 method of that module to determine whether the host requesting the node
-has been blacklisted. If this method returns true, then the 
+has been blacklisted. If this method returns true, then the
 C<blacklisted_host.tt> template will be used to display an error message.
 
 The C<blacklisted_host> method will be passed a scalar containing the host's
@@ -238,7 +238,7 @@ sub display_node {
     }
 
     $tt_vars{home_name} = $self->config->home_name;
-    
+
     if ( $id =~ /^(Category|Locale) (.*)$/ ) {
         my $type = $1;
         $tt_vars{is_indexable_node} = 1;
@@ -279,7 +279,7 @@ sub display_node {
         print $node_data{content};
         return 0;
     }
-   
+
     my %metadata_vars = OpenGuides::Template->extract_metadata_vars(
                             wiki     => $wiki,
                             config   => $config,
@@ -694,7 +694,7 @@ sub display_prefs_form {
     print $output;
 }
 
-=item B<display_recent_changes>  
+=item B<display_recent_changes>
 
   $guide->display_recent_changes;
 
@@ -719,13 +719,13 @@ sub display_recent_changes {
         $tt_vars{since} = $since;
         my $t = localtime($since); # overloaded by Time::Piece
         $tt_vars{since_string} = $t->strftime;
-        my %criteria = ( since => $since );   
+        my %criteria = ( since => $since );
         $criteria{metadata_was} = { edit_type => "Normal edit" }
           unless $minor_edits;
         my @rc = $self->_get_recent_changes(
                      config => $config, criteria => \%criteria );
         if ( scalar @rc ) {
-            $recent_changes{since} = \@rc; 
+            $recent_changes{since} = \@rc;
         }
     } else {
         # Look at day, week, fortnight, month separately, but make sure things
@@ -1282,7 +1282,7 @@ sub show_metadata {
     if($args{"format"}) {
        if($args{"format"} eq "json") {
           $content_type = "text/javascript";
-          my $json = OpenGuides::JSON->new( wiki => $wiki, 
+          my $json = OpenGuides::JSON->new( wiki => $wiki,
                                             config => $self->config );
           $output = $json->output_as_json(
                                  $type => \@values
@@ -1407,10 +1407,10 @@ sub get_feed_and_content_type {
                          category     => "Pubs",
                      );
 
-C<feed_type> is a mandatory parameter. Supported values at present are 
+C<feed_type> is a mandatory parameter. Supported values at present are
 "rss" and "atom".
 
-C<feed_listing> is a mandatory parameter. Supported values at present 
+C<feed_listing> is a mandatory parameter. Supported values at present
 are "recent_changes". (More values are coming soon though!)
 
 As with other methods, the C<return_output> parameter can be used to
@@ -1426,7 +1426,7 @@ sub display_feed {
 
     my $feed_listing = $args{feed_listing};
     croak "No feed listing given" unless $feed_listing;
-    
+
     my $return_output = $args{return_output} ? 1 : 0;
 
     # Basic criteria, whatever the feed listing type is
@@ -1467,12 +1467,12 @@ sub display_feed {
         $output .= "; charset=".$self->config->http_charset;
     }
     $output .= "\n";
-    
+
     # Get the feed, and the timestamp, in one go
-    my ($feed_output, $feed_timestamp) = 
+    my ($feed_output, $feed_timestamp) =
         $feed->make_feed( %criteria );
     my $maker = $feed->fetch_maker($feed_type);
- 
+
     $output .= "Last-Modified: " . ($maker->parse_feed_timestamp($feed_timestamp))->strftime('%a, %d %b %Y %H:%M:%S +0000') . "\n\n";
     $output .= $feed_output;
 
@@ -1504,7 +1504,7 @@ sub display_about {
   <name>OpenGuides</name>
 
   <created>2003-04-29</created>
-  
+
   <shortdesc xml:lang="en">
     A wiki engine for collaborative description of places with specialised
     geodata metadata features.
@@ -1543,10 +1543,10 @@ sub display_about {
   </release>
 
   <download-page rdf:resource="http://search.cpan.org/dist/OpenGuides/" />
-  
+
   <!-- Freshmeat category: Internet :: WWW/HTTP :: Dynamic Content -->
   <category rdf:resource="http://freshmeat.net/browse/92/" />
-  
+
   <license rdf:resource="http://www.opensource.org/licenses/gpl-license.php" />
   <license rdf:resource="http://www.opensource.org/licenses/artistic-license.php" />
 
@@ -1644,7 +1644,7 @@ information</a>
 </body>
 </html>};
     }
-    
+
     return $output if $args{return_output};
     print $output;
 }
@@ -1800,7 +1800,7 @@ sub commit_node {
                                           metadata => \%new_metadata
         );
     }
-    
+
     my $written = $wiki->write_node( $node, $content, $checksum,
                                      \%new_metadata );
 
@@ -2428,7 +2428,7 @@ sub revert_user_interface {
 
 =item B<display_admin_interface>
 
-Fetch everything we need to display the admin interface, and passes it off 
+Fetch everything we need to display the admin interface, and passes it off
  to the template
 
 =cut
@@ -2554,7 +2554,7 @@ sub redirect_index_search {
 
 sub redirect_to_node {
     my ($self, $node, $redirected_from) = @_;
-    
+
     my $script_url = $self->config->script_url;
     my $script_name = $self->config->script_name;
     my $formatter = $self->wiki->formatter;
@@ -2567,7 +2567,7 @@ sub redirect_to_node {
     $redir_param .= 'id=' if $oldid;
     $redir_param .= $id;
     $redir_param .= ";oldid=$oldid" if $oldid;
-    
+
     my $q = CGI->new;
     return $q->redirect( $redir_param );
 }

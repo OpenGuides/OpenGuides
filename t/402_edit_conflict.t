@@ -30,7 +30,7 @@ my $wiki = $guide->wiki;
 
 
 # Write some data.
-OpenGuides::Test->write_data( 
+OpenGuides::Test->write_data(
                               guide         => $guide,
                               node          => "Crabtree Tavern",
                               content       => "A pub.",
@@ -45,7 +45,7 @@ my $output = $guide->display_edit_form(
                                         id => "Crabtree Tavern",
                                         return_output => 1,
                                       );
-                                       
+
 # Strip Content-Type header to stop Test::HTML::Content getting confused.
 $output =~ s/^Content-Type.*[\r\n]+//m;
 
@@ -53,7 +53,7 @@ Test::HTML::Content::no_tag( $output, "div", { class => "warning_text" },
                              "Normal edit form doesn't contain warning_text" );
 
 # Now try to commit some edits without giving the checksum.
-$output = OpenGuides::Test->write_data( 
+$output = OpenGuides::Test->write_data(
                                         guide         => $guide,
                                         node          => "Crabtree Tavern",
                                         content       => "Still a pub.",

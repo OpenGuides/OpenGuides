@@ -59,7 +59,7 @@ foreach my $feed_type (@feed_types) {
 
     # Now write some data: 3 versions of one node, and 1 of another
     my $guide = OpenGuides->new( config => $config );
-        
+
     # Set up CGI parameters ready for a node write.
     # Most of these are in here to avoid uninitialised value warnings.
     my $q = CGI->new;

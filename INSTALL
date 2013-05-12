@@ -34,7 +34,7 @@ the installation.
 Answer "n" to this question unless you really know what you're doing.
 It's mainly there for developers. (If you already have a configuration
 file, and wish to use it without the build script asking you this
-question, run Build.PL with the option --force. This will also skip 
+question, run Build.PL with the option --force. This will also skip
 the "Continue with install?" question.)
 
 
@@ -80,7 +80,7 @@ directory belonging to you then this might require an 'su' or 'sudo'
 to root under Unix.
 
 
-  "What directory should I install the templates in?" 
+  "What directory should I install the templates in?"
   "Where should I look for custom templates?"
 
 Normally these will be in the install directory, but they can be anywhere.
@@ -239,7 +239,7 @@ Answer "y" or "n".  Note that an answer of "y" will only take effect if you've
 either chosen to use the Leaflet mapping library, or you've supplied a Google
 Maps API key.  Note further that users can choose to turn this off in their
 preferences.
- 
+
   "Do you have a Google Maps API key to use with this guide?"
 
 As of version 0.67 of OpenGuides, we recommend using the Leaflet mapping
@@ -302,7 +302,7 @@ policy, but you can leave this blank for now if you don't have one yet.
 
 The module you choose should have a method called "looks_like_spam", which
 accepts a hash with content and metadata as keys, and returns true or false
-to the question of whether the edit should be considered to be spam. 
+to the question of whether the edit should be considered to be spam.
 
   "What directory should we install static content (CSS, images, javascript)
    to?"
@@ -429,7 +429,7 @@ If you are using version 0.20 or newer of Module::Build, do:
 
 Or for earlier versions of Module::Build, do:
 
-  perl Build.PL config='sitelib=/path/to/my/modules/' 
+  perl Build.PL config='sitelib=/path/to/my/modules/'
 
 If any or all of the modules required by the OpenGuides scripts are in
 a private directory, then you'll need to tell the scripts where to find
@@ -442,7 +442,7 @@ Important note for those using SQLite:
 The user your CGI is running as must have write access to not only the
 database file itself, but the directory that the file is in, in order
 that it can write a lockfile. If it doesn't have write access to the
-database file, you'll see errors like "Unhandled error: [DBD::SQLite::db 
+database file, you'll see errors like "Unhandled error: [DBD::SQLite::db
 do failed...".
 
 ----------------------------------------------------------------------
