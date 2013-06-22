@@ -85,3 +85,9 @@
 
 # Avoid a lib we dont distribute.
 ^lib/OpenGuides/UK/PubCrawl\.pm$
+
+# Avoid test debris
+^t/templates/tmp
+^t/node\.db$
+^t/indexes\b
+
