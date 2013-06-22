@@ -56,6 +56,10 @@ The custom templates currently supported are:
          hours_text, map_link is required for this hook to be called,
          but you should not rely on this behaviour.
 
+- custom_node_location_search.tt
+  Used to add more location based searches on a node page for example nearest
+  tube station. Located after the find all things within * of here form.
+
 Requests for further custom inserts are welcomed.
 
 If you include your own versions of other (non custom_) templates in
