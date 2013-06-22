@@ -71,3 +71,17 @@
 
 # Avoid archives of this distribution
 \bOpenGuides-[\d\.\_]+
+
+# Avoid files for Vagrant
+\bpuppet\b
+\bVagrantfile$
+^README\.VAGRANT\.md$
+
+# Avoid travis configuration file
+^\.travis\.yml$
+
+# Avoid wiki.conf
+^wiki\.conf$
+
+# Avoid a lib we dont distribute.
+^lib/OpenGuides/UK/PubCrawl\.pm$
