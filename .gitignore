@@ -6,3 +6,8 @@ t/node.db
 t/templates/tmp/
 wiki.conf
 .vagrant/
+MYMETA*
+META*
+Makefile.PL
+OpenGuides-*
+
