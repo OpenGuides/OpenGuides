@@ -1,8 +1,14 @@
 language: perl
 perl:
+  - "5.18"
   - "5.16"
   - "5.14"
   - "5.12"
   - "5.10"
+  - "5.8"
+  - "5.19"
+allow_failures:
+  - perl: "5.19"
 env: AUTOMATED_TESTING=1
 before_install: cpanm --quiet --notest Config::Tiny Geo::HelmertTransform Test::HTML::Content Wiki::Toolkit::Plugin::Ping
+
