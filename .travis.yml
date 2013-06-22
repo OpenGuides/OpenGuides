@@ -10,4 +10,5 @@ allow_failures:
   - perl: "5.19"
 env: AUTOMATED_TESTING=1
 before_install: cpanm --quiet --notest Config::Tiny Geo::HelmertTransform Test::HTML::Content Wiki::Toolkit::Plugin::Ping
-
+notifications:
+  irc: "irc.perl.org#openguides"
