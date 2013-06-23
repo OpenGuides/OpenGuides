@@ -2587,15 +2587,15 @@ sub get_cookie {
 UTF8 data are currently not handled correctly throughout.
 
 Other bugs are documented at
-L<http://dev.openguides.org/>
+L<https://github.com/OpenGuides/OpenGuides/issues>
 
 =head1 SEE ALSO
 
 =over 4
 
-=item * The Randomness Guide to London, at L<http://london.randomness.org.uk/>, possinly the biggest OpenGuides site.
+=item * The Randomness Guide to London, at L<http://london.randomness.org.uk/>, the largest OpenGuides site.
 
-=item * A list of live OpenGuides installs is available at L<http://openguides.org/>.
+=item * The list of live OpenGuides installs at L<http://openguides.org/>.
 
 =item * L<Wiki::Toolkit>, the Wiki toolkit which does the heavy lifting for OpenGuides.
 
@@ -2607,7 +2607,7 @@ If you have a question, a bug report, or a patch, or you're interested
 in joining the development team, please contact openguides-dev@lists.openguides.org
 (moderated mailing list, will reach all current developers but you'll have
 to wait for your post to be approved) or file a bug report at
-L<http://dev.openguides.org/>
+L<https://github.com/OpenGuides/OpenGuides/issues>
 
 =head1 AUTHOR
 
@@ -2615,7 +2615,7 @@ The OpenGuides Project (openguides-dev@lists.openguides.org)
 
 =head1 COPYRIGHT
 
-     Copyright (C) 2003-2012 The OpenGuides Project.  All Rights Reserved.
+     Copyright (C) 2003-2013 The OpenGuides Project.  All Rights Reserved.
 
 The OpenGuides distribution is free software; you can redistribute it
 and/or modify it under the same terms as Perl itself.

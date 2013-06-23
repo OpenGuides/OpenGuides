@@ -13,31 +13,32 @@ DESCRIPTION
 
 BUGS AND CAVEATS
     UTF8 data are currently not handled correctly throughout.
-    Google Maps points will display offset when using British and Irish
-    National Grid input systems.
 
     Other bugs are documented at
-    <http://dev.openguides.org/>
+    <https://github.com/OpenGuides/OpenGuides/issues>
 
 SEE ALSO
-    * http://london.randomness.org.uk/, possibly the biggest OpenGuides site.
-    * http://openguides.org/, with a list of all live OpenGuides installs.
-    * Wiki::Toolkit, the Wiki toolkit which does the heavy lifting for
-    OpenGuides
+    *   The Randomness Guide to London, at
+        <http://london.randomness.org.uk/>, the largest OpenGuides site.
+
+    *   The list of live OpenGuides installs at <http://openguides.org/>.
+
+    *   Wiki::Toolkit, the Wiki toolkit which does the heavy lifting for
+        OpenGuides.
 
 FEEDBACK
     If you have a question, a bug report, or a patch, or you're interested
     in joining the development team, please contact
-    openguides-dev@lists.openguides.org (moderated mailing list, will reach all
-    current developers but you'll have to wait for your post to be approved)
-    or file a bug report at
-    <http://dev.openguides.org/>
+    openguides-dev@lists.openguides.org (moderated mailing list, will reach
+    all current developers but you'll have to wait for your post to be
+    approved) or file a bug report at
+    <https://github.com/OpenGuides/OpenGuides/issues>
 
 AUTHOR
     The OpenGuides Project (openguides-dev@lists.openguides.org)
 
 COPYRIGHT
-         Copyright (C) 2003-2006 The OpenGuides Project.  All Rights Reserved.
+         Copyright (C) 2003-2013 The OpenGuides Project.  All Rights Reserved.
 
     The OpenGuides distribution is free software; you can redistribute it
     and/or modify it under the same terms as Perl itself.
