@@ -2595,7 +2595,7 @@ L<https://github.com/OpenGuides/OpenGuides/issues>
 
 =item * The Randomness Guide to London, at L<http://london.randomness.org.uk/>, the largest OpenGuides site.
 
-=item * A list of live OpenGuides installs is available at L<http://openguides.org/>.
+=item * The list of live OpenGuides installs at L<http://openguides.org/>.
 
 =item * L<Wiki::Toolkit>, the Wiki toolkit which does the heavy lifting for OpenGuides.
 
