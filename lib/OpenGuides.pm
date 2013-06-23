@@ -2593,7 +2593,7 @@ L<https://github.com/OpenGuides/OpenGuides/issues>
 
 =over 4
 
-=item * The Randomness Guide to London, at L<http://london.randomness.org.uk/>, possinly the biggest OpenGuides site.
+=item * The Randomness Guide to London, at L<http://london.randomness.org.uk/>, the largest OpenGuides site.
 
 =item * A list of live OpenGuides installs is available at L<http://openguides.org/>.
 
