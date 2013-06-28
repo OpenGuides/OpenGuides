@@ -5,7 +5,7 @@ use strict;
 use OpenGuides::Utils;
 
 use vars qw( $VERSION );
-$VERSION = '0.14';
+$VERSION = '0.15';
 
 use Time::Piece;
 use URI::Escape;
@@ -287,7 +287,7 @@ The OpenGuides Project (openguides-dev@lists.openguides.org)
 
 =head1 COPYRIGHT
 
-Copyright (C) 2003-2009 The OpenGuides Project.  All Rights Reserved.
+Copyright (C) 2003-2013 The OpenGuides Project.  All Rights Reserved.
 
 This module is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself.

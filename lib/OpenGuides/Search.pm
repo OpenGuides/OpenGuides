@@ -1,6 +1,6 @@
 package OpenGuides::Search;
 use strict;
-our $VERSION = '0.14';
+our $VERSION = '0.15';
 
 use CGI qw( :standard );
 use Wiki::Toolkit::Plugin::Locator::Grid;
@@ -827,7 +827,7 @@ The OpenGuides Project (openguides-dev@lists.openguides.org)
 
 =head1 COPYRIGHT
 
-     Copyright (C) 2003-2012 The OpenGuides Project.  All Rights Reserved.
+     Copyright (C) 2003-2013 The OpenGuides Project.  All Rights Reserved.
 
 The OpenGuides distribution is free software; you can redistribute it
 and/or modify it under the same terms as Perl itself.
