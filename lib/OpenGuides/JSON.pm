@@ -3,7 +3,7 @@ package OpenGuides::JSON;
 use strict;
 
 use vars qw( $VERSION );
-$VERSION = '0.03';
+$VERSION = '0.04';
 
 use Wiki::Toolkit::Plugin::JSON;
 use Time::Piece;
@@ -312,7 +312,7 @@ The OpenGuides Project (openguides-dev@openguides.org)
 
 =head1 COPYRIGHT
 
-Copyright (C) 2003-2012 The OpenGuides Project.  All Rights Reserved.
+Copyright (C) 2003-2013 The OpenGuides Project.  All Rights Reserved.
 
 This module is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself.
