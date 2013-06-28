@@ -3,6 +3,22 @@
 More detailed changelogs can be found at
 <http://dev.openguides.org/log/trunk>.
 
+
+0.72    28 June 2013
+        Fix the date in json output. Fixes #5
+        Allow a custom template, custom_auto_map_link.tt to populate
+          map links in node metadata
+        Updated metadata since code and issues have moved to github
+          https://github.com/OpenGuides/OpenGuides/
+        Split out the node location search section of the node template.
+        Add an optional custom template to node_location_search.tt 
+        Added a README.pod to make github look pretty
+        Updated OpenGuides.pm pod
+        Add a Vagrantfile and docs to help with testing and development
+        Add configuration for Travis and Coveralls
+          https://travis-ci.org/OpenGuides/OpenGuides
+          https://coveralls.io/r/OpenGuides/OpenGuides
+
 0.71    16 March 2013
         Added scale to category/locale index maps.
         Fix several test failures triggered by the stricter

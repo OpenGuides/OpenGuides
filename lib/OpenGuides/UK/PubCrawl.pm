@@ -2,7 +2,7 @@ package OpenGuides::UK::PubCrawl;
 use strict;
 
 use vars qw( $VERSION @ISA );
-$VERSION = '0.02';
+$VERSION = '0.03';
 
 use Carp qw( croak );
 use Wiki::Toolkit::Plugin;
@@ -161,7 +161,7 @@ The OpenGuides Project (openguides-dev@openguides.org)
 
 =head1 COPYRIGHT
 
-     Copyright (C) 2003 The OpenGuides Project.  All Rights Reserved.
+     Copyright (C) 2003-2013 The OpenGuides Project.  All Rights Reserved.
 
 This module is free software; you can redistribute it and/or modify it
 under the same terms as Perl itself.
