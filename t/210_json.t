@@ -16,7 +16,7 @@ if ( $@ ) {
     plan skip_all => "DBD::SQLite could not be used - no database to test with. ($error)";
 }
 
-plan tests => 30;
+plan tests => 23;
 
 # clear out the database
 OpenGuides::Test::refresh_db();
@@ -80,52 +80,41 @@ OpenGuides::Test->write_data(
 
 my $json = $json_writer->emit_json( node => "Calthorpe Arms" );
 
-like( $json, qr|<\?xml version="1.0" \?>|, "JSON uses no encoding when none set" );
-$config->http_charset( "UTF-8" );
-$guide = OpenGuides->new( config => $config );
-$json = $json_writer->emit_json( node => "Calthorpe Arms" );
-like( $json, qr|<\?xml version="1.0" encoding="UTF-8"\?>|, "JSON uses declared encoding" );
 
-like( $json, qr|<foaf:depiction json:resource="http://example.com/calthorpe.jpg" />|, "Node image");
-
-like( $json, qr|<wail:Neighborhood json:nodeID="Bloomsbury">|,
+like( $json, qr|"locales":\["|,
+     "displays and array of locales" );
+like( $json, qr|"Bloomsbury"|,
     "finds the first locale" );
-like( $json, qr|<wail:Neighborhood json:nodeID="St_Pancras">|,
+like( $json, qr|"St Pancras"|,
     "finds the second locale" );
 
-like( $json, qr|<contact:phone>test phone number</contact:phone>|,
+like( $json, qr|"phone":"test phone number"|,
     "picks up phone number" );
 
-like( $json, qr|<dc:available>test hours</dc:available>|,
+like( $json, qr|"opening_hours_text":"test hours"|,
     "picks up opening hours text" );
 
-like( $json, qr|<foaf:homepage json:resource="http://example.com" />|, "picks up website" );
+like( $json, qr|"website":"http://example.com"|, "picks up website" );
 
-like( $json,
-    qr|<dc:title>Wiki::Toolkit Test Site: Calthorpe Arms</dc:title>|,
-    "sets the title correctly" );
 
-like( $json, qr|id=Kake;format=json#obj"|,
+like( $json, qr|username":"Kake"|,
     "last username to edit used as contributor" );
-like( $json, qr|id=Anonymous;format=json#obj"|,
-    "... as well as previous usernames" );
 
-like( $json, qr|<wiki:version>2</wiki:version>|, "version picked up" );
+like( $json, qr|"version":"2"|, "version picked up" );
 
-like( $json, qr|<json:Description json:about="">|, "sets the 'about' correctly" );
 
-like( $json, qr|<dc:source json:resource="http://wiki.example.com/mywiki.cgi\?Calthorpe_Arms" />|,
+like( $json, qr|"version_indpt_url":"http://wiki.example.com/mywiki.cgi\?Calthorpe_Arms"|,
     "set the dc:source with the version-independent uri" );
 
-like( $json, qr|<wail:City json:nodeID="city">\n\s+<wail:name>London</wail:name>|, "city" ).
-like( $json, qr|<wail:locatedIn>\n\s+<wail:Country json:nodeID="country">\n\s+<wail:name>United Kingdom</wail:name>|, "country" ).
-like( $json, qr|<wail:postalCode>WC1X 8JR</wail:postalCode>|, "postcode" );
-like( $json, qr|<geo:lat>51.524193</geo:lat>|, "latitude" );
-like( $json, qr|<geo:long>-0.114436</geo:long>|, "longitude" );
-like( $json, qr|<dc:description>a nice pub</dc:description>|, "summary (description)" );
+like( $json, qr|"city":"London"|, "city" ).
+like( $json, qr|"country":"United Kingdom"|, "country" ).
+like( $json, qr|"postcode":"WC1X 8JR"|, "postcode" );
+like( $json, qr|"latitude":"51.524193"|, "latitude" );
+like( $json, qr|"longitude":"-0.114436"|, "longitude" );
+like( $json, qr|"summary":"a nice pub"|, "summary (description)" );
 
-like( $json, qr|<dc:date>|, "date element included" );
-unlike( $json, qr|<dc:date>1970|, "hasn't defaulted to the epoch" );
+like( $json, qr|"timestamp":"|, "date element included" );
+unlike( $json, qr|"timestamp":"1970|, "hasn't defaulted to the epoch" );
 
 # Check that default city and country can be set to blank.
 $config = OpenGuides::Test->make_basic_config;
@@ -140,42 +129,12 @@ OpenGuides::Test->write_data(
                             );
 $json_writer = OpenGuides::JSON->new( wiki => $guide->wiki, config => $config );
 $json = $json_writer->emit_json( node => "Star Tavern" );
-unlike( $json, qr|<city>|, "no city in JSON when no default city" );
-unlike( $json, qr|<country>|, "...same for country" );
+like( $json, qr|"city":""|, "no city in JSON when no default city" );
+like( $json, qr|"country":""|, "...same for country" );
 
 # Now test that there's a nice failsafe where a node doesn't exist.
 $json = eval { $json_writer->emit_json( node => "I Do Not Exist" ); };
 is( $@, "", "->emit_json doesn't die when called on a nonexistent node" );
 
-like( $json, qr|<wiki:version>0</wiki:version>|, "...and wiki:version is 0" );
-
-# Test the data for a node that redirects.
-$wiki->write_node( "Calthorpe Arms Pub",
-    "#REDIRECT [[Calthorpe Arms]]",
-    undef,
-    {
-        comment  => "Created as redirect to Calthorpe Arms page.",
-        username => "Earle",
-    }
-);
-
-my $redirect_json = $json_writer->emit_json( node => "Calthorpe Arms Pub" );
-
-like( $redirect_json, qr|<owl:sameAs json:resource="/\?id=Calthorpe_Arms;format=json#obj" />|,
-    "redirecting node gets owl:sameAs to target" );
-
-$wiki->write_node( "Nonesuch Stores",
-    "A metaphysical wonderland",
-    undef,
-    {
-        comment            => "Yup.",
-        username           => "Nobody",
-        opening_hours_text => "Open All Hours",
-    }
-);
-
-$json = $json_writer->emit_json( node => "Nonesuch Stores" );
-
-like( $json, qr|<geo:SpatialThing json:ID="obj">|,
-    "having opening hours marks node as geospatial" );
+like( $json, qr|"version":"0"|, "...and version is 0" );
 
