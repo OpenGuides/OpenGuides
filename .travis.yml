@@ -12,4 +12,4 @@ env: AUTOMATED_TESTING=1
 before_install: cpanm --quiet --notest Config::Tiny Geo::HelmertTransform Test::HTML::Content Wiki::Toolkit::Plugin::Ping Devel::Cover::Report::Coveralls
 script: perl Build.PL && ./Build build && cover -test -report coveralls
 notifications:
-  irc: "irc.perl.org#openguides"
+  irc: "irc.perl.org#openguides-notices"
