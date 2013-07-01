@@ -16,7 +16,7 @@ if ( $@ ) {
     plan skip_all => "DBD::SQLite could not be used - no database to test with. ($error)";
 }
 
-plan tests => 23;
+plan tests => 24;
 
 # clear out the database
 OpenGuides::Test::refresh_db();
@@ -80,6 +80,13 @@ OpenGuides::Test->write_data(
 
 my $json = $json_writer->emit_json( node => "Calthorpe Arms" );
 
+SKIP: {
+        eval "use Test::JSON";
+
+        skip "Test::JSON not installed", 1 if $@;
+
+        is_valid_json( $json, "is well formed json");
+      };
 
 like( $json, qr|"locales":\["|,
      "displays and array of locales" );

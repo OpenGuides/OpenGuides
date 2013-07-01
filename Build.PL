@@ -348,6 +348,7 @@ my $build = OpenGuides::Build->new(
     recommends => {
         'DBD::SQLite'                         => 0, # for testing
         'Test::HTML::Content'                 => 0, # for testing, oddly enough
+        'Test::JSON'                  => 0, # for testing, oddly enough
         'Wiki::Toolkit::Plugin::Ping' => 0, # for pinging external services
         'Geo::HelmertTransform'  => 0,      # for correct WGS84 lat/long
         'Test::Pod'                           => 0,
