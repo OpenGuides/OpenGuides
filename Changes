@@ -3,6 +3,9 @@
 More detailed changelogs can be found at
 <http://dev.openguides.org/log/trunk>.
 
+0.73    
+        Bump required version of Wiki::Toolkit::Plugin::JSON to remove
+          depreciation warnings. 
 
 0.72    28 June 2013
         Fix the date in json output. Fixes #5
