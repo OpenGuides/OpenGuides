@@ -16,7 +16,7 @@ if ( $@ ) {
     plan skip_all => "DBD::SQLite could not be used - no database to test with. ($error)";
 }
 
-plan tests => 29;
+plan tests => 31;
 
 # clear out the database
 OpenGuides::Test::refresh_db();
@@ -90,6 +90,7 @@ OpenGuides::Test->write_data(
 
 my $json = $json_writer->emit_json( node => "Calthorpe Arms" );
 my $json_rc = $json_writer->make_recentchanges_json();
+my $json_random_output = $json_writer->output_as_json( beep => "random" );
 
 SKIP: {
         eval "use Test::JSON";
@@ -98,6 +99,7 @@ SKIP: {
 
         is_valid_json( $json, "node output is well formed json");
         is_valid_json( $json_rc, "recentchanges output is well formed json");
+        is_valid_json( $json_random_output, "random output is well formed json");
       };
 
 like( $json, qr|"locales":\["|,
@@ -137,6 +139,8 @@ unlike( $json, qr|"timestamp":"1970|, "hasn't defaulted to the epoch" );
 
 like ( $json_rc, qr|"username":\["Auto Create"\]|, "recent changes includes Auto Create user");
 unlike( $json_rc, qr|"timestamp":"1970|, "hasn't defaulted to the epoch" );
+
+like ( $json_random_output, qr|{"beep":"random"}|, "random output is correct");
 
 # Check that default city and country can be set to blank.
 $config = OpenGuides::Test->make_basic_config;
