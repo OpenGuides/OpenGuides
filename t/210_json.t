@@ -16,7 +16,7 @@ if ( $@ ) {
     plan skip_all => "DBD::SQLite could not be used - no database to test with. ($error)";
 }
 
-plan tests => 24;
+plan tests => 26;
 
 # clear out the database
 OpenGuides::Test::refresh_db();
@@ -37,6 +37,16 @@ if ( $@ ) { $config->use_plucene ( 0 ) };
 my $guide = OpenGuides->new( config => $config );
 my $wiki = $guide->wiki;
 
+
+my $json_writer_no_wiki = eval {
+    OpenGuides::JSON->new( wiki => '', config => $config );
+};
+isnt( $@, "", "croak if wiki object not supplied" );
+
+my $json_writer_no_config = eval {
+    OpenGuides::JSON->new( wiki => $wiki, config => '' );
+};
+isnt( $@, "", "croak if config object not supplied" );
 
 my $json_writer = eval {
     OpenGuides::JSON->new( wiki => $wiki, config => $config );
