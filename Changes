@@ -1,7 +1,7 @@
-"#" items refer to tickets. See <http://dev.openguides.org/report/9> for details.
+"#" items are GitHub issues since the 0.72 release see <https://github.com/OpenGuides/OpenGuides/issues> before that they were tickets on <http://dev.openguides.org>
 
 More detailed changelogs can be found at
-<http://dev.openguides.org/log/trunk>.
+<http://github.com/OpenGuides/OpenGuides>
 
 0.73    
         Bump required version of Wiki::Toolkit::Plugin::JSON to remove
