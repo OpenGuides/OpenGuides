@@ -86,6 +86,8 @@ OpenGuides::Test->write_data(
         longitude          => "-0.114436",
         summary            => "a nice pub",
         node_image         => "http://example.com/calthorpe.jpg",
+        node_image_url     => "http://example.com/image/calthorpe.html",
+        node_image_licence     => "http://example.com/licence",
 );
 
 my $json = $json_writer->emit_json( node => "Calthorpe Arms" );
@@ -133,6 +135,9 @@ like( $json, qr|"postcode":"WC1X 8JR"|, "postcode" );
 like( $json, qr|"latitude":"51.524193"|, "latitude" );
 like( $json, qr|"longitude":"-0.114436"|, "longitude" );
 like( $json, qr|"summary":"a nice pub"|, "summary (description)" );
+like( $json, qr|"node_image":"http://example.com/calthorpe.jpg"|, "node image" );
+like( $json, qr|"node_image_url":"http://example.com/image/calthorpe.html"|, "node image url" );
+like( $json, qr|"node_image_licence":"http://example.com/licence"|, "node image licence" );
 
 like( $json, qr|"timestamp":"|, "date element included" );
 unlike( $json, qr|"timestamp":"1970|, "hasn't defaulted to the epoch" );

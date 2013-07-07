@@ -97,6 +97,9 @@ sub emit_json {
     $data->{categories} = $node_data{metadata}{category}     || [];
     $data->{locales}    = $node_data{metadata}{locale}       || [];
     $data->{summary}    = $node_data{metadata}{summary}[0]   || '';
+    $data->{node_image} = $node_data{metadata}{node_image}[0]|| '';
+    $data->{node_image_url} = $node_data{metadata}{node_image_url}[0]|| '';
+    $data->{node_image_licence} = $node_data{metadata}{node_image_licence}[0]|| '';
 
     $data->{timestamp} = $node_data{last_modified};
 
