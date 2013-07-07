@@ -33,25 +33,25 @@ $config->website_link_max_chars( 20 );
 my %tt_vars = $guide->display_node( id => "South Croydon Station",
                                     return_tt_vars => 1 );
 is( $tt_vars{formatted_website_text},
-    '<a href="http://example.com/">example.com</a>',
+    '<a href="http://example.com/" class="external">example.com</a>',
     "Website correctly displayed when no need for truncation," );
 
 %tt_vars = $guide->display_node( id => "East Croydon Station",
                                     return_tt_vars => 1 );
 is( $tt_vars{formatted_website_text},
-    '<a href="http://www.example.com/foo">example.com/foo</a>',
+    '<a href="http://www.example.com/foo" class="external">example.com/foo</a>',
     "Website correctly truncated when there's a leading www" );
 
 %tt_vars = $guide->display_node( id => "West Croydon Station",
                                     return_tt_vars => 1 );
 is( $tt_vars{formatted_website_text},
-    '<a href="http://www.example.com/bar/">example.com/bar/</a>',
+    '<a href="http://www.example.com/bar/" class="external">example.com/bar/</a>',
     "Trailing slash not stripped unless it's immediately after domain name" );
 
 %tt_vars = $guide->display_node( id => "North Croydon Station",
                                     return_tt_vars => 1 );
 is( $tt_vars{formatted_website_text},
-    '<a href="http://longer.example.com/asdfasdf">longer.example.co...</a>',
+    '<a href="http://longer.example.com/asdfasdf" class="external">longer.example.co...</a>',
     "Website correctly truncated when much too long." );
 
 # Make sure website isn't truncated unnecessarily, e.g. that we don't end up
@@ -61,19 +61,19 @@ $config->website_link_max_chars( 26 );
 %tt_vars = $guide->display_node( id => "North Croydon Station",
                                  return_tt_vars => 1 );
 is( $tt_vars{formatted_website_text},
- '<a href="http://longer.example.com/asdfasdf">longer.example.com/asdf...</a>',
+ '<a href="http://longer.example.com/asdfasdf" class="external">longer.example.com/asdf...</a>',
     "Website truncated correctly when 1 character longer than allowed." );
 
 $config->website_link_max_chars( 27 );
 %tt_vars = $guide->display_node( id => "North Croydon Station",
                                  return_tt_vars => 1 );
 is( $tt_vars{formatted_website_text},
-'<a href="http://longer.example.com/asdfasdf">longer.example.com/asdfasdf</a>',
+'<a href="http://longer.example.com/asdfasdf" class="external">longer.example.com/asdfasdf</a>',
     "Website not truncated when exact length allowed." );
 
 $config->website_link_max_chars( 28 );
 %tt_vars = $guide->display_node( id => "North Croydon Station",
                                  return_tt_vars => 1 );
 is( $tt_vars{formatted_website_text},
-'<a href="http://longer.example.com/asdfasdf">longer.example.com/asdfasdf</a>',
+'<a href="http://longer.example.com/asdfasdf" class="external">longer.example.com/asdfasdf</a>',
     "Website not truncated when 1 character shorter than allowed." );

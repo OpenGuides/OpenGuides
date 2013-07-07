@@ -8,6 +8,8 @@ More detailed changelogs can be found at
           deprecation warnings. 
         Node JSON output now contains image information.
         Node JSON output now includes raw and html formatted content.
+        Add the external class to website and map links when
+          displaying them in the metadata section of a node. 
 
 0.72    28 June 2013
         Fix the date in json output. Fixes #5
