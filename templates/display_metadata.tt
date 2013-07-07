@@ -30,7 +30,7 @@
           [% INCLUDE custom_auto_map_link.tt %]
         [% CATCH %]
           [% IF map_link %]
-            <a href="[% map_link %]">(map of this place)</a>
+            <a href="[% map_link %]" class="external">(map of this place)</a>
           [% END %]
         [% END %]
       </li>
@@ -40,7 +40,7 @@
       [% CATCH %]
         [% IF map_link %]
           <li class="map">
-            <span class="metadata_label"><a href="[% map_link %]">Map of this place</a></span>
+            <span class="metadata_label"><a href="[% map_link %]" class="external">Map of this place</a></span>
           </li>
         [% END %]
       [% END %]
