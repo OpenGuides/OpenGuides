@@ -16,7 +16,7 @@ if ( $@ ) {
     plan skip_all => "DBD::SQLite could not be used - no database to test with. ($error)";
 }
 
-plan tests => 31;
+plan tests => 36;
 
 # clear out the database
 OpenGuides::Test::refresh_db();
@@ -74,7 +74,7 @@ OpenGuides::Test->write_data(
 OpenGuides::Test->write_data(
         guide              => $guide,
         node               => "Calthorpe Arms",
-        content            => "CAMRA-approved pub near King's Cross",
+        content            => "CAMRA-approved pub near King's Cross [http://example.com example review] [[Calthorpe Arms]]",
         comment            => "Stub page, please update!",
         username           => "Kake",
         postcode           => "WC1X 8JR",
@@ -135,6 +135,8 @@ like( $json, qr|"postcode":"WC1X 8JR"|, "postcode" );
 like( $json, qr|"latitude":"51.524193"|, "latitude" );
 like( $json, qr|"longitude":"-0.114436"|, "longitude" );
 like( $json, qr|"summary":"a nice pub"|, "summary (description)" );
+like( $json, qr|"content":"CAMRA-approved pub near King's Cross|, "content" );
+like( $json, qr|"formatted_content":"<p>CAMRA-approved pub near King's Cross <a href=|, "formatted content" );
 like( $json, qr|"node_image":"http://example.com/calthorpe.jpg"|, "node image" );
 like( $json, qr|"node_image_url":"http://example.com/image/calthorpe.html"|, "node image url" );
 like( $json, qr|"node_image_licence":"http://example.com/licence"|, "node image licence" );
