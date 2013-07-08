@@ -11,7 +11,7 @@ if ( $@ ) {
     plan skip_all => "DBD::SQLite could not be used - no database to test with. ($error)";
 }
 
-plan tests => 27;
+plan tests => 28;
 
 SKIP: {
     # Clear out the database from any previous runs.
@@ -270,4 +270,17 @@ SKIP: {
           "Node with \@INCLUDE_NODE has its own content" );
     like( $output, qr/Hello, I am Test 2!/,
           "...and the included content" );
+    #Test @NODE_COUNT
+    OpenGuides::Test->write_data(
+                                  guide   => $guide,
+                                  node    => "node count test",
+                                  content => "there are \@NODE_COUNT [[Category Foo]] things in [[Category Foo]]",
+                                  return_output => 1,
+                                );
+    $output = $guide->display_node(
+                                    return_output => 1,
+                                    id            => "node count test",
+                                  );
+    like( $output, qr/there are 2 things in/,
+          "Node with \@NODE_COUNT has a value of 2" );
 }

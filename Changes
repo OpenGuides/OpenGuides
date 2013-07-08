@@ -10,6 +10,8 @@ More detailed changelogs can be found at
         Node JSON output now includes raw and html formatted content.
         Add the external class to website and map links when
           displaying them in the metadata section of a node. 
+        Add the @NODE_COUNT macro to count the number of nodes 
+          in a category/locale.
 
 0.72    28 June 2013
         Fix the date in json output. Fixes #5
