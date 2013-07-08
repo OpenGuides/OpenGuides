@@ -2,7 +2,7 @@ package OpenGuides::Utils;
 
 use strict;
 use vars qw( $VERSION );
-$VERSION = '0.16';
+$VERSION = '0.17';
 
 use Carp qw( croak );
 use Wiki::Toolkit;
@@ -147,6 +147,12 @@ sub make_wiki_object {
                    return $class->do_index_list_macro(
                        wiki => $wiki, type => $type, value => $value );
                  },
+         qr/\@NODE_COUNT\s+\[\[(Category|Locale)\s+([^\]]+)]]/ =>
+             sub {
+                   my ($wiki, $type, $value) = @_;
+                   return $class->do_node_count(
+                       wiki => $wiki, type => $type, value => $value );
+                 },
         qr/\@MAP_LINK\s+\[\[(Category|Locale)\s+([^\]|]+)\|?([^\]]+)?\]\]/ =>
                 sub {
                       if ( UNIVERSAL::isa( $_[0], "Wiki::Toolkit" ) ) {
@@ -282,7 +288,24 @@ sub do_index_list_macro {
     }
     return $return;
 }
+sub do_node_count {
+    my ( $class, %args ) = @_;
+    my ( $wiki, $type, $value )
+        = @args{ qw( wiki type value ) };
 
+    # We may be being called by Wiki::Toolkit::Plugin::Diff,
+    # which doesn't know it has to pass us $wiki
+    if ( !UNIVERSAL::isa( $wiki, "Wiki::Toolkit" ) ) {
+            return "(unprocessed NODE_COUNT macro)";
+        }
+
+    my $num_nodes = scalar $wiki->list_nodes_by_metadata(
+        metadata_type  => $type,
+        metadata_value => $value,
+        ignore_case    => 1,
+    );
+    return $num_nodes;
+}
 =item B<get_wgs84_coords>
 
 Returns coordinate data suitable for use with Google Maps (and other GIS
