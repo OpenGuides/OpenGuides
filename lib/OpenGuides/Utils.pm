@@ -299,12 +299,12 @@ sub do_node_count {
             return "(unprocessed NODE_COUNT macro)";
         }
 
-    my @nodes = sort $wiki->list_nodes_by_metadata(
+    my $num_nodes = scalar $wiki->list_nodes_by_metadata(
         metadata_type  => $type,
         metadata_value => $value,
         ignore_case    => 1,
     );
-    return scalar @nodes;
+    return $num_nodes;
 }
 =item B<get_wgs84_coords>
 
