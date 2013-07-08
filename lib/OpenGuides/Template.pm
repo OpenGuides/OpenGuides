@@ -380,7 +380,7 @@ sub extract_metadata_vars {
         if ( length( $trunc_website ) > $maxlen ) {
             $trunc_website = substr( $trunc_website, 0, $maxlen - 3 ) . "...";
         }
-        $formatted_website_text = '<a href="' . $website . '">'
+        $formatted_website_text = '<a href="' . $website . '" class="external">'
                                   . $trunc_website . '</a>';
     }
 
