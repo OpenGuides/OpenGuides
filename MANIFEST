@@ -111,6 +111,7 @@ t/206_geo_data_search_form.t
 t/207_geo_data_edit_form.t
 t/208_wgs84_coords.t
 t/209_max_min_wgs84_coords.t
+t/210_json.t
 t/300_search_raw.t
 t/301_search.t
 t/302_search_simple_metadata.t
@@ -181,6 +182,7 @@ t/905_multiple_index.t
 t/906_show_index_form.t
 t/907_auto_map_link.t
 t/908_custom_node_location_search.t
+t/909_external_class_metadata.t
 t/templates/105_test.tt
 wiki.cgi
 META.json
