@@ -1,6 +1,5 @@
 use strict;
 use lib "lib";
-use Getopt::Long;
 
 eval {
     require Config::Tiny;
@@ -11,10 +10,48 @@ eval {
 
 die "Problem loading OpenGuides module or a missing module\n\n$@.\n" if $@;
 
-my $force;
+# Create the build object.
+my $build = OpenGuides::Build->new(
+    sign => 1,
+    dist_name => "OpenGuides",
+    dist_abstract => "A complete web application for managing a collaboratively-written guide to a city or town.",
+    module_name => "OpenGuides",
+    dist_version_from => "wiki.cgi",
+    license => "perl",
+    build_requires => {
+        'Module::Build' => '0.26', # API change for accessing config data
+        'Class::Accessor'                     => 0,
+        'Config::Tiny'                        => 0,
+        'Data::Dumper'                        => 0,
+        'File::Path'                          => 0,
+    },
+    configure_requires => {
+        'Config::Tiny'                        => 0,
+        'Class::Accessor'                     => 0,
+        'Module::Build' => '0.26', # API change for accessing config data
+    },
+    recommends => {
+        'DBD::SQLite'                         => 0, # for testing
+        'Test::HTML::Content'                 => 0, # for testing, oddly enough
+        'Test::JSON'                  => 0, # for testing, oddly enough
+        'Wiki::Toolkit::Plugin::Ping' => 0, # for pinging external services
+        'Geo::HelmertTransform'  => 0,      # for correct WGS84 lat/long
+        'Test::Pod'                           => 0,
+    },
+    meta_merge     => {
+        resources => {
+            MailingList => 'openguides-dev@lists.openguides.org',
+            homepage => 'http://openguides.org',
+            bugtracker => 'https://github.com/OpenGuides/OpenGuides/issues',
+            repository  => 'git://github.com/OpenGuides/OpenGuides.git',
+        }
+    },
+    dynamic_config => 1,
+    create_makefile_pl => "passthrough"
+);
 
-GetOptions('force' => \$force);
-
+my %args = $build->args;
+my $force = exists $args{force};
 
 unless ($force || $ENV{'AUTOMATED_TESTING'}) {
 	print <<EOF;
@@ -286,85 +323,45 @@ close FILE or die "Can't close wiki.conf: $!";
 # others in future
 my $search_module = $use_plucene ? "Plucene" : "Search::InvertedIndex";
 
-# Create the build object.
-my $build = OpenGuides::Build->new(
-    sign => 1,
-    dist_name => "OpenGuides",
-    dist_abstract => "A complete web application for managing a collaboratively-written guide to a city or town.",
-    module_name => "OpenGuides",
-    dist_version_from => "wiki.cgi",
-    license => "perl",
-    requires => {
-        'Algorithm::Diff'                     => '0.13',  # for sdiff
-        'CGI'                                 => '2.92',  # avoid escapeHTML bug
-        'CGI::Carp'                           => 0,
-        'CGI::Cookie'                         => 0,
-        'Wiki::Toolkit'                       => '0.80',
-        'Wiki::Toolkit::Feed::Atom'           => 0,
-        'Wiki::Toolkit::Feed::RSS'            => 0,
-        'Wiki::Toolkit::Formatter::UseMod'    => 0.24, #for external_link_class
-        'Wiki::Toolkit::Plugin::Categoriser'  => 0,
-        'Wiki::Toolkit::Plugin::Diff'         => 0,
-        'Wiki::Toolkit::Plugin::JSON'         => '0.05',
-        'Wiki::Toolkit::Plugin::Locator::Grid'=> 0,
-        'Wiki::Toolkit::Plugin::RSS::Reader'  => 0,
-        'Class::Accessor'                     => 0,
-        'Config::Tiny'                        => 0,
-        'Data::Dumper'                        => 0,
-        $drivers{$dbtype}                     => 0,
-        'File::Spec::Functions'               => 0,
-        'File::Temp'                          => 0,
-        'HTML::Entities'                      => 0,
-        'JSON'                                => 0, # W::T::P::JSON uses anyway
-        'LWP::Simple'                         => 0,
-        'MIME::Lite'                          => 0,
-        'Parse::RecDescent'                   => 0,
-        $search_module                        => 0,
-        'POSIX'                               => 0,
-        'Template'                            => '2.24', # for .lower vmethod
-        'Template::Plugin::JSON::Escape'      => 0,
-        'Time::Piece'                         => 0,
-        'URI::Escape'                         => 0,
-        'XML::RSS'                            => 0,
-        'Data::Validate::URI'                 => 0,
-        'Net::Netmask'                        => 0,
-        'List::Util'                          => 0,
-	'Geo::Coordinates::UTM'               => 0,
-        'Geo::Coordinates::OSGB'              => 0,
-        'Geo::Coordinates::ITM'               => 0,
-        },
-    build_requires => {
-        'Module::Build' => '0.26', # API change for accessing config data
-        'Class::Accessor'                     => 0,
-        'Config::Tiny'                        => 0,
-        'Data::Dumper'                        => 0,
-        'File::Path'                          => 0,
-        },
-    configure_requires => {
-        'Config::Tiny'                        => 0,
-        'Class::Accessor'                     => 0,
-        'Module::Build' => '0.26', # API change for accessing config data
-        },
-    recommends => {
-        'DBD::SQLite'                         => 0, # for testing
-        'Test::HTML::Content'                 => 0, # for testing, oddly enough
-        'Test::JSON'                  => 0, # for testing, oddly enough
-        'Wiki::Toolkit::Plugin::Ping' => 0, # for pinging external services
-        'Geo::HelmertTransform'  => 0,      # for correct WGS84 lat/long
-        'Test::Pod'                           => 0,
-
-    },
-  meta_merge     => {
-    resources => {
-      MailingList => 'openguides-dev@lists.openguides.org',
-      homepage => 'http://openguides.org',
-      bugtracker => 'https://github.com/OpenGuides/OpenGuides/issues',
-      repository  => 'git://github.com/OpenGuides/OpenGuides.git',
-    }
-  },
-    dynamic_config => 1,
-    create_makefile_pl => "passthrough"
-);
+$build->requires({
+    'Algorithm::Diff'                     => '0.13',  # for sdiff
+    'CGI'                                 => '2.92',  # avoid escapeHTML bug
+    'CGI::Carp'                           => 0,
+    'CGI::Cookie'                         => 0,
+    'Wiki::Toolkit'                       => '0.80',
+    'Wiki::Toolkit::Feed::Atom'           => 0,
+    'Wiki::Toolkit::Feed::RSS'            => 0,
+    'Wiki::Toolkit::Formatter::UseMod'    => 0.24, #for external_link_class
+    'Wiki::Toolkit::Plugin::Categoriser'  => 0,
+    'Wiki::Toolkit::Plugin::Diff'         => 0,
+    'Wiki::Toolkit::Plugin::JSON'         => '0.05',
+    'Wiki::Toolkit::Plugin::Locator::Grid'=> 0,
+    'Wiki::Toolkit::Plugin::RSS::Reader'  => 0,
+    'Class::Accessor'                     => 0,
+    'Config::Tiny'                        => 0,
+    'Data::Dumper'                        => 0,
+    $drivers{$dbtype}                     => 0,
+    'File::Spec::Functions'               => 0,
+    'File::Temp'                          => 0,
+    'HTML::Entities'                      => 0,
+    'JSON'                                => 0, # W::T::P::JSON uses anyway
+    'LWP::Simple'                         => 0,
+    'MIME::Lite'                          => 0,
+    'Parse::RecDescent'                   => 0,
+    $search_module                        => 0,
+    'POSIX'                               => 0,
+    'Template'                            => '2.24', # for .lower vmethod
+    'Template::Plugin::JSON::Escape'      => 0,
+    'Time::Piece'                         => 0,
+    'URI::Escape'                         => 0,
+    'XML::RSS'                            => 0,
+    'Data::Validate::URI'                 => 0,
+    'Net::Netmask'                        => 0,
+    'List::Util'                          => 0,
+    'Geo::Coordinates::UTM'               => 0,
+    'Geo::Coordinates::OSGB'              => 0,
+    'Geo::Coordinates::ITM'               => 0,
+});
 
 $build->add_to_cleanup( "t/indexes/" );
 $build->add_to_cleanup( "t/node.db" );
