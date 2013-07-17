@@ -12,6 +12,7 @@ More detailed changelogs can be found at
           displaying them in the metadata section of a node. 
         Add the @NODE_COUNT macro to count the number of nodes 
           in a category/locale.
+        Allow passing Module::Build long options to Build.PL. Fixes #71.
 
 0.72    28 June 2013
         Fix the date in json output. Fixes #5
