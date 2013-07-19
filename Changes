@@ -3,7 +3,8 @@
 More detailed changelogs can be found at
 <http://github.com/OpenGuides/OpenGuides>
 
-0.74    FIX ME
+0.74    19 July 2013
+        Skip the correct number tests in t/210_json.t
 
 0.73    17 July 2013
         Bump required version of Wiki::Toolkit::Plugin::JSON to remove
