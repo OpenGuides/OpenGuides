@@ -3,7 +3,7 @@
 More detailed changelogs can be found at
 <http://github.com/OpenGuides/OpenGuides>
 
-0.73    
+0.73    17 July 2013
         Bump required version of Wiki::Toolkit::Plugin::JSON to remove
           deprecation warnings. 
         Node JSON output now contains image information.
