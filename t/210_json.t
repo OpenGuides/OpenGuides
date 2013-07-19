@@ -97,7 +97,7 @@ my $json_random_output = $json_writer->output_as_json( beep => "random" );
 SKIP: {
         eval "use Test::JSON";
 
-        skip "Test::JSON not installed", 1 if $@;
+        skip "Test::JSON not installed", 3 if $@;
 
         is_valid_json( $json, "node output is well formed json");
         is_valid_json( $json_rc, "recentchanges output is well formed json");
