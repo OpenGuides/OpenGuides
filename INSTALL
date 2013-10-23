@@ -103,6 +103,19 @@ to search here just as you would enter them in a 'use lib qw( ... );'
 in a Perl script.
 
 
+  "Do you want to use Lucy for searching?"
+
+This is currently experimental - don't say "yes" to this question unless
+you know what you're doing.
+
+If you are changing to Lucy from another search method (Plucene or
+Search::InvertedIndex), you will need to do two things:
+    - either delete your old indexes (they're just files in the index
+      directory) or use a different index directory
+    - reindex your entire wiki (see reindex.pl in the examples/
+      directory of this distribution)
+
+
   "Do you want to use Plucene for searching?"
 
 This question is no longer asked, but documentation here is retained for

@@ -10,9 +10,10 @@ if ( $@ ) {
     plan skip_all => "DBD::SQLite could not be used - no database to test with. ($error)";
 }
 
-eval { require Plucene; };
-if ( $@ ) {
-    plan skip_all => "Plucene not installed";
+my $have_lucy = eval { require Lucy; } ? 1 : 0;
+my $have_plucene = eval { require Plucene; } ? 1 : 0;
+unless ( $have_lucy || $have_plucene ) {
+    plan skip_all => "Neither Lucy nor Plucene is installed";
 }
 
 eval { require Test::HTML::Content; };
@@ -26,7 +27,11 @@ plan tests => 12;
     OpenGuides::Test::refresh_db();
 
 my $config = OpenGuides::Test->make_basic_config;
-$config->use_plucene( 1 );
+if ( $have_lucy ) {
+  $config->use_lucy ( 1 );
+} else {
+  $config->use_plucene( 1 );
+}
 
 # British National Grid guides should have os_x/os_y/os_dist search fields.
 my $guide = OpenGuides->new( config => $config );

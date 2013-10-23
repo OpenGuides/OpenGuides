@@ -340,6 +340,15 @@ sub run_text_search {
     my $self = shift;
     my $searchstr = $self->{search_string};
     my $wiki = $self->wiki;
+    my $config = $self->config;
+
+    if ( $config->use_lucy ) {
+        require OpenGuides::Search::Lucy;
+        my $lucy = OpenGuides::Search::Lucy->new( config => $config );
+        my %results = $lucy->run_text_search( search_string => $searchstr );
+        $self->{results} = \%results;
+        return $self;
+    }
 
     # Create parser to parse the search string.
     my $parser = Parse::RecDescent->new( q{
