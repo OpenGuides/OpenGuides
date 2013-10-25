@@ -37,7 +37,9 @@ sub new {
     my ($class, %args) = @_;
     my $config = $args{config};
     my $searcher = Wiki::Toolkit::Search::Lucy->new(
-      path => $config->indexing_directory );
+      path => $config->indexing_directory,
+      metadata_fields => [ qw( address category locale ) ],
+    );
 
     my $self = {
       config => $config,

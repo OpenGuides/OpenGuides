@@ -28,6 +28,7 @@ sub run_tests {
     my $config = OpenGuides::Test->make_basic_config;
     if ( $args{use_lucy} ) {
         $config->use_lucy( 1 );
+        $config->use_plucene( 0 );
     } else {
         # Plucene is recommended over Search::InvertedIndex.
         eval { require Wiki::Toolkit::Search::Plucene; };
