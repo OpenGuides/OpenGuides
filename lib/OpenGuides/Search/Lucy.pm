@@ -1,6 +1,7 @@
 package OpenGuides::Search::Lucy;
 use strict;
 
+use OpenGuides::Utils;
 use Wiki::Toolkit::Search::Lucy;
 
 =head1 NAME
@@ -36,10 +37,7 @@ This documentation is probably only useful to OpenGuides developers.
 sub new {
     my ($class, %args) = @_;
     my $config = $args{config};
-    my $searcher = Wiki::Toolkit::Search::Lucy->new(
-      path => $config->indexing_directory,
-      metadata_fields => [ qw( address category locale ) ],
-    );
+    my $searcher = OpenGuides::Utils->make_lucy_searcher( config => $config );
 
     my $self = {
       config => $config,

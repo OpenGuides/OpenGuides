@@ -99,11 +99,7 @@ sub make_wiki_object {
     # Make search.
     my $search;
     if ( $config->use_lucy ) {
-        require Wiki::Toolkit::Search::Lucy;
-        $search = Wiki::Toolkit::Search::Lucy->new(
-                      path => $config->indexing_directory,
-                      metadata_fields => [ qw( address category locale ) ],
-        );
+        $search = $class->make_lucy_searcher( config => $config );
     } elsif ( $config->use_plucene
          && ( lc($config->use_plucene) eq "y"
               || $config->use_plucene == 1 )
@@ -259,6 +255,16 @@ sub make_wiki_object {
 
     my $wiki = Wiki::Toolkit->new( %conf );
     return $wiki;
+}
+
+sub make_lucy_searcher {
+    my ( $class, %args ) = @_;
+    require Wiki::Toolkit::Search::Lucy;
+    my $config = $args{config};
+    return Wiki::Toolkit::Search::Lucy->new(
+             path => $config->indexing_directory,
+             metadata_fields => [ qw( address category locale ) ],
+    );
 }
 
 sub do_index_list_macro {
