@@ -264,6 +264,7 @@ sub make_lucy_searcher {
     return Wiki::Toolkit::Search::Lucy->new(
              path => $config->indexing_directory,
              metadata_fields => [ qw( address category locale ) ],
+             boost => { title => 10 }, # empirically determined (test t/306)
     );
 }
 
