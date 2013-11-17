@@ -17,7 +17,7 @@ eval {
     );
 };
 
-like( $@, qr/File 'fake' does not exist/, '...and Config::Tiny errors are reported');
+like( $@, qr/ile 'fake'/, '...and Config::Tiny errors are reported');
 
 my $have_sqlite = 1;
 my $sqlite_error;
