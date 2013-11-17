@@ -341,7 +341,7 @@ $build->requires({
     'CGI'                                 => '2.92',  # avoid escapeHTML bug
     'CGI::Carp'                           => 0,
     'CGI::Cookie'                         => 0,
-    'Wiki::Toolkit'                       => '0.80',
+    'Wiki::Toolkit'                       => '0.82',
     'Wiki::Toolkit::Feed::Atom'           => 0,
     'Wiki::Toolkit::Feed::RSS'            => 0,
     'Wiki::Toolkit::Formatter::UseMod'    => 0.24, #for external_link_class
