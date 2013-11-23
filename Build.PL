@@ -85,7 +85,7 @@ my %yn_vars = map { $_ => 1 }
    qw(use_plucene enable_page_deletion navbar_on_home_page backlinks_in_title
       moderation_requires_password enable_node_image enable_common_categories
       enable_common_locales recent_changes_on_home_page use_leaflet
-      random_page_omits_locales random_page_omits_categories
+      random_page_omits_locales random_page_omits_categories use_lucy
       content_above_navbar_in_html show_gmap_in_node_display force_wgs84
       send_moderation_notifications read_only);
 
@@ -135,6 +135,7 @@ push @answers, { question => $dbtype_qu,
 
 my $install_directory; # used to suggest template paths
 my $use_plucene = 1; # keep track of this so we know what to put in prereqs
+my $use_lucy = 0;
 my $use_leaflet; # if true, we skip the GMaps questions
 my %gmaps_vars = map { $_ => 1 } qw( gmaps_api_key centre_long centre_lat
                                 default_gmaps_zoom default_gmaps_search_zoom );
@@ -142,7 +143,7 @@ my $centre_lat = ''; # contains centre lat derived from Google Maps URL
 foreach my $var ( qw(
    dbname dbuser dbpass dbhost dbport script_name
    install_directory template_path custom_template_path script_url
-   custom_lib_path use_plucene indexing_directory enable_page_deletion
+   custom_lib_path use_lucy use_plucene indexing_directory enable_page_deletion
    admin_pass stylesheet_url site_name navbar_on_home_page
    recent_changes_on_home_page random_page_omits_locales
    random_page_omits_categories content_above_navbar_in_html home_name
@@ -178,15 +179,26 @@ foreach my $var ( qw(
         next;
     }
 
-    # We don't ask this for new installs as Search::InvertedIndex is
-    # deprecated
-    if ( $var eq "use_plucene" and $existing_config->$var == 1) {
-        print "Skipping question about plucene\n"
-            unless $skip_config;
-        push @answers, { question => $qu,
-                         variable => $var,
-                         value => 1 };
-        next;
+    # Don't ask about Plucene if we've said to use Lucy.  If we haven't said
+    # to use Lucy, ask about Plucene only for existing installs, since the old
+    # Search::InvertedIndex method is deprecated.
+    if ( $var eq "use_plucene" ) {
+        if ( $use_lucy ) {
+            print "Skipping question about Plucene - we're using Lucy.\n"
+                unless $skip_config;
+            push @answers, { question => $qu,
+                             variable => $var,
+                             value => 0 };
+            next;
+        } elsif ( $existing_config->$var == 1 ) {
+            print "Skipping question about Plucene - we'll use it by "
+                  . "default.\n"
+                unless $skip_config;
+            push @answers, { question => $qu,
+                             variable => $var,
+                             value => 1 };
+            next;
+        }
     }
 
     # If we're using Leaflet, we can skip the GMaps stuff.  Don't erase any
@@ -245,6 +257,7 @@ foreach my $var ( qw(
 
     # Keep track of chosen search method so we know what to put in prereqs.
     # From Module::Build docs: ->y_n returns a Perl boolean true or false.
+    $use_lucy = 1 if $var eq "use_lucy" and $val;
     $use_plucene = 1 if $var eq "use_plucene" and $val;
 
     # If they've just chosen to use Leaflet, we won't need to ask any of the
@@ -328,7 +341,7 @@ $build->requires({
     'CGI'                                 => '2.92',  # avoid escapeHTML bug
     'CGI::Carp'                           => 0,
     'CGI::Cookie'                         => 0,
-    'Wiki::Toolkit'                       => '0.80',
+    'Wiki::Toolkit'                       => '0.83',
     'Wiki::Toolkit::Feed::Atom'           => 0,
     'Wiki::Toolkit::Feed::RSS'            => 0,
     'Wiki::Toolkit::Formatter::UseMod'    => 0.24, #for external_link_class

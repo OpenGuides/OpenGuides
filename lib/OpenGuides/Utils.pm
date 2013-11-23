@@ -60,7 +60,8 @@ dbname
 
 =item *
 
-indexing_directory - for the L<Search::InvertedIndex> or L<Plucene> files to go
+indexing_directory - for the L<Search::InvertedIndex>, L<Plucene>,
+or C<Lucy> files to go in
 
 =back
 
@@ -97,7 +98,9 @@ sub make_wiki_object {
 
     # Make search.
     my $search;
-    if ( $config->use_plucene
+    if ( $config->use_lucy ) {
+        $search = $class->make_lucy_searcher( config => $config );
+    } elsif ( $config->use_plucene
          && ( lc($config->use_plucene) eq "y"
               || $config->use_plucene == 1 )
        ) {
@@ -252,6 +255,17 @@ sub make_wiki_object {
 
     my $wiki = Wiki::Toolkit->new( %conf );
     return $wiki;
+}
+
+sub make_lucy_searcher {
+    my ( $class, %args ) = @_;
+    require Wiki::Toolkit::Search::Lucy;
+    my $config = $args{config};
+    return Wiki::Toolkit::Search::Lucy->new(
+             path => $config->indexing_directory,
+             metadata_fields => [ qw( address category locale ) ],
+             boost => { title => 10 }, # empirically determined (test t/306)
+    );
 }
 
 sub do_index_list_macro {

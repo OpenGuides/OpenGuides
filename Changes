@@ -3,6 +3,12 @@
 More detailed changelogs can be found at
 <http://github.com/OpenGuides/OpenGuides>
 
+0.75
+        Add a Lucy backend for searching.  This is still experimental,
+          so we recommend most people stick with Plucene for now.
+        If you do change to Lucy, you will need to reindex your entire guide
+          (see examples/reindex.pl in the distribution).
+
 0.74    19 July 2013
         Skip the correct number tests in t/210_json.t
 

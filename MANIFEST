@@ -21,6 +21,7 @@ lib/OpenGuides/Feed.pm
 lib/OpenGuides/JSON.pm
 lib/OpenGuides/RDF.pm
 lib/OpenGuides/Search.pm
+lib/OpenGuides/Search/Lucy.pm
 lib/OpenGuides/Template.pm
 lib/OpenGuides/Test.pm
 lib/OpenGuides/Utils.pm

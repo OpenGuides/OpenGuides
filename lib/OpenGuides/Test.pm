@@ -208,7 +208,8 @@ sub make_cgi_object {
 
   Openguides::Test::refresh_db();
 
-Unlink the existing SQLite database t/node.db and plucene indexes. Then create a new SQLite database t/node.db
+Unlink the existing SQLite database t/node.db and Plucene/Lucy indexes.
+Then create a new SQLite database t/node.db
 
 =cut
 sub refresh_db {
