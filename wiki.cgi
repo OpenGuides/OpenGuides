@@ -4,7 +4,7 @@ use strict;
 use warnings;
 use sigtrap die => 'normal-signals';
 use vars qw( $VERSION );
-$VERSION = '0.75';
+$VERSION = '0.76';
 
 use CGI qw/:standard/;
 use CGI::Carp qw(croak);
