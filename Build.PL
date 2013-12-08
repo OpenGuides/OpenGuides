@@ -154,7 +154,7 @@ foreach my $var ( qw(
    licence_name licence_url licence_info_url moderation_requires_password
    enable_node_image enable_common_categories enable_common_locales
    spam_detector_module host_checker_module static_path static_url
-   send_moderation_notifications read_only
+   send_moderation_notifications read_only custom_macro_module
   ) ) {
     my $q_method = $var . "__qu";
     my $qu  = $existing_config->$q_method;

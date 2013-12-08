@@ -3,6 +3,9 @@
 More detailed changelogs can be found at
 <http://github.com/OpenGuides/OpenGuides>
 
+0.76
+        Add facility to create custom macros and override existing ones.
+
 0.75    23 November 2013
         Add a Lucy backend for searching.  This is still experimental,
           so we recommend most people stick with Plucene for now.

@@ -234,6 +234,14 @@ sub make_wiki_object {
         },
     );
 
+    my $custom_macro_module = $config->custom_macro_module;
+    if ( $custom_macro_module ) {
+        eval {
+            eval "require $custom_macro_module";
+            %macros = $custom_macro_module->custom_macros(macros => \%macros);
+        };
+    }
+
     my $formatter = Wiki::Toolkit::Formatter::UseMod->new(
         extended_links      => 1,
         implicit_links      => 0,

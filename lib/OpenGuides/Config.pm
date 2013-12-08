@@ -25,7 +25,8 @@ my @variables = qw(
    licence_name licence_url licence_info_url
    moderation_requires_password moderate_whitelist
    enable_node_image enable_common_categories enable_common_locales
-   spam_detector_module host_checker_module static_path static_url
+   spam_detector_module host_checker_module custom_macro_module
+   static_path static_url
    send_moderation_notifications website_link_max_chars read_only
 );
 my @questions = map { $_ . "__qu" } @variables;
@@ -117,6 +118,7 @@ sub _init {
                      licence_info_url => "",
                      spam_detector_module => "",
                      host_checker_module => "",
+                     custom_macro_module => "",
                      static_path => "/usr/local/share/openguides/static",
                      send_moderation_notifications => 1,
                      website_link_max_chars => 25,
@@ -205,6 +207,7 @@ sub _init {
         licence_info_url => "What is the URL to your local page about your licensing policy?",
         spam_detector_module => "What module would you like to use for spam detection? (optional)",
         host_checker_module => "What module would you like to use to run an IP blacklist? (optional)",
+        custom_macro_module => "What module would you like to use to define custom macros? (optional)",
         static_path => "What directory should we install static content (CSS, images, javascript) to?",
         static_url => "What is the URL corresponding to the static content?",
         send_moderation_notifications => "Should we send email notifications when a moderated node is edited?",
@@ -342,6 +345,8 @@ sub script_url {
 =item * spam_detector_module
 
 =item * host_checker_module
+
+=item * custom_macro_module
 
 =item * static_path
 

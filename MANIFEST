@@ -135,6 +135,7 @@ t/407_navbar_placement.t
 t/408_google_analytics.t
 t/409_custom_header.t
 t/410_meta_description.t
+t/411_custom_macros.t
 t/500_http_response_codes.t
 t/501_display_node.t
 t/502_display_diffs.t
