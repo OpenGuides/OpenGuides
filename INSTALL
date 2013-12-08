@@ -317,6 +317,13 @@ The module you choose should have a method called "looks_like_spam", which
 accepts a hash with content and metadata as keys, and returns true or false
 to the question of whether the edit should be considered to be spam.
 
+  "What module would you like to use to define custom macros? (optional)"
+
+The module you choose should have a method called "custom_macros", which
+takes arguments macros => \%macros, where the keys of %macros are regexps
+and the values are subs.  It should return a hash similar to %macros.
+See OpenGuides::Utils for the macros defined in core OpenGuides.
+
   "What directory should we install static content (CSS, images, javascript)
    to?"
 
