@@ -14,15 +14,15 @@ if ( $@ ) {
 
 plan tests => 13;
 
+# Clear out the database from any previous runs.
+OpenGuides::Test::refresh_db();
+
 my $config = OpenGuides::Test->make_basic_config;
 $config->custom_template_path( cwd . "/t/templates/" );
 my $guide = OpenGuides->new( config => $config );
 my $wiki = $guide->wiki;
 my $categoriser = Wiki::Toolkit::Plugin::Categoriser->new;
 $wiki->register_plugin( plugin => $categoriser );
-
-# Clear out the database from any previous runs.
-OpenGuides::Test::refresh_db();
 
 # Check that unwelcome characters are stripped from autocreated cats/locales.
 # Double spaces:

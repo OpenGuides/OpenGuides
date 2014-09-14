@@ -14,13 +14,13 @@ if ( $@ ) {
 
 plan tests => 3;
 
+# Clear out the database from any previous runs.
+OpenGuides::Test::refresh_db();
+
 my $config = OpenGuides::Test->make_basic_config;
 $config->custom_template_path( cwd . "/t/templates/tmp/" );
 my $guide = OpenGuides->new( config => $config );
 my $wiki = $guide->wiki;
-
-# Clear out the database from any previous runs.
-OpenGuides::Test::refresh_db();
 
 # Write a couple of nodes, one with a map link and another
 # without; also with/without address

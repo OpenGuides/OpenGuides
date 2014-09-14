@@ -16,13 +16,13 @@ my $thc = $@ ? 0 : 1;
 
 plan tests => 25;
 
+# Clear out the database from any previous runs.
+OpenGuides::Test::refresh_db();
+
 my $config = OpenGuides::Test->make_basic_config;
 $config->static_url( "http://example.com/static" );
 my $guide = OpenGuides->new( config => $config );
 my $wiki = $guide->wiki;
-
-# Clear out the database from any previous runs.
-OpenGuides::Test::refresh_db();
 
 # Write a couple of nodes, two with legitimate geodata, another with
 # broken geodata, another with no geodata.

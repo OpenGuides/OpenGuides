@@ -14,12 +14,12 @@ if ( $@ ) {
 
 plan tests => 2;
 
+# Clear out the database from any previous runs.
+OpenGuides::Test::refresh_db();
+
 my $config = OpenGuides::Test->make_basic_config;
 my $guide = OpenGuides->new( config => $config );
 my $wiki = $guide->wiki;
-
-# Clear out the database from any previous runs.
-OpenGuides::Test::refresh_db();
 
 # Write out a node with a map link and external website
 OpenGuides::Test->write_data(

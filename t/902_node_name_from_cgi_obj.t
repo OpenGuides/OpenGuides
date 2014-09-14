@@ -13,12 +13,12 @@ if ( $@ ) {
 
 plan tests => 18;
 
+# Clear out the database from any previous runs.
+OpenGuides::Test::refresh_db();
+
 my $config = OpenGuides::Test->make_basic_config;
 my $guide = OpenGuides->new( config => $config );
 my $wiki = $guide->wiki;
-
-# Clear out the database from any previous runs.
-OpenGuides::Test::refresh_db();
 
 # Write a node.
 OpenGuides::Test->write_data(

@@ -14,12 +14,12 @@ if ( $@ ) {
 
 plan tests => 2;
 
+# Clear out the database from any previous runs.
+OpenGuides::Test::refresh_db();
+
 my $config = OpenGuides::Test->make_basic_config;
 $config->custom_template_path( cwd . "/t/templates/tmp/" );
 my $guide = OpenGuides->new( config => $config );
-
-# Clear out the database from any previous runs.
-OpenGuides::Test::refresh_db();
 
 # Write a node.
 OpenGuides::Test->write_data(
