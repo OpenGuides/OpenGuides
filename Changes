@@ -3,6 +3,10 @@
 More detailed changelogs can be found at
 <http://github.com/OpenGuides/OpenGuides>
 
+0.77    20 September 2014
+        Fix tests to work with more upto date versions of SQLite 
+        Thanks to @jmdh and Niko Tyni. See PR #78 for more info.
+
 0.76    08 December 2013
         Add facility to create custom macros and override existing ones.
 
