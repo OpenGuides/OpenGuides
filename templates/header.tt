@@ -11,7 +11,12 @@
     <meta name="DC.title" content="[% node_name %] - [% site_name %]" />
   [% END %]
     <meta name="DC.publisher" content="[% site_name %]" />
-
+  [% IF node_image %]
+    <meta property="og:title" content="[% node_name %]" />
+    <meta property="og:type" content="article" />
+    <meta property="og:url" content="[% full_cgi_url %]?[% node_param %]" />
+    <meta property="og:image" content="[% node_image %]" />
+  [% END %]
   [% IF contact_email %]
     <link rev="made" href="mailto:[% contact_email %]" />
   [% END %]
