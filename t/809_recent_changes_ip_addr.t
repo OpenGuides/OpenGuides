@@ -14,12 +14,12 @@ if ( $@ ) {
 
 plan tests => 10;
 
+# Clear out the database from any previous runs.
+OpenGuides::Test::refresh_db();
+
 my $config = OpenGuides::Test->make_basic_config;
 my $guide = OpenGuides->new( config => $config );
 my $wiki = $guide->wiki;
-
-# Clear out the database from any previous runs.
-OpenGuides::Test::refresh_db();
 
 # First we need to make sure that the preferences are accessible
 # from the recent changes view.  Can't test this using return_tt_vars

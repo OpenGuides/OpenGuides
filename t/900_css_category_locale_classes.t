@@ -18,12 +18,12 @@ if ( $@ ) {
 
 plan tests => 3;
 
+# Clear out the database from any previous runs.
+OpenGuides::Test::refresh_db();
+
 my $config = OpenGuides::Test->make_basic_config;
 $config->custom_template_path( cwd . "/t/templates/" );
 my $guide = OpenGuides->new( config => $config );
-
-# Clear out the database from any previous runs.
-OpenGuides::Test::refresh_db();
 
 # Check that a node in one locale and one category has CSS classes for both.
 OpenGuides::Test->write_data(
