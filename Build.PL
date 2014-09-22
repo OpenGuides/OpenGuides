@@ -44,6 +44,7 @@ my $build = OpenGuides::Build->new(
             homepage => 'http://openguides.org',
             bugtracker => 'https://github.com/OpenGuides/OpenGuides/issues',
             repository  => 'git://github.com/OpenGuides/OpenGuides.git',
+            x_IRC => 'irc://irc.perl.org/#openguides',
         }
     },
     dynamic_config => 1,
