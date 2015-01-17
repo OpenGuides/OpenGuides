@@ -350,7 +350,6 @@ $build->requires({
     'Wiki::Toolkit::Plugin::Diff'         => 0,
     'Wiki::Toolkit::Plugin::JSON'         => '0.05',
     'Wiki::Toolkit::Plugin::Locator::Grid'=> 0,
-    'Wiki::Toolkit::Plugin::RSS::Reader'  => 0,
     'Class::Accessor'                     => 0,
     'Config::Tiny'                        => 0,
     'Data::Dumper'                        => 0,
