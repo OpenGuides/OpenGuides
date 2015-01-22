@@ -7,7 +7,6 @@ $VERSION = '0.18';
 use Carp qw( croak );
 use Wiki::Toolkit;
 use Wiki::Toolkit::Formatter::UseMod;
-use Wiki::Toolkit::Plugin::RSS::Reader;
 use URI::Escape;
 use MIME::Lite;
 use Net::Netmask;
@@ -190,48 +189,6 @@ sub make_wiki_object {
                   my %node_data = $wiki->retrieve_node( $node );
                   return $node_data{content};
                 },
-	qr/\@RSS\s+(.+)/ => sub {
-                    # We may be being called by Wiki::Toolkit::Plugin::Diff,
-                    # which doesn't know it has to pass us $wiki - and
-                    # we don't use it anyway.
-                    if ( UNIVERSAL::isa( $_[0], "Wiki::Toolkit" ) ) {
-                        shift; # just throw it away
-                    }
-
-                    my $url = shift;
-
-                    # The URL will already have been processed as an inline
-                    # link, so transform it back again.
-                    if ( $url =~ m/href="([^"]+)/ ) {
-                        $url = $1;
-                    }
-
-                    # We can't do much about remote errors fetching
-                    # at this stage
-                    my $rss = eval { Wiki::Toolkit::Plugin::RSS::Reader->new(url => $url); };
-                    if ( $@ ) {
-                        warn $@;
-                        return '';
-                    }
-                    my @items = $rss->retrieve;
-
-                    # Ten items only at this till.
-                    $#items = 10 if $#items > 10;
-
-                    # Make a UseMod-formatted list with them - macros are
-                    # processed *before* UseMod formatting is applied but
-                    # *after* inline links like [http://foo/ bar]
-                    my $list = "\n";
-                    foreach (@items) {
-                        my $link        = $_->{link};
-                        my $title       = $_->{title};
-                        my $description = $_->{description};
-                        $list .= qq{* <a href="$link">$title</a>};
-                        $list .= " - $description" if $description;
-                        $list .= "\n";
-                    }
-                    $list .= "</ul>\n";
-        },
     );
 
     my $custom_macro_module = $config->custom_macro_module;
