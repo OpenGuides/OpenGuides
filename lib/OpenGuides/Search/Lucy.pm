@@ -1,5 +1,6 @@
 package OpenGuides::Search::Lucy;
 use strict;
+our $VERSION = '0.01';
 
 use OpenGuides::Utils;
 use Wiki::Toolkit::Search::Lucy;
