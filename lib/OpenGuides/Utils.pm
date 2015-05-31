@@ -104,9 +104,18 @@ sub make_wiki_object {
               || $config->use_plucene == 1 )
        ) {
         require Wiki::Toolkit::Search::Plucene;
-        $search = Wiki::Toolkit::Search::Plucene->new(
-                                       path => $config->indexing_directory,
-                                                 );
+        my %plucene_args = ( path => $config->indexing_directory );
+        my $munger = $config->search_content_munger_module;
+        if ( $munger ) {
+            eval {
+                eval "require $munger";
+                $plucene_args{content_munger} = sub {
+                    my $content = shift;
+                    return $munger->search_content_munger( $content );
+                };
+            };
+        }
+        $search = Wiki::Toolkit::Search::Plucene->new( %plucene_args );
     } else {
         require Wiki::Toolkit::Search::SII;
         require Search::InvertedIndex::DB::DB_File_SplitHash;
@@ -226,11 +235,22 @@ sub make_lucy_searcher {
     my ( $class, %args ) = @_;
     require Wiki::Toolkit::Search::Lucy;
     my $config = $args{config};
-    return Wiki::Toolkit::Search::Lucy->new(
+    my %lucy_args = (
              path => $config->indexing_directory,
              metadata_fields => [ qw( address category locale ) ],
              boost => { title => 10 }, # empirically determined (test t/306)
     );
+    my $munger = $config->search_content_munger_module;
+    if ( $munger ) {
+        eval {
+            eval "require $munger";
+            $lucy_args{content_munger} = sub {
+                my $content = shift;
+                return $munger->search_content_munger( $content );
+            };
+        };
+    }
+    return Wiki::Toolkit::Search::Lucy->new( %lucy_args );
 }
 
 sub do_index_list_macro {

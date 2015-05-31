@@ -124,6 +124,7 @@ t/306_search_order.t
 t/307_search_summaries.t
 t/308_search_params.t
 t/309_search_form.t
+t/310_search_munge_content.t
 t/400_search_as_feed.t
 t/401_deletion.t
 t/402_edit_conflict.t

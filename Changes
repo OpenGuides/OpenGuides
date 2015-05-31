@@ -3,6 +3,10 @@
 More detailed changelogs can be found at
 <http://github.com/OpenGuides/OpenGuides>
 
+0.79    
+        Add search_content_munger_module option to allow munging of node
+        content before indexing for search (Plucene and Lucy only).
+
 0.78    01 March 2015
         Add support for the OpenGraph Protocol #77
         Add IRC metadata #80

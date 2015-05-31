@@ -12,7 +12,8 @@ use base qw( Class::Accessor );
 my @variables = qw(
    dbtype dbname dbuser dbpass dbport dbhost dbencoding
    script_name install_directory script_url
-   custom_lib_path use_plucene use_lucy indexing_directory enable_page_deletion
+   custom_lib_path use_plucene use_lucy search_content_munger_module
+   indexing_directory enable_page_deletion
    admin_pass stylesheet_url site_name navbar_on_home_page
    recent_changes_on_home_page random_page_omits_locales
    random_page_omits_categories content_above_navbar_in_html home_name
@@ -80,6 +81,7 @@ sub _init {
                      install_directory => "/usr/lib/cgi-bin/openguides/",
                      use_plucene => 1,
                      use_lucy => 0,
+                     search_content_munger_module => "",
                      indexing_directory => "/usr/lib/cgi-bin/openguides/indexes/",
                      enable_page_deletion => 0,
                      moderation_requires_password => 1,
@@ -167,6 +169,7 @@ sub _init {
         custom_lib_path => "Do you want me to munge a custom lib path into the scripts?  If so, enter it here.  Separate path entries with whitespace.",
         use_plucene => "Do you want to use Plucene for searching? (recommended, but see Changes file before saying yes to this if you are upgrading)",
         use_lucy => "Do you want to use Lucy for searching? (experimental)",
+        search_content_munger_module => "What module would you like to use to munge node content before indexing for the search? (optional, only works with Plucene and Lucy)",
         indexing_directory => "What directory can I use to store indexes in for searching? ***NOTE*** This directory must exist and be writeable by the user that your script will run as.  See README for more on this.",
         enable_page_deletion => "Do you want to enable page deletion?",
         moderation_requires_password => "Is the admin password required for moderating pages?",
@@ -273,6 +276,8 @@ sub script_url {
 =item * use_plucene (default: true)
 
 =item * use_lucy (default: false)
+
+=item * search_content_munger_module
 
 =item * indexing_directory (default: C</usr/lib/cgi-bin/openguides/indexes>)
 

@@ -138,6 +138,15 @@ dedicated user - 'nobody' or 'www-data' for example, but for many
 multi-user systems this will just be yourself.
 
 
+  "What module would you like to use to munge node content before indexing
+  for the search? (optional, only works with Plucene and Lucy)"
+
+The module you choose should have a method called "search_content_munger",
+which accepts a string containing the node content, and returns a string
+(which may be the same string) containing the content as you would like it
+to be indexed for the search.
+
+
   "Do you want to enable page deletion?"
   "Please specify a password for the site admin."
 

@@ -144,7 +144,8 @@ my $centre_lat = ''; # contains centre lat derived from Google Maps URL
 foreach my $var ( qw(
    dbname dbuser dbpass dbhost dbport script_name
    install_directory template_path custom_template_path script_url
-   custom_lib_path use_lucy use_plucene indexing_directory enable_page_deletion
+   custom_lib_path use_lucy use_plucene indexing_directory
+   search_content_munger_module enable_page_deletion
    admin_pass stylesheet_url site_name navbar_on_home_page
    recent_changes_on_home_page random_page_omits_locales
    random_page_omits_categories content_above_navbar_in_html home_name
@@ -342,7 +343,7 @@ $build->requires({
     'CGI'                                 => '2.92',  # avoid escapeHTML bug
     'CGI::Carp'                           => 0,
     'CGI::Cookie'                         => 0,
-    'Wiki::Toolkit'                       => '0.83',
+    'Wiki::Toolkit'                       => '0.84',
     'Wiki::Toolkit::Feed::Atom'           => 0,
     'Wiki::Toolkit::Feed::RSS'            => 0,
     'Wiki::Toolkit::Formatter::UseMod'    => 0.24, #for external_link_class
