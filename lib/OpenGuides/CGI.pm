@@ -107,7 +107,7 @@ sub extract_node_param {
     # We need this to do URLs like foo.com/wiki.cgi?This_Page
     my $param = $q->param( "id" )
                 || $q->param( "title" )
-                || join( " ", $q->param( "keywords" ) )
+                || join( " ", $q->multi_param( "keywords" ) )
                 || "";
     $param =~ s/%20/ /g;
     $param =~ s/\+/ /g;

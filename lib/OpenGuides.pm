@@ -619,7 +619,7 @@ sub preview_edit {
                                                set_coord_field_vars => 1,
     );
     foreach my $var ( qw( username comment edit_type ) ) {
-        $new_metadata{$var} = $q->escapeHTML($q->param($var));
+        $new_metadata{$var} = $q->escapeHTML(scalar $q->param($var));
     }
 
     if ($wiki->verify_checksum($node, $checksum)) {

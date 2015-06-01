@@ -531,7 +531,7 @@ sub validate_edit {
     }
 
     if ( $q->param('website') and $q->param('website') ne 'http://' ) {
-        unless ( is_web_uri( $q->param('website') ) ) {
+        unless ( is_web_uri( scalar $q->param('website') ) ) {
             push @fails, $q->param('website') . ' is not a valid web URI';
         }
     }

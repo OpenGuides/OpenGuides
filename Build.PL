@@ -340,7 +340,7 @@ my $search_module = $use_plucene ? "Plucene" : "Search::InvertedIndex";
 
 $build->requires({
     'Algorithm::Diff'                     => '0.13',  # for sdiff
-    'CGI'                                 => '2.92',  # avoid escapeHTML bug
+    'CGI'                                 => '4.08',  # use multi_param
     'CGI::Carp'                           => 0,
     'CGI::Cookie'                         => 0,
     'Wiki::Toolkit'                       => '0.84',
