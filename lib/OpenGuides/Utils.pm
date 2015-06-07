@@ -2,7 +2,7 @@ package OpenGuides::Utils;
 
 use strict;
 use vars qw( $VERSION );
-$VERSION = '0.18';
+$VERSION = '0.19';
 
 use Carp qw( croak );
 use Wiki::Toolkit;

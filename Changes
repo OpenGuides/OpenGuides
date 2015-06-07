@@ -3,6 +3,9 @@
 More detailed changelogs can be found at
 <http://github.com/OpenGuides/OpenGuides>
 
+0.80    07 June 2015
+        Fix calling CGI:param in a list context #85
+
 0.79    31 May 2015
         Add search_content_munger_module option to allow munging of node
         content before indexing for search (Plucene and Lucy only).
