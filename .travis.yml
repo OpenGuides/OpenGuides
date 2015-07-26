@@ -11,3 +11,4 @@ before_install: cpanm --quiet --notest Config::Tiny Geo::HelmertTransform Test::
 script: perl Build.PL && ./Build build && cover -test -ignore Build.pm -report coveralls
 notifications:
   irc: "irc.perl.org#openguides-notices"
+sudo: false
