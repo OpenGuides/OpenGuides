@@ -13,7 +13,7 @@ if ( $@ ) {
     plan skip_all => "DBD::SQLite could not be used - no database to test with ($error)";
 }
 
-plan tests => 8;
+plan tests => 9;
 
 # Clear out the database from any previous runs.
     OpenGuides::Test::refresh_db();
@@ -36,8 +36,6 @@ my $guide = OpenGuides->new( config => $config );
     is( $metadata_vars{os_x}, "123456",
         "leading and trailing spaces stripped from os_x when processed" );
     is( $metadata_vars{os_y}, "654321", "...and os_y" );
-
-
 
     $config->geo_handler( 2 );
     $q = CGI->new( "" );
@@ -78,6 +76,7 @@ OpenGuides::Test->write_data(
                               node  => "A Node",
                               categories => " Food \r\n Live Music ",
                               locales    => " Hammersmith \r\n Fulham ",
+                              fax => " 567890 ",
 );
 my %node = $guide->wiki->retrieve_node( "A Node" );
 my %data = %{ $node{metadata} };
@@ -86,3 +85,5 @@ is_deeply( \@cats, [ "Food", "Live Music" ],
     "leading and trailing spaces stripped from all categories when stored" );
 my @locs = sort @{ $data{locale} || [] };
 is_deeply( \@locs, [ "Fulham", "Hammersmith" ], "...and all locales" );
+my $fax = $data{fax}[0];
+is( $fax, "567890", "...and fax field" );

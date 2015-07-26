@@ -469,6 +469,12 @@ sub extract_metadata_vars {
             $vars{$var} = $q->param($var);
         }
 
+        # Trim leading and trailing whitespace from the fax field - some
+        # guides use this to store the Twitter username, so whitespace will
+        # mess things up when this is turned into a URL.
+        $vars{fax} =~ s/^\s+//g;
+        $vars{fax} =~ s/\s+$//g;
+
         my $geo_handler = $config->geo_handler;
         if ( $geo_handler == 1 ) {
             require Geo::Coordinates::OSGB;

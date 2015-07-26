@@ -3,6 +3,11 @@
 More detailed changelogs can be found at
 <http://github.com/OpenGuides/OpenGuides>
 
+0.81
+        Trim leading/trailing whitespace from the fax field (so those of us
+          using this field to store the Twitter username don't get broken
+          links).
+
 0.80    07 June 2015
         Fix calling CGI:param in a list context #85
 
