@@ -791,6 +791,10 @@ sub _get_recent_changes {
     }
 
     @rc = map {
+        my $url = $base_url
+                . CGI->escape($formatter->node_name_to_node_param($_->{name}));
+        # CGI->escape escapes commas in URLs.  This is annoying.
+        $url =~ s/%2C/,/gs;
         {
           name => CGI->escapeHTML($_->{name}),
           last_modified => CGI->escapeHTML($_->{last_modified}),
@@ -803,8 +807,7 @@ sub _get_recent_changes {
           host => CGI->escapeHTML($_->{metadata}{host}[0]),
           username_param => CGI->escape($_->{metadata}{username}[0]),
           edit_type => CGI->escapeHTML($_->{metadata}{edit_type}[0]),
-          url => $base_url
-                . CGI->escape($formatter->node_name_to_node_param($_->{name})),
+          url => $url
         }
     } @rc;
     return @rc;

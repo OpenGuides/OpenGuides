@@ -221,6 +221,7 @@ sub make_wiki_object {
         edit_prefix         => "$script_name?action=edit;id=",
         munge_urls          => 1,
         external_link_class => "external",
+        escape_url_commas   => 0,
     );
 
     my %conf = ( store     => $store,
@@ -285,6 +286,8 @@ sub do_index_list_macro {
                                                  link => "$node|$title" )
                 . "\n";
     }
+    # URI::Escape escapes commas in URLs.  This is annoying.
+    $return =~ s/%2C/,/gs;
     return $return;
 }
 sub do_node_count {
