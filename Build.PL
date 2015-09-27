@@ -346,7 +346,7 @@ $build->requires({
     'Wiki::Toolkit'                       => '0.84',
     'Wiki::Toolkit::Feed::Atom'           => 0,
     'Wiki::Toolkit::Feed::RSS'            => 0,
-    'Wiki::Toolkit::Formatter::UseMod'    => 0.24, #for external_link_class
+    'Wiki::Toolkit::Formatter::UseMod'    => 0.25, # for escape_url_commas
     'Wiki::Toolkit::Plugin::Categoriser'  => 0,
     'Wiki::Toolkit::Plugin::Diff'         => 0,
     'Wiki::Toolkit::Plugin::JSON'         => '0.05',
