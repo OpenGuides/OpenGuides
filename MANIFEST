@@ -138,7 +138,7 @@ t/409_custom_header.t
 t/410_meta_description.t
 t/411_custom_macros.t
 t/412_opengraph_protocol_meta.t
-4/413_commas_in_urls.t
+t/413_commas_in_urls.t
 t/500_http_response_codes.t
 t/501_display_node.t
 t/502_display_diffs.t
