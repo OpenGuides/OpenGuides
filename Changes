@@ -3,7 +3,7 @@
 More detailed changelogs can be found at
 <http://github.com/OpenGuides/OpenGuides>
 
-0.81
+0.81    10 January 2016
         Trim leading/trailing whitespace from the fax field (so those of us
           using this field to store the Twitter username don't get broken
           links).
