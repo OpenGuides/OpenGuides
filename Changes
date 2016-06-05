@@ -3,6 +3,12 @@
 More detailed changelogs can be found at
 <http://github.com/OpenGuides/OpenGuides>
 
+0.82
+        Add some extra CSS hooks to the templates.  Add new base stylesheet
+          rules for a responsive version.  Make a few changes in core templates
+          to facilitate the responsive version.  To get all these shiny new
+          features, you need to set the "responsive" config variable to true.
+
 0.81    10 January 2016
         Trim leading/trailing whitespace from the fax field (so those of us
           using this field to store the Twitter username don't get broken

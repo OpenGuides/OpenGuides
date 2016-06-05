@@ -14,7 +14,7 @@ use URI::Escape;
 
 use vars qw( $VERSION );
 
-$VERSION = '0.81';
+$VERSION = '0.82';
 
 =head1 NAME
 

@@ -20,12 +20,12 @@
   [% END %]
 
   [% BLOCK changes %]
-    <table id="recentchanges_[% days %]" cellpadding="0" cellspacing="0"
+    <table class="recentchanges_section" id="recentchanges_[% days %]" cellpadding="0" cellspacing="0"
      border="0"
      summary="Table containing the list of recent changes to this site">
     [% FOREACH node = nodes %]
       <tr>
-        <td class="recentchanges_node_name"><a href="[% node.url %]">[% node.name %]</a></td>
+        <td class="recentchanges_node_name"[% IF responsive %] rowspan="2"[% END %]><a href="[% node.url %]">[% node.name %]</a></td>
         <td class="recentchanges_meta">
           [% IF node.version > 1 %]
             (<a href="[% cgi_url %]?id=[% node.name %];version=[% node.version - 1 %];diffversion=[% node.version %]">diff</a>)
@@ -38,7 +38,9 @@
         </td>
       </tr>
       <tr>
-        <td></td>
+        [% UNLESS responsive %]
+          <td></td>
+        [% END %]
         <td><span class="recentchanges_user">
           [% host_link = '<a href="' _ cgi_url _ '?host=' _ node.host _ ';action=userstats">' %]
           [% IF node.host.length AND node.host.length > 15 %]
@@ -71,22 +73,22 @@
 [% ELSE %]
 
   [% IF recent_changes.1 %]
-    <h2>Pages changed in the last 24 hours:</h2>
+    <h2 class="recentchanges_section_header">Pages changed in the last 24 hours:</h2>
     [% INCLUDE changes nodes = recent_changes.1 days = 1 %]
   [% END %]
 
   [% IF recent_changes.7 %]
-    <h2>Pages changed in the last week:</h2>
+    <h2 class="recentchanges_section_header">Pages changed in the last week:</h2>
     [% INCLUDE changes nodes = recent_changes.7 days = 7 %]
   [% END %]
 
   [% IF recent_changes.14 %]
-    <h2>Pages changed in the last fortnight:</h2>
+    <h2 class="recentchanges_section_header">Pages changed in the last fortnight:</h2>
     [% INCLUDE changes nodes = recent_changes.14 days = 14 %]
   [% END %]
 
   [% IF recent_changes.30 %]
-    <h2>Pages changed in the last 30 days:</h2>
+    <h2 class="recentchanges_section_header">Pages changed in the last 30 days:</h2>
     [% INCLUDE changes nodes = recent_changes.30 days = 30 %]
   [% END %]
 

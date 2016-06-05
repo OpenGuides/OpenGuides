@@ -2,7 +2,11 @@
 [% INCLUDE header.tt page_title = "History of $node_name - $site_name" %]
 [% INCLUDE banner.tt %]
 <div id="content">
-[% INCLUDE navbar.tt %]
+
+[% IF !config.content_above_navbar_in_html %]
+  [% INCLUDE navbar.tt %]
+[% END %]
+
 <div id="maincontent">
 <h1>
   [% site_name %] - History of <span class="node_name">[% node_name %]</span>
@@ -10,7 +14,7 @@
 <p>
 Note: only administrators can delete historical versions.
 </p>
-<ul>
+<ul class="node_history">
 [%
   months.1 = 'January';
   months.2 = 'February';
@@ -72,4 +76,9 @@ Note: only administrators can delete historical versions.
   <a href="[% cgi_url %]?action=list_all_versions;format=atom;id=[% node_param %]">atom feed</a>.
 </p>
 </div>
+
+[% IF config.content_above_navbar_in_html %]
+  [% INCLUDE navbar.tt %]
+[% END %]
+
 [% INCLUDE footer.tt %]

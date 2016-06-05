@@ -184,7 +184,8 @@ sub output {
         gmaps_api_key         => $config->gmaps_api_key,
         licence_name          => $config->licence_name,
         licence_url           => $config->licence_url,
-        licence_info_url      => $config->licence_info_url
+        licence_info_url      => $config->licence_info_url,
+        responsive            => $config->responsive,
     };
 
     if ($args{node}) {

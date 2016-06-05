@@ -11,7 +11,7 @@
 
   <div id="maincontent_no_navbar">
 
-    <h2>Map of
+    <h2 class="map_index_header">Map of
       [% IF criteria %]
         [% links = [] %]
         [% FOREACH criterion = criteria %]

@@ -349,6 +349,22 @@ input the URL the content will be visible at here.
 For spam avoidance, you can configure certain nodes to require moderation.
 To ensure that such edits are noticed, OpenGuides can email you.
 
+  "Should the guide be read-only (no edits permitted)?"
+
+If you want to switch your guide to read-only, either temporarily (e.g. all
+the moderators are going on holiday) or permanently (e.g. the guide is now
+just an archive), answer "y" here.  You can reverse this decision at any time.
+
+  "Should the site be mobile-friendly (responsive)?"
+
+As of version 0.82, fresh OpenGuides installs are mobile-friendly.  If
+you have an existing site and wish to make it mobile-friendly, you should
+answer "y" here AND make sure any of the templates you've overridden with
+custom versions are brought up to date with the current core templates.
+The easiest way to do this is to run diffs between the main templates and
+your own versions, and make sure there are no differences other than the
+ones you intend.
+
   "Distance calculation methods available are:
       1) British National Grid
       2) Irish National Grid

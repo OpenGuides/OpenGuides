@@ -1,16 +1,23 @@
 [% INCLUDE header.tt page_title = "Set username/preferences" %]
 [% INCLUDE banner.tt %]
 <div id="content">
-[% INCLUDE navbar.tt %]
+
+  [% IF !config.content_above_navbar_in_html %]
+    [% INCLUDE navbar.tt %]
+  [% END %]
+
 <div id="maincontent">
 [% IF show_form %]
 
-  <form action="preferences.cgi" method="post">
-    <h1>Username</h1>
-    <p><label for="username">How you wish to be identified in Recent Changes:</label></p>
+  <form id="preferences_form" action="preferences.cgi" method="post">
+    <div class="set_username">
+    <h2>Username</h2>
+    <label for="username">How you wish to be identified in Recent Changes:</label>
     <input type="text" size="20" id="username" name="username" value="[% prefs.username %]" />
+    </div>
 
-    <h1>Preferences</h1>
+    <div class="set_preferences">
+    <h2>Preferences</h2>
 
     <p>
     [% IF prefs.preview_above_edit_box %]
@@ -63,7 +70,7 @@
     [% ELSE %]
       <input type="checkbox" id="is_admin" name="is_admin" value="1" />
     [% END %]
-    <label for="show_minor">Show admin related links</label>
+    <label for="is_admin">Show admin related links</label>
     </p>
 
     <p>
@@ -118,8 +125,9 @@
         [% END %]
       </select>
     </p>
+    </div>
 
-    <input type="submit" value="Set it" class="form_button" />
+    <input id="submit" type="submit" value="Set it" class="form_button" />
     <input type="hidden" name="action" value="set_preferences" />
     [% IF return_to_url %]
       <input type="hidden" name="return_to_url"
@@ -195,11 +203,16 @@
     [% END %]
   </p>
 
-<ul>
+<ul id="prefs_saved_extra_nav">
   <li><a href="[% IF return_to_url %][% return_to_url | html %][% ELSE %][% full_cgi_url %][% END %]">Return to [% site_name %]</a></li>
   <li><a href="preferences.cgi">Change preferences</a></li>
 </ul>
 
 [% END %]
 </div>
+
+[% IF config.content_above_navbar_in_html %]
+  [% INCLUDE navbar.tt %]
+[% END %]
+
 [% INCLUDE footer.tt %]

@@ -28,7 +28,7 @@ my @variables = qw(
    enable_node_image enable_common_categories enable_common_locales
    spam_detector_module host_checker_module custom_macro_module
    static_path static_url
-   send_moderation_notifications website_link_max_chars read_only
+   send_moderation_notifications website_link_max_chars read_only responsive
 );
 my @questions = map { $_ . "__qu" } @variables;
 OpenGuides::Config->mk_accessors( @variables );
@@ -125,6 +125,7 @@ sub _init {
                      send_moderation_notifications => 1,
                      website_link_max_chars => 25,
                      read_only => 0,
+                     responsive => 0,
                    );
 
     # See if we already have some config variables set.
@@ -217,6 +218,7 @@ sub _init {
         website_link_max_chars => "How many characters of the URL of node websites should be displayed?",
         moderate_whitelist => "Enter a comma-separated list of IP addresses able to make changes to moderated nodes and have them show up immediately",
         read_only => "Should the guide be read-only (no edits permitted)?",
+        responsive => "Should the site be mobile-friendly (responsive)?",
     );
 
     foreach my $var ( keys %questions ) {
@@ -374,6 +376,8 @@ sub static_url {
 =item * website_link_max_chars (default: C<25>)
 
 =item * read_only
+
+=item * responsive
 
 =back
 

@@ -1,7 +1,11 @@
 [% INCLUDE header.tt page_title = "Wanted Pages - $site_name" %]
 [% INCLUDE banner.tt %]
 <div id="content">
-[% INCLUDE navbar.tt %]
+
+  [% IF !config.content_above_navbar_in_html %]
+    [% INCLUDE navbar.tt %]
+  [% END %]
+
 <div id="maincontent">
 <h2>Wanted Pages</h2>
 <p>
@@ -13,7 +17,7 @@ These are nodes which have been linked to but do not yet exist.
      <tr>
      <td>[% node.name %]</td>
      <td>[% node.backlinks_count %]</td>
-     <td><a href="[% node.backlink_link %]">Show linking nodes</a>
+     <td id="action"><a href="[% node.backlink_link %]">Show linking nodes</a>
          or <a href="[% node.edit_link %]">Create node</a>
      </td>
      </tr>
@@ -21,4 +25,9 @@ These are nodes which have been linked to but do not yet exist.
 </table>
 
 </div>
+
+[% IF config.content_above_navbar_in_html %]
+  [% INCLUDE navbar.tt %]
+[% END %]
+
 [% INCLUDE footer.tt %]

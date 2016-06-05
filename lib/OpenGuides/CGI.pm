@@ -529,6 +529,7 @@ sub _make_dropdown_html {
 
     my $q = CGI->new( "" );
     return $q->popup_menu( -name => $field_name,
+                           -class => "$args{type}_index",
                            -values => [ "", @values ],
                            -labels => { "" => $any_label, %labels },
                            -default => $default );

@@ -5,10 +5,16 @@
 [% END %]
 [% INCLUDE banner.tt %]
 <div id="content">
-[% INCLUDE navbar.tt %]
+
+[% IF !config.content_above_navbar_in_html %]
+  [% INCLUDE navbar.tt %]
+[% END %]
+
 <div id="maincontent">
 
 <h1>Confirm Deletion</h1>
+
+<div class="confirm_deletion_text">
 <p>
 [% IF delete_version %]
   Are you sure you want to delete version [% delete_version %] of
@@ -25,14 +31,21 @@ If so, please enter the admin
 password. If not, you can <a href="[% cgi_url %]?[% node_param %]">go back to the
 page</a>.
 </p>
-<form action="[% cgi_url %]" method="post">
+</div>
+
+<form class="confirm_deletion" action="[% cgi_url %]" method="post">
   <input type="hidden" name="action" value="delete" />
   <input type="hidden" name="id" value="[% node_name %]" />
   <input type="hidden" name="version" value="[% delete_version %]" />
-  <strong>Password:</strong>
-  <input type="password" name="password" />
+  <label for="password">Password:</label>
+  <input type="password" name="password" id="password" />
   <input type="submit" value="Delete" />
 </form>
 
 </div>
+
+[% IF config.content_above_navbar_in_html %]
+  [% INCLUDE navbar.tt %]
+[% END %]
+
 [% INCLUDE footer.tt %]
