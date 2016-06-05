@@ -1,7 +1,11 @@
 [% INCLUDE header.tt page_title = "Pages Needing Moderation - $site_name" %]
 [% INCLUDE banner.tt %]
 <div id="content">
-[% INCLUDE navbar.tt %]
+
+[% IF !config.content_above_navbar_in_html %]
+  [% INCLUDE navbar.tt %]
+[% END %]
+
 <div id="maincontent">
 <h2>Pages Needing Moderation</h2>
 <p>
@@ -24,4 +28,9 @@ These are nodes which have been created/edited, but not yet moderated.
 </table>
 
 </div>
+
+[% IF config.content_above_navbar_in_html %]
+  [% INCLUDE navbar.tt %]
+[% END %]
+
 [% INCLUDE footer.tt %]

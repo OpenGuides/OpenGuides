@@ -3,7 +3,9 @@
 [% INCLUDE banner.tt %]
 
 <div id="content">
-  [% INCLUDE navbar.tt %]
+  [% IF !config.content_above_navbar_in_html %]
+    [% INCLUDE navbar.tt %]
+  [% END %]
   <div id="maincontent">
 
     <div id="create_new_page">
@@ -33,4 +35,9 @@
     </div>
 
   </div>
+
+[% IF config.content_above_navbar_in_html %]
+  [% INCLUDE navbar.tt %]
+[% END %]
+
 [% INCLUDE footer.tt %]

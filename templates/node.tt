@@ -17,6 +17,10 @@
 <div id="redirect_message">(redirected from <a href="[% full_cgi_url %]?id=[% oldid %];redirect=0">[% oldid.replace('_', ' ') %]</a>)</div>
 [% END %]
 
+[% IF responsive %]
+  <div id="node_map_and_image">
+[% END %]
+
 [% IF wgs84_lat AND wgs84_long AND display_google_maps %]
   [% IF config.use_leaflet %]
     <div id="node_map_canvas"></div>
@@ -50,6 +54,10 @@
 [% END %]
 
 [% INCLUDE node_image.tt %]
+
+[% IF responsive %]
+  </div>
+[% END %]
 
 <div id="node_title">
 [% IF current %]
@@ -107,7 +115,7 @@ Would you like to <a href="[% full_cgi_url %]?action=edit;id=[% node_param %]">c
 [% END %]
 
 [% INCLUDE node_location_search.tt %]
-                          
+
 [% IF (latitude AND longitude) OR (os_x AND os_y) OR (osie_x AND osie_y) %]
 <div id="coordinates" class="geo">
 [% END %]
@@ -142,18 +150,7 @@ Would you like to <a href="[% full_cgi_url %]?action=edit;id=[% node_param %]">c
 [% IF (latitude AND longitude) OR (os_x AND os_y) OR (osie_x AND osie_y)%]
 </div>
 [% END %]
-<div id="rdf_link">
-  <a href="[% cgi_url %]?id=[% node_param %];format=rdf">RDF/XML for this
-  node</a>
-  <a href="[% cgi_url %]?id=[% node_param %];format=json">JSON for this
-  node</a>
-  [% IF rss_locale_url %]
-    / <a href="[% rss_locale_url %]">RSS feed for this locale</a>
-  [% END %]
-  [% IF rss_category_url %]
-    / <a href="[% rss_category_url %]">RSS feed for this category</a>
-  [% END %]
-</div>
+
 <div id="version">
 [% IF current %]
   Last edited [% last_modified %]

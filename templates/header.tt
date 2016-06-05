@@ -3,6 +3,9 @@
 <html lang="[% language %]">
 <head profile="http://a9.com/-/spec/opensearch/1.1/">
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  [% IF responsive %]
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+  [% END %]
   [% IF page_title %]
     <title>[% page_title %]</title>
     <meta name="DC.title" content="[% page_title %]" />
@@ -36,16 +39,15 @@ locales.size > 0 %][% FOREACH locale = locales %][% locale.name %][%-
 ", " UNLESS loop.last %][% END %][% END %]" />
   [% END %]
 
+  [% SET leaflet_version='0.7.5' %]
+
   [% IF stylesheet %]
     <link rel="stylesheet" href="[% stylesheet %]" type="text/css" title="Stylesheet for [% site_name %]" />
   [% ELSE %]
     <link rel="stylesheet" href="[% config.static_url %]openguides-base.css" type="text/css" title="Basic OpenGuides stylesheet" />
   [% END %]
   [% IF config.use_leaflet %]
-    <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.4/leaflet.css" />
-    <!--[if lte IE 8]>
-      <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.4/leaflet.ie.css" />
-    <![endif]-->
+    <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-[% leaflet_version %]/leaflet.css" />
   [% END %]
 
   [% IF feed_base %]
@@ -84,7 +86,7 @@ locales.size > 0 %][% FOREACH locale = locales %][% locale.name %][%-
       <script
          src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"
          type="text/javascript"></script>
-      <script src="http://cdn.leafletjs.com/leaflet-0.4/leaflet.js"
+      <script src="http://cdn.leafletjs.com/leaflet-[% leaflet_version %]/leaflet.js"
               type="text/javascript"></script>
       <script src="[% config.static_url %]map-leaflet.js"
               type="text/javascript"></script>

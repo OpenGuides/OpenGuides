@@ -24,13 +24,13 @@
     [% IF address %]
       <li class="address">
         <span class="metadata_label">Address:</span>
-        <span class="adr"><span class="street-address">[% CGI.escapeHTML(address) %]</span></span><!--, [% default_city %] --> [%# uncomment at left to show city %]
+        <span class="adr"><span class="street-address">[% CGI.escapeHTML(address) %]</span><!--, [% default_city %] -->[%# uncomment at left to show city %][% IF responsive AND postcode %], <span class="postal-code">[% postcode %]</span>[% END %]</span>
         [% TRY %]
           [% SET auto_map_link_in_address = 1 %]
           [% INCLUDE custom_auto_map_link.tt %]
         [% CATCH %]
           [% IF map_link %]
-            <a href="[% map_link %]" class="external">(map of this place)</a>
+            <a href="[% map_link %]" class="external">(map[% UNLESS responsive %] of this place[% END %])</a>
           [% END %]
         [% END %]
       </li>
@@ -40,12 +40,12 @@
       [% CATCH %]
         [% IF map_link %]
           <li class="map">
-            <span class="metadata_label"><a href="[% map_link %]" class="external">Map of this place</a></span>
+            <span class="metadata_label"><a href="[% map_link %]" class="external">Map[% UNLESS responsive %] of this place[% END %]</a></span>
           </li>
         [% END %]
       [% END %]
     [% END %]
-    [% IF postcode %]
+    [% IF postcode AND !responsive %]
       <li class="postcode">
         <span class="metadata_label">Postcode:</span>
         <span class="adr"><span class="postal-code">[% CGI.escapeHTML(postcode) %]</span></span>
