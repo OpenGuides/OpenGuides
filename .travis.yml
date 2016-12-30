@@ -8,7 +8,7 @@ perl:
   - "5.12"
   - "5.10"
 env: AUTOMATED_TESTING=1
-before_install: cpanm --quiet --notest Config::Tiny Geo::HelmertTransform Test::HTML::Content Wiki::Toolkit::Plugin::Ping Devel::Cover::Report::Coveralls Test::JSON Class::Accessor CREAMYG/Lucy-0.3.3.tar.gz
+before_install: cpanm --quiet --notest Config::Tiny Geo::HelmertTransform Test::HTML::Content Wiki::Toolkit::Plugin::Ping Devel::Cover::Report::Coveralls Test::JSON Class::Accessor Lucy
 script: perl Build.PL && ./Build build && cover -test -ignore Build.pm -report coveralls
 notifications:
   irc: "irc.perl.org#openguides-notices"
