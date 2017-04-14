@@ -1607,7 +1607,7 @@ src="http://openguides.org/img/logo.png" alt="OpenGuides"></a>
 <h1><a href="$script_name">$site_name</a></h1>
 <h2>is powered by <a href="http://openguides.org/">OpenGuides</a> -<br>
 the guides made by you.</h2>
-<h3>version <a href="http://search.cpan.org/~dom/OpenGuides-$VERSION">$VERSION</a></h3>
+<h3>version <a href="https://metacpan.org/release/BOB/OpenGuides-$VERSION">$VERSION</a></h3>
 </div>
 <div id="about">
 <p>
