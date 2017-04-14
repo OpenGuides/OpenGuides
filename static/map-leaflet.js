@@ -1,4 +1,4 @@
-var centre_lat, centre_long, min_lat, min_long, max_lat, max_long, map, map_div_id;
+var full_cgi_url, centre_lat, centre_long, min_lat, min_long, max_lat, max_long, map, map_div_id;
 var positions = [], markers = [];
 
 var gicon = L.Icon.extend( {
@@ -54,7 +54,7 @@ function add_marker( i, node ) {
   marker = new L.Marker( position, { icon: new gicon() } );
   map.addLayer( marker );
 
-  content = '<a href="?' + node.param + '">' + node.name + '</a>';
+  content = '<a href="' + full_cgi_url + '?' + node.param + '">' + node.name + '</a>';
   if ( node.address ) {
     content += '<br />' + node.address;
   }
