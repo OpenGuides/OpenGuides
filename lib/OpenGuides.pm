@@ -14,7 +14,7 @@ use URI::Escape;
 
 use vars qw( $VERSION );
 
-$VERSION = '0.82';
+$VERSION = '0.83';
 
 =head1 NAME
 
@@ -1199,6 +1199,9 @@ sub show_index {
     } else {
         $template = "site_index.tt";
     }
+
+    $tt_vars{not_editable} = 1;
+    $tt_vars{not_deletable} = 1;
 
     return %tt_vars if $args{return_tt_vars};
 

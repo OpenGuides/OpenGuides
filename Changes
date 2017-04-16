@@ -8,6 +8,7 @@ More detailed changelogs can be found at
         Add full CGI URL to popups on map search results, so they can be
           used in addon scripts.
         Fix broken version link in ?action=about
+        Make sure index pages don't offer page deletion links.
 
 0.82    05 June 2016
         Add some extra CSS hooks to the templates.  Add new base stylesheet
