@@ -105,13 +105,6 @@ div.navbar_site_name {
   display: none;
 }
 
-/* Maps */
-/* This is a temporary fix for a Leaflet bug that was fixed on github in
-   Feb 2017 but the most recent release is 1.0.3 in Jan 2017 */
-.leaflet-container {
-  -webkit-tap-highlight-color: rgba(255, 255, 255, 0);
-}
-
 @media (min-width: 550px) and (max-width: 799px) {
   div#node_map_and_image {
     display: flex;

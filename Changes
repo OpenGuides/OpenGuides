@@ -9,9 +9,7 @@ More detailed changelogs can be found at
           used in addon scripts.
         Fix broken version link in ?action=about
         Make sure index pages don't offer page deletion links.
-        Upgrade Leaflet version to 1.0.3.  (Note temporary addition of
-          .leaflet-container to openguides-base.css - you may wish to include
-          this in your own CSS.)
+        Upgrade Leaflet version to 1.1.0.
         Make sure HTTPS website links are truncated in same way as HTTP.
 
 0.82    05 June 2016

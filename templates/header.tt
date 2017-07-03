@@ -39,7 +39,7 @@ locales.size > 0 %][% FOREACH locale = locales %][% locale.name %][%-
 ", " UNLESS loop.last %][% END %][% END %]" />
   [% END %]
 
-  [% SET leaflet_version='1.0.3' %]
+  [% SET leaflet_version='1.1.0' %]
 
   [% IF stylesheet %]
     <link rel="stylesheet" href="[% stylesheet %]" type="text/css" title="Stylesheet for [% site_name %]" />
