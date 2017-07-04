@@ -150,6 +150,7 @@ t/507_random_page.t
 t/508_navbar_common_locales_categories.t
 t/509_preferences.t
 t/510_show_index_omits_deletion_link.t
+t/511_url_escaping.t
 t/601_bug_textareas.t
 t/602_bug_trailing_whitespace.t
 t/603_bug_map_link_no_address.t

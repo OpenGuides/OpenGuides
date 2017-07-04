@@ -190,7 +190,8 @@ sub output {
 
     if ($args{node}) {
         $tt_vars->{node_name} = CGI->escapeHTML($args{node});
-        $tt_vars->{node_param} = CGI->escape($args{wiki}->formatter->node_name_to_node_param($args{node}));
+        $tt_vars->{node_param} = OpenGuides::CGI->escape(
+            $args{wiki}->formatter->node_name_to_node_param( $args{node} ) );
     }
 
     # Now set further TT variables if explicitly supplied - do this after the
