@@ -329,6 +329,8 @@ sub extract_metadata_vars {
         foreach ( $categories_text, $locales_text ) {
             s/</&lt;/g;
             s/>/&gt;/g;
+            # Underscores aren't allowed in node names - change them to spaces.
+            s/_+/ /g;
         }
 
         # Trim leading and trailing spaces, collapse internal whitespace.
