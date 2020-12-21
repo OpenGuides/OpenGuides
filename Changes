@@ -3,6 +3,10 @@
 More detailed changelogs can be found at
 <http://github.com/OpenGuides/OpenGuides>
 
+0.84
+        Switch to HTTPS for map tiles and icons, to avoid mixed-content
+        warnings.
+
 0.83    06 January 2020
         Remove use of MapQuest tiles, as they're no longer available.
         Add full CGI URL to popups on map search results, so they can be
