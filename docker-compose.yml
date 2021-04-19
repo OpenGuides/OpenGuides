@@ -1,0 +1,32 @@
+version: '3.7'
+#  bring up mysql to be the database
+#  this could be postgres with the right env vars changes in docker-compose.env
+#
+#  on first launch of the database you will need to run
+#  `docker compose exec web openguides-setup-db wiki.conf`
+#  to create the database once the db and web containers are fully up
+#  
+services:
+  db:
+    image: mysql:latest
+    restart: always
+    env_file:
+      - docker-compose.env
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./docker/db/data:/var/lib/mysql
+
+  web:
+    build: .
+    restart: always
+    env_file:
+      - docker-compose.env
+    ports:
+      - "80:5000"
+    links:
+      - db
+    depends_on:
+      - db
+
+
