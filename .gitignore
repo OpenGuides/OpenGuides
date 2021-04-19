@@ -12,3 +12,4 @@ Makefile.PL
 OpenGuides-*
 cover_db/
 *~
+docker/db
