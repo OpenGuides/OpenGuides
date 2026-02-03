@@ -341,7 +341,7 @@ my $search_module = $use_plucene ? "Plucene" : "Search::InvertedIndex";
 
 $build->requires({
     'Algorithm::Diff'                     => '0.13',  # for sdiff
-    'CGI'                                 => '4.08',  # use multi_param
+    'CGI'                                 => '4.50',  # use multi_param, updated from 4.08
     'CGI::Carp'                           => 0,
     'CGI::Cookie'                         => 0,
     'Wiki::Toolkit'                       => '0.86',
@@ -365,7 +365,7 @@ $build->requires({
     'Parse::RecDescent'                   => 0,
     $search_module                        => 0,
     'POSIX'                               => 0,
-    'Template'                            => '2.24', # for .lower vmethod
+    'Template'                            => '2.27', # for .lower vmethod, updated from 2.24
     'Template::Plugin::JSON::Escape'      => 0,
     'Time::Piece'                         => 0,
     'URI::Escape'                         => 0,
